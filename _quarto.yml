@@ -25,16 +25,16 @@ website:
           - course-info/how-to-contribute.md
       - section: "Fundamentos em GIS e Sensoriamento Remoto"
         contents:
-          - section: "Week 0 — Python Basics"
+          - section: "Week 0 — Ecossistema geoespacial"
             contents:
               - fundamentals_gis_rs/week0/index.qmd
               - fundamentals_gis_rs/week0/provedores.qmd
               - fundamentals_gis_rs/week0/space_tech_ecossystem.ipynb
-          - section: "Week 1 — Introduction to GIS"
+          - section: "Week 1 — Fundamentos em GIS"
             contents:
               - fundamentals_gis_rs/week1/index.qmd
               - fundamentals_gis_rs/week1/week1_introductionGIS.ipynb
-          - section: "Week 2"
+          - section: "Week 2 - Fundamentos em Sensoriamento Remoto"
             contents:
               - fundamentals_gis_rs/week2/index.md
           - section: "Week 3"

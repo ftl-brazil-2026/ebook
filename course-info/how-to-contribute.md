@@ -2,9 +2,9 @@
 title: "Como Contribuir"
 ---
 
-Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir; mais vão aparecer ao longo do bootcamp.
+Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir, contudo o repositório visa ser uma contribução coletiva de muitas formas, então diversas outras maneiras aparecerão ao longo do bootcamp.
 
-Antes de editar qualquer coisa, crie sua própria branch — veja o passo 3 da página de [Setup](setup.md). Isso evita conflito com atualizações futuras do repositório.
+Antes de editar qualquer coisa, crie sua própria branch! Veja o passo 3 da página de [Setup](setup.md). Isso evita conflito com atualizações futuras do repositório.
 
 ## Contribuindo com o Awesome Geospatial
 
@@ -46,6 +46,7 @@ python3 -m json.tool fundamentals_gis_rs/week0/data/provedores.json > /dev/null
 Sem erro impresso = JSON válido.
 
 ::: {.callout-note appearance="simple"}
+
 ## Dúvida?
 
 Pergunta no canal do bootcamp antes de gastar muito tempo tentando resolver sozinho.

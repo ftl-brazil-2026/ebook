@@ -2,6 +2,9 @@
 
 # Future Tech Leaders Brasil 2026
 
+Nossa pagina [Ebook page](https://ftl-brazil-2026.github.io/ebook/)
+
+
 ## Space Tech Bootcamp 
 
 This repository host the ebook of the programme, with content and materials following the Remote Sensing and 

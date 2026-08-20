@@ -11,7 +11,7 @@ Portanto, esse primeiro capítulo é destinado a um panorama do ecossistema de d
 
 Antes de seguir, se você ainda não configurou seu ambiente, dá uma olhada nos [Utilitários de CLI](../../course-info/cli-utils.md).
 
-## O que vocês querem aprender
+## Quais são os nossos interesses em comum?
 
 No questionário inicial, cada um de vocês votou nos assuntos que mais têm interesse dentro do ecossistema geoespacial:
 
