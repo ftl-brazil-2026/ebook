@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "titulo": "Provedores de dados geoespaciais",
+    "fonte_votos": "Questionario inicial - Future Tech Leader Brasil (57 respondentes, ate 3 votos)",
+    "escopos": ["BR", "GLOBAL"]
+  },
+  "categorias": [
+    {
+      "nome": "Satelites, plano de orbita",
+      "votos": 24,
+      "provedores": [
+        {"nome": "INPE - Catalogo DGI", "escopo": "BR", "url": "https://www.dgi.inpe.br/catalogo/explore", "dado": "Acervo CBERS-4/4A, Amazonia-1, Landsat recebido no Brasil"},
+        {"nome":"STAC CATALOGUE","escopo":"GLOBAL","url":"https://stacspec.org/en", "dado":"Grande Catalogo de espaço e temporal de dados de satelite de diferentes provodores e metadata."},
+        {"nome": "Brazil Data Cube", "escopo": "BR", "url": "https://data.inpe.br/bdc/explorer", "dado": "Cubos analiticos (ARD) CBERS/Sentinel/Landsat via STAC"},
+        {"nome": "Copernicus Data Space", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "Sentinel-1/2/3/5P, orbitas e efemerides"},
+        {"nome": "Copernicus Browser", "escopo": "GLOBAL", "url": "https://browser.dataspace.copernicus.eu/", "dado": "Exploracao visual rapida de cenas"},
+        {"nome": "Microsoft Planetary Computer", "escopo": "GLOBAL", "url": "https://planetarycomputer.microsoft.com/catalog", "dado": "Catalogo STAC multi-sensor + ambiente de processamento"},
+        {"nome": "Google Earth Engine Catalog", "escopo": "GLOBAL", "url": "https://developers.google.com/earth-engine/datasets", "dado": "Series historicas globais prontas para analise"}
+      ]
+    },
+    {
+      "nome": "Mudancas climaticas",
+      "votos": 21,
+      "provedores": [
+        {"nome": "Copernicus Climate Data Store (ERA5)", "escopo": "GLOBAL", "url": "https://cds.climate.copernicus.eu/", "dado": "Reanalise horaria 1940-hoje: temperatura, vento, precipitacao"},
+        {"nome": "Destination Earth", "escopo": "GLOBAL", "url": "https://destination-earth.eu/", "dado": "Gemeos digitais climaticos de alta resolucao"},
+        {"nome": "INPE - CPTEC", "escopo": "BR", "url": "https://www.cptec.inpe.br/", "dado": "Previsao numerica e projecoes climaticas regionalizadas (Eta)"},
+        {"nome": "IPEA Data", "escopo": "BR", "url": "http://www.ipeadata.gov.br/", "dado": "Series socioeconomicas para cruzar com clima"},
+        {"nome": "NASA Earthdata", "escopo": "GLOBAL", "url": "https://www.earthdata.nasa.gov/", "dado": "MODIS, GPM, GRACE, POWER"}
+      ]
+    },
+    {
+      "nome": "Queimadas / desmatamento / secas",
+      "votos": 17,
+      "provedores": [
+        {"nome": "TerraBrasilis (PRODES/DETER)", "escopo": "BR", "url": "https://terrabrasilis.dpi.inpe.br/downloads/", "dado": "Poligonos anuais de desmatamento e alertas diarios"},
+        {"nome": "INPE - Programa Queimadas", "escopo": "BR", "url": "https://terrabrasilis.dpi.inpe.br/queimadas/portal/", "dado": "Focos de calor e risco de fogo, atualizacao diaria"},
+        {"nome": "MapBiomas", "escopo": "BR", "url": "https://brasil.mapbiomas.org", "dado": "Uso e cobertura 1985-hoje. Diversos dados diferentes, agricultura, queimadas, etc etc."},
+        {"nome": "BiomasBR", "escopo": "BR", "url": "https://www.terraclass.gov.br/", "dado": "Uso da terra em areas ja desmatadas (Amazonia e Cerrado)"},
+        {"nome": "CEMADEN", "escopo": "BR", "url": "https://www.gov.br/cemaden/", "dado": "Monitoramento de secas e desastres naturais"},
+        {"nome": "Copernicus EMS", "escopo": "GLOBAL", "url": "https://emergency.copernicus.eu/", "dado": "Mapeamento rapido de incendios e indices de seca"}
+      ]
+    },
+    {
+      "nome": "Drones e UAV",
+      "votos": 17,
+      "provedores": [
+        {"nome": "OpenAerialMap (HOT)", "escopo": "GLOBAL", "url": "https://openaerialmap.org/", "dado": "Imagens de drone abertas, muitas de resposta humanitaria"},
+        {"nome": "OpenDroneMap", "escopo": "GLOBAL", "url": "https://www.opendronemap.org/", "dado": "Software livre + datasets de exemplo para fotogrametria"},
+        {"nome": "Kaggle", "escopo": "GLOBAL", "url": "https://www.kaggle.com/datasets", "dado": "Datasets rotulados de UAV para deteccao e segmentacao"},
+        {"nome": "Grupos de pesquisa / CAPES", "escopo": "BR", "url": "https://catalogodeteses.capes.gov.br/", "dado": "Voos locais publicados junto a teses e artigos"},
+        {"nome": "Embrapa", "escopo": "BR", "url": "https://www.embrapa.br/", "dado": "Campanhas com VANT em agricultura de precisao"}
+      ]
+    },
+    {
+      "nome": "Oceanografia",
+      "votos": 11,
+      "provedores": [
+        {"nome": "Copernicus Marine (CMEMS)", "escopo": "GLOBAL", "url": "https://marine.copernicus.eu/", "dado": "Temperatura da superficie, correntes, clorofila, nivel do mar"},
+        {"nome": "Marinha do Brasil - CHM / BNDO", "escopo": "BR", "url": "https://www.marinha.mil.br/chm/", "dado": "Batimetria, mares, cartas nauticas"},
+        {"nome": "INPE - Catalogo DGI (CBERS-4)", "escopo": "BR", "url": "https://www.dgi.inpe.br/catalogo/explore", "dado": "Serie temporal para linha de costa e plumas costeiras"},
+        {"nome": "SiMCosta", "escopo": "BR", "url": "https://simcosta.furg.br/", "dado": "Boias costeiras: ondas, salinidade, temperatura in situ"},
+        {"nome": "NOAA / NASA Ocean Color", "escopo": "GLOBAL", "url": "https://oceancolor.gsfc.nasa.gov/", "dado": "Cor do oceano, SST, produtos MODIS/VIIRS"}
+      ]
+    },
+    {
+      "nome": "Agricultura digital",
+      "votos": 11,
+      "provedores": [
+        {"nome": "Embrapa / GeoInfo", "escopo": "BR", "url": "https://www.geoinfo.cnpm.embrapa.br/", "dado": "Solos, aptidao agricola, zoneamentos"},
+        {"nome": "IBGE - PAM / Censo Agropecuario", "escopo": "BR", "url": "https://sidra.ibge.gov.br/", "dado": "Producao agricola municipal, base para validacao"},
+        {"nome": "CAR - Cadastro Ambiental Rural", "escopo": "BR", "url": "https://consultapublica.car.gov.br/publico/imoveis/index", "dado": "Limites de imoveis rurais, APP e reserva legal"},
+        {"nome": "MapBiomas Agua/Irrigacao", "escopo": "BR", "url": "https://brasil.mapbiomas.org/", "dado": "Pivos centrais e dinamica de irrigacao"},
+        {"nome": "Copernicus Data Space (Sentinel-2)", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "NDVI e fenologia da safra a 10 m"},
+        {"nome": "Google Earth Engine Catalog", "escopo": "GLOBAL", "url": "https://developers.google.com/earth-engine/datasets", "dado": "Series de indices de vegetacao em escala"}
+      ]
+    },
+    {
+      "nome": "Florestas",
+      "votos": 10,
+      "provedores": [
+        {"nome": "SFB - Sistema Nacional de Info. Florestal", "escopo": "BR", "url": "https://snif.florestal.gov.br/", "dado": "Inventario florestal nacional, concessoes"},
+        {"nome": "MapBiomas", "escopo": "BR", "url": "https://brasil.mapbiomas.org/", "dado": "Cobertura florestal por bioma, 1985-hoje"},
+        {"nome": "TerraClass", "escopo": "BR", "url": "https://www.terraclass.gov.br/", "dado": "Regeneracao e uso pos-desmatamento"},
+        {"nome": "GEDI / NASA Earthdata", "escopo": "GLOBAL", "url": "https://www.earthdata.nasa.gov/", "dado": "LiDAR espacial: altura de dossel e biomassa"},
+        {"nome": "Global Forest Watch", "escopo": "GLOBAL", "url": "https://www.globalforestwatch.org/", "dado": "Perda de cobertura arborea comparavel entre paises"}
+      ]
+    },
+    {
+      "nome": "3D e point-cloud",
+      "votos": 9,
+      "provedores": [
+        {"nome": "IBGE - Modelos digitais e geodesia", "escopo": "BR", "url": "https://www.ibge.gov.br/geociencias/", "dado": "MDE, RRNN, bases altimetricas"},
+        {"nome": "Prefeituras / orgaos estaduais", "escopo": "BR", "url": "https://metadados.snirh.gov.br/geonetwork/srv/eng/catalog.search#/home", "dado": "LiDAR aerofotogrametrico municipal (ex. SP, RJ, PR)"},
+        {"nome": "Copernicus DEM", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "MDE global 30 m derivado de TanDEM-X"},
+        {"nome": "OpenTopography", "escopo": "GLOBAL", "url": "https://opentopography.org/", "dado": "Nuvens de pontos LiDAR e MDT de alta resolucao"},
+        {"nome": "Geoscience Australia - ELVIS", "escopo": "GLOBAL", "url": "https://elevation.fsdf.org.au/", "dado": "Referencia de programa nacional de elevacao"}
+      ]
+    },
+    {
+      "nome": "Ecologia",
+      "votos": 8,
+      "provedores": [
+        {"nome": "SiBBr", "escopo": "BR", "url": "https://sibbr.gov.br/", "dado": "Ocorrencias de especies brasileiras"},
+        {"nome": "ICMBio / SALVE", "escopo": "BR", "url": "https://salve.icmbio.gov.br/", "dado": "Avaliacao de risco de extincao, distribuicao de especies"},
+        {"nome": "GBIF", "escopo": "GLOBAL", "url": "https://www.gbif.org/", "dado": "Maior base global de ocorrencia de biodiversidade"},
+        {"nome": "WorldClim / CHELSA", "escopo": "GLOBAL", "url": "https://www.worldclim.org/", "dado": "Variaveis bioclimaticas para modelagem de nicho"}
+      ]
+    },
+    {
+      "nome": "Ecologia de paisagem",
+      "votos": 8,
+      "provedores": [
+        {"nome": "MapBiomas", "escopo": "BR", "url": "https://brasil.mapbiomas.org/", "dado": "Serie de uso e cobertura para metricas de fragmentacao"},
+        {"nome": "IBGE - Biomas e vegetacao", "escopo": "BR", "url": "https://www.ibge.gov.br/geociencias/", "dado": "Limites de biomas, mapas de vegetacao"},
+        {"nome": "CAR", "escopo": "BR", "url": "https://consultapublica.car.gov.br/publico/imoveis/index", "dado": "Reserva legal e APP como estrutura da paisagem"},
+        {"nome": "Copernicus Land Monitoring", "escopo": "GLOBAL", "url": "https://land.copernicus.eu/", "dado": "Produtos de cobertura e conectividade"},
+        {"nome": "Google Earth Engine Catalog", "escopo": "GLOBAL", "url": "https://developers.google.com/earth-engine/datasets", "dado": "Dynamic World e outras coberturas quase em tempo real"}
+      ]
+    },
+    {
+      "nome": "Hidrologia",
+      "votos": 7,
+      "provedores": [
+        {"nome": "ANA - SNIRH / metadados", "escopo": "BR", "url": "https://metadados.snirh.gov.br/geonetwork/srv/eng/catalog.search#/home", "dado": "Estacoes fluviometricas, ottobacias, outorgas"},
+        {"nome": "ANA - HidroWeb", "escopo": "BR", "url": "https://www.snirh.gov.br/hidroweb/", "dado": "Series historicas de vazao e chuva"},
+        {"nome": "MapBiomas Agua", "escopo": "BR", "url": "https://brasil.mapbiomas.org/", "dado": "Superficie de agua mapeada desde 1985"},
+        {"nome": "Copernicus Global Land / GloFAS", "escopo": "GLOBAL", "url": "https://www.globalfloods.eu/", "dado": "Previsao hidrologica global"},
+        {"nome": "NASA - GPM e SWOT", "escopo": "GLOBAL", "url": "https://www.earthdata.nasa.gov/", "dado": "Precipitacao e altimetria de aguas continentais"}
+      ]
+    },
+    {
+      "nome": "Mobilidade e transportes",
+      "votos": 7,
+      "provedores": [
+        {"nome": "OpenStreetMap", "escopo": "GLOBAL", "url": "https://www.openstreetmap.org/", "dado": "Malha viaria, ciclovias, pontos de parada"},
+        {"nome": "IPEA - Projeto Acesso a Oportunidades", "escopo": "BR", "url": "https://www.ipea.gov.br/acessooportunidades/", "dado": "Matrizes de tempo de viagem para 20 cidades brasileiras"},
+        {"nome": "IBGE - malhas e setores censitarios", "escopo": "BR", "url": "https://www.ibge.gov.br/geociencias/", "dado": "Denominador populacional para acessibilidade"},
+        {"nome": "Dados abertos municipais (GTFS)", "escopo": "BR", "url": "https://dados.gov.br/", "dado": "Itinerarios e horarios de transporte publico"}
+      ]
+    },
+    {
+      "nome": "Mapeamento humanitario",
+      "votos": 6,
+      "provedores": [
+        {"nome": "HOT - Humanitarian OSM Team", "escopo": "GLOBAL", "url": "https://www.hotosm.org/", "dado": "Mapeamento colaborativo, tasking manager"},
+        {"nome": "HDX", "escopo": "GLOBAL", "url": "https://data.humdata.org/", "dado": "Datasets humanitarios padronizados por crise"},
+        {"nome": "OpenAerialMap", "escopo": "GLOBAL", "url": "https://openaerialmap.org/", "dado": "Imagens de drone pos-desastre"},
+        {"nome": "CEMADEN / Defesa Civil", "escopo": "BR", "url": "https://www.gov.br/cemaden/", "dado": "Areas de risco e alertas no territorio brasileiro"},
+        {"nome": "IBGE - aglomerados subnormais", "escopo": "BR", "url": "https://www.ibge.gov.br/geociencias/", "dado": "Recorte oficial de favelas e comunidades urbanas"}
+      ]
+    },
+    {
+      "nome": "Inundacoes",
+      "votos": 6,
+      "provedores": [
+        {"nome": "ANA - SNIRH", "escopo": "BR", "url": "https://metadados.snirh.gov.br/geonetwork/srv/eng/catalog.search#/home", "dado": "Niveis, cotas de alerta, bacias"},
+        {"nome": "CEMADEN", "escopo": "BR", "url": "https://www.gov.br/cemaden/", "dado": "Pluviometros automaticos e alertas de risco"},
+        {"nome": "Copernicus EMS Rapid Mapping", "escopo": "GLOBAL", "url": "https://emergency.copernicus.eu/", "dado": "Mancha de inundacao mapeada apos eventos"},
+        {"nome": "Sentinel-1 (Copernicus Data Space)", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "SAR enxerga agua sob nuvem, essencial em enchentes"},
+        {"nome": "Global Flood Awareness System", "escopo": "GLOBAL", "url": "https://www.globalfloods.eu/", "dado": "Previsao e reanalise de cheias"}
+      ]
+    },
+    {
+      "nome": "Qualidade do ar",
+      "votos": 6,
+      "provedores": [
+        {"nome": "Copernicus Atmosphere (CAMS)", "escopo": "GLOBAL", "url": "https://atmosphere.copernicus.eu/", "dado": "Reanalise e previsao de PM2.5, NO2, O3"},
+        {"nome": "Sentinel-5P (Copernicus Data Space)", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "Colunas troposfericas de NO2, CO, SO2, aerossois"},
+        {"nome": "CETESB e orgaos estaduais de meio ambiente", "escopo": "BR", "url": "https://cetesb.sp.gov.br/ar/qualar/", "dado": "Estacoes de superficie, indice horario por municipio"},
+        {"nome": "MonitorAr / IEMA", "escopo": "BR", "url": "https://energiaeambiente.org.br/", "dado": "Consolidacao nacional de dados de monitoramento"},
+        {"nome": "OpenAQ", "escopo": "GLOBAL", "url": "https://openaq.org/", "dado": "Agregador global de estacoes, inclui Brasil"}
+      ]
+    },
+    {
+      "nome": "Gemeos digitais (digital twins)",
+      "votos": 5,
+      "provedores": [
+        {"nome": "Destination Earth", "escopo": "GLOBAL", "url": "https://destination-earth.eu/", "dado": "Gemeos digitais do planeta (clima e extremos)"},
+        {"nome": "Microsoft Planetary Computer", "escopo": "GLOBAL", "url": "https://planetarycomputer.microsoft.com/catalog", "dado": "Camadas + computacao para simulacao"},
+        {"nome": "Brazil Data Cube", "escopo": "BR", "url": "https://data.inpe.br/bdc/explorer", "dado": "Base ARD nacional para replicas temporais do territorio"},
+        {"nome": "IBGE - base cartografica continua", "escopo": "BR", "url": "https://www.ibge.gov.br/geociencias/", "dado": "Esqueleto vetorial do territorio brasileiro"},
+        {"nome": "OpenStreetMap", "escopo": "GLOBAL", "url": "https://www.openstreetmap.org/", "dado": "Edificacoes e infraestrutura para modelos urbanos"}
+      ]
+    },
+    {
+      "nome": "Ilhas de calor e urbanismo",
+      "votos": 4,
+      "provedores": [
+        {"nome": "Landsat 8/9 TIRS via INPE ou USGS", "escopo": "BR", "url": "https://www.dgi.inpe.br/catalogo/explore", "dado": "Banda termica para temperatura de superficie"},
+        {"nome": "IBGE - setores censitarios e areas urbanizadas", "escopo": "BR", "url": "https://www.ibge.gov.br/geociencias/", "dado": "Densidade, renda e vulnerabilidade por setor"},
+        {"nome": "MapBiomas - area urbana", "escopo": "BR", "url": "https://brasil.mapbiomas.org/", "dado": "Expansao da mancha urbana ao longo do tempo"},
+        {"nome": "Copernicus Urban Atlas / Land", "escopo": "GLOBAL", "url": "https://land.copernicus.eu/", "dado": "Metodologia de referencia para uso urbano"},
+        {"nome": "Global Human Settlement Layer", "escopo": "GLOBAL", "url": "https://human-settlement.emergency.copernicus.eu/", "dado": "Populacao e superficie construida em grade global"}
+      ]
+    },
+    {
+      "nome": "Seguranca publica",
+      "votos": 1,
+      "provedores": [
+        {"nome": "Forum Brasileiro de Seguranca Publica", "escopo": "BR", "url": "https://forumseguranca.org.br/", "dado": "Anuario e microdados de criminalidade"},
+        {"nome": "Secretarias estaduais de seguranca", "escopo": "BR", "url": "https://dados.gov.br/", "dado": "Boletins de ocorrencia georreferenciados (ex. SSP-SP)"},
+        {"nome": "IPEA / Atlas da Violencia", "escopo": "BR", "url": "https://www.ipea.gov.br/atlasviolencia/", "dado": "Series municipais de homicidios"},
+        {"nome": "OpenStreetMap", "escopo": "GLOBAL", "url": "https://www.openstreetmap.org/", "dado": "Iluminacao, uso do solo e contexto urbano"},
+        {"nome": "GeoBR", "escopo":"BR","url":"https://ipea.github.io/geobr/","dado":"Repo:Github. Dados geoespaciais de municipios"}
+      ]
+    },
+    {
+      "nome": "Deteccao de patrimonio arqueologico",
+      "votos": 1,
+      "provedores": [
+        {"nome": "IPHAN - Sistemas de patrimonio", "escopo": "BR", "url": "http://portal.iphan.gov.br/", "dado": "Cadastro de sitios arqueologicos registrados"},
+        {"nome": "OpenTopography", "escopo": "GLOBAL", "url": "https://opentopography.org/", "dado": "LiDAR que revela geoglifos sob dossel"},
+        {"nome": "Copernicus DEM / Sentinel-2", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "Micro-relevo e marcas de vegetacao"},
+        {"nome": "Grupos de pesquisa - CAPES", "escopo": "BR", "url": "https://catalogodeteses.capes.gov.br/", "dado": "Levantamentos locais publicados em teses"}
+      ]
+    }
+  ]
+}
