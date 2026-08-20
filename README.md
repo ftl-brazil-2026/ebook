@@ -1,10 +1,27 @@
-# SpaceTech Bootcamp — GIS Ebook
+![ftl-logo](assets/logos/Future_Tech_Leaders3-01.png)
 
-Source for the GIS module course ebook, built with [Quarto](https://quarto.org). Published at:
+# Future Tech Leaders Brasil 2026
 
-**<https://emanuel-gf.github.io/spacetech-gis-ebook/>**
+## Space Tech Bootcamp 
+
+This repository host the ebook of the programme, with content and materials following the Remote Sensing and 
+Geographic Information Systems curriculum proposed by United Nations Office for Outer Space Affair (UNOOSA) and adapted for the Brazil's reality.
+
+The programme and bootcamp is executed by UNDP and SDG AI lab in partnership with Brazilian Space Agency (AEB) and United Nations.
+
+This e-book is an open-source and crowd contribution dedicated to all our students of FTL Brasil intake 2026, and enthusiasts of the geospatial sector. 
+
+Weekly updates will be added here to improve the quality of the material and align with our online sessions and meetings. 
+
+## What is Future Tech Leaders?
+
+FTL is a joint United Nations initiative by the UNDP Istanbul International Center for Private Sector in Development (ICPSD) and the UN Technology Bank to train young people in emerging technologies and close the digital divide in vulnerable regions. Primarily targets youth and university students, encouraging active participation and tech careers.
+
 
 ## Structure
+
+
+Our ebook is based on [Quarto](https://quarto.org), where the materials are splited into 3 big modules: Fundamentals of GIS and Remote Sensing. Fundamentals of Machine-Learning and Deep-Learning and State-of-Art. 
 
 ```text
 _quarto.yml           site config (sidebar navigation, theme, execute options)
@@ -15,15 +32,11 @@ week1/ … week4/       one folder per week
 pyproject.toml        Python dependencies (managed with uv)
 ```
 
-### Adding material to a week
+## Getting Started
 
-Drop a file into `weekN/` and add it to that week's `contents:` list in `_quarto.yml`:
+Please read our [course-info/setup.md](course-info/setup.md) page for a more detailed explanation in how to set up the environment in your own computer
 
-- **Narrative page** — a `.md` or `.qmd` file.
-- **Hands-on notebook** — a `.ipynb` file. It renders as a page and stays downloadable as-is.
-- **Slides** — a `.qmd` file with `format: revealjs` in its own front matter (this overrides the site's default HTML format for that page only — don't add `revealjs` to the site-wide `format:` key or every plain page will try to render twice).
-
-## Local development
+### Local development
 
 ```bash
 uv sync                # install the exact Python env (geopandas, cartopy, plotly, ...)
@@ -32,10 +45,10 @@ uv run quarto preview  # live-reload preview of the full site
 
 If Quarto can't find Jupyter (it sometimes picks up a system Python instead of `.venv`), see the troubleshooting note in [course-info/setup.md](course-info/setup.md).
 
-## Deployment
 
-A GitHub Actions workflow (`.github/workflows/publish.yml`) renders the site and publishes it to the `gh-pages` branch on every push to `main`. No manual render/commit step is needed — just push source files.
+## Contributions
 
-## For students
+We have a page dedicated to whom is willing of contributing into our repo. Please read [contributions](course-info/how-to-contribute.md)
 
-See the **Course Information → Standard Set Up** page on the site for clone/setup instructions.
+
+![logos](/assets/logos/union_logo.png)
