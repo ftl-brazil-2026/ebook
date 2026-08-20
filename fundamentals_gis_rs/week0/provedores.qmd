@@ -1,0 +1,16 @@
+---
+title: "Provedores de Dados Geoespaciais"
+subtitle: "Temas de interesse × onde encontrar cada um"
+resources:
+  - data/provedores.json
+---
+
+Para cada um dos 19 temas que mais interessaram na turma, mapeamos de 4 a 6 provedores de dados — 94 conexões tema&ndash;provedor no total. Clique num tema para abrir e ver os provedores; clique num provedor para ir direto ao site.
+
+{{< include data/temas_provedores_bubble.html >}}
+
+::: {.callout-tip appearance="simple"}
+## Quer adicionar um provedor?
+
+Os dados desse diagrama vivem em [`data/provedores.json`](data/provedores.json), editável por qualquer aluno. Veja o passo a passo em [Como Contribuir](../../course-info/how-to-contribute.md).
+:::

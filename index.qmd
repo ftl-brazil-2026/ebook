@@ -1,0 +1,28 @@
+---
+title: "SpaceTech Bootcamp"
+subtitle: "Future Tech Leaders Brasil — Course Ebook"
+---
+
+::: {.logo-row}
+![](assets/logos/Future_Tech_Leaders3-01.png){alt="United Nations"}
+:::
+
+Bem-vindo(a)! Este site é o nosso ebook do Future Tech Leaders Brasil - Space Tech Bootcam.
+
+Use a barra lateral à esquerda para navegar:
+
+- **Course Information** : informações gerais, leituras recomendadas e como configurar o seu ambiente para dados geoespaciais.
+- **Fundamentos em GIS e Sensoriamento Remoto** — Nossas sessões semanais, organizadas referente ao calendário disponibilizado do curso, com python notebooks para as aulas práticas.
+- **Fundamentos em Machine Learning e Deep Learning** - Materiais e práticas referente a ML e DL aplicado a observação da terra, bem como atividade de visão computacional.
+- **Estado da Arte (State-of-Art)** - Últimos avanços e paradigmas sobre Deep Learning, incorporando sessões práticas com arquitetura de Deep Learning, Embeddings, Foundation Models, Knowledge Distillation (Destilação) e muito mais! 
+- **Sessões de Convidados** - Página específica onde disponibizaremos todos os materiais que nossos experts dentro da área de dados geoespaciais apresentarão no decorrer desse bootcamp. 
+
+::: {.callout-tip appearance="simple"}
+## Primeira vez por aqui?
+
+Comece pela página de [Setup](course-info/setup.md) para configurar o seu ambiente.
+:::
+
+::: {.logo-bottom}
+![logoAEB](assets/logos/union_logo.png){alt="Logos"}
+:::

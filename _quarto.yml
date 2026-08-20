@@ -1,0 +1,79 @@
+project:
+  type: website
+
+website:
+  title: "SpaceTech Bootcamp — GIS"
+  site-url: "https://emanuel-gf.github.io/spacetech-gis-ebook/"
+  repo-url: "https://github.com/emanuel-gf/spacetech-gis-ebook"
+  page-navigation: true
+  navbar:
+    right:
+      - icon: github
+        href: https://github.com/emanuel-gf/spacetech-gis-ebook
+  sidebar:
+    style: docked
+    collapse-level: 1
+    contents:
+      - text: "Home"
+        href: index.qmd
+      - section: "Course Information"
+        contents:
+          - course-info/general-info.md
+          - course-info/reading.md
+          - course-info/setup.md
+          - course-info/cli-utils.md
+          - course-info/how-to-contribute.md
+      - section: "Fundamentos em GIS e Sensoriamento Remoto"
+        contents:
+          - section: "Week 0 — Python Basics"
+            contents:
+              - fundamentals_gis_rs/week0/index.qmd
+              - fundamentals_gis_rs/week0/provedores.qmd
+              - fundamentals_gis_rs/week0/space_tech_ecossystem.ipynb
+          - section: "Week 1 — Introduction to GIS"
+            contents:
+              - fundamentals_gis_rs/week1/index.qmd
+              - fundamentals_gis_rs/week1/week1_introductionGIS.ipynb
+          - section: "Week 2"
+            contents:
+              - fundamentals_gis_rs/week2/index.md
+          - section: "Week 3"
+            contents:
+              - fundamentals_gis_rs/week3/index.md
+          - section: "Week 4"
+            contents:
+              - fundamentals_gis_rs/week4/index.md
+      - section: "Fundamentos em Machine Learning e Deep Learning"
+        contents:
+          - ml-dl/index.md
+      - section: "Estado da Arte (State-of-Art)"
+        contents:
+          - state-of-art/index.md
+      - section: "Sessões de Convidados"
+        contents:
+          - guest-sessions/index.md
+      - text: "Awesome Geospatial"
+        href: awesome-geospatial/index.md
+  page-footer:
+    left: "SpaceTech Bootcamp · Emanuel Goulart"
+    right: "Built with Quarto"
+
+format:
+  html:
+    theme: [cosmo, custom.scss]
+    toc: true
+    toc-depth: 3
+    toc-title: "On this page"
+    code-fold: true
+    code-tools: true
+    code-copy: true
+    smooth-scroll: true
+    anchor-sections: true
+    fig-align: center
+
+execute:
+  engine: jupyter
+  echo: true
+  warning: false
+  message: false
+  freeze: auto

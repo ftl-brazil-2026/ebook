@@ -1,0 +1,25 @@
+# Quarto
+/.quarto/
+/_site/
+**/*.quarto_ipynb
+
+# Python / uv
+.venv/
+__pycache__/
+*.py[oc]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# Legacy content kept locally for reference, not published
+/_legacy/
+
+
+## important!!!!
+.env
+
+## qualquer coisa
+manifest_os/

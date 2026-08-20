@@ -1,0 +1,160 @@
+<style>
+  :root {
+    --ink: #1a1a19; --ink-2: #52514e; --muted: #898781;
+    --br: #1baf7a; --gl: #2a78d6; --surface: #ffffff; --line: #e1e0d9;
+  }
+  .geo-wrap { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--ink); max-width: 900px; margin: 0 auto; }
+  .geo-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 10px; font-size: 13px; color: var(--ink-2); }
+  .geo-key { display: flex; align-items: center; gap: 6px; }
+  .geo-dot { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .geo-hint { color: var(--muted); font-size: 12px; margin-left: auto; }
+  .geo-svg { width: 100%; height: auto; display: block; cursor: pointer; }
+  .geo-svg text { pointer-events: none; }
+  .geo-panel { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; font-size: 14px; min-height: 110px; }
+  .geo-panel h3 { margin: 0 0 2px; font-size: 16px; font-weight: 500; }
+  .geo-panel .sub { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+  .geo-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px 20px; }
+  .geo-list li { border-left: 3px solid var(--line); padding: 2px 0 2px 10px; }
+  .geo-list li.br { border-left-color: var(--br); }
+  .geo-list li.gl { border-left-color: var(--gl); }
+  .geo-list a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: 13.5px; }
+  .geo-list a:hover { text-decoration: underline; }
+  .geo-list span { display: block; color: var(--ink-2); font-size: 12.5px; line-height: 1.45; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #f0efec; --ink-2: #c3c2b7; --surface: #1a1a19; --line: #2c2c2a; }
+  }
+</style>
+<div class="geo-wrap">
+  <div class="geo-bar">
+    <span class="geo-key"><i class="geo-dot" style="background:#1baf7a"></i>Provedor brasileiro</span>
+    <span class="geo-key"><i class="geo-dot" style="background:#2a78d6"></i>Provedor internacional</span>
+    <span class="geo-hint">Tamanho do tema = votos no questionário. Clique num tema para abrir; clique num provedor para ir direto ao site.</span>
+  </div>
+  <svg class="geo-svg" id="geoSvg" role="img" aria-label="Diagrama de bolhas ligando temas de interesse a provedores de dados"></svg>
+  <div class="geo-panel" id="geoPanel">Carregando…</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+(function () {
+const BR = "#1baf7a", GL = "#2a78d6";
+const W = 900, H = 760;
+const svg = d3.select("#geoSvg").attr("viewBox", [-W/2, -H/2, W, H]);
+const panel = d3.select("#geoPanel");
+
+// Carrega provedores.json em tempo de execução -- é a única fonte de dados.
+// Editar o JSON é o bastante: não existe mais uma cópia duplicada dos dados aqui no HTML.
+d3.json("data/provedores.json").then(DATA => {
+
+const root = d3.hierarchy({name: "root", children: DATA.categorias.map(c => ({
+    name: c.nome, votos: c.votos,
+    children: c.provedores.map(p => ({name: p.nome, escopo: p.escopo, url: p.url, dado: p.dado, value: 1}))
+  }))})
+  .sum(d => d.value)
+  .sort((a, b) => (b.data.votos || 0) - (a.data.votos || 0));
+
+root.children.forEach(c => { c.value = 6 + (c.data.votos || 1) * 2.2; });
+root.value = d3.sum(root.children, c => c.value);
+
+d3.pack().size([W - 8, H - 8]).padding(6)(root);
+
+let focus = root, view;
+
+const node = svg.append("g").selectAll("circle")
+  .data(root.descendants().slice(1))
+  .join("circle")
+    .attr("fill", d => d.depth === 1 ? (isDark() ? "#232322" : "#f5f4f0") : (d.data.escopo === "BR" ? BR : GL))
+    .attr("fill-opacity", d => d.depth === 1 ? 1 : 0.85)
+    .attr("stroke", d => d.depth === 1 ? (isDark() ? "#3a3a37" : "#dcdad2") : "none")
+    .style("cursor", "pointer")
+    .on("mouseover", function(){ d3.select(this).attr("fill-opacity", 1); })
+    .on("mouseout", function(d){ d3.select(this).attr("fill-opacity", this.__depth === 1 ? 1 : 0.85); })
+    .on("click", (event, d) => {
+      if (d.depth === 1) {
+        zoom(event, d);
+        showCategory(d);
+      } else {
+        // clique num provedor: abre o site direto numa nova aba
+        showProvider(d);
+        if (focus !== d.parent) zoom(event, d.parent);
+        window.open(d.data.url, "_blank", "noopener");
+      }
+      event.stopPropagation();
+    });
+
+node.each(function(d){ this.__depth = d.depth; });
+
+const label = svg.append("g")
+    .style("font-family", "system-ui, sans-serif")
+    .attr("text-anchor", "middle")
+  .selectAll("text")
+  .data(root.descendants().slice(1))
+  .join("text")
+    .style("fill-opacity", d => d.parent === root ? 1 : 0)
+    .style("display", d => d.parent === root ? "inline" : "none")
+    .style("font-size", d => d.depth === 1 ? "13px" : "11px")
+    .style("fill", d => d.depth === 1 ? (isDark() ? "#f0efec" : "#1a1a19") : "#ffffff")
+    .each(function(d){ wrap(d3.select(this), d.data.name, d.depth === 1 ? 15 : 18); });
+
+svg.on("click", (event) => { zoom(event, root); panel.html(intro()); });
+zoomTo([root.x, root.y, root.r * 2]);
+panel.html(intro());
+
+function isDark(){ return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
+
+function wrap(sel, text, maxChars) {
+  const words = String(text).split(/\s+/);
+  const lines = []; let line = "";
+  words.forEach(w => {
+    if ((line + " " + w).trim().length > maxChars && line) { lines.push(line); line = w; }
+    else line = (line + " " + w).trim();
+  });
+  if (line) lines.push(line);
+  const dy0 = -((lines.length - 1) * 0.55);
+  sel.selectAll("tspan").data(lines).join("tspan")
+    .attr("x", 0).attr("dy", (d, i) => (i === 0 ? dy0 : 1.1) + "em").text(d => d);
+}
+
+function zoomTo(v) {
+  const k = W / v[2]; view = v;
+  label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`)
+       .style("font-size", d => (d.depth === 1 ? 13 : 11) * (focus === root ? 1 : Math.min(k / (W / (root.r * 2)), 2.2)) + "px");
+  node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`).attr("r", d => d.r * k);
+}
+
+function zoom(event, d) {
+  focus = d;
+  const t = svg.transition().duration(650).tween("zoom", () => {
+    const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
+    return t2 => zoomTo(i(t2));
+  });
+  label.filter(function(l){ return l.parent === focus || this.style.display === "inline"; })
+    .transition(t)
+      .style("fill-opacity", l => l.parent === focus ? 1 : 0)
+      .on("start", function(l){ if (l.parent === focus) this.style.display = "inline"; })
+      .on("end", function(l){ if (l.parent !== focus) this.style.display = "none"; });
+}
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+
+function intro() {
+  const nCat = DATA.categorias.length;
+  const nProv = new Set(DATA.categorias.flatMap(c => c.provedores.map(p => p.nome))).size;
+  return `<h3>${esc(DATA.meta.titulo)}</h3><div class="sub">${nCat} temas, ${nProv} provedores distintos. ${esc(DATA.meta.fonte_votos)}</div>`;
+}
+
+function showCategory(d) {
+  const c = DATA.categorias.find(x => x.nome === d.data.name);
+  const items = c.provedores.map(p => `<li class="${p.escopo === 'BR' ? 'br' : 'gl'}"><a href="${p.url}" target="_blank" rel="noopener">${esc(p.nome)}</a><span>${esc(p.dado)}</span></li>`).join("");
+  panel.html(`<h3>${esc(c.nome)}</h3><div class="sub">${c.provedores.length} provedores &middot; clique num nome ou numa bolha para abrir</div><ul class="geo-list">${items}</ul>`);
+}
+
+function showProvider(d) {
+  panel.html(`<h3><a href="${d.data.url}" target="_blank" rel="noopener" style="color:inherit">${esc(d.data.name)}</a></h3><div class="sub">${d.data.escopo === 'BR' ? 'Provedor brasileiro' : 'Provedor internacional'} &middot; tema: ${esc(d.parent.data.name)}</div><ul class="geo-list"><li class="${d.data.escopo === 'BR' ? 'br' : 'gl'}"><span>${esc(d.data.dado)}</span></li></ul>`);
+}
+
+}).catch(err => {
+  panel.html(`<p style="color:#c0392b">Não foi possível carregar provedores.json: ${err}</p>`);
+  console.error(err);
+});
+})();
+</script>

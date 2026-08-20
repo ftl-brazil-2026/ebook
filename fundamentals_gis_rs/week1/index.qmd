@@ -1,0 +1,793 @@
+---
+title: "Introdução a Mapas de Calor"
+subtitle: "Sistemas de Informação Geográfica — Mão na Massa"
+author: "Emanuel Goulart"
+date: today
+---
+
+::: {.callout-note appearance="simple"}
+Notebook para exploração livre desta aula: [week1_introductionGIS.ipynb](week1_introductionGIS.ipynb)
+:::
+
+```{python}
+#| include: false
+import warnings
+warnings.filterwarnings('ignore')
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+from scipy.stats import gaussian_kde
+import geopandas as gpd
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+import plotly.express as px
+```
+
+------------------------------------------------------------------------
+
+## Introdução a Mapas de Calor em SIG
+
+::: {.callout-tip appearance="simple"}
+## Nota sobre Acrônimos
+
+Devido ao grande uso de acrônimos relativos a noções de dados geoespaciais, durante essa apresentação farei uso dos acrônimos em Inglês, para facilitar a pesquisa e padronização de métricas.
+
+| Acrônimos em Português | Acrônimos em Inglês |
+|------------------------------------|------------------------------------|
+| Sistema de Coordenadas de Referência (SCR) | Coordinate Reference System (CRS) |
+| Sistema de Informação Georreferenciada (SIG) | Geographical Information System (GIS) |
+
+: Lista de Abreviações
+:::
+
+------------------------------------------------------------------------
+
+# Capítulo 1 — Sistemas de Coordenadas de Referência (CRS) {#crs}
+
+::: {.callout-note appearance="simple"}
+## Motivação
+
+- Como localizar objetos na Terra?
+- Onde definimos o centro de um eixo?
+- O que define norte e sul?
+:::
+
+![Imagem recente do planeta Terra capturada pela última missão Artemis II. Fonte: Artemis II. NASA. 02-04-2026.](images/artemis2.jpg){fig-align="center"}
+
+------------------------------------------------------------------------
+
+Um sistema de coordenadas (CRS) define como as representações gráficas nas ferramentas GIS estão localizadas e posicionadas no planeta Terra. Portanto, se partimos da presunção de que a Terra é uma esfera perfeita, poderíamos correlacionar esse ponto com a perspectiva de um ponto tangenciando uma esfera.
+
+```{python}
+import numpy as np
+import plotly.graph_objects as go
+
+R = 1.0
+
+theta = np.pi / 4
+phi = np.pi / 3
+
+x0 = R * np.sin(theta) * np.cos(phi)
+y0 = R * np.sin(theta) * np.sin(phi)
+z0 = R * np.cos(theta)
+
+u = np.linspace(0, 2*np.pi, 80)
+v = np.linspace(0, np.pi, 80)
+
+x = R * np.outer(np.cos(u), np.sin(v))
+y = R * np.outer(np.sin(u), np.sin(v))
+z = R * np.outer(np.ones_like(u), np.cos(v))
+
+sphere = go.Surface(
+    x=x, y=y, z=z,
+    opacity=0.4,
+    colorscale="Blues",
+    showscale=False
+)
+
+vector = go.Scatter3d(
+    x=[0, x0],
+    y=[0, y0],
+    z=[0, z0],
+    mode="lines+markers",
+    line=dict(color="red", width=6),
+    marker=dict(size=4),
+    name="vetor r"
+)
+
+point = go.Scatter3d(
+    x=[x0],
+    y=[y0],
+    z=[z0],
+    mode="markers",
+    marker=dict(size=6, color="red"),
+)
+
+L = 1.5 * R
+
+axes = [
+    go.Scatter3d(x=[-L, L], y=[0, 0], z=[0, 0],
+                 mode="lines", line=dict(color="black", width=4)),
+    go.Scatter3d(x=[0, 0], y=[-L, L], z=[0, 0],
+                 mode="lines", line=dict(color="black", width=4)),
+    go.Scatter3d(x=[0, 0], y=[0, 0], z=[-L, L],
+                 mode="lines", line=dict(color="black", width=4)),
+]
+
+layout = go.Layout(
+    scene=dict(
+        xaxis=dict(title="X", showbackground=True),
+        yaxis=dict(title="Y", showbackground=True),
+        zaxis=dict(title="Z", showbackground=True),
+        aspectmode="cube"
+    ),
+    margin=dict(l=0, r=0, b=0, t=0)
+)
+
+fig = go.Figure(data=[sphere, vector, point] + axes, layout=layout)
+fig.show()
+```
+
+Bom... considerando que a Terra é redonda. Contudo, os dados mostram que o formato da Terra não é exatamente esférico.
+
+![Campo gravitacional terrestre (Geoide). Fonte: ESA](images/geoide.webp){fig-align="center"}
+
+[Animação da Representação do Geoide](https://www.esa.int/ESA_Multimedia/Videos/2021/03/The_geoid) — ESA
+
+Portanto, esse sistema define padrões e afinidades que permitem localizar um ponto em qualquer lugar da Terra. Há de se considerar que o padrão esférico não muito viável para levar a todos os cantos, estimar fronteiras, etc. Dessa forma, a cartografia desse seus primórdios rabiscou o planeta como uma projeção bi-dimensional em um plano cartesiano XY.
+
+![Família de projeções geográficas. Fonte: R Spatial Book](images/projection_families.png){fig-align="center"}
+
+::: callout-tip
+## Projeções e Distorções
+
+Hoje, naturalmente, o processo de projetar uma Terra esférica num papel plano é feito usando princípios matemáticos de geometria e trigonometria, reproduzindo-se a projeção física de luz através do globo.
+
+Dessa forma, precisamos elencar a ideia de distorção. O conceito da deformação cartográfica — seja ela em ângulo, área ou distâncias — existe simplesmente porque é possível representar a Terra de várias formas.
+:::
+
+Dessa forma, quando lidamos com dados espaciais, temos diversos acordos que facilitam o compartilhamento dos dados e da informação.
+
+| CRS       | Descrição                                  |
+|-----------|--------------------------------------------|
+| EPSG:4326 | WGS84 — latitude / longitude               |
+| EPSG:3857 | Projeção Web Mercator — usada em mapas web |
+| EPSG:2154 | Lambert 93 (França)                        |
+
+: Sistemas de Coordenadas de Referência mais utilizados
+
+## Planet Terra em três projeções diferentes.
+
+Os mesmos dados, formas muito diferentes, a projeção é uma decisão analítica, não apenas estética, quiçá política.
+
+```{python}
+#| label: fig-africa
+#| fig-cap: "O mundo em três projeções: PlateCarree (geográfica), Mercator e Mollweide (equivalente em área)."
+
+world = gpd.read_file(
+    "https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_0_countries.zip"
+)
+
+projections = [
+    (ccrs.PlateCarree(),   'PlateCarree — Geográfica',          '#457b9d'),
+    (ccrs.Mercator(),      'Mercator — Conformal',               '#f4a261'),
+    (ccrs.Mollweide(),     'Mollweide — Equivalente em Área ✓',  '#e63946'),
+]
+
+fig, axes = plt.subplots(
+    1, 3, figsize=(15, 6),
+    subplot_kw={'projection': None}
+)
+
+for i, (proj, title, color) in enumerate(projections):
+    ax = fig.add_subplot(1, 3, i + 1, projection=proj)
+    ax.set_global()
+    ax.add_feature(cfeature.OCEAN, facecolor='#e8f4f8')
+    ax.add_feature(cfeature.LAND,  facecolor='#f0f0f0')
+    for geom in world.geometry:
+        ax.add_geometries(
+            [geom], ccrs.PlateCarree(),
+            facecolor=color, edgecolor='white', linewidth=0.5
+        )
+    ax.set_title(title, fontsize=11, fontweight='bold', pad=10)
+
+plt.tight_layout()
+plt.show()
+
+```
+
+### Fun Fact
+
+A bandeira da ONU é uma projeção equidistante.
+
+```{python}
+from matplotlib.patches import PathPatch
+import matplotlib.path
+import matplotlib.pyplot as plt
+import matplotlib.ticker
+from matplotlib.transforms import Bbox, BboxTransform
+import numpy as np
+
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+
+
+# When drawing the flag, we can either use white filled land, or be a little
+# more fancy and use the Natural Earth shaded relief imagery.
+filled_land = True
+
+
+def olive_path():
+    """
+    Return a Matplotlib path representing a single olive branch from the
+    UN Flag. The path coordinates were extracted from the SVG at
+    https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Nations.svg.
+
+    """
+    olives_verts = np.array(
+        [[0,   2,   6,   9,  30,  55,  79,  94, 104, 117, 134, 157, 177,
+          188, 199, 207, 191, 167, 149, 129, 109,  87,  53,  22,   0, 663,
+          245, 223, 187, 158, 154, 150, 146, 149, 154, 158, 181, 184, 197,
+          181, 167, 153, 142, 129, 116, 119, 123, 127, 151, 178, 203, 220,
+          237, 245, 663, 280, 267, 232, 209, 205, 201, 196, 196, 201, 207,
+          211, 224, 219, 230, 220, 212, 207, 198, 195, 176, 197, 220, 239,
+          259, 277, 280, 663, 295, 293, 264, 250, 247, 244, 240, 240, 243,
+          244, 249, 251, 250, 248, 242, 245, 233, 236, 230, 228, 224, 222,
+          234, 249, 262, 275, 285, 291, 295, 296, 295, 663, 294, 293, 292,
+          289, 294, 277, 271, 269, 268, 265, 264, 264, 264, 272, 260, 248,
+          245, 243, 242, 240, 243, 245, 247, 252, 256, 259, 258, 257, 258,
+          267, 285, 290, 294, 297, 294, 663, 285, 285, 277, 266, 265, 265,
+          265, 277, 266, 268, 269, 269, 269, 268, 268, 267, 267, 264, 248,
+          235, 232, 229, 228, 229, 232, 236, 246, 266, 269, 271, 285, 285,
+          663, 252, 245, 238, 230, 246, 245, 250, 252, 255, 256, 256, 253,
+          249, 242, 231, 214, 208, 208, 227, 244, 252, 258, 262, 262, 261,
+          262, 264, 265, 252, 663, 185, 197, 206, 215, 223, 233, 242, 237,
+          237, 230, 220, 202, 185, 663],
+         [8,   5,   3,   0,  22,  46,  46,  46,  35,  27,  16,  10,  18,
+          22,  28,  38,  27,  26,  33,  41,  52,  52,  52,  30,   8, 595,
+          77,  52,  61,  54,  53,  52,  53,  55,  55,  57,  65,  90, 106,
+          96,  81,  68,  58,  54,  51,  50,  51,  50,  44,  34,  43,  48,
+          61,  77, 595, 135, 104, 102,  83,  79,  76,  74,  74,  79,  84,
+          90, 109, 135, 156, 145, 133, 121, 100,  77,  62,  69,  67,  80,
+          92, 113, 135, 595, 198, 171, 156, 134, 129, 124, 120, 123, 126,
+          129, 138, 149, 161, 175, 188, 202, 177, 144, 116, 110, 105,  99,
+          108, 116, 126, 136, 147, 162, 173, 186, 198, 595, 249, 255, 261,
+          267, 241, 222, 200, 192, 183, 175, 175, 175, 175, 199, 221, 240,
+          245, 250, 256, 245, 233, 222, 207, 194, 180, 172, 162, 153, 154,
+          171, 184, 202, 216, 233, 249, 595, 276, 296, 312, 327, 327, 327,
+          327, 308, 284, 262, 240, 240, 239, 239, 242, 244, 247, 265, 277,
+          290, 293, 296, 300, 291, 282, 274, 253, 236, 213, 235, 252, 276,
+          595, 342, 349, 355, 357, 346, 326, 309, 303, 297, 291, 290, 297,
+          304, 310, 321, 327, 343, 321, 305, 292, 286, 278, 270, 276, 281,
+          287, 306, 328, 342, 595, 379, 369, 355, 343, 333, 326, 318, 328,
+          340, 349, 366, 373, 379, 595]]).T
+    olives_codes = np.array([1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 4, 4, 4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4,
+                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 2, 4,
+                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4,
+                             4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+                             4, 4, 79], dtype=np.uint8)
+
+    return matplotlib.path.Path(olives_verts, olives_codes)
+
+
+
+blue = '#4b92db'
+
+# We're drawing a flag with a 3:5 aspect ratio.
+fig = plt.figure(figsize=[7.5, 4.5], facecolor=blue)
+# Put a blue background on the figure.
+blue_background = PathPatch(matplotlib.path.Path.unit_rectangle(),
+                            transform=fig.transFigure, color=blue,
+                            zorder=-1)
+fig.patches.append(blue_background)
+
+# Set up the Azimuthal Equidistant and Plate Carree projections
+# for later use.
+az_eq = ccrs.AzimuthalEquidistant(central_latitude=90)
+pc = ccrs.PlateCarree()
+
+# Pick a suitable location for the map (which is in an Azimuthal
+# Equidistant projection).
+ax = fig.add_axes([0.25, 0.24, 0.5, 0.54], projection=az_eq)
+
+# The background patch is not needed in this example.
+ax.patch.set_facecolor('none')
+# The Axes frame produces the outer meridian line.
+for spine in ax.spines.values():
+    spine.update({'edgecolor': 'white', 'linewidth': 2})
+
+# We want the map to go down to -60 degrees latitude.
+ax.set_extent([-180, 180, -60, 90], ccrs.PlateCarree())
+
+# Importantly, we want the axes to be circular at the -60 latitude
+# rather than cartopy's default behaviour of zooming in and becoming
+# square.
+_, patch_radius = az_eq.transform_point(0, -60, pc)
+circular_path = matplotlib.path.Path.circle(0, patch_radius)
+ax.set_boundary(circular_path)
+
+if filled_land:
+    ax.add_feature(
+        cfeature.LAND, facecolor='white', edgecolor='none')
+else:
+    ax.stock_img()
+
+gl = ax.gridlines(crs=pc, linewidth=2, color='white', linestyle='-')
+# Meridians every 45 degrees, and 4 parallels.
+gl.xlocator = matplotlib.ticker.FixedLocator(np.arange(-180, 181, 45))
+parallels = np.arange(-30, 70, 30)
+gl.ylocator = matplotlib.ticker.FixedLocator(parallels)
+
+# Now add the olive branches around the axes. We do this in normalised
+# figure coordinates
+olive_leaf = olive_path()
+
+olives_bbox = Bbox.null()
+olives_bbox.update_from_path(olive_leaf)
+
+# The first olive branch goes from left to right.
+olive1_axes_bbox = Bbox([[0.45, 0.15], [0.725, 0.75]])
+olive1_trans = BboxTransform(olives_bbox, olive1_axes_bbox)
+
+# THe second olive branch goes from right to left (mirroring the first).
+olive2_axes_bbox = Bbox([[0.55, 0.15], [0.275, 0.75]])
+olive2_trans = BboxTransform(olives_bbox, olive2_axes_bbox)
+
+olive1 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',
+                    transform=olive1_trans + fig.transFigure)
+olive2 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',
+                    transform=olive2_trans + fig.transFigure)
+
+fig.patches.append(olive1)
+fig.patches.append(olive2)
+
+plt.show()
+
+
+
+```
+
+::: callout-note
+## Sistema UTM - Universal Transverse Mercator
+
+O Sistema de Coordenadas Universal Transverso de Mercator (UTM) tem sua origem no equador em uma longitude específica. Para diminuir distorções, o mundo é dividido em 60 zonas com 6 graus de comprimento em longitude. As zonas são numeradas entre 1 e 60, em ordem respectiva de oeste a leste.
+
+```{python}
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+
+
+# Create a list of integers from 1 - 60
+zones = range(1, 61)
+
+# Create a figure
+fig = plt.figure(figsize=(18, 6))
+
+# Loop through each zone in the list
+for zone in zones:
+
+    # Add GeoAxes object with specific UTM zone projection to the figure
+    ax = fig.add_subplot(1, len(zones), zone,
+                            projection=ccrs.UTM(zone=zone,
+                                                southern_hemisphere=True))
+
+    # Add coastlines, gridlines and zone number for the subplot
+    ax.coastlines(resolution='110m')
+    ax.gridlines()
+    ax.set_title(zone)
+
+# Add a supertitle for the figure
+fig.suptitle("UTM Projection - Zones")
+
+# Display the figure
+plt.show()
+```
+:::
+
+### Falando sobre projeções...
+
+![Novo mapa mundi divulgado pelo Governo do Brasil, 2026. Fonte: IBGE](images/ibge-mapa-mundi.webp){fig-align="center"}
+
+------------------------------------------------------------------------
+
+# Capítulo 2 — Tipos de Dados Geoespaciais {#tipos-dados}
+
+::: {.callout-note appearance="simple"}
+## As Duas Maneiras "Bem Conhecidas" de Representar o Mundo
+
+|            | **Vetorial**                   | **Raster**                       |
+|------------------------|------------------------|------------------------|
+| Representa | Objetos discretos              | Campos contínuos                 |
+| Estrutura  | Pontos, linhas, polígonos      | Grade regular de células         |
+| Exemplos   | Cidades, rodovias, países      | Temperatura, elevação, densidade |
+| Formato    | GeoJSON, Shapefile, GeoPackage | GeoTIFF, NetCDF, Zarr, COG       |
+|            |                                |                                  |
+:::
+
+Da qual ambos possuem padrões bem estabelecidos que são compartilhados entre a maioria das linguagens de dados. Esses padrões podem ser encontrados no padrão **Simple Features** (ISO 19125-1). Também são conhecidos como Well-Known Text (WKT), pois representam de forma serializada e legível ao ser humano. Por exemplo: `POINT (25 60.5)`, sabendo que `POINT (LON LAT)`.
+
+A Especificação *Simple Features Access* (Herring, 2011), é um padrão (ISO 19125-1) formalizado pelo [Consórcio Geoespacial Global](https://www.ogc.org/) e Organizações Internacionais.
+
+::: {.callout-tip appearance="minimal"}
+> "O Well-known text (WKT) também é definido na Especificação Simple Features Access. As geometrias também podem ser representadas em formato binário, denominado Well-known binary (WKB). O WKB é útil para armazenar geometrias de forma mais compacta, mas não é legível por humanos. Na maioria das vezes, você não precisa se preocupar com esses detalhes técnicos ao trabalhar com dados espaciais, mas é útil conhecer os fundamentos subjacentes à maioria (senão a todas) as bibliotecas GIS."
+:::
+
+``` r
+> st_as_binary(st_point(c(0,1)))
+ [1] 01 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 f0 3f
+> st_as_binary(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
+ [1] 01 03 00 00 00 01 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[26] 00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00 00 00 00 00 00 00 00 00 00
+[51] 00 f0 3f 00 00 00 00 00 00 f0 3f 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[76] f0 3f 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+```
+
+## Dados Vetoriais: Simple Features
+
+- **Ponto** (*Point*) — uma única localização: `POINT (25 60.5)`
+- **Linha** (*LineString*) — uma sequência de pontos conectados: estradas, rios
+- **Polígono** (*Polygon*) — uma área fechada: fronteiras de países, contornos de lagos.
+
+![Formas vetoriais mais comuns. Fonte: R-Spatial Book](images/vector_data_model.png)
+
+—
+
+Cada uma dessas geometrias pode carregar uma série de atributos, onde esses atributos possuem propriedades. Pense como uma grande planilha de Excel que possui um ponto ou geometria associado a ela. Isso nos dá uma possibilidade muito grande de carregar informações geoespaciais e tirar grandes lições e direções *data-driven*.
+
+::: callout-tip
+**"As geometrias te dizem: Onde? A tabela de atributos, te diz: O quê?"**
+:::
+
+![Ilustração da tabela de attributos. Fonte: Allison Horst](images/attribtps.png){fig-align="center"}
+
+### Representações Geoespaciais
+
+Sempre é bom se perguntar: **qual é a projeção correta para os meus dados?**
+
+::: callout-tip
+## Não Existe Receita de Bolo
+
+Projeções que não possuem distorções não existem, mas algumas projeções são amplamente utilizadas e por vezes referendadas por órgãos federais de cada nação.
+
+Alguns sites interessantes para visualizar rapidamente as diferentes projeções:
+
+- [EPSG.IO](https://epsg.io/)
+- [FindMyProjection](https://findmyprojection.com/)
+- [BboxFinder](https://bboxfinder.com/)
+:::
+
+Devemos estar cientes das distorções cartográficas.
+
+::: {.callout-note appearance="simple"}
+## Elementos Básicos de um Mapa
+
+Todo mapa apresentado a uma audiência precisa de ao menos:
+
+- **Legenda** — o que as cores significam e quais são as unidades?
+- **Escala** — qual é o tamanho da área em termos do mundo real?
+- **Rosa dos Ventos** — orientação cardinal
+- **Título** — qual fenômeno está sendo exibido, de qual dado?
+- **Rótulo de Projeção** — qual CRS foi utilizado?
+- **Paleta de Cores** - Sua paleta de cores é adequada para o usuário final?
+:::
+
+------------------------------------------------------------------------
+
+# Capítulo 3 — Interpolação Espacial {#interpolacao}
+
+::: {.callout-note appearance="simple"}
+## Recapitulando
+
+- Temos a noção de espaço, coordenadas geográficas e sistema de coordenadas
+- Compreendemos os tipos de dados geoespaciais
+:::
+
+## A Ideia Central
+
+Imagine um antro de pontos distribuidos sobre um plano. Podemos visualmente inferir noções a esses pontos como proximidade relativa, alguma percepção de densidade, e uma noção especial de como esses pontos estao distribuidos sobre um dado plano. Imagine posicionar uma suave "colina" sobre cada ponto observado. A KDE (*Kernel Density Estimation*) é a **soma de todas essas colinas**, alta onde as observações se concentram, plana onde são esparsas.
+
+$$\hat{f}(x) = \frac{1}{n h^2} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)$$
+
+Onde $K$ é o **kernel** (a forma da colina) e $h$ é a **largura de banda** (*bandwidth*) , o quão larga ela se espalha.
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KernelDensity
+
+# Generate random 2D points
+np.random.seed(42)
+points = np.random.rand(100, 2) * 10  # 100 points in [0, 10] x [0, 10]
+
+# Fit Kernel Density Estimation
+kde = KernelDensity(bandwidth=0.5, metric='euclidean')
+kde.fit(points)
+
+# Create a grid for density evaluation
+x_grid, y_grid = np.meshgrid(np.linspace(0, 10, 200), np.linspace(0, 10, 200))
+grid_points = np.vstack([x_grid.ravel(), y_grid.ravel()]).T
+log_density = kde.score_samples(grid_points)
+density = np.exp(log_density).reshape(x_grid.shape)
+
+# Create a 2-column subplot
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# First subplot: Only the points
+ax1.scatter(points[:, 0], points[:, 1], s=10, c='red')
+ax1.set_title('Random Points')
+ax1.set_xlabel('X')
+ax1.set_ylabel('Y')
+ax1.grid(True)
+
+# Second subplot: Density estimation
+contour = ax2.contourf(x_grid, y_grid, density, levels=20, cmap='viridis', alpha=0.6)
+fig.colorbar(contour, ax=ax2, label='Density')
+ax2.set_title('Kernel Density Estimation')
+ax2.set_xlabel('X')
+ax2.set_ylabel('Y')
+ax2.grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Efeito da Largura de Banda
+
+```{python}
+#| label: fig-bandwidth
+#| fig-cap: "Três escolhas de largura de banda nos mesmos dados. Muito pequena = ruidosa. Muito grande = super-suavizada. A do meio usa a regra de Scott, um seletor automático fundamentado."
+
+np.random.seed(13531)
+n = 60
+x2 = np.concatenate([np.random.uniform(0.05, 0.45, 35),
+                      np.random.uniform(0.55, 0.95, 25)])
+y2 = np.concatenate([np.random.uniform(0.05, 0.95, 35),
+                      np.random.uniform(0.05, 0.55, 25)])
+xy2 = np.vstack([x2, y2])
+
+grid_x, grid_y = np.meshgrid(
+    np.linspace(0, 1, 200),
+    np.linspace(0, 1, 200)
+)
+grid_pts = np.vstack([grid_x.ravel(), grid_y.ravel()])
+
+bw_scott = gaussian_kde(xy2).factor
+bandwidths = [
+    (bw_scott * 0.25, f'Muito pequena  h={bw_scott*0.25:.3f}'),
+    (bw_scott,        f'Ótima          h={bw_scott:.3f}  (Scott)'),
+    (bw_scott * 4,    f'Muito grande   h={bw_scott*4:.3f}'),
+]
+
+cmap = mcolors.LinearSegmentedColormap.from_list(
+    'heatmap', ['#0d1b2a', '#457b9d', '#f4a261', '#e63946']
+)
+
+fig, axes = plt.subplots(1, 3, figsize=(14, 4.5))
+
+for ax, (bw, title) in zip(axes, bandwidths):
+    kde2 = gaussian_kde(xy2, bw_method=bw)
+    z = kde2(grid_pts).reshape(200, 200)
+    ax.imshow(z, extent=[0,1,0,1], origin='lower', cmap=cmap, aspect='equal')
+    ax.scatter(x2, y2, color='white', s=8, alpha=0.5)
+    ax.set_title(title, fontsize=10, fontweight='bold')
+    ax.set_xlabel('x'); ax.set_ylabel('y')
+
+plt.suptitle('Efeito da largura de banda na KDE', fontsize=13, fontweight='bold', y=1.02)
+plt.tight_layout()
+plt.show()
+```
+
+::: callout-important
+## Conclusão Importante
+
+A largura de banda é uma **decisão analítica**. Sempre seja explícito sobre como você a escolheu. Por isso importante possuir referencias sobre estimção ideal, para isso, sugiro: a regra de Scott e a regra de Silverman, os quais são seletores the bandwith, automáticos fundamentados.
+:::
+
+## Comparação de Paletas de Cores
+
+Os mesmos dados, quatro paletas diferentes. Viridis e plasma são perceptualmente uniformes. O arco-íris cria picos visuais falsos — evite-o.
+
+```{python}
+#| label: fig-colors
+#| fig-cap: "Mesma superfície de densidade, quatro paletas. Viridis e plasma são perceptualmente uniformes. Arco-íris cria picos visuais falsos."
+np.random.seed(99)
+x3 = np.concatenate([np.random.uniform(0.1, 0.45, 40),
+                      np.random.uniform(0.55, 0.9, 40)])
+y3 = np.random.uniform(0.1, 0.9, 80)
+xy3 = np.vstack([x3, y3])
+kde3 = gaussian_kde(xy3)
+z3 = kde3(grid_pts).reshape(200, 200)
+
+palettes = [
+    ('viridis',  'viridis '),
+    ('plasma',   'plasma '),
+    (mcolors.LinearSegmentedColormap.from_list(
+        'custom', ['#0d1b2a','#457b9d','#f4a261','#e63946']),
+     'sequencial personalizado'),
+    ('hsv',      'arco-iris'),
+]
+
+fig, axes = plt.subplots(2, 2, figsize=(11, 9))
+
+for ax, (cmap_name, title) in zip(axes.flat, palettes):
+    ax.imshow(z3, extent=[0,1,0,1], origin='lower',
+              cmap=cmap_name, aspect='equal')
+    ax.set_title(title, fontsize=11, fontweight='bold')
+    ax.axis('off')
+
+plt.suptitle('Comparação de paletas de cores', fontsize=13, fontweight='bold')
+plt.tight_layout()
+plt.show()
+```
+
+## Exemplos: Mapas de Densidade Interativos
+
+### Cenário A · Densidade Populacional — Galícia, Espanha
+
+**A pergunta:** Onde as pessoas se concentram na Galícia? Como isso se relaciona com a costa?
+
+```{python}
+#| label: fig-galicia
+#| fig-cap: "Mapa de calor de densidade populacional da Galícia. Mais quente = maior concentração."
+
+df_gal = pd.read_csv(
+    'https://raw.githubusercontent.com/R-CoderDotCom/data/main/sample_datasets/population_galicia.csv'
+)
+
+fig_gal = px.density_mapbox(
+    df_gal,
+    lat='latitude', lon='longitude', z='tot_pob',
+    radius=8,
+    center=dict(lat=42.83, lon=-8.35),
+    zoom=6,
+    mapbox_style='open-street-map',
+    color_continuous_scale='Plasma',
+    title='Densidade Populacional — Galícia, Espanha'
+)
+fig_gal.update_layout(margin=dict(l=0, r=0, t=40, b=0))
+fig_gal.show()
+```
+
+### Cenário B · Riscos Naturais — Terremotos Globais
+
+**A pergunta:** Onde a energia sísmica se concentra globalmente?
+
+```{python}
+#| label: fig-earthquakes
+#| fig-cap: "Densidade global de terremotos ponderada pela magnitude. O Anel de Fogo é inconfundível."
+
+df_eq = pd.read_csv(
+    'https://raw.githubusercontent.com/plotly/datasets/master/earthquakes-23k.csv'
+)
+
+fig_eq = px.density_map(
+    df_eq,
+    lat='Latitude', lon='Longitude', z='Magnitude',
+    radius=10,
+    center=dict(lat=0, lon=180),
+    zoom=0,
+    map_style='open-street-map',
+    color_continuous_scale='Inferno',
+    title='Densidade Global de Terremotos — ponderada pela magnitude'
+)
+fig_eq.update_layout(margin=dict(l=0, r=0, t=40, b=0))
+fig_eq.show()
+```
+
+### Cenário C · Quantidade de locais para alugar bicicleta em Londres.
+
+::: callout-note
+## Dados do Open Street Map (OSM)
+
+- Locais disponíveis para locação de bicicletas e mobilidade urbana em Londres.
+:::
+
+```{python}
+
+import geopandas as gpd
+import plotly.express as px
+
+# Load the GeoJSON data from the URL
+#new_gdf = gpd.read_file(geodatasets.get_url('spdata.cycle_hire_osm'))
+url = "https://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojson"
+gdf = gpd.read_file(url)
+
+# Extract latitude and longitude from the geometry column
+gdf['lat'] = gdf.geometry.y
+gdf['lon'] = gdf.geometry.x
+
+# Create a density heatmap using Plotly Express
+fig = px.density_mapbox(
+    gdf,
+    lat='lat',
+    lon='lon',
+    z=None,  # Use default density calculation
+    radius=15,
+    center=dict(lat=51.5074, lon=-0.1278),  # Center on London
+    zoom=10,
+    mapbox_style='open-street-map',
+    title='Bicycle Hire Points Density in London (OSM)',
+    height=600,
+    width=800
+)
+
+# Show the figure
+fig.show()
+
+```
+
+### Comparação com Scatter Plot
+
+```{python}
+fig = px.scatter_map(
+    gdf,
+    lat='lat',
+    lon='lon',
+    #size='capacity',  # Fixed size for all points
+    #projection='mercator',
+    center=dict(lat=51.5074, lon=-0.1278),  # Center on London
+    zoom=10,
+    #mapbox_style='open-street-map',
+    title='Bicycle Hire Points in London (Scatter Plot)',
+    height=600,
+    width=800
+)
+fig.show()
+
+```
+
+------------------------------------------------------------------------
+
+# Conclusões Finais
+
+Mapas de calor podem expressar muito bem observações de densidade referente a região de análise. Contudo, importante aspectos devem ser considerados quando produzindo-os: distância radial, paleta de cores, quantidade de pontosem questões de representatividade de área. Dessa forma, se bem conduzido, tem a capacidade de gerar impacto e decisões baseadas em dados.
+
+::: callout-tip
+## Fluxo Completo
+
+| Etapa | Ferramenta | A decisão |
+|------------------------|------------------------|------------------------|
+| Definir CRS | `geopandas`, `cartopy` | Qual datum? Qual projeção? |
+| Modelo de dados | Pontos vetoriais | Qual é o valor z? |
+| Estimar densidade | `scipy.stats.gaussian_kde` | Largura de banda? Forma do kernel? |
+| Projetar o mapa | `matplotlib`, `plotly` | Escala de cores? Equivalente em área? |
+| Contar a história | Anotação | O que você quer que os espectadores vejam? |
+
+Cada etapa envolve uma escolha. Cada escolha é um argumento.
+:::
+
+## 
+
+# Obrigado!
+
+Referências:
+
+- Edzer Pebesma, 2018. Simple Features for R: Standardized Support for Spatial Vector Data. The R Journal [10:1, 439-446.](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html)
+
+- Pebesma, E.; Bivand, R. (2023). [Spatial Data Science: With Applications in R](https://r-spatial.org/book/) (1st ed.). 314 pages. [Chapman and Hall/CRC](https://doi.org/10.1201/9780429459016).
+
+- R. S. Bivand, E. Pebesma and V. Gomez-Rubio. *Applied spatial data analysis with R, second edition.* Springer-Verlag, 2013. URL <http://www.asdar-book.org/>.
+
+- . R. Herring. OpenGIS implementation standard for geographic information-simple feature access-part 1: Common architecture. *Open Geospatial Consortium Inc*, 111, 2011. URL <http://portal.opengeospatial.org/files/?artifact_id=25355>.
+
+- Adams, R., and L. Bischof. 1994. “Seeded Region Growing.” *IEEE Transactions on Pattern Analysis and Machine Intelligence* 16 (6): 641–47. <https://doi.org/10.1109/34.295913>.
+
+- Bivand, Roger. 2016a. *Rgrass7: Interface Between GRASS 7 Geographical Information System and R*. R package.
+
+- QGIS Documentation 3.40. 2026. <https://docs.qgis.org/>
+
+------------------------------------------------------------------------
+
+![Obra do uruguaio Joaquim Torres Garcia. TItulo: America Invertida. 1943.](images/joaquintorresgarcia.jpg){fig-align="right"}

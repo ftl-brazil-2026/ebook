@@ -1,0 +1,43 @@
+/*-- scss:defaults --*/
+
+$link-color: #1d4e89;
+$sidebar-bg: #f7f9fb;
+
+/*-- scss:rules --*/
+
+.sidebar-title {
+  font-weight: 700;
+}
+
+.callout {
+  border-radius: 6px;
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+
+  img {
+    max-height: 70px;
+    width: auto;
+  }
+}
+
+.logo-bottom{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+
+  img {
+    max-height: 100px;
+    width: auto;
+  }
+
+}

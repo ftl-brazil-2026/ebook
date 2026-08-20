@@ -1,0 +1,44 @@
+---
+title: "Ecossistema Geoespacial"
+subtitle: "Como representar o espaço físico?"
+author: "Emanuel Goulart"
+date: today
+---
+
+Dado o contexto apresentado nos slides da nossa sessão, se faz necessário elencar esses provedores do ecossitema geoespacial brasileiro e mundial. 
+
+Portanto, esse primeiro capítulo é destinado a um panorama do ecossistema de dados geoespaciais. Para explorar os desafios impostos no cenário cotidiano, precisamos primeiro compreender quais os serviços de dados mais pertinentes dado o nosso problema. E quais os tipos de dados que necessitamos para solucioná-lo.
+
+Antes de seguir, se você ainda não configurou seu ambiente, dá uma olhada nos [Utilitários de CLI](../../course-info/cli-utils.md).
+
+## O que vocês querem aprender
+
+No questionário inicial, 57 pessoas votaram (até 3 temas cada) nos assuntos que mais têm interesse dentro do ecossistema geoespacial — 179 votos distribuídos entre 19 temas:
+
+| Tema | Votos |
+|---|---|
+| Satélites / plano de órbita | 24 |
+| Mudanças climáticas | 21 |
+| Queimadas / desmatamento / secas | 17 |
+| Drones e UAV | 17 |
+| Oceanografia | 11 |
+| Agricultura digital | 11 |
+| Florestas | 10 |
+| 3D e point-cloud | 9 |
+| Ecologia | 8 |
+| Ecologia de paisagem | 8 |
+| Hidrologia | 7 |
+| Mobilidade e transportes | 7 |
+| Mapeamento humanitário | 6 |
+| Inundações | 6 |
+| Qualidade do ar | 6 |
+| Gêmeos digitais | 5 |
+| Ilhas de calor e urbanismo | 4 |
+| Segurança pública | 1 |
+| Patrimônio arqueológico | 1 |
+
+## Onde encontrar dado para cada tema
+
+Para cada um desses 19 temas, mapeamos de 4 a 6 provedores de dados — 94 conexões tema&ndash;provedor no total, num diagrama interativo de bolhas: clique num tema para abrir e ver os provedores; clique num provedor para ir direto ao site.
+
+➡️ [**Provedores de Dados Geoespaciais**](provedores.qmd) — o diagrama completo 
