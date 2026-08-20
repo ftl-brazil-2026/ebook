@@ -1,4 +1,4 @@
-lugar_limpo,lat,lon,matched_address
+lugar_clean,lat,lon,matched_address
 Fortaleza-CE,-3.7932167,-38.5280359,"Fortaleza, Ceará, Região Nordeste, Brasil"
 RECIFE/PE,-8.0584933,-34.8848193,"Recife, Pernambuco, Região Nordeste, Brasil"
 Limeira/SP,-22.5615068,-47.401766,"Limeira, São Paulo, Região Sudeste, Brasil"
@@ -25,7 +25,7 @@ Campina Grande/PB,-7.2246743,-35.8771292,"Campina Grande, Paraíba, Região Nord
 Belém/PA,-1.45056,-48.4682453,"Belém, Pará, Região Norte, Brasil"
 Brasília/DF,-15.7754462,-47.7970891,"Distrito Federal, Região Centro-Oeste, Brasil"
 Lauro de Freitas/BA,-12.89242,-38.3127691,"Lauro de Freitas, Bahia, Região Nordeste, Brasil"
-Passa Quatro/MG,-22.390283,-44.9669696,"Passa Quatro, Minas Gerais, Região Sudeste, 37460-000, Brasil"
+Passa Quatro/MG,-22.3893803,-44.9666039,"Passa Quatro, Minas Gerais, Região Sudeste, 37460-000, Brasil"
 Glória do Goitá/PE,-7.999959,-35.2866116,"Glória do Goitá, Pernambuco, Região Nordeste, Brasil"
 Betim - MG,-19.9703184,-44.206495,"Betim, Minas Gerais, Região Sudeste, Brasil"
 Araraquara/SP,-21.7886713,-48.1773096,"Araraquara, São Paulo, Região Sudeste, Brasil"
@@ -44,9 +44,9 @@ São Paulo/SP,-21.2283556,-50.4370715,"New York Tower, Rua Doutor Francisco Agui
 São José do Rio Preto/SP,-20.8125851,-49.3804212,"São José do Rio Preto, São Paulo, Região Sudeste, Brasil"
 Penedo/AL,-10.2872341,-36.5819262,"Penedo, Alagoas, Região Nordeste, Brasil"
 Maringá/PR,-23.2064992,-45.8948505,"Praça Maringá, Jardim Maringá, São José dos Campos, São Paulo, Região Sudeste, Brasil"
-Cuiabá/MT,-15.6222659,-56.0756233,"Hospital São Judas Tadeu  Cuiabá MT, Rua Pedregal, Jardim Califórnia, Cuiabá, Mato Grosso, Região Centro-Oeste, 78065-828, Brasil"
+Cuiabá/MT,-15.5958886,-56.1130717,"Clínica Santa Maria - Cuiabá MT, 131, Rua das Papoulas, Jardim Cuiabá, Cuiabá, Mato Grosso, Região Centro-Oeste, 78043-138, Brasil"
 São Paulo,-23.5506507,-46.6333824,"São Paulo, Região Sudeste, Brasil"
-Sobral/CE,-3.683939,-40.356254,"Sobral, Ceará, Região Nordeste, Brasil"
+Sobral/CE,-3.8565437,-40.0438895,"Sobral, Ceará, Região Nordeste, Brasil"
 São Bernardo do Campo/SP,-23.7080345,-46.5506747,"São Bernardo do Campo, São Paulo, Região Sudeste, Brasil"
 Caxias/MA,-4.8654201,-43.353664,"Caxias, Maranhão, Região Nordeste, Brasil"
 "Três Corações, MG",-21.695625,-45.2543675,"Três Corações, Minas Gerais, Região Sudeste, 37410-000, Brasil"

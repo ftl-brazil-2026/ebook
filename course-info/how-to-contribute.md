@@ -13,10 +13,10 @@ A página [Awesome Geospatial](../awesome-geospatial/index.md) é uma lista de f
 Para adicionar uma ferramenta, edite [`awesome-geospatial/index.md`](../awesome-geospatial/index.md) e inclua um item na lista, sob a seção da plataforma correspondente:
 
 ```markdown
-## QGIS
-
-- [Nome da ferramenta](https://exemplo.com/) — uma frase curta sobre o que ela faz
+- [**Nome**](https://link.com) — descrição curta do que é / para que serve.
 ```
+
+Se você não tem certeza que o link ou a descrição estão corretos/atualizados, adicione `⚠️ *verificar*` no fim da linha — assim outra pessoa sabe que precisa conferir antes de confiar no item. Sem essa marcação, o item é considerado confiável.
 
 Se a plataforma que você quer ainda não tem uma seção, crie um novo `## Nome da Plataforma` no fim do arquivo.
 

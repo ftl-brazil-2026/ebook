@@ -7,8 +7,10 @@ requires-python = ">=3.13"
 dependencies = [
     "cartopy>=0.25.0",
     "fiona>=1.10.1",
+    "folium>=0.20.0",
+    "geobr>=1.0.0",
     "geodatasets>=2026.5.1",
-    "geopandas>=1.1.4",
+    "geopandas>=1.0.0,<=1.1.2",
     "geopy>=2.5.0",
     "ipykernel>=7.3.0",
     "jupyter>=1.1.1",

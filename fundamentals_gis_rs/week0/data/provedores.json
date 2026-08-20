@@ -1,6 +1,6 @@
 {
   "meta": {
-    "titulo": "Temas de interesse x provedores de dados geoespaciais",
+    "titulo": "Provedores de dados geoespaciais",
     "fonte_votos": "Questionario inicial - Future Tech Leader Brasil (57 respondentes, ate 3 votos)",
     "escopos": ["BR", "GLOBAL"]
   },
@@ -10,6 +10,7 @@
       "votos": 24,
       "provedores": [
         {"nome": "INPE - Catalogo DGI", "escopo": "BR", "url": "https://www.dgi.inpe.br/catalogo/explore", "dado": "Acervo CBERS-4/4A, Amazonia-1, Landsat recebido no Brasil"},
+        {"nome":"STAC CATALOGUE","escopo":"GLOBAL","url":"https://stacspec.org/en", "dado":"Grande Catalogo de espaço e temporal de dados de satelite de diferentes provodores e metadata."},
         {"nome": "Brazil Data Cube", "escopo": "BR", "url": "https://data.inpe.br/bdc/explorer", "dado": "Cubos analiticos (ARD) CBERS/Sentinel/Landsat via STAC"},
         {"nome": "Copernicus Data Space", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "Sentinel-1/2/3/5P, orbitas e efemerides"},
         {"nome": "Copernicus Browser", "escopo": "GLOBAL", "url": "https://browser.dataspace.copernicus.eu/", "dado": "Exploracao visual rapida de cenas"},
@@ -34,8 +35,8 @@
       "provedores": [
         {"nome": "TerraBrasilis (PRODES/DETER)", "escopo": "BR", "url": "https://terrabrasilis.dpi.inpe.br/downloads/", "dado": "Poligonos anuais de desmatamento e alertas diarios"},
         {"nome": "INPE - Programa Queimadas", "escopo": "BR", "url": "https://terrabrasilis.dpi.inpe.br/queimadas/portal/", "dado": "Focos de calor e risco de fogo, atualizacao diaria"},
-        {"nome": "MapBiomas / MapBiomas Fogo", "escopo": "BR", "url": "https://brasil.mapbiomas.org/", "dado": "Uso e cobertura 1985-hoje, cicatrizes de fogo, alertas"},
-        {"nome": "TerraClass", "escopo": "BR", "url": "https://www.terraclass.gov.br/", "dado": "Uso da terra em areas ja desmatadas (Amazonia e Cerrado)"},
+        {"nome": "MapBiomas", "escopo": "BR", "url": "https://brasil.mapbiomas.org", "dado": "Uso e cobertura 1985-hoje. Diversos dados diferentes, agricultura, queimadas, etc etc."},
+        {"nome": "BiomasBR", "escopo": "BR", "url": "https://www.terraclass.gov.br/", "dado": "Uso da terra em areas ja desmatadas (Amazonia e Cerrado)"},
         {"nome": "CEMADEN", "escopo": "BR", "url": "https://www.gov.br/cemaden/", "dado": "Monitoramento de secas e desastres naturais"},
         {"nome": "Copernicus EMS", "escopo": "GLOBAL", "url": "https://emergency.copernicus.eu/", "dado": "Mapeamento rapido de incendios e indices de seca"}
       ]
@@ -200,7 +201,8 @@
         {"nome": "Forum Brasileiro de Seguranca Publica", "escopo": "BR", "url": "https://forumseguranca.org.br/", "dado": "Anuario e microdados de criminalidade"},
         {"nome": "Secretarias estaduais de seguranca", "escopo": "BR", "url": "https://dados.gov.br/", "dado": "Boletins de ocorrencia georreferenciados (ex. SSP-SP)"},
         {"nome": "IPEA / Atlas da Violencia", "escopo": "BR", "url": "https://www.ipea.gov.br/atlasviolencia/", "dado": "Series municipais de homicidios"},
-        {"nome": "OpenStreetMap", "escopo": "GLOBAL", "url": "https://www.openstreetmap.org/", "dado": "Iluminacao, uso do solo e contexto urbano"}
+        {"nome": "OpenStreetMap", "escopo": "GLOBAL", "url": "https://www.openstreetmap.org/", "dado": "Iluminacao, uso do solo e contexto urbano"},
+        {"nome": "GeoBR", "escopo":"BR","url":"https://ipea.github.io/geobr/","dado":"Repo:Github. Dados geoespaciais de municipios"}
       ]
     },
     {

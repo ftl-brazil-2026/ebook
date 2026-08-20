@@ -790,4 +790,4 @@ Referências:
 
 ------------------------------------------------------------------------
 
-![Obra do uruguaio Joaquim Torres Garcia. TItulo: America Invertida. 1943.](images/joaquintorresgarcia.jpg){fig-align="right"}
+![Obra do uruguaio Joaquim Torres Garcia. Título: América Invertida. 1943.](images/joaquintorresgarcia.jpg){fig-align="right"}

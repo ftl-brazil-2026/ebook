@@ -13,7 +13,7 @@ Antes de seguir, se você ainda não configurou seu ambiente, dá uma olhada nos
 
 ## O que vocês querem aprender
 
-No questionário inicial, 57 pessoas votaram (até 3 temas cada) nos assuntos que mais têm interesse dentro do ecossistema geoespacial — 179 votos distribuídos entre 19 temas:
+No questionário inicial, cada um de vocês votou nos assuntos que mais têm interesse dentro do ecossistema geoespacial:
 
 | Tema | Votos |
 |---|---|
@@ -39,6 +39,6 @@ No questionário inicial, 57 pessoas votaram (até 3 temas cada) nos assuntos qu
 
 ## Onde encontrar dado para cada tema
 
-Para cada um desses 19 temas, mapeamos de 4 a 6 provedores de dados — 94 conexões tema&ndash;provedor no total, num diagrama interativo de bolhas: clique num tema para abrir e ver os provedores; clique num provedor para ir direto ao site.
+Para cada um desses grandes temas, mapeamos alguns provedores de dados que podem ajudar quando analisarmos os dados para projetos e desafios diários. Entre na página de provedores para explorar os provedores e ajude-nos a contribuir com as devidas urls diretamente ao nosso site. 
 
 ➡️ [**Provedores de Dados Geoespaciais**](provedores.qmd) — o diagrama completo 
