@@ -1,23 +1,230 @@
 [
   {
+    "objectID": "fundamentals_gis_rs/week4/index.html",
+    "href": "fundamentals_gis_rs/week4/index.html",
+    "title": "Week 4",
+    "section": "",
+    "text": "Content coming soon.",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 4",
+      "Week 4"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/week1_introductionGIS.html",
+    "href": "fundamentals_gis_rs/week1/week1_introductionGIS.html",
+    "title": "",
+    "section": "",
+    "text": "CodeShow All CodeHide All Code\n\n\n\n\n\n\nCode\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport matplotlib.colors as mcolors\nfrom scipy.stats import gaussian_kde\nimport geopandas as gpd\nimport cartopy.crs as ccrs\nimport cartopy.feature as cfeature\nimport plotly.express as px\n\n\n\n\nCode\nimport geodatasets\n\n\n\n\nCode\ngeodatasets.data.flatten().keys()\n\n\ndict_keys(['geoda.airbnb', 'geoda.atlanta', 'geoda.cars', 'geoda.charleston1', 'geoda.charleston2', 'geoda.chicago_health', 'geoda.chicago_commpop', 'geoda.chile_labor', 'geoda.cincinnati', 'geoda.cleveland', 'geoda.grid100', 'geoda.groceries', 'geoda.guerry', 'geoda.health', 'geoda.health_indicators', 'geoda.hickory1', 'geoda.hickory2', 'geoda.home_sales', 'geoda.houston', 'geoda.juvenile', 'geoda.lansing1', 'geoda.lansing2', 'geoda.lasrosas', 'geoda.liquor_stores', 'geoda.malaria', 'geoda.milwaukee1', 'geoda.milwaukee2', 'geoda.ncovr', 'geoda.natregimes', 'geoda.ndvi', 'geoda.nepal', 'geoda.nyc', 'geoda.nyc_earnings', 'geoda.nyc_education', 'geoda.nyc_neighborhoods', 'geoda.orlando1', 'geoda.orlando2', 'geoda.oz9799', 'geoda.phoenix_acs', 'geoda.police', 'geoda.sacramento1', 'geoda.sacramento2', 'geoda.savannah1', 'geoda.savannah2', 'geoda.seattle1', 'geoda.seattle2', 'geoda.sids', 'geoda.sids2', 'geoda.south', 'geoda.spirals', 'geoda.stlouis', 'geoda.tampa1', 'geoda.us_sdoh', 'ny.bb', 'eea.large_rivers', 'abs.australia', 'abs.australia_states_territories', 'naturalearth.cities', 'naturalearth.lakes', 'naturalearth.land', 'spdata.nydata', 'spdata.auckland', 'spdata.boston', 'spdata.columbus', 'spdata.cycle_hire', 'spdata.cycle_hire_osm', 'spdata.eire', 'spdata.ncsids', 'spdata.wheat', 'spdata.zion', 'spdata.zion_points', 'eurostat.nuts_rg_10m_2024_3035', 'eurostat.nuts_lb_2024_3035'])\n\n\n\n\nCode\nurl = \"https://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojson\"\ngdf = gpd.read_file(url)\n\n\n\n\nCode\n# Extract latitude and longitude from the geometry column\ngdf['lat'] = gdf.geometry.y\ngdf['lon'] = gdf.geometry.x\n\n\n\n\nCode\ngeodatasets.data.query_name('spdata.cycle_hire_osm')\n\n\n\n        \n        \n            \n                \n                    geodatasets.Dataset\n                    spdata.cycle_hire_osm\n                \n                \n                    \n                        urlhttps://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojsonlicenseCC0attributionspDatadescriptionCycle hire points in London from OSMgeometry_typePointdetailshttps://jakubnowosad.com/spData/reference/cycle_hire_osm.htmlnrows532ncols6hash804e7298bc5e84d6a73f212bdd19b7f3926ee0f50a3dbd957c46c07950dcc267filenamecycle_hire_osm.geojson\n                    \n                \n            \n        \n        \n\n\n\n\nCode\nfor col in gdf.columns:\n    print(col)\n\n\nosm_id\nname\ncapacity\ncyclestreets_id\ndescription\ngeometry\nlat\nlon\n\n\n\n\nCode\ngdf.capacity\n\n\n0       24\n1      NaN\n2       21\n3      NaN\n4      NaN\n      ... \n527    NaN\n528    NaN\n529    NaN\n530    NaN\n531    NaN\nName: capacity, Length: 532, dtype: str\n\n\n\n\nCode\nfig = px.scatter_map(\n    gdf,\n    lat='lat',\n    lon='lon',\n    #size='capacity',  # Fixed size for all points\n    #projection='mercator',\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    #mapbox_style='open-street-map',\n    title='Bicycle Hire Points in London (Scatter Plot)',\n    height=600,\n    width=800\n)\nfig.show()\n\n\nUnable to display output for mime type(s): application/vnd.plotly.v1+json\n\n\n\n\nCode\nimport geopandas as gpd\nimport plotly.express as px\n\n# Load the GeoJSON data from the URL\n#new_gdf = gpd.read_file(geodatasets.get_url('spdata.cycle_hire_osm'))\nurl = \"https://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojson\"\ngdf = gpd.read_file(url)\n\n# Extract latitude and longitude from the geometry column\ngdf['lat'] = gdf.geometry.y\ngdf['lon'] = gdf.geometry.x\n\n# Create a density heatmap using Plotly Express\nfig = px.density_mapbox(\n    gdf,\n    lat='lat',\n    lon='lon',\n    z=None,  # Use default density calculation\n    radius=15,\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    mapbox_style='open-street-map',\n    title='Bicycle Hire Points Density in London (OSM)',\n    height=600,\n    width=800\n)\n\n# Show the figure\nfig.show()\n\n\nUnable to display output for mime type(s): application/vnd.plotly.v1+json\n\n\n\n\nCode\nnew_gdf.plot()\n\n\n\n\n\n\n\n\n\n\n\nCode\nfrom matplotlib.patches import PathPatch\nimport matplotlib.path\nimport matplotlib.pyplot as plt\nimport matplotlib.ticker\nfrom matplotlib.transforms import Bbox, BboxTransform\nimport numpy as np\n\nimport cartopy.crs as ccrs\nimport cartopy.feature as cfeature\n\n\n# When drawing the flag, we can either use white filled land, or be a little\n# more fancy and use the Natural Earth shaded relief imagery.\nfilled_land = True\n\n\ndef olive_path():\n    \"\"\"\n    Return a Matplotlib path representing a single olive branch from the\n    UN Flag. The path coordinates were extracted from the SVG at\n    https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Nations.svg.\n\n    \"\"\"\n    olives_verts = np.array(\n        [[0,   2,   6,   9,  30,  55,  79,  94, 104, 117, 134, 157, 177,\n          188, 199, 207, 191, 167, 149, 129, 109,  87,  53,  22,   0, 663,\n          245, 223, 187, 158, 154, 150, 146, 149, 154, 158, 181, 184, 197,\n          181, 167, 153, 142, 129, 116, 119, 123, 127, 151, 178, 203, 220,\n          237, 245, 663, 280, 267, 232, 209, 205, 201, 196, 196, 201, 207,\n          211, 224, 219, 230, 220, 212, 207, 198, 195, 176, 197, 220, 239,\n          259, 277, 280, 663, 295, 293, 264, 250, 247, 244, 240, 240, 243,\n          244, 249, 251, 250, 248, 242, 245, 233, 236, 230, 228, 224, 222,\n          234, 249, 262, 275, 285, 291, 295, 296, 295, 663, 294, 293, 292,\n          289, 294, 277, 271, 269, 268, 265, 264, 264, 264, 272, 260, 248,\n          245, 243, 242, 240, 243, 245, 247, 252, 256, 259, 258, 257, 258,\n          267, 285, 290, 294, 297, 294, 663, 285, 285, 277, 266, 265, 265,\n          265, 277, 266, 268, 269, 269, 269, 268, 268, 267, 267, 264, 248,\n          235, 232, 229, 228, 229, 232, 236, 246, 266, 269, 271, 285, 285,\n          663, 252, 245, 238, 230, 246, 245, 250, 252, 255, 256, 256, 253,\n          249, 242, 231, 214, 208, 208, 227, 244, 252, 258, 262, 262, 261,\n          262, 264, 265, 252, 663, 185, 197, 206, 215, 223, 233, 242, 237,\n          237, 230, 220, 202, 185, 663],\n         [8,   5,   3,   0,  22,  46,  46,  46,  35,  27,  16,  10,  18,\n          22,  28,  38,  27,  26,  33,  41,  52,  52,  52,  30,   8, 595,\n          77,  52,  61,  54,  53,  52,  53,  55,  55,  57,  65,  90, 106,\n          96,  81,  68,  58,  54,  51,  50,  51,  50,  44,  34,  43,  48,\n          61,  77, 595, 135, 104, 102,  83,  79,  76,  74,  74,  79,  84,\n          90, 109, 135, 156, 145, 133, 121, 100,  77,  62,  69,  67,  80,\n          92, 113, 135, 595, 198, 171, 156, 134, 129, 124, 120, 123, 126,\n          129, 138, 149, 161, 175, 188, 202, 177, 144, 116, 110, 105,  99,\n          108, 116, 126, 136, 147, 162, 173, 186, 198, 595, 249, 255, 261,\n          267, 241, 222, 200, 192, 183, 175, 175, 175, 175, 199, 221, 240,\n          245, 250, 256, 245, 233, 222, 207, 194, 180, 172, 162, 153, 154,\n          171, 184, 202, 216, 233, 249, 595, 276, 296, 312, 327, 327, 327,\n          327, 308, 284, 262, 240, 240, 239, 239, 242, 244, 247, 265, 277,\n          290, 293, 296, 300, 291, 282, 274, 253, 236, 213, 235, 252, 276,\n          595, 342, 349, 355, 357, 346, 326, 309, 303, 297, 291, 290, 297,\n          304, 310, 321, 327, 343, 321, 305, 292, 286, 278, 270, 276, 281,\n          287, 306, 328, 342, 595, 379, 369, 355, 343, 333, 326, 318, 328,\n          340, 349, 366, 373, 379, 595]]).T\n    olives_codes = np.array([1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 79], dtype=np.uint8)\n\n    return matplotlib.path.Path(olives_verts, olives_codes)\n\n\n\nblue = '#4b92db'\n\n# We're drawing a flag with a 3:5 aspect ratio.\nfig = plt.figure(figsize=[7.5, 4.5], facecolor=blue)\n# Put a blue background on the figure.\nblue_background = PathPatch(matplotlib.path.Path.unit_rectangle(),\n                            transform=fig.transFigure, color=blue,\n                            zorder=-1)\nfig.patches.append(blue_background)\n\n# Set up the Azimuthal Equidistant and Plate Carree projections\n# for later use.\naz_eq = ccrs.AzimuthalEquidistant(central_latitude=90)\npc = ccrs.PlateCarree()\n\n# Pick a suitable location for the map (which is in an Azimuthal\n# Equidistant projection).\nax = fig.add_axes([0.25, 0.24, 0.5, 0.54], projection=az_eq)\n\n# The background patch is not needed in this example.\nax.patch.set_facecolor('none')\n# The Axes frame produces the outer meridian line.\nfor spine in ax.spines.values():\n    spine.update({'edgecolor': 'white', 'linewidth': 2})\n\n# We want the map to go down to -60 degrees latitude.\nax.set_extent([-180, 180, -60, 90], ccrs.PlateCarree())\n\n# Importantly, we want the axes to be circular at the -60 latitude\n# rather than cartopy's default behaviour of zooming in and becoming\n# square.\n_, patch_radius = az_eq.transform_point(0, -60, pc)\ncircular_path = matplotlib.path.Path.circle(0, patch_radius)\nax.set_boundary(circular_path)\n\nif filled_land:\n    ax.add_feature(\n        cfeature.LAND, facecolor='white', edgecolor='none')\nelse:\n    ax.stock_img()\n\ngl = ax.gridlines(crs=pc, linewidth=2, color='white', linestyle='-')\n# Meridians every 45 degrees, and 4 parallels.\ngl.xlocator = matplotlib.ticker.FixedLocator(np.arange(-180, 181, 45))\nparallels = np.arange(-30, 70, 30)\ngl.ylocator = matplotlib.ticker.FixedLocator(parallels)\n\n# Now add the olive branches around the axes. We do this in normalised\n# figure coordinates\nolive_leaf = olive_path()\n\nolives_bbox = Bbox.null()\nolives_bbox.update_from_path(olive_leaf)\n\n# The first olive branch goes from left to right.\nolive1_axes_bbox = Bbox([[0.45, 0.15], [0.725, 0.75]])\nolive1_trans = BboxTransform(olives_bbox, olive1_axes_bbox)\n\n# THe second olive branch goes from right to left (mirroring the first).\nolive2_axes_bbox = Bbox([[0.55, 0.15], [0.275, 0.75]])\nolive2_trans = BboxTransform(olives_bbox, olive2_axes_bbox)\n\nolive1 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive1_trans + fig.transFigure)\nolive2 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive2_trans + fig.transFigure)\n\nfig.patches.append(olive1)\nfig.patches.append(olive2)\n\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n\nworld = gpd.read_file(\n    \"https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_0_countries.zip\"\n)\n\nprojections = [\n    (ccrs.PlateCarree(),   'PlateCarree — Geographic',  '#457b9d'),\n    (ccrs.Mercator(),      'Mercator — Conformal',       '#f4a261'),\n    (ccrs.Mollweide(),     'Mollweide — Equal-Area ✓',   '#e63946'),\n]\n\nfig, axes = plt.subplots(\n    1, 3, figsize=(15, 6),\n    subplot_kw={'projection': None}\n)\n\nfor i, (proj, title, color) in enumerate(projections):\n    ax = fig.add_subplot(1, 3, i + 1, projection=proj)\n    ax.set_global()\n    ax.add_feature(cfeature.OCEAN, facecolor='#e8f4f8')\n    ax.add_feature(cfeature.LAND,  facecolor='#f0f0f0')\n    for geom in world.geometry:\n        ax.add_geometries(\n            [geom], ccrs.PlateCarree(),\n            facecolor=color, edgecolor='white', linewidth=0.5\n        )\n    ax.set_title(title, fontsize=11, fontweight='bold', pad=10)\n\n#plt.suptitle('Same data, three projections', fontsize=13, y=1.02)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nimport numpy as np\nimport plotly.graph_objects as go\n\n# -----------------------\n# Parameters\n# -----------------------\nR = 1.0  # radius of the sphere (Earth)\n\n# Point on the sphere (spherical coordinates)\ntheta = np.pi / 4   # polar angle\nphi = np.pi / 3     # azimuthal angle\n\nx0 = R * np.sin(theta) * np.cos(phi)\ny0 = R * np.sin(theta) * np.sin(phi)\nz0 = R * np.cos(theta)\n\n# -----------------------\n# Sphere surface\n# -----------------------\nu = np.linspace(0, 2*np.pi, 80)\nv = np.linspace(0, np.pi, 80)\n\nx = R * np.outer(np.cos(u), np.sin(v))\ny = R * np.outer(np.sin(u), np.sin(v))\nz = R * np.outer(np.ones_like(u), np.cos(v))\n\nsphere = go.Surface(\n    x=x, y=y, z=z,\n    opacity=0.4,\n    colorscale=\"Blues\",\n    showscale=False\n)\n\n# -----------------------\n# Vector (arrow-like line)\n# -----------------------\nvector = go.Scatter3d(\n    x=[0, x0],\n    y=[0, y0],\n    z=[0, z0],\n    mode=\"lines+markers\",\n    line=dict(color=\"red\", width=6),\n    marker=dict(size=4),\n    name=\"vector r\"\n)\n\n# Point on sphere\npoint = go.Scatter3d(\n    x=[x0],\n    y=[y0],\n    z=[z0],\n    mode=\"markers\",\n    marker=dict(size=6, color=\"red\"),\n)\n\n# -----------------------\n# Axes (explicit lines)\n# -----------------------\nL = 1.5 * R\n\naxes = [\n    go.Scatter3d(x=[-L, L], y=[0, 0], z=[0, 0],\n                 mode=\"lines\", line=dict(color=\"black\", width=4)),\n    go.Scatter3d(x=[0, 0], y=[-L, L], z=[0, 0],\n                 mode=\"lines\", line=dict(color=\"black\", width=4)),\n    go.Scatter3d(x=[0, 0], y=[0, 0], z=[-L, L],\n                 mode=\"lines\", line=dict(color=\"black\", width=4)),\n]\n\n# -----------------------\n# Layout\n# -----------------------\nlayout = go.Layout(\n    scene=dict(\n        xaxis=dict(title=\"X\", showbackground=True),\n        yaxis=dict(title=\"Y\", showbackground=True),\n        zaxis=dict(title=\"Z\", showbackground=True),\n        aspectmode=\"cube\"\n    ),\n    margin=dict(l=0, r=0, b=0, t=0)\n)\n\n# -----------------------\n# Figure\n# -----------------------\nfig = go.Figure(data=[sphere, vector, point] + axes, layout=layout)\nfig.show()\n\n\nUnable to display output for mime type(s): application/vnd.plotly.v1+json\n\n\n\n\nCode\n\nfig, ax = plt.subplots(figsize=(6, 6))\n\ntheta = np.linspace(0, 2 * np.pi, 300)\nax.plot(5 * np.cos(theta), 5 * np.sin(theta), color='grey', lw=1.5, alpha=0.6)\n\nax.axhline(0, color='grey', lw=0.8)\nax.axvline(0, color='grey', lw=0.8)\n\nax.annotate('', xy=(3, 4), xytext=(0, 0),\n            arrowprops=dict(arrowstyle='-&gt;', color='#e63946', lw=2))\nax.text(1.3, 2.5, 'r', color='#e63946', fontsize=14, fontweight='bold')\n\narc_theta = np.linspace(0, np.arctan2(4, 3), 50)\nax.plot(np.cos(arc_theta), np.sin(arc_theta), color='#e63946', lw=2)\nax.text(1.1, 0.4, 'φ', color='#e63946', fontsize=13)\n\nax.plot([3, 3], [0, 4], linestyle='--', color='#457b9d', lw=1.5)\nax.plot([0, 3], [4, 4], linestyle='--', color='#457b9d', lw=1.5)\nax.text(3.15, 0.2, 'x', color='#457b9d', fontsize=13, fontweight='bold')\nax.text(0.15, 4.2, 'y', color='#457b9d', fontsize=13, fontweight='bold')\n\nax.plot(3, 4, 'o', color='#e63946', markersize=8)\n\nax.set_xlim(-6, 6)\nax.set_ylim(-6, 6)\nax.set_aspect('equal')\nax.tick_params(colors='grey')\nax.set_title('Sistema de Coordenadas Polares', fontsize=14, fontweight='bold', pad=12)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nworld.columns\n\n\nIndex(['featurecla', 'scalerank', 'LABELRANK', 'SOVEREIGNT', 'SOV_A3',\n       'ADM0_DIF', 'LEVEL', 'TYPE', 'TLC', 'ADMIN',\n       ...\n       'FCLASS_TR', 'FCLASS_ID', 'FCLASS_PL', 'FCLASS_GR', 'FCLASS_IT',\n       'FCLASS_NL', 'FCLASS_SE', 'FCLASS_BD', 'FCLASS_UA', 'geometry'],\n      dtype='str', length=169)\n\n\n\n\nCode\ntype(world)\n\n\ngeopandas.geodataframe.GeoDataFrame\n\n\n\n\nCode\nnp.random.seed(42)\nn = 80\nx = np.concatenate([np.random.uniform(0.1, 0.5, 50),\n                     np.random.uniform(0.6, 0.9, 30)])\ny = np.concatenate([np.random.uniform(0.1, 0.9, 50),\n                     np.random.uniform(0.1, 0.5, 30)])\n\nxy = np.vstack([x, y])\nkde = gaussian_kde(xy, bw_method=0.15)\ngrid_x, grid_y = np.meshgrid(\n    np.linspace(0, 1, 200),\n    np.linspace(0, 1, 200)\n)\ngrid_z = kde(np.vstack([grid_x.ravel(), grid_y.ravel()])).reshape(200, 200)\n\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))\n\nax1.scatter(x, y, color='#e63946', s=40, alpha=0.8, zorder=3)\nax1.set_xlim(0, 1); ax1.set_ylim(0, 1)\nax1.set_aspect('equal')\nax1.set_title('Vetorial: observações de pontos', fontweight='bold', fontsize=12)\nax1.set_xlabel('x'); ax1.set_ylabel('y')\nax1.grid(True, alpha=0.3)\n\ncmap = mcolors.LinearSegmentedColormap.from_list(\n    'heatmap', ['#0d1b2a', '#457b9d', '#f4a261', '#e63946']\n)\nim = ax2.imshow(\n    grid_z, extent=[0, 1, 0, 1], origin='lower',\n    cmap=cmap, aspect='equal'\n)\nax2.scatter(x, y, color='white', s=10, alpha=0.4, zorder=3)\nplt.colorbar(im, ax=ax2, label='Densidade')\nax2.set_title('Raster: superfície de densidade de kernel', fontweight='bold', fontsize=12)\nax2.set_xlabel('x'); ax2.set_ylabel('y')\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 1: Esquerda: 80 observações de pontos brutos. Direita: a superfície de densidade de kernel derivada dos mesmos pontos — isso é um mapa de calor.\n\n\n\n\n\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.neighbors import KernelDensity\n\n# Generate random 2D points\nnp.random.seed(42)\npoints = np.random.rand(100, 2) * 10  # 100 points in [0, 10] x [0, 10]\n\n# Fit Kernel Density Estimation\nkde = KernelDensity(bandwidth=0.5, metric='euclidean')\nkde.fit(points)\n\n# Create a grid for density evaluation\nx_grid, y_grid = np.meshgrid(np.linspace(0, 10, 200), np.linspace(0, 10, 200))\ngrid_points = np.vstack([x_grid.ravel(), y_grid.ravel()]).T\nlog_density = kde.score_samples(grid_points)\ndensity = np.exp(log_density).reshape(x_grid.shape)\n\n# Plot\nplt.figure(figsize=(10, 6))\nplt.scatter(points[:, 0], points[:, 1], s=10, c='red', label='Random Points')\nplt.contourf(x_grid, y_grid, density, levels=20, cmap='viridis', alpha=0.6, label='Density')\nplt.colorbar(label='Density')\nplt.title('Interpolacao Espacial: Pontos Aleatórios e Densidade Kernel')\nplt.xlabel('X')\nplt.ylabel('Y')\nplt.legend()\nplt.grid(True)\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.neighbors import KernelDensity\n\n# Generate random 2D points\nnp.random.seed(42)\npoints = np.random.rand(100, 2) * 10  # 100 points in [0, 10] x [0, 10]\n\n# Fit Kernel Density Estimation\nkde = KernelDensity(bandwidth=0.5, metric='euclidean')\nkde.fit(points)\n\n# Create a grid for density evaluation\nx_grid, y_grid = np.meshgrid(np.linspace(0, 10, 200), np.linspace(0, 10, 200))\ngrid_points = np.vstack([x_grid.ravel(), y_grid.ravel()]).T\nlog_density = kde.score_samples(grid_points)\ndensity = np.exp(log_density).reshape(x_grid.shape)\n\n# Create a 2-column subplot\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))\n\n# First subplot: Only the points\nax1.scatter(points[:, 0], points[:, 1], s=10, c='red')\nax1.set_title('Random Points')\nax1.set_xlabel('X')\nax1.set_ylabel('Y')\nax1.grid(True)\n\n# Second subplot: Density estimation\ncontour = ax2.contourf(x_grid, y_grid, density, levels=20, cmap='viridis', alpha=0.6)\nfig.colorbar(contour, ax=ax2, label='Density')\nax2.set_title('Kernel Density Estimation')\nax2.set_xlabel('X')\nax2.set_ylabel('Y')\nax2.grid(True)\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nfrom scipy.stats import gaussian_kde\nnp.random.seed(13531)\nn = 60\nx2 = np.concatenate([np.random.uniform(0.05, 0.45, 35),\n                      np.random.uniform(0.55, 0.95, 25)])\ny2 = np.concatenate([np.random.uniform(0.05, 0.95, 35),\n                      np.random.uniform(0.05, 0.55, 25)])\nxy2 = np.vstack([x2, y2])\n\ngrid_x, grid_y = np.meshgrid(\n    np.linspace(0, 1, 200),\n    np.linspace(0, 1, 200)\n)\ngrid_pts = np.vstack([grid_x.ravel(), grid_y.ravel()])\n\nbw_scott = gaussian_kde(xy2).factor\nbandwidths = [\n    (bw_scott * 0.25, f'Muito pequena  h={bw_scott*0.25:.3f}'),\n    (bw_scott,        f'Ótima          h={bw_scott:.3f}  (Scott)'),\n    (bw_scott * 4,    f'Muito grande   h={bw_scott*4:.3f}'),\n]\n\ncmap = mcolors.LinearSegmentedColormap.from_list(\n    'heatmap', ['#0d1b2a', '#457b9d', '#f4a261', '#e63946']\n)\n\nfig, axes = plt.subplots(1, 3, figsize=(14, 4.5))\n\nfor ax, (bw, title) in zip(axes, bandwidths):\n    kde2 = gaussian_kde(xy2, bw_method=bw)\n    z = kde2(grid_pts).reshape(200, 200)\n    ax.imshow(z, extent=[0,1,0,1], origin='lower', cmap=cmap, aspect='equal')\n    ax.scatter(x2, y2, color='white', s=8, alpha=0.5)\n    ax.set_title(title, fontsize=10, fontweight='bold')\n    ax.set_xlabel('x'); ax.set_ylabel('y')\n\nplt.suptitle('Efeito da largura de banda na KDE', fontsize=13, fontweight='bold', y=1.02)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nnp.random.seed(99)\nx3 = np.concatenate([np.random.uniform(0.1, 0.45, 40),\n                      np.random.uniform(0.55, 0.9, 40)])\ny3 = np.random.uniform(0.1, 0.9, 80)\nxy3 = np.vstack([x3, y3])\nkde3 = gaussian_kde(xy3)\nz3 = kde3(grid_pts).reshape(200, 200)\n\npalettes = [\n    ('viridis',  'viridis '),\n    ('plasma',   'plasma '),\n    (mcolors.LinearSegmentedColormap.from_list(\n        'custom', ['#0d1b2a','#457b9d','#f4a261','#e63946']),\n     'sequencial personalizado'),\n    ('hsv',      'arco-iris'),\n]\n\nfig, axes = plt.subplots(2, 2, figsize=(11, 9))\n\nfor ax, (cmap_name, title) in zip(axes.flat, palettes):\n    ax.imshow(z3, extent=[0,1,0,1], origin='lower',\n              cmap=cmap_name, aspect='equal')\n    ax.set_title(title, fontsize=11, fontweight='bold')\n    ax.axis('off')\n\nplt.suptitle('Comparação de paletas de cores', fontsize=13, fontweight='bold')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nworld.ADMIN\n\n\n0                             Fiji\n1      United Republic of Tanzania\n2                   Western Sahara\n3                           Canada\n4         United States of America\n                  ...             \n172             Republic of Serbia\n173                     Montenegro\n174                         Kosovo\n175            Trinidad and Tobago\n176                    South Sudan\nName: ADMIN, Length: 177, dtype: str\n\n\n\n\nCode\ntype(world.ADMIN)\n\n\npandas.Series\n\n\n\n\nCode\ncountry_names = world.ADMIN\ncountry_names.unique()\n\n\n&lt;StringArray&gt;\n[                       'Fiji', 'United Republic of Tanzania',\n              'Western Sahara',                      'Canada',\n    'United States of America',                  'Kazakhstan',\n                  'Uzbekistan',            'Papua New Guinea',\n                   'Indonesia',                   'Argentina',\n ...\n                  'Somaliland',                      'Uganda',\n                      'Rwanda',      'Bosnia and Herzegovina',\n             'North Macedonia',          'Republic of Serbia',\n                  'Montenegro',                      'Kosovo',\n         'Trinidad and Tobago',                 'South Sudan']\nLength: 177, dtype: str\n\n\n\n\nCode\ncountry_names.duplicated()\n\n\n0      False\n1      False\n2      False\n3      False\n4      False\n       ...  \n172    False\n173    False\n174    False\n175    False\n176    False\nName: ADMIN, Length: 177, dtype: bool\n\n\n\n\nCode\nsum(country_names.duplicated())\n\n\n0",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "week1_introductionGIS.html"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html",
+    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html",
+    "title": "Sessao 0 - 19/08/2026",
+    "section": "",
+    "text": "Antes de mergulharmos na amplitude dos ecossistemas geoespaciais, vamos compreender melhor a nossa comunidade FTL Brasil.\n\n\n\n\nCode\nimport pandas as pd\nimport geopandas as gpd\nimport matplotlib.pyplot as plt \nimport os \n\n\n\n\nCode\nos.getcwd()\n\n\n'/Users/macuser/Documents/UN/ebook/fundamentals_gis_rs/week0'\n\n\n\n\nCode\n# lets read our csv with the location of everyone\ndf = pd.read_excel('data/NOS-FTL-Brasil.xlsx')\n\ndf.head()\n\n\n\n\n\n\n\n\n\nID\nDe onde você é? (Escreva como: Cidade/SG.  exemplo: Pindamonhangaba/SP . Tarauca/AC , catole do rocha/PB)\\n\\n\n\n\n\n\n0\n1\nFortaleza-CE\n\n\n1\n2\nRECIFE/PE\n\n\n2\n3\nLimeira/SP\n\n\n3\n4\nCuritiba - Paraná\n\n\n4\n5\nViamão/RS",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Sessao 0 - 19/08/2026"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#ecosistema-geoespacial",
+    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#ecosistema-geoespacial",
+    "title": "Sessao 0 - 19/08/2026",
+    "section": "",
+    "text": "Antes de mergulharmos na amplitude dos ecossistemas geoespaciais, vamos compreender melhor a nossa comunidade FTL Brasil.\n\n\n\n\nCode\nimport pandas as pd\nimport geopandas as gpd\nimport matplotlib.pyplot as plt \nimport os \n\n\n\n\nCode\nos.getcwd()\n\n\n'/Users/macuser/Documents/UN/ebook/fundamentals_gis_rs/week0'\n\n\n\n\nCode\n# lets read our csv with the location of everyone\ndf = pd.read_excel('data/NOS-FTL-Brasil.xlsx')\n\ndf.head()\n\n\n\n\n\n\n\n\n\nID\nDe onde você é? (Escreva como: Cidade/SG.  exemplo: Pindamonhangaba/SP . Tarauca/AC , catole do rocha/PB)\\n\\n\n\n\n\n\n0\n1\nFortaleza-CE\n\n\n1\n2\nRECIFE/PE\n\n\n2\n3\nLimeira/SP\n\n\n3\n4\nCuritiba - Paraná\n\n\n4\n5\nViamão/RS",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Sessao 0 - 19/08/2026"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#limpeza-de-dados",
+    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#limpeza-de-dados",
+    "title": "Sessao 0 - 19/08/2026",
+    "section": "Limpeza de dados",
+    "text": "Limpeza de dados\nAquilo que todo cientista de dados ama.\nComo o texto livre tem bastante variação, como separadores diferentes (/, -, ,), estado abreviado vs. nome completo, prefixos tipo “Sou de…” — fazemos só uma limpeza leve antes de geocodificar. Não tentamos separar cidade/estado manualmente: casos como \"Minas - Pouso Alegre\" (ordem invertida!) tornariam isso frágil. Em vez disso, mandamos a string inteira para o Nominatim, que já é bom em interpretar texto livre e na prática resolve isso para gente.\n\n\nCode\nplace= df.columns[1]\ndf.rename(columns={place:'lugar'},inplace=True)\n\n\n\n\nCode\nimport re\n\ndef clean_place(raw: str) -&gt; str:\n    s = raw.strip()\n    s = re.sub(r'(?i)^sou de\\s+', '', s)   # tira prefixos tipo \"Sou de Sobral/CE\"\n    s = re.sub(r'\\s+', ' ', s)              # espaços duplicados\n    s = s.strip(' -,/')                     # separadores soltos na ponta\n    return s\n\ndf['lugar_clean'] = df['lugar'].apply(clean_place)\ndf['lugar_clean'].unique()\n\n\n&lt;ArrowStringArray&gt;\n[            'Fortaleza-CE',                'RECIFE/PE',\n               'Limeira/SP',        'Curitiba - Paraná',\n                'Viamão/RS',                'Recife/PE',\n                'Fortaleza',                 'Betim/MG',\n   'São José dos Campos/SP',                'Toledo/PR',\n            'Santarém/Pará',          'Santarém - Pará',\n                  'Ijuí/RS',            'Fortaleza, ce',\n               'Niterói/RJ',              'Gravataí/RS',\n         'Florianópolis/SC',               'Pinhais/PR',\n               'Goiânia/GO', 'Campos dos Goytacazes/RJ',\n      'Rio de Janeiro / RJ',           'Porto velho/RO',\n        'Campina Grande/PB',                 'Belém/PA',\n              'Brasília/DF',      'Lauro de Freitas/BA',\n          'Passa Quatro/MG',       'Glória do Goitá/PE',\n               'Betim - MG',            'Araraquara/SP',\n              'Floresta/PR',             'Rio Claro/SP',\n   'Presidente Prudente/SP',           'Santa Maria/RS',\n              'Salvador/BA',        'Rio de Janeiro/RJ',\n           'João Pessoa/PB',            'Holambra - SP',\n                 'Timbó/SC', 'Campos dos goytacazes/RJ',\n            'São Luís / MA',             'São Paulo/SP',\n 'São José do Rio Preto/SP',                'Penedo/AL',\n               'Maringá/PR',                'Cuiabá/MT',\n                'São Paulo',                'Sobral/CE',\n 'São Bernardo do Campo/SP',                'Caxias/MA',\n        'Três Corações, MG',     'Minas - Pouso Alegre',\n           'Santo André/SP',               'Niterói RJ']\nLength: 54, dtype: str\n\n\n\nGeocodificação\nAgora vamos transformar cada lugar (texto livre, do jeito que cada pessoa preencheu no formulário) em coordenadas (latitude, longitude), usando a API pública do Nominatim (OpenStreetMap).\n\n\nCode\nfrom pathlib import Path\nfrom geopy.geocoders import Nominatim\nfrom geopy.extra.rate_limiter import RateLimiter\n\nCACHE_PATH = Path('data/geocoded_cache.csv')\n\nif CACHE_PATH.exists():\n    # cache na parada toda, evita bater na API do Nominatim de novo\n    cache = pd.read_csv(CACHE_PATH)\nelse:\n    # user_agent é obrigatório pela política de uso do Nominatim\n    geolocator = Nominatim(user_agent='ftl-brasil-tmj', \n                           timeout=10)\n    # 1 requisição por segundo\n    # swallow_exceptions evita que uma falha derrube o loop\n    geocode = RateLimiter(geolocator.geocode, \n                          min_delay_seconds=1, \n                          error_wait_seconds=5,\n                           max_retries=2, \n                           swallow_exceptions=True)\n\n    unique_places = df[['lugar_clean']].drop_duplicates().reset_index(drop=True)\n    unique_places['location'] = unique_places['lugar_clean'].apply(lambda p: geocode(p, country_codes='br'))\n    unique_places['lat'] = unique_places['location'].apply(lambda loc: loc.latitude if loc else None)\n    unique_places['lon'] = unique_places['location'].apply(lambda loc: loc.longitude if loc else None)\n    unique_places['matched_address'] = unique_places['location'].apply(lambda loc: loc.address if loc else None)\n\n    cache = unique_places[['lugar_clean', 'lat', 'lon', 'matched_address']]\n    cache.to_csv(CACHE_PATH, index=False)\n\n# unimos no nosso antigo df\ndf = df.merge(cache, on='lugar_clean', how='left')\n\n# verificamos aqui os dados que nao conseguiram ser geocodificados\nnao_geocodificados = df[df['lat'].isna()]\nprint(f\"{len(nao_geocodificados)} de {len(df)} linhas não foram geocodificadas\")\nnao_geocodificados\n\n\n0 de 57 linhas não foram geocodificadas\n\n\n\n\n\n\n\n\n\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\n\n\n\n\n\n\n\n\n\n\n\nCode\ndf.head()\n\n\n\n\n\n\n\n\n\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\n\n\n\n\n0\n1\nFortaleza-CE\nFortaleza-CE\n-3.793217\n-38.528036\nFortaleza, Ceará, Região Nordeste, Brasil\n\n\n1\n2\nRECIFE/PE\nRECIFE/PE\n-8.058493\n-34.884819\nRecife, Pernambuco, Região Nordeste, Brasil\n\n\n2\n3\nLimeira/SP\nLimeira/SP\n-22.561507\n-47.401766\nLimeira, São Paulo, Região Sudeste, Brasil\n\n\n3\n4\nCuritiba - Paraná\nCuritiba - Paraná\n-25.429596\n-49.271272\nCuritiba, Paraná, Região Sul, Brasil\n\n\n4\n5\nViamão/RS\nViamão/RS\n-30.081934\n-51.026193\nViamão, Rio Grande do Sul, Região Sul, Brasil\n\n\n\n\n\n\n\n\n\nCode\n# vamos converter nossos dados em um geodataframe para manipular espacialmente\n\ngdf = gpd.GeoDataFrame(\n    df.dropna(subset=['lat', 'lon']),\n    geometry=gpd.points_from_xy(df['lon'], df['lat']),\n    crs='EPSG:4326',\n)\ngdf.head()\n\n\n\n\n\n\n\n\n\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\ngeometry\n\n\n\n\n0\n1\nFortaleza-CE\nFortaleza-CE\n-3.793217\n-38.528036\nFortaleza, Ceará, Região Nordeste, Brasil\nPOINT (-38.52804 -3.79322)\n\n\n1\n2\nRECIFE/PE\nRECIFE/PE\n-8.058493\n-34.884819\nRecife, Pernambuco, Região Nordeste, Brasil\nPOINT (-34.88482 -8.05849)\n\n\n2\n3\nLimeira/SP\nLimeira/SP\n-22.561507\n-47.401766\nLimeira, São Paulo, Região Sudeste, Brasil\nPOINT (-47.40177 -22.56151)\n\n\n3\n4\nCuritiba - Paraná\nCuritiba - Paraná\n-25.429596\n-49.271272\nCuritiba, Paraná, Região Sul, Brasil\nPOINT (-49.27127 -25.4296)\n\n\n4\n5\nViamão/RS\nViamão/RS\n-30.081934\n-51.026193\nViamão, Rio Grande do Sul, Região Sul, Brasil\nPOINT (-51.02619 -30.08193)\n\n\n\n\n\n\n\n\n\nCode\n# vamo espiar rapidamente esses dados \ngdf.plot()\n\n\n\n\n\n\n\n\n\n\n\nimproving the plot\nDá para melhorar isso ne? Fala tu\n\nComo? \n\nVamos utilizar os dados que estão em nossos ecossistema geoespacial.\nComeçando pela biblioteca GEOBR. Veja mais em nossa Awesome-FTL page.\n\n\nCode\n# baixando o polígono da nossa terra brasil\nimport geobr",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Sessao 0 - 19/08/2026"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#dá-para-melhorar-certamente",
+    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#dá-para-melhorar-certamente",
+    "title": "Sessao 0 - 19/08/2026",
+    "section": "Dá para melhorar? certamente",
+    "text": "Dá para melhorar? certamente\n\n\nCode\n# baixando os dados de municipipo\nmuni = geobr.read_municipality(year=2020)\nmuni.plot()\n\n\n\n\n\n\n\n\n\n\n\nCode\n## vamos fazer uma spatial query para pegar os municipios\n\nnew_gdf = muni.sjoin(\n    gdf.to_crs(muni.crs),\n    how=\"inner\",\n    predicate=\"intersects\"\n)\n\n# quick plot\nnew_gdf.plot()\n\n\n\n\n\n\n\n\n\n\n\nCode\nnew_gdf.columns\n\n\nIndex(['code_muni', 'name_muni', 'code_state', 'abbrev_state', 'name_state',\n       'code_region', 'name_region', 'year', 'geometry', 'index_right', 'ID',\n       'lugar', 'lugar_clean', 'lat', 'lon', 'matched_address'],\n      dtype='str')\n\n\n\n\nCode\n# adicionamos uma nova coluna com o numero de participantes por cidade\nnn = new_gdf.groupby('name_muni').agg(\n    num_part=('code_muni','count')\n)[['num_part']]\n\n# merge das informacoes\nnew_gdf = new_gdf.merge(\n    nn,\n    how='inner',\n    on='name_muni'\n)\n\n## agora o nosso gdf tem o numero de alunos por cidade\nnew_gdf.head(2)\n\n\n\n\n\n\n\n\n\ncode_muni\nname_muni\ncode_state\nabbrev_state\nname_state\ncode_region\nname_region\nyear\ngeometry\nindex_right\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\nnum_part_x\nnum_part_y\n\n\n\n\n0\n1100205.0\nPorto Velho\n11.0\nRO\nRondônia\n1.0\nNorte\n2020.0\nPOLYGON ((-62.86662 -7.97587, -62.85336 -7.987...\n22\n23\nPorto velho/RO\nporto velho/ro\n-8.749453\n-63.873544\nPorto Velho, Rondônia, Região Norte, Brasil\n1\n1\n\n\n1\n1501402.0\nBelém\n15.0\nPA\nPará\n1.0\nNorte\n2020.0\nPOLYGON ((-48.35304 -1.22103, -48.36552 -1.229...\n51\n52\nBelém/PA\nbelém/pa\n-1.450560\n-48.468245\nBelém, Pará, Região Norte, Brasil\n2\n2",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Sessao 0 - 19/08/2026"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#mapa-de-localização-com-os-municipios",
+    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#mapa-de-localização-com-os-municipios",
+    "title": "Sessao 0 - 19/08/2026",
+    "section": "Mapa de localização com os municipios",
+    "text": "Mapa de localização com os municipios\n\n\nCode\nimport matplotlib.pyplot as plt\nimport matplotlib as mpl\n\nfig, ax = plt.subplots(figsize=(7, 8))\n\nbrasil_gdf.plot(\n    ax=ax,\n    color=\"#162551\",\n    edgecolor=\"#E6E2D7\",\n    linewidth=0.6\n)\n\ncmap = plt.cm.Wistia\nnorm = mpl.colors.Normalize(vmin=1, vmax=3)\n\nnew_gdf.plot(\n    ax=ax,\n    column='num_part',\n    markersize=30,\n    cmap=cmap,\n    norm=norm,\n    alpha=0.85,\n    edgecolor='white',\n    linewidth=0.4\n)\n\n# Legend/colorbar\nsm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)\nsm.set_array([])\n\n# cbar = fig.colorbar(sm, ax=ax, shrink=0.6, pad=0.02)\n# cbar.set_ticks([1, 2, 3])\n# cbar.set_label('Número de participantes')\n\nax.set_title('Participantes FTL Brasil', fontsize=13, fontweight='bold')\nax.set_axis_off()\n\nplt.show()\n\n\n\n\n\n\n\n\n\n## É possível melhorar esse mapa? Certamente\nMostra pra gente alguma ideia sua!\nAinda não sabe o que é spatial query?\n\nNao mosca e corre lá para ver nossas aulas de introducao em python + GIS\nlink github: github-ftl-brasil",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Sessao 0 - 19/08/2026"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week0/provedores.html",
+    "href": "fundamentals_gis_rs/week0/provedores.html",
+    "title": "Provedores de Dados Geoespaciais",
+    "section": "",
+    "text": "Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.\n\n\n\n&lt;span class=\"geo-key\"&gt;&lt;i class=\"geo-dot\" style=\"background:#1baf7a\"&gt;&lt;/i&gt;Provedor brasileiro&lt;/span&gt;\n&lt;span class=\"geo-key\"&gt;&lt;i class=\"geo-dot\" style=\"background:#2a78d6\"&gt;&lt;/i&gt;Provedor internacional&lt;/span&gt;\n&lt;span class=\"geo-hint\"&gt;Tamanho do tema = votos no questionário. Clique num tema para abrir; clique num provedor para ir direto ao site.&lt;/span&gt;\n\n\n\nCarregando…\n\n\n\n\n\n\n\n\n\n\nTipQuer adicionar um provedor?\n\n\n\nOs dados desse diagrama vivem em data/provedores.json, editável por qualquer aluno. Veja o passo a passo em Como Contribuir.",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Provedores de Dados Geoespaciais"
+    ]
+  },
+  {
     "objectID": "guest-sessions/index.html",
     "href": "guest-sessions/index.html",
     "title": "Sessões de Convidados",
     "section": "",
-    "text": "Content coming soon.",
+    "text": "Content coming soon.\nEm breve, amigos\n\n\n\ntotoro",
     "crumbs": [
       "Sessões de Convidados",
       "Sessões de Convidados"
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "SpaceTech Bootcamp",
+    "objectID": "course-info/general-info.html",
+    "href": "course-info/general-info.html",
+    "title": "Informações Gerais",
     "section": "",
-    "text": "Bem-vindo(a)! Este site é o nosso ebook do Future Tech Leaders Brasil - Space Tech Bootcam.\nUse a barra lateral à esquerda para navegar:\n\nCourse Information : informações gerais, leituras recomendadas e como configurar o seu ambiente para dados geoespaciais.\nFundamentos em GIS e Sensoriamento Remoto — Nossas sessões semanais, organizadas referente ao calendário disponibilizado do curso, com python notebooks para as aulas práticas.\nFundamentos em Machine Learning e Deep Learning - Materiais e práticas referente a ML e DL aplicado a observação da terra, bem como atividade de visão computacional.\nEstado da Arte (State-of-Art) - Últimos avanços e paradigmas sobre Deep Learning, incorporando sessões práticas com arquitetura de Deep Learning, Embeddings, Foundation Models, Knowledge Distillation (Destilação) e muito mais!\nSessões de Convidados - Página específica onde disponibizaremos todos os materiais que nossos experts dentro da área de dados geoespaciais apresentarão no decorrer desse bootcamp.\n\n\n\n\n\n\n\nTipPrimeira vez por aqui?\n\n\n\nComece pela página de Setup para configurar o seu ambiente.\n\n\n\n\n\n\nlogoAEB",
+    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
     "crumbs": [
-      "Home"
+      "Course Information",
+      "Informações Gerais"
+    ]
+  },
+  {
+    "objectID": "course-info/general-info.html#sobre-esse-módulo",
+    "href": "course-info/general-info.html#sobre-esse-módulo",
+    "title": "Informações Gerais",
+    "section": "",
+    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "crumbs": [
+      "Course Information",
+      "Informações Gerais"
+    ]
+  },
+  {
+    "objectID": "course-info/general-info.html#estrutura-de-aulas-semanais",
+    "href": "course-info/general-info.html#estrutura-de-aulas-semanais",
+    "title": "Informações Gerais",
+    "section": "Estrutura de Aulas Semanais",
+    "text": "Estrutura de Aulas Semanais\n\nFundamentos em GIS e Sensoriamento Remoto\n\n\n\nWeek\nTopic\n\n\n\n\n0\nEcossistema de Dados Geoespaciais\n\n\n1\nFundamentos em Análises Espaciais para dados vetoriais.\n\n\n2\nFundamentos em Sensoriamento Remoto e dados raster.\n\n\n3\nExpandindo conhecimentos para análise dados geoespaciais.\n\n\n4\nCubo de Dados (Data Cubes)\n\n\n\n\n\nFundamentos em Machine Learning e Deep Learning\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\nEstado da Arte (State-of-Art)\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\n\n\nlogoAEB",
+    "crumbs": [
+      "Course Information",
+      "Informações Gerais"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html",
+    "href": "course-info/setup.html",
+    "title": "Standard Set Up",
+    "section": "",
+    "text": "Verifique de seguir esse guia antes de começar a explorar o bootcamp. Aqui ajudamos a como fazer as configurações corretas do Python enviroment e reproduzir os resultados em seu próprio computador.",
+    "crumbs": [
+      "Course Information",
+      "Standard Set Up"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html#pré-requisitos",
+    "href": "course-info/setup.html#pré-requisitos",
+    "title": "Standard Set Up",
+    "section": "1. Pré-requisitos",
+    "text": "1. Pré-requisitos\n\nGit — https://git-scm.com/downloads\nuv (Python package/version manager) — https://docs.astral.sh/uv/getting-started/installation/\nVS Code (recommended editor, with the Python + Jupyter extensions) — https://code.visualstudio.com/download\nQuarto — (optional, only if you want to preview the site itself, not just run notebooks) https://quarto.org/docs/get-started/\nPostgreSQL + PostGIS — (optional, only needed once we start working with a spatial database)\n\n\n\n\n\n\n\nLembre-se de usar uv sync para baixar as bibliotecas que utilizamos no decorrer de nossos encontros.",
+    "crumbs": [
+      "Course Information",
+      "Standard Set Up"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html#clone-the-repository",
+    "href": "course-info/setup.html#clone-the-repository",
+    "title": "Standard Set Up",
+    "section": "2. Clone the repository",
+    "text": "2. Clone the repository\ngit clone https://github.com/emanuel-gf/spacetech-gis-ebook.git\ncd spacetech-gis-ebook",
+    "crumbs": [
+      "Course Information",
+      "Standard Set Up"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html#create-your-own-branch",
+    "href": "course-info/setup.html#create-your-own-branch",
+    "title": "Standard Set Up",
+    "section": "3. Create your own branch",
+    "text": "3. Create your own branch\nEste repositório será atualizado semanalmente. Portanto, se você modificar os arquivos diretamente na branch main, você terá um pouco de problema/dificuldade para baixar os novos capítulos que serão disponibilizados (git pull). Dessa forma, sugerimos que você crie sua própria branch e altere seus arquivos nessa branch, deixando sempre a main limpa.\ngit checkout -b semana0\nOU\ngit checkout -b qualquer-nome-aqui\nDessa forma, sempre que o repositório for atualizado, você só precisa ir na branch main e dar um git pull.\ngit checkout main\ngit pull\ngit checkout my-work\ngit merge main\nIsto deixará a main limpa e isolada, evitando possiveis dores de cabeça num futuro não muito distante.",
+    "crumbs": [
+      "Course Information",
+      "Standard Set Up"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html#sync-as-bibliotecas-de-python",
+    "href": "course-info/setup.html#sync-as-bibliotecas-de-python",
+    "title": "Standard Set Up",
+    "section": "4. Sync as bibliotecas de python",
+    "text": "4. Sync as bibliotecas de python\nCertifique-se de antes ter um ambiente uv, através do uv venv e de que esse ambiente esteja Ativo.\nuv sync\nThis reads pyproject.toml / uv.lock and creates a local .venv with the exact package versions used in class (geopandas, cartopy, plotly, etc).",
+    "crumbs": [
+      "Course Information",
+      "Standard Set Up"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html#pronto",
+    "href": "course-info/setup.html#pronto",
+    "title": "Standard Set Up",
+    "section": "5. Pronto!",
+    "text": "5. Pronto!\nAgora você já pode rodar o notebook, clique nesse e selecione o kernel, tudo rodará feito magia.",
+    "crumbs": [
+      "Course Information",
+      "Standard Set Up"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html#re-construindo-o-website-com-quarto",
+    "href": "course-info/setup.html#re-construindo-o-website-com-quarto",
+    "title": "Standard Set Up",
+    "section": "6. Re-construindo o website com quarto",
+    "text": "6. Re-construindo o website com quarto\nEssa é para você que deseja explorar um pouco mais as funcionalidades do Quarto. Primeiro de uma lida na documentação. Depois, dentro do projeto, rode isso no terminal.\nuv run quarto preview\n\n\n\n\n\n\nWarning“Jupyter is not available” / Quarto can’t find your kernel\n\n\n\nQuarto sometimes finds a system Python instead of the one uv just created in .venv. If quarto check jupyter reports no Jupyter, point Quarto at the venv explicitly:\nexport QUARTO_PYTHON=$(pwd)/.venv/bin/python\nquarto check jupyter\n\n\n\n\n\n\n\n\nNoteEmpacou meu querido?\n\n\n\nPergunta lá no nosso canal do discord. Algum colega com toda a certeza conseguirá te ajudar. Noiz.",
+    "crumbs": [
+      "Course Information",
+      "Standard Set Up"
+    ]
+  },
+  {
+    "objectID": "ml-dl/index.html",
+    "href": "ml-dl/index.html",
+    "title": "Fundamentos em Machine Learning e Deep Learning",
+    "section": "",
+    "text": "Em construção.\n\n\n\n\n\n\nTudo aqui em construção\n\n\n\n\n\n\nvov_juju",
+    "crumbs": [
+      "Fundamentos em Machine Learning e Deep Learning",
+      "Fundamentos em Machine Learning e Deep Learning"
     ]
   },
   {
@@ -121,361 +328,57 @@
     ]
   },
   {
-    "objectID": "course-info/reading.html",
-    "href": "course-info/reading.html",
-    "title": "Leituras",
-    "section": "",
-    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nBivand, R. S.; Pebesma, E.; Gómez-Rubio, V. (2013). Applied Spatial Data Analysis with R, 2nd ed. Springer.\nQGIS Documentation 3.40. https://docs.qgis.org/",
-    "crumbs": [
-      "Course Information",
-      "Leituras"
-    ]
-  },
-  {
-    "objectID": "course-info/reading.html#leituras-recomendadas",
-    "href": "course-info/reading.html#leituras-recomendadas",
-    "title": "Leituras",
-    "section": "",
-    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nBivand, R. S.; Pebesma, E.; Gómez-Rubio, V. (2013). Applied Spatial Data Analysis with R, 2nd ed. Springer.\nQGIS Documentation 3.40. https://docs.qgis.org/",
-    "crumbs": [
-      "Course Information",
-      "Leituras"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html",
-    "href": "course-info/setup.html",
-    "title": "Standard Set Up",
-    "section": "",
-    "text": "Verifique de seguir esse guia antes de começar a explorar o bootcamp. Aqui ajudamos a como fazer as configurações corretas do Python enviroment e reproduzir os resultados em seu próprio computador.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#pré-requisitos",
-    "href": "course-info/setup.html#pré-requisitos",
-    "title": "Standard Set Up",
-    "section": "1. Pré-requisitos",
-    "text": "1. Pré-requisitos\n\nGit — https://git-scm.com/downloads\nuv (Python package/version manager) — https://docs.astral.sh/uv/getting-started/installation/\nVS Code (recommended editor, with the Python + Jupyter extensions) — https://code.visualstudio.com/download\nQuarto — (optional, only if you want to preview the site itself, not just run notebooks) https://quarto.org/docs/get-started/\nPostgreSQL + PostGIS — (optional, only needed once we start working with a spatial database)\n\n\n\n\n\n\n\nLembre-se de usar uv sync para baixar as bibliotecas que utilizamos no decorrer de nossos encontros.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#clone-the-repository",
-    "href": "course-info/setup.html#clone-the-repository",
-    "title": "Standard Set Up",
-    "section": "2. Clone the repository",
-    "text": "2. Clone the repository\ngit clone https://github.com/emanuel-gf/spacetech-gis-ebook.git\ncd spacetech-gis-ebook",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#create-your-own-branch",
-    "href": "course-info/setup.html#create-your-own-branch",
-    "title": "Standard Set Up",
-    "section": "3. Create your own branch",
-    "text": "3. Create your own branch\nEste repositório será atualizado semanalmente. Portanto, se você modificar os arquivos diretamente na branch main, você terá um pouco de problema/dificuldade para baixar os novos capítulos que serão disponibilizados (git pull). Dessa forma, sugerimos que você crie sua própria branch e altere seus arquivos nessa branch, deixando sempre a main limpa.\ngit checkout -b semana0\nOU\ngit checkout -b qualquer-nome-aqui\nDessa forma, sempre que o repositório for atualizado, você só precisa ir na branch main e dar um git pull.\ngit checkout main\ngit pull\ngit checkout my-work\ngit merge main\nIsto deixará a main limpa e isolada, evitando possiveis dores de cabeça num futuro não muito distante.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#sync-as-bibliotecas-de-python",
-    "href": "course-info/setup.html#sync-as-bibliotecas-de-python",
-    "title": "Standard Set Up",
-    "section": "4. Sync as bibliotecas de python",
-    "text": "4. Sync as bibliotecas de python\nCertifique-se de antes ter um ambiente uv, através do uv venv e de que esse ambiente esteja Ativo.\nuv sync\nThis reads pyproject.toml / uv.lock and creates a local .venv with the exact package versions used in class (geopandas, cartopy, plotly, etc).",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#pronto",
-    "href": "course-info/setup.html#pronto",
-    "title": "Standard Set Up",
-    "section": "5. Pronto!",
-    "text": "5. Pronto!\nAgora você já pode rodar o notebook, clique nesse e selecione o kernel, tudo rodará feito magia.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#re-construindo-o-website-com-quarto",
-    "href": "course-info/setup.html#re-construindo-o-website-com-quarto",
-    "title": "Standard Set Up",
-    "section": "6. Re-construindo o website com quarto",
-    "text": "6. Re-construindo o website com quarto\nEssa é para você que deseja explorar um pouco mais as funcionalidades do Quarto. Primeiro de uma lida na documentação. Depois, dentro do projeto, rode isso no terminal.\nuv run quarto preview\n\n\n\n\n\n\nWarning“Jupyter is not available” / Quarto can’t find your kernel\n\n\n\nQuarto sometimes finds a system Python instead of the one uv just created in .venv. If quarto check jupyter reports no Jupyter, point Quarto at the venv explicitly:\nexport QUARTO_PYTHON=$(pwd)/.venv/bin/python\nquarto check jupyter\n\n\n\n\n\n\n\n\nNoteEmpacou meu querido?\n\n\n\nPergunta lá no nosso canal do discord. Algum colega com toda a certeza conseguirá te ajudar. Noiz.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "manifest_os/manifest.html",
-    "href": "manifest_os/manifest.html",
-    "title": "",
-    "section": "",
-    "text": "Code"
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week4/index.html",
-    "href": "fundamentals_gis_rs/week4/index.html",
-    "title": "Week 4",
+    "objectID": "state-of-art/index.html",
+    "href": "state-of-art/index.html",
+    "title": "Estado da Arte (State-of-Art)",
     "section": "",
     "text": "Content coming soon.",
     "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 4",
-      "Week 4"
+      "Estado da Arte (State-of-Art)",
+      "Estado da Arte (State-of-Art)"
     ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week0/provedores.html",
-    "href": "fundamentals_gis_rs/week0/provedores.html",
-    "title": "Provedores de Dados Geoespaciais",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "SpaceTech Bootcamp",
     "section": "",
-    "text": "Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.\n\n\n\n&lt;span class=\"geo-key\"&gt;&lt;i class=\"geo-dot\" style=\"background:#1baf7a\"&gt;&lt;/i&gt;Provedor brasileiro&lt;/span&gt;\n&lt;span class=\"geo-key\"&gt;&lt;i class=\"geo-dot\" style=\"background:#2a78d6\"&gt;&lt;/i&gt;Provedor internacional&lt;/span&gt;\n&lt;span class=\"geo-hint\"&gt;Tamanho do tema = votos no questionário. Clique num tema para abrir; clique num provedor para ir direto ao site.&lt;/span&gt;\n\n\n\nCarregando…\n\n\n\n\n\n\n\n\n\n\nTipQuer adicionar um provedor?\n\n\n\nOs dados desse diagrama vivem em data/provedores.json, editável por qualquer aluno. Veja o passo a passo em Como Contribuir.",
+    "text": "Bem-vindo(a)! Este site é o nosso ebook do Future Tech Leaders Brasil - Space Tech Bootcam.\nUse a barra lateral à esquerda para navegar:\n\nCourse Information : informações gerais, leituras recomendadas e como configurar o seu ambiente para dados geoespaciais.\nFundamentos em GIS e Sensoriamento Remoto — Nossas sessões semanais, organizadas referente ao calendário disponibilizado do curso, com python notebooks para as aulas práticas.\nFundamentos em Machine Learning e Deep Learning - Materiais e práticas referente a ML e DL aplicado a observação da terra, bem como atividade de visão computacional.\nEstado da Arte (State-of-Art) - Últimos avanços e paradigmas sobre Deep Learning, incorporando sessões práticas com arquitetura de Deep Learning, Embeddings, Foundation Models, Knowledge Distillation (Destilação) e muito mais!\nSessões de Convidados - Página específica onde disponibizaremos todos os materiais que nossos experts dentro da área de dados geoespaciais apresentarão no decorrer desse bootcamp.\n\n\n\n\n\n\n\nTipPrimeira vez por aqui?\n\n\n\nComece pela página de Setup para configurar o seu ambiente.\n\n\n\n\n\n\nlogoAEB",
     "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Provedores de Dados Geoespaciais"
+      "Home"
     ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week0/index.html",
-    "href": "fundamentals_gis_rs/week0/index.html",
-    "title": "Ecossistema Geoespacial",
+    "objectID": "course-info/how-to-contribute.html",
+    "href": "course-info/how-to-contribute.html",
+    "title": "Como Contribuir",
     "section": "",
-    "text": "Dado o contexto apresentado nos slides da nossa sessão, se faz necessário elencar esses provedores do ecossitema geoespacial brasileiro e mundial.\nPortanto, esse primeiro capítulo é destinado a um panorama do ecossistema de dados geoespaciais. Para explorar os desafios impostos no cenário cotidiano, precisamos primeiro compreender quais os serviços de dados mais pertinentes dado o nosso problema. E quais os tipos de dados que necessitamos para solucioná-lo.\nAntes de seguir, se você ainda não configurou seu ambiente, dá uma olhada nos Utilitários de CLI.",
+    "text": "Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir, contudo o repositório visa ser uma contribução coletiva de muitas formas, então diversas outras maneiras aparecerão ao longo do bootcamp.\nAntes de editar qualquer coisa, crie sua própria branch! Veja o passo 3 da página de Setup. Isso evita conflito com atualizações futuras do repositório.",
     "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Ecossistema Geoespacial"
+      "Course Information",
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week0/index.html#o-que-vocês-querem-aprender",
-    "href": "fundamentals_gis_rs/week0/index.html#o-que-vocês-querem-aprender",
-    "title": "Ecossistema Geoespacial",
-    "section": "O que vocês querem aprender",
-    "text": "O que vocês querem aprender\nNo questionário inicial, cada um de vocês votou nos assuntos que mais têm interesse dentro do ecossistema geoespacial:\n\n\n\nTema\nVotos\n\n\n\n\nSatélites / plano de órbita\n24\n\n\nMudanças climáticas\n21\n\n\nQueimadas / desmatamento / secas\n17\n\n\nDrones e UAV\n17\n\n\nOceanografia\n11\n\n\nAgricultura digital\n11\n\n\nFlorestas\n10\n\n\n3D e point-cloud\n9\n\n\nEcologia\n8\n\n\nEcologia de paisagem\n8\n\n\nHidrologia\n7\n\n\nMobilidade e transportes\n7\n\n\nMapeamento humanitário\n6\n\n\nInundações\n6\n\n\nQualidade do ar\n6\n\n\nGêmeos digitais\n5\n\n\nIlhas de calor e urbanismo\n4\n\n\nSegurança pública\n1\n\n\nPatrimônio arqueológico\n1",
+    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
+    "href": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
+    "title": "Como Contribuir",
+    "section": "Contribuindo com o Awesome Geospatial",
+    "text": "Contribuindo com o Awesome Geospatial\nA página Awesome Geospatial é uma lista de ferramentas organizadas por plataforma (QGIS, Google Earth Engine, Machine Learning, AI, Databases, Cloud Computing).\nPara adicionar uma ferramenta, edite awesome-geospatial/index.md e inclua um item na lista, sob a seção da plataforma correspondente:\n- [**Nome**](https://link.com) — descrição curta do que é / para que serve.\nSe você não tem certeza que o link ou a descrição estão corretos/atualizados, adicione ⚠️ *verificar* no fim da linha — assim outra pessoa sabe que precisa conferir antes de confiar no item. Sem essa marcação, o item é considerado confiável.\nSe a plataforma que você quer ainda não tem uma seção, crie um novo ## Nome da Plataforma no fim do arquivo.",
     "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Ecossistema Geoespacial"
+      "Course Information",
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week0/index.html#onde-encontrar-dado-para-cada-tema",
-    "href": "fundamentals_gis_rs/week0/index.html#onde-encontrar-dado-para-cada-tema",
-    "title": "Ecossistema Geoespacial",
-    "section": "Onde encontrar dado para cada tema",
-    "text": "Onde encontrar dado para cada tema\nPara cada um desses grandes temas, mapeamos alguns provedores de dados que podem ajudar quando analisarmos os dados para projetos e desafios diários. Entre na página de provedores para explorar os provedores e ajude-nos a contribuir com as devidas urls diretamente ao nosso site.\n➡️ Provedores de Dados Geoespaciais — o diagrama completo",
+    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
+    "href": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
+    "title": "Como Contribuir",
+    "section": "Contribuindo com o diagrama de provedores (bubble chart)",
+    "text": "Contribuindo com o diagrama de provedores (bubble chart)\nO diagrama de bolhas em Provedores de Dados Geoespaciais — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: fundamentals_gis_rs/week0/data/provedores.json. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.\nPara adicionar um provedor a um tema já existente, inclua um novo objeto na lista provedores da categoria correspondente:\n{\n  \"nome\": \"Nome do provedor\",\n  \"escopo\": \"BR\",\n  \"url\": \"https://exemplo.gov.br/\",\n  \"dado\": \"Uma frase curta: qual dado, para qual uso\"\n}\nescopo é sempre \"BR\" ou \"GLOBAL\". Para criar um tema novo inteiro, adicione um objeto à lista categorias (nível raiz do JSON) com nome, votos (pode deixar 0 se não veio do questionário original) e sua própria lista de provedores.\nAntes de commitar, valide que o JSON continua válido:\npython3 -m json.tool fundamentals_gis_rs/week0/data/provedores.json &gt; /dev/null\nSem erro impresso = JSON válido.\n\n\n\n\n\n\nNoteDúvida?\n\n\n\nPergunta no canal do bootcamp antes de gastar muito tempo tentando resolver sozinho.",
     "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Ecossistema Geoespacial"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/week1_introductionGIS.html",
-    "href": "fundamentals_gis_rs/week1/week1_introductionGIS.html",
-    "title": "",
-    "section": "",
-    "text": "CodeShow All CodeHide All Code\n\n\n\n\n\n\nCode\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport matplotlib.colors as mcolors\nfrom scipy.stats import gaussian_kde\nimport geopandas as gpd\nimport cartopy.crs as ccrs\nimport cartopy.feature as cfeature\nimport plotly.express as px\n\n\n\n\nCode\nimport geodatasets\n\n\n\n\nCode\ngeodatasets.data.flatten().keys()\n\n\ndict_keys(['geoda.airbnb', 'geoda.atlanta', 'geoda.cars', 'geoda.charleston1', 'geoda.charleston2', 'geoda.chicago_health', 'geoda.chicago_commpop', 'geoda.chile_labor', 'geoda.cincinnati', 'geoda.cleveland', 'geoda.grid100', 'geoda.groceries', 'geoda.guerry', 'geoda.health', 'geoda.health_indicators', 'geoda.hickory1', 'geoda.hickory2', 'geoda.home_sales', 'geoda.houston', 'geoda.juvenile', 'geoda.lansing1', 'geoda.lansing2', 'geoda.lasrosas', 'geoda.liquor_stores', 'geoda.malaria', 'geoda.milwaukee1', 'geoda.milwaukee2', 'geoda.ncovr', 'geoda.natregimes', 'geoda.ndvi', 'geoda.nepal', 'geoda.nyc', 'geoda.nyc_earnings', 'geoda.nyc_education', 'geoda.nyc_neighborhoods', 'geoda.orlando1', 'geoda.orlando2', 'geoda.oz9799', 'geoda.phoenix_acs', 'geoda.police', 'geoda.sacramento1', 'geoda.sacramento2', 'geoda.savannah1', 'geoda.savannah2', 'geoda.seattle1', 'geoda.seattle2', 'geoda.sids', 'geoda.sids2', 'geoda.south', 'geoda.spirals', 'geoda.stlouis', 'geoda.tampa1', 'geoda.us_sdoh', 'ny.bb', 'eea.large_rivers', 'abs.australia', 'abs.australia_states_territories', 'naturalearth.cities', 'naturalearth.lakes', 'naturalearth.land', 'spdata.nydata', 'spdata.auckland', 'spdata.boston', 'spdata.columbus', 'spdata.cycle_hire', 'spdata.cycle_hire_osm', 'spdata.eire', 'spdata.ncsids', 'spdata.wheat', 'spdata.zion', 'spdata.zion_points', 'eurostat.nuts_rg_10m_2024_3035', 'eurostat.nuts_lb_2024_3035'])\n\n\n\n\nCode\nurl = \"https://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojson\"\ngdf = gpd.read_file(url)\n\n\n\n\nCode\n# Extract latitude and longitude from the geometry column\ngdf['lat'] = gdf.geometry.y\ngdf['lon'] = gdf.geometry.x\n\n\n\n\nCode\ngeodatasets.data.query_name('spdata.cycle_hire_osm')\n\n\n\n        \n        \n            \n                \n                    geodatasets.Dataset\n                    spdata.cycle_hire_osm\n                \n                \n                    \n                        urlhttps://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojsonlicenseCC0attributionspDatadescriptionCycle hire points in London from OSMgeometry_typePointdetailshttps://jakubnowosad.com/spData/reference/cycle_hire_osm.htmlnrows532ncols6hash804e7298bc5e84d6a73f212bdd19b7f3926ee0f50a3dbd957c46c07950dcc267filenamecycle_hire_osm.geojson\n                    \n                \n            \n        \n        \n\n\n\n\nCode\nfor col in gdf.columns:\n    print(col)\n\n\nosm_id\nname\ncapacity\ncyclestreets_id\ndescription\ngeometry\nlat\nlon\n\n\n\n\nCode\ngdf.capacity\n\n\n0       24\n1      NaN\n2       21\n3      NaN\n4      NaN\n      ... \n527    NaN\n528    NaN\n529    NaN\n530    NaN\n531    NaN\nName: capacity, Length: 532, dtype: str\n\n\n\n\nCode\nfig = px.scatter_map(\n    gdf,\n    lat='lat',\n    lon='lon',\n    #size='capacity',  # Fixed size for all points\n    #projection='mercator',\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    #mapbox_style='open-street-map',\n    title='Bicycle Hire Points in London (Scatter Plot)',\n    height=600,\n    width=800\n)\nfig.show()\n\n\nUnable to display output for mime type(s): application/vnd.plotly.v1+json\n\n\n\n\nCode\nimport geopandas as gpd\nimport plotly.express as px\n\n# Load the GeoJSON data from the URL\n#new_gdf = gpd.read_file(geodatasets.get_url('spdata.cycle_hire_osm'))\nurl = \"https://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojson\"\ngdf = gpd.read_file(url)\n\n# Extract latitude and longitude from the geometry column\ngdf['lat'] = gdf.geometry.y\ngdf['lon'] = gdf.geometry.x\n\n# Create a density heatmap using Plotly Express\nfig = px.density_mapbox(\n    gdf,\n    lat='lat',\n    lon='lon',\n    z=None,  # Use default density calculation\n    radius=15,\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    mapbox_style='open-street-map',\n    title='Bicycle Hire Points Density in London (OSM)',\n    height=600,\n    width=800\n)\n\n# Show the figure\nfig.show()\n\n\nUnable to display output for mime type(s): application/vnd.plotly.v1+json\n\n\n\n\nCode\nnew_gdf.plot()\n\n\n\n\n\n\n\n\n\n\n\nCode\nfrom matplotlib.patches import PathPatch\nimport matplotlib.path\nimport matplotlib.pyplot as plt\nimport matplotlib.ticker\nfrom matplotlib.transforms import Bbox, BboxTransform\nimport numpy as np\n\nimport cartopy.crs as ccrs\nimport cartopy.feature as cfeature\n\n\n# When drawing the flag, we can either use white filled land, or be a little\n# more fancy and use the Natural Earth shaded relief imagery.\nfilled_land = True\n\n\ndef olive_path():\n    \"\"\"\n    Return a Matplotlib path representing a single olive branch from the\n    UN Flag. The path coordinates were extracted from the SVG at\n    https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Nations.svg.\n\n    \"\"\"\n    olives_verts = np.array(\n        [[0,   2,   6,   9,  30,  55,  79,  94, 104, 117, 134, 157, 177,\n          188, 199, 207, 191, 167, 149, 129, 109,  87,  53,  22,   0, 663,\n          245, 223, 187, 158, 154, 150, 146, 149, 154, 158, 181, 184, 197,\n          181, 167, 153, 142, 129, 116, 119, 123, 127, 151, 178, 203, 220,\n          237, 245, 663, 280, 267, 232, 209, 205, 201, 196, 196, 201, 207,\n          211, 224, 219, 230, 220, 212, 207, 198, 195, 176, 197, 220, 239,\n          259, 277, 280, 663, 295, 293, 264, 250, 247, 244, 240, 240, 243,\n          244, 249, 251, 250, 248, 242, 245, 233, 236, 230, 228, 224, 222,\n          234, 249, 262, 275, 285, 291, 295, 296, 295, 663, 294, 293, 292,\n          289, 294, 277, 271, 269, 268, 265, 264, 264, 264, 272, 260, 248,\n          245, 243, 242, 240, 243, 245, 247, 252, 256, 259, 258, 257, 258,\n          267, 285, 290, 294, 297, 294, 663, 285, 285, 277, 266, 265, 265,\n          265, 277, 266, 268, 269, 269, 269, 268, 268, 267, 267, 264, 248,\n          235, 232, 229, 228, 229, 232, 236, 246, 266, 269, 271, 285, 285,\n          663, 252, 245, 238, 230, 246, 245, 250, 252, 255, 256, 256, 253,\n          249, 242, 231, 214, 208, 208, 227, 244, 252, 258, 262, 262, 261,\n          262, 264, 265, 252, 663, 185, 197, 206, 215, 223, 233, 242, 237,\n          237, 230, 220, 202, 185, 663],\n         [8,   5,   3,   0,  22,  46,  46,  46,  35,  27,  16,  10,  18,\n          22,  28,  38,  27,  26,  33,  41,  52,  52,  52,  30,   8, 595,\n          77,  52,  61,  54,  53,  52,  53,  55,  55,  57,  65,  90, 106,\n          96,  81,  68,  58,  54,  51,  50,  51,  50,  44,  34,  43,  48,\n          61,  77, 595, 135, 104, 102,  83,  79,  76,  74,  74,  79,  84,\n          90, 109, 135, 156, 145, 133, 121, 100,  77,  62,  69,  67,  80,\n          92, 113, 135, 595, 198, 171, 156, 134, 129, 124, 120, 123, 126,\n          129, 138, 149, 161, 175, 188, 202, 177, 144, 116, 110, 105,  99,\n          108, 116, 126, 136, 147, 162, 173, 186, 198, 595, 249, 255, 261,\n          267, 241, 222, 200, 192, 183, 175, 175, 175, 175, 199, 221, 240,\n          245, 250, 256, 245, 233, 222, 207, 194, 180, 172, 162, 153, 154,\n          171, 184, 202, 216, 233, 249, 595, 276, 296, 312, 327, 327, 327,\n          327, 308, 284, 262, 240, 240, 239, 239, 242, 244, 247, 265, 277,\n          290, 293, 296, 300, 291, 282, 274, 253, 236, 213, 235, 252, 276,\n          595, 342, 349, 355, 357, 346, 326, 309, 303, 297, 291, 290, 297,\n          304, 310, 321, 327, 343, 321, 305, 292, 286, 278, 270, 276, 281,\n          287, 306, 328, 342, 595, 379, 369, 355, 343, 333, 326, 318, 328,\n          340, 349, 366, 373, 379, 595]]).T\n    olives_codes = np.array([1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 79], dtype=np.uint8)\n\n    return matplotlib.path.Path(olives_verts, olives_codes)\n\n\n\nblue = '#4b92db'\n\n# We're drawing a flag with a 3:5 aspect ratio.\nfig = plt.figure(figsize=[7.5, 4.5], facecolor=blue)\n# Put a blue background on the figure.\nblue_background = PathPatch(matplotlib.path.Path.unit_rectangle(),\n                            transform=fig.transFigure, color=blue,\n                            zorder=-1)\nfig.patches.append(blue_background)\n\n# Set up the Azimuthal Equidistant and Plate Carree projections\n# for later use.\naz_eq = ccrs.AzimuthalEquidistant(central_latitude=90)\npc = ccrs.PlateCarree()\n\n# Pick a suitable location for the map (which is in an Azimuthal\n# Equidistant projection).\nax = fig.add_axes([0.25, 0.24, 0.5, 0.54], projection=az_eq)\n\n# The background patch is not needed in this example.\nax.patch.set_facecolor('none')\n# The Axes frame produces the outer meridian line.\nfor spine in ax.spines.values():\n    spine.update({'edgecolor': 'white', 'linewidth': 2})\n\n# We want the map to go down to -60 degrees latitude.\nax.set_extent([-180, 180, -60, 90], ccrs.PlateCarree())\n\n# Importantly, we want the axes to be circular at the -60 latitude\n# rather than cartopy's default behaviour of zooming in and becoming\n# square.\n_, patch_radius = az_eq.transform_point(0, -60, pc)\ncircular_path = matplotlib.path.Path.circle(0, patch_radius)\nax.set_boundary(circular_path)\n\nif filled_land:\n    ax.add_feature(\n        cfeature.LAND, facecolor='white', edgecolor='none')\nelse:\n    ax.stock_img()\n\ngl = ax.gridlines(crs=pc, linewidth=2, color='white', linestyle='-')\n# Meridians every 45 degrees, and 4 parallels.\ngl.xlocator = matplotlib.ticker.FixedLocator(np.arange(-180, 181, 45))\nparallels = np.arange(-30, 70, 30)\ngl.ylocator = matplotlib.ticker.FixedLocator(parallels)\n\n# Now add the olive branches around the axes. We do this in normalised\n# figure coordinates\nolive_leaf = olive_path()\n\nolives_bbox = Bbox.null()\nolives_bbox.update_from_path(olive_leaf)\n\n# The first olive branch goes from left to right.\nolive1_axes_bbox = Bbox([[0.45, 0.15], [0.725, 0.75]])\nolive1_trans = BboxTransform(olives_bbox, olive1_axes_bbox)\n\n# THe second olive branch goes from right to left (mirroring the first).\nolive2_axes_bbox = Bbox([[0.55, 0.15], [0.275, 0.75]])\nolive2_trans = BboxTransform(olives_bbox, olive2_axes_bbox)\n\nolive1 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive1_trans + fig.transFigure)\nolive2 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive2_trans + fig.transFigure)\n\nfig.patches.append(olive1)\nfig.patches.append(olive2)\n\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n\nworld = gpd.read_file(\n    \"https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_0_countries.zip\"\n)\n\nprojections = [\n    (ccrs.PlateCarree(),   'PlateCarree — Geographic',  '#457b9d'),\n    (ccrs.Mercator(),      'Mercator — Conformal',       '#f4a261'),\n    (ccrs.Mollweide(),     'Mollweide — Equal-Area ✓',   '#e63946'),\n]\n\nfig, axes = plt.subplots(\n    1, 3, figsize=(15, 6),\n    subplot_kw={'projection': None}\n)\n\nfor i, (proj, title, color) in enumerate(projections):\n    ax = fig.add_subplot(1, 3, i + 1, projection=proj)\n    ax.set_global()\n    ax.add_feature(cfeature.OCEAN, facecolor='#e8f4f8')\n    ax.add_feature(cfeature.LAND,  facecolor='#f0f0f0')\n    for geom in world.geometry:\n        ax.add_geometries(\n            [geom], ccrs.PlateCarree(),\n            facecolor=color, edgecolor='white', linewidth=0.5\n        )\n    ax.set_title(title, fontsize=11, fontweight='bold', pad=10)\n\n#plt.suptitle('Same data, three projections', fontsize=13, y=1.02)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nimport numpy as np\nimport plotly.graph_objects as go\n\n# -----------------------\n# Parameters\n# -----------------------\nR = 1.0  # radius of the sphere (Earth)\n\n# Point on the sphere (spherical coordinates)\ntheta = np.pi / 4   # polar angle\nphi = np.pi / 3     # azimuthal angle\n\nx0 = R * np.sin(theta) * np.cos(phi)\ny0 = R * np.sin(theta) * np.sin(phi)\nz0 = R * np.cos(theta)\n\n# -----------------------\n# Sphere surface\n# -----------------------\nu = np.linspace(0, 2*np.pi, 80)\nv = np.linspace(0, np.pi, 80)\n\nx = R * np.outer(np.cos(u), np.sin(v))\ny = R * np.outer(np.sin(u), np.sin(v))\nz = R * np.outer(np.ones_like(u), np.cos(v))\n\nsphere = go.Surface(\n    x=x, y=y, z=z,\n    opacity=0.4,\n    colorscale=\"Blues\",\n    showscale=False\n)\n\n# -----------------------\n# Vector (arrow-like line)\n# -----------------------\nvector = go.Scatter3d(\n    x=[0, x0],\n    y=[0, y0],\n    z=[0, z0],\n    mode=\"lines+markers\",\n    line=dict(color=\"red\", width=6),\n    marker=dict(size=4),\n    name=\"vector r\"\n)\n\n# Point on sphere\npoint = go.Scatter3d(\n    x=[x0],\n    y=[y0],\n    z=[z0],\n    mode=\"markers\",\n    marker=dict(size=6, color=\"red\"),\n)\n\n# -----------------------\n# Axes (explicit lines)\n# -----------------------\nL = 1.5 * R\n\naxes = [\n    go.Scatter3d(x=[-L, L], y=[0, 0], z=[0, 0],\n                 mode=\"lines\", line=dict(color=\"black\", width=4)),\n    go.Scatter3d(x=[0, 0], y=[-L, L], z=[0, 0],\n                 mode=\"lines\", line=dict(color=\"black\", width=4)),\n    go.Scatter3d(x=[0, 0], y=[0, 0], z=[-L, L],\n                 mode=\"lines\", line=dict(color=\"black\", width=4)),\n]\n\n# -----------------------\n# Layout\n# -----------------------\nlayout = go.Layout(\n    scene=dict(\n        xaxis=dict(title=\"X\", showbackground=True),\n        yaxis=dict(title=\"Y\", showbackground=True),\n        zaxis=dict(title=\"Z\", showbackground=True),\n        aspectmode=\"cube\"\n    ),\n    margin=dict(l=0, r=0, b=0, t=0)\n)\n\n# -----------------------\n# Figure\n# -----------------------\nfig = go.Figure(data=[sphere, vector, point] + axes, layout=layout)\nfig.show()\n\n\nUnable to display output for mime type(s): application/vnd.plotly.v1+json\n\n\n\n\nCode\n\nfig, ax = plt.subplots(figsize=(6, 6))\n\ntheta = np.linspace(0, 2 * np.pi, 300)\nax.plot(5 * np.cos(theta), 5 * np.sin(theta), color='grey', lw=1.5, alpha=0.6)\n\nax.axhline(0, color='grey', lw=0.8)\nax.axvline(0, color='grey', lw=0.8)\n\nax.annotate('', xy=(3, 4), xytext=(0, 0),\n            arrowprops=dict(arrowstyle='-&gt;', color='#e63946', lw=2))\nax.text(1.3, 2.5, 'r', color='#e63946', fontsize=14, fontweight='bold')\n\narc_theta = np.linspace(0, np.arctan2(4, 3), 50)\nax.plot(np.cos(arc_theta), np.sin(arc_theta), color='#e63946', lw=2)\nax.text(1.1, 0.4, 'φ', color='#e63946', fontsize=13)\n\nax.plot([3, 3], [0, 4], linestyle='--', color='#457b9d', lw=1.5)\nax.plot([0, 3], [4, 4], linestyle='--', color='#457b9d', lw=1.5)\nax.text(3.15, 0.2, 'x', color='#457b9d', fontsize=13, fontweight='bold')\nax.text(0.15, 4.2, 'y', color='#457b9d', fontsize=13, fontweight='bold')\n\nax.plot(3, 4, 'o', color='#e63946', markersize=8)\n\nax.set_xlim(-6, 6)\nax.set_ylim(-6, 6)\nax.set_aspect('equal')\nax.tick_params(colors='grey')\nax.set_title('Sistema de Coordenadas Polares', fontsize=14, fontweight='bold', pad=12)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nworld.columns\n\n\nIndex(['featurecla', 'scalerank', 'LABELRANK', 'SOVEREIGNT', 'SOV_A3',\n       'ADM0_DIF', 'LEVEL', 'TYPE', 'TLC', 'ADMIN',\n       ...\n       'FCLASS_TR', 'FCLASS_ID', 'FCLASS_PL', 'FCLASS_GR', 'FCLASS_IT',\n       'FCLASS_NL', 'FCLASS_SE', 'FCLASS_BD', 'FCLASS_UA', 'geometry'],\n      dtype='str', length=169)\n\n\n\n\nCode\ntype(world)\n\n\ngeopandas.geodataframe.GeoDataFrame\n\n\n\n\nCode\nnp.random.seed(42)\nn = 80\nx = np.concatenate([np.random.uniform(0.1, 0.5, 50),\n                     np.random.uniform(0.6, 0.9, 30)])\ny = np.concatenate([np.random.uniform(0.1, 0.9, 50),\n                     np.random.uniform(0.1, 0.5, 30)])\n\nxy = np.vstack([x, y])\nkde = gaussian_kde(xy, bw_method=0.15)\ngrid_x, grid_y = np.meshgrid(\n    np.linspace(0, 1, 200),\n    np.linspace(0, 1, 200)\n)\ngrid_z = kde(np.vstack([grid_x.ravel(), grid_y.ravel()])).reshape(200, 200)\n\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))\n\nax1.scatter(x, y, color='#e63946', s=40, alpha=0.8, zorder=3)\nax1.set_xlim(0, 1); ax1.set_ylim(0, 1)\nax1.set_aspect('equal')\nax1.set_title('Vetorial: observações de pontos', fontweight='bold', fontsize=12)\nax1.set_xlabel('x'); ax1.set_ylabel('y')\nax1.grid(True, alpha=0.3)\n\ncmap = mcolors.LinearSegmentedColormap.from_list(\n    'heatmap', ['#0d1b2a', '#457b9d', '#f4a261', '#e63946']\n)\nim = ax2.imshow(\n    grid_z, extent=[0, 1, 0, 1], origin='lower',\n    cmap=cmap, aspect='equal'\n)\nax2.scatter(x, y, color='white', s=10, alpha=0.4, zorder=3)\nplt.colorbar(im, ax=ax2, label='Densidade')\nax2.set_title('Raster: superfície de densidade de kernel', fontweight='bold', fontsize=12)\nax2.set_xlabel('x'); ax2.set_ylabel('y')\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 1: Esquerda: 80 observações de pontos brutos. Direita: a superfície de densidade de kernel derivada dos mesmos pontos — isso é um mapa de calor.\n\n\n\n\n\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.neighbors import KernelDensity\n\n# Generate random 2D points\nnp.random.seed(42)\npoints = np.random.rand(100, 2) * 10  # 100 points in [0, 10] x [0, 10]\n\n# Fit Kernel Density Estimation\nkde = KernelDensity(bandwidth=0.5, metric='euclidean')\nkde.fit(points)\n\n# Create a grid for density evaluation\nx_grid, y_grid = np.meshgrid(np.linspace(0, 10, 200), np.linspace(0, 10, 200))\ngrid_points = np.vstack([x_grid.ravel(), y_grid.ravel()]).T\nlog_density = kde.score_samples(grid_points)\ndensity = np.exp(log_density).reshape(x_grid.shape)\n\n# Plot\nplt.figure(figsize=(10, 6))\nplt.scatter(points[:, 0], points[:, 1], s=10, c='red', label='Random Points')\nplt.contourf(x_grid, y_grid, density, levels=20, cmap='viridis', alpha=0.6, label='Density')\nplt.colorbar(label='Density')\nplt.title('Interpolacao Espacial: Pontos Aleatórios e Densidade Kernel')\nplt.xlabel('X')\nplt.ylabel('Y')\nplt.legend()\nplt.grid(True)\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.neighbors import KernelDensity\n\n# Generate random 2D points\nnp.random.seed(42)\npoints = np.random.rand(100, 2) * 10  # 100 points in [0, 10] x [0, 10]\n\n# Fit Kernel Density Estimation\nkde = KernelDensity(bandwidth=0.5, metric='euclidean')\nkde.fit(points)\n\n# Create a grid for density evaluation\nx_grid, y_grid = np.meshgrid(np.linspace(0, 10, 200), np.linspace(0, 10, 200))\ngrid_points = np.vstack([x_grid.ravel(), y_grid.ravel()]).T\nlog_density = kde.score_samples(grid_points)\ndensity = np.exp(log_density).reshape(x_grid.shape)\n\n# Create a 2-column subplot\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))\n\n# First subplot: Only the points\nax1.scatter(points[:, 0], points[:, 1], s=10, c='red')\nax1.set_title('Random Points')\nax1.set_xlabel('X')\nax1.set_ylabel('Y')\nax1.grid(True)\n\n# Second subplot: Density estimation\ncontour = ax2.contourf(x_grid, y_grid, density, levels=20, cmap='viridis', alpha=0.6)\nfig.colorbar(contour, ax=ax2, label='Density')\nax2.set_title('Kernel Density Estimation')\nax2.set_xlabel('X')\nax2.set_ylabel('Y')\nax2.grid(True)\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nfrom scipy.stats import gaussian_kde\nnp.random.seed(13531)\nn = 60\nx2 = np.concatenate([np.random.uniform(0.05, 0.45, 35),\n                      np.random.uniform(0.55, 0.95, 25)])\ny2 = np.concatenate([np.random.uniform(0.05, 0.95, 35),\n                      np.random.uniform(0.05, 0.55, 25)])\nxy2 = np.vstack([x2, y2])\n\ngrid_x, grid_y = np.meshgrid(\n    np.linspace(0, 1, 200),\n    np.linspace(0, 1, 200)\n)\ngrid_pts = np.vstack([grid_x.ravel(), grid_y.ravel()])\n\nbw_scott = gaussian_kde(xy2).factor\nbandwidths = [\n    (bw_scott * 0.25, f'Muito pequena  h={bw_scott*0.25:.3f}'),\n    (bw_scott,        f'Ótima          h={bw_scott:.3f}  (Scott)'),\n    (bw_scott * 4,    f'Muito grande   h={bw_scott*4:.3f}'),\n]\n\ncmap = mcolors.LinearSegmentedColormap.from_list(\n    'heatmap', ['#0d1b2a', '#457b9d', '#f4a261', '#e63946']\n)\n\nfig, axes = plt.subplots(1, 3, figsize=(14, 4.5))\n\nfor ax, (bw, title) in zip(axes, bandwidths):\n    kde2 = gaussian_kde(xy2, bw_method=bw)\n    z = kde2(grid_pts).reshape(200, 200)\n    ax.imshow(z, extent=[0,1,0,1], origin='lower', cmap=cmap, aspect='equal')\n    ax.scatter(x2, y2, color='white', s=8, alpha=0.5)\n    ax.set_title(title, fontsize=10, fontweight='bold')\n    ax.set_xlabel('x'); ax.set_ylabel('y')\n\nplt.suptitle('Efeito da largura de banda na KDE', fontsize=13, fontweight='bold', y=1.02)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nnp.random.seed(99)\nx3 = np.concatenate([np.random.uniform(0.1, 0.45, 40),\n                      np.random.uniform(0.55, 0.9, 40)])\ny3 = np.random.uniform(0.1, 0.9, 80)\nxy3 = np.vstack([x3, y3])\nkde3 = gaussian_kde(xy3)\nz3 = kde3(grid_pts).reshape(200, 200)\n\npalettes = [\n    ('viridis',  'viridis '),\n    ('plasma',   'plasma '),\n    (mcolors.LinearSegmentedColormap.from_list(\n        'custom', ['#0d1b2a','#457b9d','#f4a261','#e63946']),\n     'sequencial personalizado'),\n    ('hsv',      'arco-iris'),\n]\n\nfig, axes = plt.subplots(2, 2, figsize=(11, 9))\n\nfor ax, (cmap_name, title) in zip(axes.flat, palettes):\n    ax.imshow(z3, extent=[0,1,0,1], origin='lower',\n              cmap=cmap_name, aspect='equal')\n    ax.set_title(title, fontsize=11, fontweight='bold')\n    ax.axis('off')\n\nplt.suptitle('Comparação de paletas de cores', fontsize=13, fontweight='bold')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nworld.ADMIN\n\n\n0                             Fiji\n1      United Republic of Tanzania\n2                   Western Sahara\n3                           Canada\n4         United States of America\n                  ...             \n172             Republic of Serbia\n173                     Montenegro\n174                         Kosovo\n175            Trinidad and Tobago\n176                    South Sudan\nName: ADMIN, Length: 177, dtype: str\n\n\n\n\nCode\ntype(world.ADMIN)\n\n\npandas.Series\n\n\n\n\nCode\ncountry_names = world.ADMIN\ncountry_names.unique()\n\n\n&lt;StringArray&gt;\n[                       'Fiji', 'United Republic of Tanzania',\n              'Western Sahara',                      'Canada',\n    'United States of America',                  'Kazakhstan',\n                  'Uzbekistan',            'Papua New Guinea',\n                   'Indonesia',                   'Argentina',\n ...\n                  'Somaliland',                      'Uganda',\n                      'Rwanda',      'Bosnia and Herzegovina',\n             'North Macedonia',          'Republic of Serbia',\n                  'Montenegro',                      'Kosovo',\n         'Trinidad and Tobago',                 'South Sudan']\nLength: 177, dtype: str\n\n\n\n\nCode\ncountry_names.duplicated()\n\n\n0      False\n1      False\n2      False\n3      False\n4      False\n       ...  \n172    False\n173    False\n174    False\n175    False\n176    False\nName: ADMIN, Length: 177, dtype: bool\n\n\n\n\nCode\nsum(country_names.duplicated())\n\n\n0",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "week1_introductionGIS.html"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html",
-    "href": "fundamentals_gis_rs/week1/index.html",
-    "title": "Introdução a Mapas de Calor",
-    "section": "",
-    "text": "Notebook para exploração livre desta aula: week1_introductionGIS.ipynb",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html#introdução-a-mapas-de-calor-em-sig",
-    "href": "fundamentals_gis_rs/week1/index.html#introdução-a-mapas-de-calor-em-sig",
-    "title": "Introdução a Mapas de Calor",
-    "section": "Introdução a Mapas de Calor em SIG",
-    "text": "Introdução a Mapas de Calor em SIG\n\n\n\n\n\n\nTipNota sobre Acrônimos\n\n\n\nDevido ao grande uso de acrônimos relativos a noções de dados geoespaciais, durante essa apresentação farei uso dos acrônimos em Inglês, para facilitar a pesquisa e padronização de métricas.\n\nLista de Abreviações\n\n\n\n\n\n\nAcrônimos em Português\nAcrônimos em Inglês\n\n\n\n\nSistema de Coordenadas de Referência (SCR)\nCoordinate Reference System (CRS)\n\n\nSistema de Informação Georreferenciada (SIG)\nGeographical Information System (GIS)",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html#planet-terra-em-três-projeções-diferentes.",
-    "href": "fundamentals_gis_rs/week1/index.html#planet-terra-em-três-projeções-diferentes.",
-    "title": "Introdução a Mapas de Calor",
-    "section": "Planet Terra em três projeções diferentes.",
-    "text": "Planet Terra em três projeções diferentes.\nOs mesmos dados, formas muito diferentes, a projeção é uma decisão analítica, não apenas estética, quiçá política.\n\n\nCode\nworld = gpd.read_file(\n    \"https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_0_countries.zip\"\n)\n\nprojections = [\n    (ccrs.PlateCarree(),   'PlateCarree — Geográfica',          '#457b9d'),\n    (ccrs.Mercator(),      'Mercator — Conformal',               '#f4a261'),\n    (ccrs.Mollweide(),     'Mollweide — Equivalente em Área ✓',  '#e63946'),\n]\n\nfig, axes = plt.subplots(\n    1, 3, figsize=(15, 6),\n    subplot_kw={'projection': None}\n)\n\nfor i, (proj, title, color) in enumerate(projections):\n    ax = fig.add_subplot(1, 3, i + 1, projection=proj)\n    ax.set_global()\n    ax.add_feature(cfeature.OCEAN, facecolor='#e8f4f8')\n    ax.add_feature(cfeature.LAND,  facecolor='#f0f0f0')\n    for geom in world.geometry:\n        ax.add_geometries(\n            [geom], ccrs.PlateCarree(),\n            facecolor=color, edgecolor='white', linewidth=0.5\n        )\n    ax.set_title(title, fontsize=11, fontweight='bold', pad=10)\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 1: O mundo em três projeções: PlateCarree (geográfica), Mercator e Mollweide (equivalente em área).\n\n\n\n\n\n\nFun Fact\nA bandeira da ONU é uma projeção equidistante.\n\n\nCode\nfrom matplotlib.patches import PathPatch\nimport matplotlib.path\nimport matplotlib.pyplot as plt\nimport matplotlib.ticker\nfrom matplotlib.transforms import Bbox, BboxTransform\nimport numpy as np\n\nimport cartopy.crs as ccrs\nimport cartopy.feature as cfeature\n\n\n# When drawing the flag, we can either use white filled land, or be a little\n# more fancy and use the Natural Earth shaded relief imagery.\nfilled_land = True\n\n\ndef olive_path():\n    \"\"\"\n    Return a Matplotlib path representing a single olive branch from the\n    UN Flag. The path coordinates were extracted from the SVG at\n    https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Nations.svg.\n\n    \"\"\"\n    olives_verts = np.array(\n        [[0,   2,   6,   9,  30,  55,  79,  94, 104, 117, 134, 157, 177,\n          188, 199, 207, 191, 167, 149, 129, 109,  87,  53,  22,   0, 663,\n          245, 223, 187, 158, 154, 150, 146, 149, 154, 158, 181, 184, 197,\n          181, 167, 153, 142, 129, 116, 119, 123, 127, 151, 178, 203, 220,\n          237, 245, 663, 280, 267, 232, 209, 205, 201, 196, 196, 201, 207,\n          211, 224, 219, 230, 220, 212, 207, 198, 195, 176, 197, 220, 239,\n          259, 277, 280, 663, 295, 293, 264, 250, 247, 244, 240, 240, 243,\n          244, 249, 251, 250, 248, 242, 245, 233, 236, 230, 228, 224, 222,\n          234, 249, 262, 275, 285, 291, 295, 296, 295, 663, 294, 293, 292,\n          289, 294, 277, 271, 269, 268, 265, 264, 264, 264, 272, 260, 248,\n          245, 243, 242, 240, 243, 245, 247, 252, 256, 259, 258, 257, 258,\n          267, 285, 290, 294, 297, 294, 663, 285, 285, 277, 266, 265, 265,\n          265, 277, 266, 268, 269, 269, 269, 268, 268, 267, 267, 264, 248,\n          235, 232, 229, 228, 229, 232, 236, 246, 266, 269, 271, 285, 285,\n          663, 252, 245, 238, 230, 246, 245, 250, 252, 255, 256, 256, 253,\n          249, 242, 231, 214, 208, 208, 227, 244, 252, 258, 262, 262, 261,\n          262, 264, 265, 252, 663, 185, 197, 206, 215, 223, 233, 242, 237,\n          237, 230, 220, 202, 185, 663],\n         [8,   5,   3,   0,  22,  46,  46,  46,  35,  27,  16,  10,  18,\n          22,  28,  38,  27,  26,  33,  41,  52,  52,  52,  30,   8, 595,\n          77,  52,  61,  54,  53,  52,  53,  55,  55,  57,  65,  90, 106,\n          96,  81,  68,  58,  54,  51,  50,  51,  50,  44,  34,  43,  48,\n          61,  77, 595, 135, 104, 102,  83,  79,  76,  74,  74,  79,  84,\n          90, 109, 135, 156, 145, 133, 121, 100,  77,  62,  69,  67,  80,\n          92, 113, 135, 595, 198, 171, 156, 134, 129, 124, 120, 123, 126,\n          129, 138, 149, 161, 175, 188, 202, 177, 144, 116, 110, 105,  99,\n          108, 116, 126, 136, 147, 162, 173, 186, 198, 595, 249, 255, 261,\n          267, 241, 222, 200, 192, 183, 175, 175, 175, 175, 199, 221, 240,\n          245, 250, 256, 245, 233, 222, 207, 194, 180, 172, 162, 153, 154,\n          171, 184, 202, 216, 233, 249, 595, 276, 296, 312, 327, 327, 327,\n          327, 308, 284, 262, 240, 240, 239, 239, 242, 244, 247, 265, 277,\n          290, 293, 296, 300, 291, 282, 274, 253, 236, 213, 235, 252, 276,\n          595, 342, 349, 355, 357, 346, 326, 309, 303, 297, 291, 290, 297,\n          304, 310, 321, 327, 343, 321, 305, 292, 286, 278, 270, 276, 281,\n          287, 306, 328, 342, 595, 379, 369, 355, 343, 333, 326, 318, 328,\n          340, 349, 366, 373, 379, 595]]).T\n    olives_codes = np.array([1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 79], dtype=np.uint8)\n\n    return matplotlib.path.Path(olives_verts, olives_codes)\n\n\n\nblue = '#4b92db'\n\n# We're drawing a flag with a 3:5 aspect ratio.\nfig = plt.figure(figsize=[7.5, 4.5], facecolor=blue)\n# Put a blue background on the figure.\nblue_background = PathPatch(matplotlib.path.Path.unit_rectangle(),\n                            transform=fig.transFigure, color=blue,\n                            zorder=-1)\nfig.patches.append(blue_background)\n\n# Set up the Azimuthal Equidistant and Plate Carree projections\n# for later use.\naz_eq = ccrs.AzimuthalEquidistant(central_latitude=90)\npc = ccrs.PlateCarree()\n\n# Pick a suitable location for the map (which is in an Azimuthal\n# Equidistant projection).\nax = fig.add_axes([0.25, 0.24, 0.5, 0.54], projection=az_eq)\n\n# The background patch is not needed in this example.\nax.patch.set_facecolor('none')\n# The Axes frame produces the outer meridian line.\nfor spine in ax.spines.values():\n    spine.update({'edgecolor': 'white', 'linewidth': 2})\n\n# We want the map to go down to -60 degrees latitude.\nax.set_extent([-180, 180, -60, 90], ccrs.PlateCarree())\n\n# Importantly, we want the axes to be circular at the -60 latitude\n# rather than cartopy's default behaviour of zooming in and becoming\n# square.\n_, patch_radius = az_eq.transform_point(0, -60, pc)\ncircular_path = matplotlib.path.Path.circle(0, patch_radius)\nax.set_boundary(circular_path)\n\nif filled_land:\n    ax.add_feature(\n        cfeature.LAND, facecolor='white', edgecolor='none')\nelse:\n    ax.stock_img()\n\ngl = ax.gridlines(crs=pc, linewidth=2, color='white', linestyle='-')\n# Meridians every 45 degrees, and 4 parallels.\ngl.xlocator = matplotlib.ticker.FixedLocator(np.arange(-180, 181, 45))\nparallels = np.arange(-30, 70, 30)\ngl.ylocator = matplotlib.ticker.FixedLocator(parallels)\n\n# Now add the olive branches around the axes. We do this in normalised\n# figure coordinates\nolive_leaf = olive_path()\n\nolives_bbox = Bbox.null()\nolives_bbox.update_from_path(olive_leaf)\n\n# The first olive branch goes from left to right.\nolive1_axes_bbox = Bbox([[0.45, 0.15], [0.725, 0.75]])\nolive1_trans = BboxTransform(olives_bbox, olive1_axes_bbox)\n\n# THe second olive branch goes from right to left (mirroring the first).\nolive2_axes_bbox = Bbox([[0.55, 0.15], [0.275, 0.75]])\nolive2_trans = BboxTransform(olives_bbox, olive2_axes_bbox)\n\nolive1 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive1_trans + fig.transFigure)\nolive2 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive2_trans + fig.transFigure)\n\nfig.patches.append(olive1)\nfig.patches.append(olive2)\n\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteSistema UTM - Universal Transverse Mercator\n\n\n\nO Sistema de Coordenadas Universal Transverso de Mercator (UTM) tem sua origem no equador em uma longitude específica. Para diminuir distorções, o mundo é dividido em 60 zonas com 6 graus de comprimento em longitude. As zonas são numeradas entre 1 e 60, em ordem respectiva de oeste a leste.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport cartopy.crs as ccrs\n\n\n# Create a list of integers from 1 - 60\nzones = range(1, 61)\n\n# Create a figure\nfig = plt.figure(figsize=(18, 6))\n\n# Loop through each zone in the list\nfor zone in zones:\n\n    # Add GeoAxes object with specific UTM zone projection to the figure\n    ax = fig.add_subplot(1, len(zones), zone,\n                            projection=ccrs.UTM(zone=zone,\n                                                southern_hemisphere=True))\n\n    # Add coastlines, gridlines and zone number for the subplot\n    ax.coastlines(resolution='110m')\n    ax.gridlines()\n    ax.set_title(zone)\n\n# Add a supertitle for the figure\nfig.suptitle(\"UTM Projection - Zones\")\n\n# Display the figure\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\n\nFalando sobre projeções…\n\n\n\nNovo mapa mundi divulgado pelo Governo do Brasil, 2026. Fonte: IBGE",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html#dados-vetoriais-simple-features",
-    "href": "fundamentals_gis_rs/week1/index.html#dados-vetoriais-simple-features",
-    "title": "Introdução a Mapas de Calor",
-    "section": "Dados Vetoriais: Simple Features",
-    "text": "Dados Vetoriais: Simple Features\n\nPonto (Point) — uma única localização: POINT (25 60.5)\nLinha (LineString) — uma sequência de pontos conectados: estradas, rios\nPolígono (Polygon) — uma área fechada: fronteiras de países, contornos de lagos.\n\n\n\n\nFormas vetoriais mais comuns. Fonte: R-Spatial Book\n\n\n—\nCada uma dessas geometrias pode carregar uma série de atributos, onde esses atributos possuem propriedades. Pense como uma grande planilha de Excel que possui um ponto ou geometria associado a ela. Isso nos dá uma possibilidade muito grande de carregar informações geoespaciais e tirar grandes lições e direções data-driven.\n\n\n\n\n\n\nTip\n\n\n\n“As geometrias te dizem: Onde? A tabela de atributos, te diz: O quê?”\n\n\n\n\n\nIlustração da tabela de attributos. Fonte: Allison Horst\n\n\n\nRepresentações Geoespaciais\nSempre é bom se perguntar: qual é a projeção correta para os meus dados?\n\n\n\n\n\n\nTipNão Existe Receita de Bolo\n\n\n\nProjeções que não possuem distorções não existem, mas algumas projeções são amplamente utilizadas e por vezes referendadas por órgãos federais de cada nação.\nAlguns sites interessantes para visualizar rapidamente as diferentes projeções:\n\nEPSG.IO\nFindMyProjection\nBboxFinder\n\n\n\nDevemos estar cientes das distorções cartográficas.\n\n\n\n\n\n\nNoteElementos Básicos de um Mapa\n\n\n\nTodo mapa apresentado a uma audiência precisa de ao menos:\n\nLegenda — o que as cores significam e quais são as unidades?\nEscala — qual é o tamanho da área em termos do mundo real?\nRosa dos Ventos — orientação cardinal\nTítulo — qual fenômeno está sendo exibido, de qual dado?\nRótulo de Projeção — qual CRS foi utilizado?\nPaleta de Cores - Sua paleta de cores é adequada para o usuário final?",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html#a-ideia-central",
-    "href": "fundamentals_gis_rs/week1/index.html#a-ideia-central",
-    "title": "Introdução a Mapas de Calor",
-    "section": "A Ideia Central",
-    "text": "A Ideia Central\nImagine um antro de pontos distribuidos sobre um plano. Podemos visualmente inferir noções a esses pontos como proximidade relativa, alguma percepção de densidade, e uma noção especial de como esses pontos estao distribuidos sobre um dado plano. Imagine posicionar uma suave “colina” sobre cada ponto observado. A KDE (Kernel Density Estimation) é a soma de todas essas colinas, alta onde as observações se concentram, plana onde são esparsas.\n\\[\\hat{f}(x) = \\frac{1}{n h^2} \\sum_{i=1}^{n} K\\left(\\frac{x - x_i}{h}\\right)\\]\nOnde \\(K\\) é o kernel (a forma da colina) e \\(h\\) é a largura de banda (bandwidth) , o quão larga ela se espalha.\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.neighbors import KernelDensity\n\n# Generate random 2D points\nnp.random.seed(42)\npoints = np.random.rand(100, 2) * 10  # 100 points in [0, 10] x [0, 10]\n\n# Fit Kernel Density Estimation\nkde = KernelDensity(bandwidth=0.5, metric='euclidean')\nkde.fit(points)\n\n# Create a grid for density evaluation\nx_grid, y_grid = np.meshgrid(np.linspace(0, 10, 200), np.linspace(0, 10, 200))\ngrid_points = np.vstack([x_grid.ravel(), y_grid.ravel()]).T\nlog_density = kde.score_samples(grid_points)\ndensity = np.exp(log_density).reshape(x_grid.shape)\n\n# Create a 2-column subplot\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))\n\n# First subplot: Only the points\nax1.scatter(points[:, 0], points[:, 1], s=10, c='red')\nax1.set_title('Random Points')\nax1.set_xlabel('X')\nax1.set_ylabel('Y')\nax1.grid(True)\n\n# Second subplot: Density estimation\ncontour = ax2.contourf(x_grid, y_grid, density, levels=20, cmap='viridis', alpha=0.6)\nfig.colorbar(contour, ax=ax2, label='Density')\nax2.set_title('Kernel Density Estimation')\nax2.set_xlabel('X')\nax2.set_ylabel('Y')\nax2.grid(True)\n\nplt.tight_layout()\nplt.show()",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html#efeito-da-largura-de-banda",
-    "href": "fundamentals_gis_rs/week1/index.html#efeito-da-largura-de-banda",
-    "title": "Introdução a Mapas de Calor",
-    "section": "Efeito da Largura de Banda",
-    "text": "Efeito da Largura de Banda\n\n\nCode\nnp.random.seed(13531)\nn = 60\nx2 = np.concatenate([np.random.uniform(0.05, 0.45, 35),\n                      np.random.uniform(0.55, 0.95, 25)])\ny2 = np.concatenate([np.random.uniform(0.05, 0.95, 35),\n                      np.random.uniform(0.05, 0.55, 25)])\nxy2 = np.vstack([x2, y2])\n\ngrid_x, grid_y = np.meshgrid(\n    np.linspace(0, 1, 200),\n    np.linspace(0, 1, 200)\n)\ngrid_pts = np.vstack([grid_x.ravel(), grid_y.ravel()])\n\nbw_scott = gaussian_kde(xy2).factor\nbandwidths = [\n    (bw_scott * 0.25, f'Muito pequena  h={bw_scott*0.25:.3f}'),\n    (bw_scott,        f'Ótima          h={bw_scott:.3f}  (Scott)'),\n    (bw_scott * 4,    f'Muito grande   h={bw_scott*4:.3f}'),\n]\n\ncmap = mcolors.LinearSegmentedColormap.from_list(\n    'heatmap', ['#0d1b2a', '#457b9d', '#f4a261', '#e63946']\n)\n\nfig, axes = plt.subplots(1, 3, figsize=(14, 4.5))\n\nfor ax, (bw, title) in zip(axes, bandwidths):\n    kde2 = gaussian_kde(xy2, bw_method=bw)\n    z = kde2(grid_pts).reshape(200, 200)\n    ax.imshow(z, extent=[0,1,0,1], origin='lower', cmap=cmap, aspect='equal')\n    ax.scatter(x2, y2, color='white', s=8, alpha=0.5)\n    ax.set_title(title, fontsize=10, fontweight='bold')\n    ax.set_xlabel('x'); ax.set_ylabel('y')\n\nplt.suptitle('Efeito da largura de banda na KDE', fontsize=13, fontweight='bold', y=1.02)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 2: Três escolhas de largura de banda nos mesmos dados. Muito pequena = ruidosa. Muito grande = super-suavizada. A do meio usa a regra de Scott, um seletor automático fundamentado.\n\n\n\n\n\n\n\n\n\n\n\nImportantConclusão Importante\n\n\n\nA largura de banda é uma decisão analítica. Sempre seja explícito sobre como você a escolheu. Por isso importante possuir referencias sobre estimção ideal, para isso, sugiro: a regra de Scott e a regra de Silverman, os quais são seletores the bandwith, automáticos fundamentados.",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html#comparação-de-paletas-de-cores",
-    "href": "fundamentals_gis_rs/week1/index.html#comparação-de-paletas-de-cores",
-    "title": "Introdução a Mapas de Calor",
-    "section": "Comparação de Paletas de Cores",
-    "text": "Comparação de Paletas de Cores\nOs mesmos dados, quatro paletas diferentes. Viridis e plasma são perceptualmente uniformes. O arco-íris cria picos visuais falsos — evite-o.\n\n\nCode\nnp.random.seed(99)\nx3 = np.concatenate([np.random.uniform(0.1, 0.45, 40),\n                      np.random.uniform(0.55, 0.9, 40)])\ny3 = np.random.uniform(0.1, 0.9, 80)\nxy3 = np.vstack([x3, y3])\nkde3 = gaussian_kde(xy3)\nz3 = kde3(grid_pts).reshape(200, 200)\n\npalettes = [\n    ('viridis',  'viridis '),\n    ('plasma',   'plasma '),\n    (mcolors.LinearSegmentedColormap.from_list(\n        'custom', ['#0d1b2a','#457b9d','#f4a261','#e63946']),\n     'sequencial personalizado'),\n    ('hsv',      'arco-iris'),\n]\n\nfig, axes = plt.subplots(2, 2, figsize=(11, 9))\n\nfor ax, (cmap_name, title) in zip(axes.flat, palettes):\n    ax.imshow(z3, extent=[0,1,0,1], origin='lower',\n              cmap=cmap_name, aspect='equal')\n    ax.set_title(title, fontsize=11, fontweight='bold')\n    ax.axis('off')\n\nplt.suptitle('Comparação de paletas de cores', fontsize=13, fontweight='bold')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 3: Mesma superfície de densidade, quatro paletas. Viridis e plasma são perceptualmente uniformes. Arco-íris cria picos visuais falsos.",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week1/index.html#exemplos-mapas-de-densidade-interativos",
-    "href": "fundamentals_gis_rs/week1/index.html#exemplos-mapas-de-densidade-interativos",
-    "title": "Introdução a Mapas de Calor",
-    "section": "Exemplos: Mapas de Densidade Interativos",
-    "text": "Exemplos: Mapas de Densidade Interativos\n\nCenário A · Densidade Populacional — Galícia, Espanha\nA pergunta: Onde as pessoas se concentram na Galícia? Como isso se relaciona com a costa?\n\n\nCode\ndf_gal = pd.read_csv(\n    'https://raw.githubusercontent.com/R-CoderDotCom/data/main/sample_datasets/population_galicia.csv'\n)\n\nfig_gal = px.density_mapbox(\n    df_gal,\n    lat='latitude', lon='longitude', z='tot_pob',\n    radius=8,\n    center=dict(lat=42.83, lon=-8.35),\n    zoom=6,\n    mapbox_style='open-street-map',\n    color_continuous_scale='Plasma',\n    title='Densidade Populacional — Galícia, Espanha'\n)\nfig_gal.update_layout(margin=dict(l=0, r=0, t=40, b=0))\nfig_gal.show()\n\n\n\n\n                            \n                                            \n\n\nFigure 4: Mapa de calor de densidade populacional da Galícia. Mais quente = maior concentração.\n\n\n\n\n\n\nCenário B · Riscos Naturais — Terremotos Globais\nA pergunta: Onde a energia sísmica se concentra globalmente?\n\n\nCode\ndf_eq = pd.read_csv(\n    'https://raw.githubusercontent.com/plotly/datasets/master/earthquakes-23k.csv'\n)\n\nfig_eq = px.density_map(\n    df_eq,\n    lat='Latitude', lon='Longitude', z='Magnitude',\n    radius=10,\n    center=dict(lat=0, lon=180),\n    zoom=0,\n    map_style='open-street-map',\n    color_continuous_scale='Inferno',\n    title='Densidade Global de Terremotos — ponderada pela magnitude'\n)\nfig_eq.update_layout(margin=dict(l=0, r=0, t=40, b=0))\nfig_eq.show()\n\n\n\n\n                            \n                                            \n\n\nFigure 5: Densidade global de terremotos ponderada pela magnitude. O Anel de Fogo é inconfundível.\n\n\n\n\n\n\nCenário C · Quantidade de locais para alugar bicicleta em Londres.\n\n\n\n\n\n\nNoteDados do Open Street Map (OSM)\n\n\n\n\nLocais disponíveis para locação de bicicletas e mobilidade urbana em Londres.\n\n\n\n\n\nCode\nimport geopandas as gpd\nimport plotly.express as px\n\n# Load the GeoJSON data from the URL\n#new_gdf = gpd.read_file(geodatasets.get_url('spdata.cycle_hire_osm'))\nurl = \"https://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojson\"\ngdf = gpd.read_file(url)\n\n# Extract latitude and longitude from the geometry column\ngdf['lat'] = gdf.geometry.y\ngdf['lon'] = gdf.geometry.x\n\n# Create a density heatmap using Plotly Express\nfig = px.density_mapbox(\n    gdf,\n    lat='lat',\n    lon='lon',\n    z=None,  # Use default density calculation\n    radius=15,\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    mapbox_style='open-street-map',\n    title='Bicycle Hire Points Density in London (OSM)',\n    height=600,\n    width=800\n)\n\n# Show the figure\nfig.show()\n\n\n                            \n                                            \n\n\n\n\nComparação com Scatter Plot\n\n\nCode\nfig = px.scatter_map(\n    gdf,\n    lat='lat',\n    lon='lon',\n    #size='capacity',  # Fixed size for all points\n    #projection='mercator',\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    #mapbox_style='open-street-map',\n    title='Bicycle Hire Points in London (Scatter Plot)',\n    height=600,\n    width=800\n)\nfig.show()",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 1 — Introduction to GIS",
-      "Introdução a Mapas de Calor"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html",
-    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html",
-    "title": "Sessao 0 - 19/08/2026",
-    "section": "",
-    "text": "Antes de mergulharmos na amplitude dos ecossistemas geoespaciais, vamos compreender melhor a nossa comunidade FTL Brasil.\n\n\n\n\nCode\nimport pandas as pd\nimport geopandas as gpd\nimport matplotlib.pyplot as plt \nimport os \n\n\n\n\nCode\nos.getcwd()\n\n\n'/Users/macuser/Documents/UN/ebook/fundamentals_gis_rs/week0'\n\n\n\n\nCode\n# lets read our csv with the location of everyone\ndf = pd.read_excel('data/NOS-FTL-Brasil.xlsx')\n\ndf.head()\n\n\n\n\n\n\n\n\n\nID\nDe onde você é? (Escreva como: Cidade/SG.  exemplo: Pindamonhangaba/SP . Tarauca/AC , catole do rocha/PB)\\n\\n\n\n\n\n\n0\n1\nFortaleza-CE\n\n\n1\n2\nRECIFE/PE\n\n\n2\n3\nLimeira/SP\n\n\n3\n4\nCuritiba - Paraná\n\n\n4\n5\nViamão/RS",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Sessao 0 - 19/08/2026"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#ecosistema-geoespacial",
-    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#ecosistema-geoespacial",
-    "title": "Sessao 0 - 19/08/2026",
-    "section": "",
-    "text": "Antes de mergulharmos na amplitude dos ecossistemas geoespaciais, vamos compreender melhor a nossa comunidade FTL Brasil.\n\n\n\n\nCode\nimport pandas as pd\nimport geopandas as gpd\nimport matplotlib.pyplot as plt \nimport os \n\n\n\n\nCode\nos.getcwd()\n\n\n'/Users/macuser/Documents/UN/ebook/fundamentals_gis_rs/week0'\n\n\n\n\nCode\n# lets read our csv with the location of everyone\ndf = pd.read_excel('data/NOS-FTL-Brasil.xlsx')\n\ndf.head()\n\n\n\n\n\n\n\n\n\nID\nDe onde você é? (Escreva como: Cidade/SG.  exemplo: Pindamonhangaba/SP . Tarauca/AC , catole do rocha/PB)\\n\\n\n\n\n\n\n0\n1\nFortaleza-CE\n\n\n1\n2\nRECIFE/PE\n\n\n2\n3\nLimeira/SP\n\n\n3\n4\nCuritiba - Paraná\n\n\n4\n5\nViamão/RS",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Sessao 0 - 19/08/2026"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#limpeza-de-dados",
-    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#limpeza-de-dados",
-    "title": "Sessao 0 - 19/08/2026",
-    "section": "Limpeza de dados",
-    "text": "Limpeza de dados\nAquilo que todo cientista de dados ama.\nComo o texto livre tem bastante variação, como separadores diferentes (/, -, ,), estado abreviado vs. nome completo, prefixos tipo “Sou de…” — fazemos só uma limpeza leve antes de geocodificar. Não tentamos separar cidade/estado manualmente: casos como \"Minas - Pouso Alegre\" (ordem invertida!) tornariam isso frágil. Em vez disso, mandamos a string inteira para o Nominatim, que já é bom em interpretar texto livre e na prática resolve isso para gente.\n\n\nCode\nplace= df.columns[1]\ndf.rename(columns={place:'lugar'},inplace=True)\n\n\n\n\nCode\nimport re\n\ndef clean_place(raw: str) -&gt; str:\n    s = raw.strip()\n    s = re.sub(r'(?i)^sou de\\s+', '', s)   # tira prefixos tipo \"Sou de Sobral/CE\"\n    s = re.sub(r'\\s+', ' ', s)              # espaços duplicados\n    s = s.strip(' -,/')                     # separadores soltos na ponta\n    return s\n\ndf['lugar_clean'] = df['lugar'].apply(clean_place)\ndf['lugar_clean'].unique()\n\n\n&lt;ArrowStringArray&gt;\n[            'Fortaleza-CE',                'RECIFE/PE',\n               'Limeira/SP',        'Curitiba - Paraná',\n                'Viamão/RS',                'Recife/PE',\n                'Fortaleza',                 'Betim/MG',\n   'São José dos Campos/SP',                'Toledo/PR',\n            'Santarém/Pará',          'Santarém - Pará',\n                  'Ijuí/RS',            'Fortaleza, ce',\n               'Niterói/RJ',              'Gravataí/RS',\n         'Florianópolis/SC',               'Pinhais/PR',\n               'Goiânia/GO', 'Campos dos Goytacazes/RJ',\n      'Rio de Janeiro / RJ',           'Porto velho/RO',\n        'Campina Grande/PB',                 'Belém/PA',\n              'Brasília/DF',      'Lauro de Freitas/BA',\n          'Passa Quatro/MG',       'Glória do Goitá/PE',\n               'Betim - MG',            'Araraquara/SP',\n              'Floresta/PR',             'Rio Claro/SP',\n   'Presidente Prudente/SP',           'Santa Maria/RS',\n              'Salvador/BA',        'Rio de Janeiro/RJ',\n           'João Pessoa/PB',            'Holambra - SP',\n                 'Timbó/SC', 'Campos dos goytacazes/RJ',\n            'São Luís / MA',             'São Paulo/SP',\n 'São José do Rio Preto/SP',                'Penedo/AL',\n               'Maringá/PR',                'Cuiabá/MT',\n                'São Paulo',                'Sobral/CE',\n 'São Bernardo do Campo/SP',                'Caxias/MA',\n        'Três Corações, MG',     'Minas - Pouso Alegre',\n           'Santo André/SP',               'Niterói RJ']\nLength: 54, dtype: str\n\n\n\nGeocodificação\nAgora vamos transformar cada lugar (texto livre, do jeito que cada pessoa preencheu no formulário) em coordenadas (latitude, longitude), usando a API pública do Nominatim (OpenStreetMap).\n\n\nCode\nfrom pathlib import Path\nfrom geopy.geocoders import Nominatim\nfrom geopy.extra.rate_limiter import RateLimiter\n\nCACHE_PATH = Path('data/geocoded_cache.csv')\n\nif CACHE_PATH.exists():\n    # cache na parada toda, evita bater na API do Nominatim de novo\n    cache = pd.read_csv(CACHE_PATH)\nelse:\n    # user_agent é obrigatório pela política de uso do Nominatim\n    geolocator = Nominatim(user_agent='ftl-brasil-tmj', \n                           timeout=10)\n    # 1 requisição por segundo\n    # swallow_exceptions evita que uma falha derrube o loop\n    geocode = RateLimiter(geolocator.geocode, \n                          min_delay_seconds=1, \n                          error_wait_seconds=5,\n                           max_retries=2, \n                           swallow_exceptions=True)\n\n    unique_places = df[['lugar_clean']].drop_duplicates().reset_index(drop=True)\n    unique_places['location'] = unique_places['lugar_clean'].apply(lambda p: geocode(p, country_codes='br'))\n    unique_places['lat'] = unique_places['location'].apply(lambda loc: loc.latitude if loc else None)\n    unique_places['lon'] = unique_places['location'].apply(lambda loc: loc.longitude if loc else None)\n    unique_places['matched_address'] = unique_places['location'].apply(lambda loc: loc.address if loc else None)\n\n    cache = unique_places[['lugar_clean', 'lat', 'lon', 'matched_address']]\n    cache.to_csv(CACHE_PATH, index=False)\n\n# unimos no nosso antigo df\ndf = df.merge(cache, on='lugar_clean', how='left')\n\n# verificamos aqui os dados que nao conseguiram ser geocodificados\nnao_geocodificados = df[df['lat'].isna()]\nprint(f\"{len(nao_geocodificados)} de {len(df)} linhas não foram geocodificadas\")\nnao_geocodificados\n\n\n0 de 57 linhas não foram geocodificadas\n\n\n\n\n\n\n\n\n\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\n\n\n\n\n\n\n\n\n\n\n\nCode\ndf.head()\n\n\n\n\n\n\n\n\n\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\n\n\n\n\n0\n1\nFortaleza-CE\nFortaleza-CE\n-3.793217\n-38.528036\nFortaleza, Ceará, Região Nordeste, Brasil\n\n\n1\n2\nRECIFE/PE\nRECIFE/PE\n-8.058493\n-34.884819\nRecife, Pernambuco, Região Nordeste, Brasil\n\n\n2\n3\nLimeira/SP\nLimeira/SP\n-22.561507\n-47.401766\nLimeira, São Paulo, Região Sudeste, Brasil\n\n\n3\n4\nCuritiba - Paraná\nCuritiba - Paraná\n-25.429596\n-49.271272\nCuritiba, Paraná, Região Sul, Brasil\n\n\n4\n5\nViamão/RS\nViamão/RS\n-30.081934\n-51.026193\nViamão, Rio Grande do Sul, Região Sul, Brasil\n\n\n\n\n\n\n\n\n\nCode\n# vamos converter nossos dados em um geodataframe para manipular espacialmente\n\ngdf = gpd.GeoDataFrame(\n    df.dropna(subset=['lat', 'lon']),\n    geometry=gpd.points_from_xy(df['lon'], df['lat']),\n    crs='EPSG:4326',\n)\ngdf.head()\n\n\n\n\n\n\n\n\n\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\ngeometry\n\n\n\n\n0\n1\nFortaleza-CE\nFortaleza-CE\n-3.793217\n-38.528036\nFortaleza, Ceará, Região Nordeste, Brasil\nPOINT (-38.52804 -3.79322)\n\n\n1\n2\nRECIFE/PE\nRECIFE/PE\n-8.058493\n-34.884819\nRecife, Pernambuco, Região Nordeste, Brasil\nPOINT (-34.88482 -8.05849)\n\n\n2\n3\nLimeira/SP\nLimeira/SP\n-22.561507\n-47.401766\nLimeira, São Paulo, Região Sudeste, Brasil\nPOINT (-47.40177 -22.56151)\n\n\n3\n4\nCuritiba - Paraná\nCuritiba - Paraná\n-25.429596\n-49.271272\nCuritiba, Paraná, Região Sul, Brasil\nPOINT (-49.27127 -25.4296)\n\n\n4\n5\nViamão/RS\nViamão/RS\n-30.081934\n-51.026193\nViamão, Rio Grande do Sul, Região Sul, Brasil\nPOINT (-51.02619 -30.08193)\n\n\n\n\n\n\n\n\n\nCode\n# vamo espiar rapidamente esses dados \ngdf.plot()\n\n\n\n\n\n\n\n\n\n\n\nimproving the plot\nDá para melhorar isso ne? Fala tu\n\nComo? \n\nVamos utilizar os dados que estão em nossos ecossistema geoespacial.\nComeçando pela biblioteca GEOBR. Veja mais em nossa Awesome-FTL page.\n\n\nCode\n# baixando o polígono da nossa terra brasil\nimport geobr",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Sessao 0 - 19/08/2026"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#dá-para-melhorar-certamente",
-    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#dá-para-melhorar-certamente",
-    "title": "Sessao 0 - 19/08/2026",
-    "section": "Dá para melhorar? certamente",
-    "text": "Dá para melhorar? certamente\n\n\nCode\n# baixando os dados de municipipo\nmuni = geobr.read_municipality(year=2020)\nmuni.plot()\n\n\n\n\n\n\n\n\n\n\n\nCode\n## vamos fazer uma spatial query para pegar os municipios\n\nnew_gdf = muni.sjoin(\n    gdf.to_crs(muni.crs),\n    how=\"inner\",\n    predicate=\"intersects\"\n)\n\n# quick plot\nnew_gdf.plot()\n\n\n\n\n\n\n\n\n\n\n\nCode\nnew_gdf.columns\n\n\nIndex(['code_muni', 'name_muni', 'code_state', 'abbrev_state', 'name_state',\n       'code_region', 'name_region', 'year', 'geometry', 'index_right', 'ID',\n       'lugar', 'lugar_clean', 'lat', 'lon', 'matched_address'],\n      dtype='str')\n\n\n\n\nCode\n# adicionamos uma nova coluna com o numero de participantes por cidade\nnn = new_gdf.groupby('name_muni').agg(\n    num_part=('code_muni','count')\n)[['num_part']]\n\n# merge das informacoes\nnew_gdf = new_gdf.merge(\n    nn,\n    how='inner',\n    on='name_muni'\n)\n\n## agora o nosso gdf tem o numero de alunos por cidade\nnew_gdf.head(2)\n\n\n\n\n\n\n\n\n\ncode_muni\nname_muni\ncode_state\nabbrev_state\nname_state\ncode_region\nname_region\nyear\ngeometry\nindex_right\nID\nlugar\nlugar_clean\nlat\nlon\nmatched_address\nnum_part_x\nnum_part_y\n\n\n\n\n0\n1100205.0\nPorto Velho\n11.0\nRO\nRondônia\n1.0\nNorte\n2020.0\nPOLYGON ((-62.86662 -7.97587, -62.85336 -7.987...\n22\n23\nPorto velho/RO\nporto velho/ro\n-8.749453\n-63.873544\nPorto Velho, Rondônia, Região Norte, Brasil\n1\n1\n\n\n1\n1501402.0\nBelém\n15.0\nPA\nPará\n1.0\nNorte\n2020.0\nPOLYGON ((-48.35304 -1.22103, -48.36552 -1.229...\n51\n52\nBelém/PA\nbelém/pa\n-1.450560\n-48.468245\nBelém, Pará, Região Norte, Brasil\n2\n2",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Sessao 0 - 19/08/2026"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#mapa-de-localização-com-os-municipios",
-    "href": "fundamentals_gis_rs/week0/space_tech_ecossystem.html#mapa-de-localização-com-os-municipios",
-    "title": "Sessao 0 - 19/08/2026",
-    "section": "Mapa de localização com os municipios",
-    "text": "Mapa de localização com os municipios\n\n\nCode\nimport matplotlib.pyplot as plt\nimport matplotlib as mpl\n\nfig, ax = plt.subplots(figsize=(7, 8))\n\nbrasil_gdf.plot(\n    ax=ax,\n    color=\"#162551\",\n    edgecolor=\"#E6E2D7\",\n    linewidth=0.6\n)\n\ncmap = plt.cm.Wistia\nnorm = mpl.colors.Normalize(vmin=1, vmax=3)\n\nnew_gdf.plot(\n    ax=ax,\n    column='num_part',\n    markersize=30,\n    cmap=cmap,\n    norm=norm,\n    alpha=0.85,\n    edgecolor='white',\n    linewidth=0.4\n)\n\n# Legend/colorbar\nsm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)\nsm.set_array([])\n\n# cbar = fig.colorbar(sm, ax=ax, shrink=0.6, pad=0.02)\n# cbar.set_ticks([1, 2, 3])\n# cbar.set_label('Número de participantes')\n\nax.set_title('Participantes FTL Brasil', fontsize=13, fontweight='bold')\nax.set_axis_off()\n\nplt.show()\n\n\n\n\n\n\n\n\n\n## É possível melhorar esse mapa? Certamente\nMostra pra gente alguma ideia sua!\nAinda não sabe o que é spatial query?\n\nNao mosca e corre lá para ver nossas aulas de introducao em python + GIS\nlink github: github-ftl-brasil",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 0 — Python Basics",
-      "Sessao 0 - 19/08/2026"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week2/index.html",
-    "href": "fundamentals_gis_rs/week2/index.html",
-    "title": "Week 2",
-    "section": "",
-    "text": "Content coming soon.\n\n\n\n\n\n\nTipPattern for adding material to a week\n\n\n\n\nNarrative page — add a .md or .qmd file in this folder, then list it under this week’s contents: in _quarto.yml.\nHands-on notebook — drop a .ipynb file in this folder and list it the same way; it renders as a page and stays downloadable as-is.\nSlides — create a .qmd file with format: revealjs in its front matter (see Quarto’s revealjs docs) and list it too.",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 2",
-      "Week 2"
-    ]
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week3/index.html",
-    "href": "fundamentals_gis_rs/week3/index.html",
-    "title": "Week 3",
-    "section": "",
-    "text": "Content coming soon.",
-    "crumbs": [
-      "Fundamentos em GIS e Sensoriamento Remoto",
-      "Week 3",
-      "Week 3"
+      "Course Information",
+      "Como Contribuir"
     ]
   },
   {
@@ -556,91 +459,181 @@
     ]
   },
   {
-    "objectID": "course-info/how-to-contribute.html",
-    "href": "course-info/how-to-contribute.html",
-    "title": "Como Contribuir",
+    "objectID": "course-info/reading.html",
+    "href": "course-info/reading.html",
+    "title": "Leituras",
     "section": "",
-    "text": "Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir; mais vão aparecer ao longo do bootcamp.\nAntes de editar qualquer coisa, crie sua própria branch — veja o passo 3 da página de Setup. Isso evita conflito com atualizações futuras do repositório.",
+    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article",
     "crumbs": [
       "Course Information",
-      "Como Contribuir"
+      "Leituras"
     ]
   },
   {
-    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
-    "href": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
-    "title": "Como Contribuir",
-    "section": "Contribuindo com o Awesome Geospatial",
-    "text": "Contribuindo com o Awesome Geospatial\nA página Awesome Geospatial é uma lista de ferramentas organizadas por plataforma (QGIS, Google Earth Engine, Machine Learning, AI, Databases, Cloud Computing).\nPara adicionar uma ferramenta, edite awesome-geospatial/index.md e inclua um item na lista, sob a seção da plataforma correspondente:\n- [**Nome**](https://link.com) — descrição curta do que é / para que serve.\nSe você não tem certeza que o link ou a descrição estão corretos/atualizados, adicione ⚠️ *verificar* no fim da linha — assim outra pessoa sabe que precisa conferir antes de confiar no item. Sem essa marcação, o item é considerado confiável.\nSe a plataforma que você quer ainda não tem uma seção, crie um novo ## Nome da Plataforma no fim do arquivo.",
-    "crumbs": [
-      "Course Information",
-      "Como Contribuir"
-    ]
-  },
-  {
-    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
-    "href": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
-    "title": "Como Contribuir",
-    "section": "Contribuindo com o diagrama de provedores (bubble chart)",
-    "text": "Contribuindo com o diagrama de provedores (bubble chart)\nO diagrama de bolhas em Provedores de Dados Geoespaciais — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: fundamentals_gis_rs/week0/data/provedores.json. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.\nPara adicionar um provedor a um tema já existente, inclua um novo objeto na lista provedores da categoria correspondente:\n{\n  \"nome\": \"Nome do provedor\",\n  \"escopo\": \"BR\",\n  \"url\": \"https://exemplo.gov.br/\",\n  \"dado\": \"Uma frase curta: qual dado, para qual uso\"\n}\nescopo é sempre \"BR\" ou \"GLOBAL\". Para criar um tema novo inteiro, adicione um objeto à lista categorias (nível raiz do JSON) com nome, votos (pode deixar 0 se não veio do questionário original) e sua própria lista de provedores.\nAntes de commitar, valide que o JSON continua válido:\npython3 -m json.tool fundamentals_gis_rs/week0/data/provedores.json &gt; /dev/null\nSem erro impresso = JSON válido.\n\n\n\n\n\n\nNoteDúvida?\n\n\n\nPergunta no canal do bootcamp antes de gastar muito tempo tentando resolver sozinho.",
-    "crumbs": [
-      "Course Information",
-      "Como Contribuir"
-    ]
-  },
-  {
-    "objectID": "course-info/general-info.html",
-    "href": "course-info/general-info.html",
-    "title": "Informações Gerais",
+    "objectID": "course-info/reading.html#leituras-recomendadas",
+    "href": "course-info/reading.html#leituras-recomendadas",
+    "title": "Leituras",
     "section": "",
-    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article",
     "crumbs": [
       "Course Information",
-      "Informações Gerais"
+      "Leituras"
     ]
   },
   {
-    "objectID": "course-info/general-info.html#sobre-esse-módulo",
-    "href": "course-info/general-info.html#sobre-esse-módulo",
-    "title": "Informações Gerais",
+    "objectID": "fundamentals_gis_rs/week2/index.html",
+    "href": "fundamentals_gis_rs/week2/index.html",
+    "title": "Week 2",
     "section": "",
-    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "text": "Tamo na labuta, espera a semana 2, paciencia pequeno gafanhoto.\n\n\n\n\n\n\nTipPattern for adding material to a week\n\n\n\nEm construção\n\n\n\n\n\nbob_esponja",
     "crumbs": [
-      "Course Information",
-      "Informações Gerais"
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 2 - Fundamentos em Sensoriamento Remoto",
+      "Week 2"
     ]
   },
   {
-    "objectID": "course-info/general-info.html#estrutura-de-aulas-semanais",
-    "href": "course-info/general-info.html#estrutura-de-aulas-semanais",
-    "title": "Informações Gerais",
-    "section": "Estrutura de Aulas Semanais",
-    "text": "Estrutura de Aulas Semanais\n\nFundamentos em GIS e Sensoriamento Remoto\n\n\n\nWeek\nTopic\n\n\n\n\n0\nEcossistema de Dados Geoespaciais\n\n\n1\nFundamentos em Análises Espaciais para dados vetoriais.\n\n\n2\nFundamentos em Sensoriamento Remoto e dados raster.\n\n\n3\nExpandindo conhecimentos para análise dados geoespaciais.\n\n\n4\nCubo de Dados (Data Cubes)\n\n\n\n\n\nFundamentos em Machine Learning e Deep Learning\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\nEstado da Arte (State-of-Art)\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\n\n\nlogoAEB",
-    "crumbs": [
-      "Course Information",
-      "Informações Gerais"
-    ]
-  },
-  {
-    "objectID": "ml-dl/index.html",
-    "href": "ml-dl/index.html",
-    "title": "Fundamentos em Machine Learning e Deep Learning",
+    "objectID": "fundamentals_gis_rs/week0/index.html",
+    "href": "fundamentals_gis_rs/week0/index.html",
+    "title": "Ecossistema Geoespacial",
     "section": "",
-    "text": "Content coming soon.\n\n\n\n\n\n\nTipPattern for adding material to this module\n\n\n\nSame pattern as the GIS/RS module: create a folder per topic or week (e.g. ml-dl/week1/), drop .md/.qmd pages, .ipynb notebooks, or format: revealjs slides in it, then list it under this module’s contents: in _quarto.yml.",
+    "text": "Dado o contexto apresentado nos slides da nossa sessão, se faz necessário elencar esses provedores do ecossitema geoespacial brasileiro e mundial.\nPortanto, esse primeiro capítulo é destinado a um panorama do ecossistema de dados geoespaciais. Para explorar os desafios impostos no cenário cotidiano, precisamos primeiro compreender quais os serviços de dados mais pertinentes dado o nosso problema. E quais os tipos de dados que necessitamos para solucioná-lo.\nAntes de seguir, se você ainda não configurou seu ambiente, dá uma olhada nos Utilitários de CLI.",
     "crumbs": [
-      "Fundamentos em Machine Learning e Deep Learning",
-      "Fundamentos em Machine Learning e Deep Learning"
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Ecossistema Geoespacial"
     ]
   },
   {
-    "objectID": "state-of-art/index.html",
-    "href": "state-of-art/index.html",
-    "title": "Estado da Arte (State-of-Art)",
+    "objectID": "fundamentals_gis_rs/week0/index.html#quais-são-os-nossos-interesses-em-comum",
+    "href": "fundamentals_gis_rs/week0/index.html#quais-são-os-nossos-interesses-em-comum",
+    "title": "Ecossistema Geoespacial",
+    "section": "Quais são os nossos interesses em comum?",
+    "text": "Quais são os nossos interesses em comum?\nNo questionário inicial, cada um de vocês votou nos assuntos que mais têm interesse dentro do ecossistema geoespacial:\n\n\n\nTema\nVotos\n\n\n\n\nSatélites / plano de órbita\n24\n\n\nMudanças climáticas\n21\n\n\nQueimadas / desmatamento / secas\n17\n\n\nDrones e UAV\n17\n\n\nOceanografia\n11\n\n\nAgricultura digital\n11\n\n\nFlorestas\n10\n\n\n3D e point-cloud\n9\n\n\nEcologia\n8\n\n\nEcologia de paisagem\n8\n\n\nHidrologia\n7\n\n\nMobilidade e transportes\n7\n\n\nMapeamento humanitário\n6\n\n\nInundações\n6\n\n\nQualidade do ar\n6\n\n\nGêmeos digitais\n5\n\n\nIlhas de calor e urbanismo\n4\n\n\nSegurança pública\n1\n\n\nPatrimônio arqueológico\n1",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Ecossistema Geoespacial"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week0/index.html#onde-encontrar-dado-para-cada-tema",
+    "href": "fundamentals_gis_rs/week0/index.html#onde-encontrar-dado-para-cada-tema",
+    "title": "Ecossistema Geoespacial",
+    "section": "Onde encontrar dado para cada tema",
+    "text": "Onde encontrar dado para cada tema\nPara cada um desses grandes temas, mapeamos alguns provedores de dados que podem ajudar quando analisarmos os dados para projetos e desafios diários. Entre na página de provedores para explorar os provedores e ajude-nos a contribuir com as devidas urls diretamente ao nosso site.\n➡️ Provedores de Dados Geoespaciais — o diagrama completo",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 0 — Ecossistema geoespacial",
+      "Ecossistema Geoespacial"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html",
+    "href": "fundamentals_gis_rs/week1/index.html",
+    "title": "Introdução a Mapas de Calor",
+    "section": "",
+    "text": "Notebook para exploração livre desta aula: week1_introductionGIS.ipynb",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html#introdução-a-mapas-de-calor-em-sig",
+    "href": "fundamentals_gis_rs/week1/index.html#introdução-a-mapas-de-calor-em-sig",
+    "title": "Introdução a Mapas de Calor",
+    "section": "Introdução a Mapas de Calor em SIG",
+    "text": "Introdução a Mapas de Calor em SIG\n\n\n\n\n\n\nTipNota sobre Acrônimos\n\n\n\nDevido ao grande uso de acrônimos relativos a noções de dados geoespaciais, durante essa apresentação farei uso dos acrônimos em Inglês, para facilitar a pesquisa e padronização de métricas.\n\nLista de Abreviações\n\n\n\n\n\n\nAcrônimos em Português\nAcrônimos em Inglês\n\n\n\n\nSistema de Coordenadas de Referência (SCR)\nCoordinate Reference System (CRS)\n\n\nSistema de Informação Georreferenciada (SIG)\nGeographical Information System (GIS)",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html#planet-terra-em-três-projeções-diferentes.",
+    "href": "fundamentals_gis_rs/week1/index.html#planet-terra-em-três-projeções-diferentes.",
+    "title": "Introdução a Mapas de Calor",
+    "section": "Planet Terra em três projeções diferentes.",
+    "text": "Planet Terra em três projeções diferentes.\nOs mesmos dados, formas muito diferentes, a projeção é uma decisão analítica, não apenas estética, quiçá política.\n\n\nCode\nworld = gpd.read_file(\n    \"https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_0_countries.zip\"\n)\n\nprojections = [\n    (ccrs.PlateCarree(),   'PlateCarree — Geográfica',          '#457b9d'),\n    (ccrs.Mercator(),      'Mercator — Conformal',               '#f4a261'),\n    (ccrs.Mollweide(),     'Mollweide — Equivalente em Área ✓',  '#e63946'),\n]\n\nfig, axes = plt.subplots(\n    1, 3, figsize=(15, 6),\n    subplot_kw={'projection': None}\n)\n\nfor i, (proj, title, color) in enumerate(projections):\n    ax = fig.add_subplot(1, 3, i + 1, projection=proj)\n    ax.set_global()\n    ax.add_feature(cfeature.OCEAN, facecolor='#e8f4f8')\n    ax.add_feature(cfeature.LAND,  facecolor='#f0f0f0')\n    for geom in world.geometry:\n        ax.add_geometries(\n            [geom], ccrs.PlateCarree(),\n            facecolor=color, edgecolor='white', linewidth=0.5\n        )\n    ax.set_title(title, fontsize=11, fontweight='bold', pad=10)\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 1: O mundo em três projeções: PlateCarree (geográfica), Mercator e Mollweide (equivalente em área).\n\n\n\n\n\n\nFun Fact\nA bandeira da ONU é uma projeção equidistante.\n\n\nCode\nfrom matplotlib.patches import PathPatch\nimport matplotlib.path\nimport matplotlib.pyplot as plt\nimport matplotlib.ticker\nfrom matplotlib.transforms import Bbox, BboxTransform\nimport numpy as np\n\nimport cartopy.crs as ccrs\nimport cartopy.feature as cfeature\n\n\n# When drawing the flag, we can either use white filled land, or be a little\n# more fancy and use the Natural Earth shaded relief imagery.\nfilled_land = True\n\n\ndef olive_path():\n    \"\"\"\n    Return a Matplotlib path representing a single olive branch from the\n    UN Flag. The path coordinates were extracted from the SVG at\n    https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Nations.svg.\n\n    \"\"\"\n    olives_verts = np.array(\n        [[0,   2,   6,   9,  30,  55,  79,  94, 104, 117, 134, 157, 177,\n          188, 199, 207, 191, 167, 149, 129, 109,  87,  53,  22,   0, 663,\n          245, 223, 187, 158, 154, 150, 146, 149, 154, 158, 181, 184, 197,\n          181, 167, 153, 142, 129, 116, 119, 123, 127, 151, 178, 203, 220,\n          237, 245, 663, 280, 267, 232, 209, 205, 201, 196, 196, 201, 207,\n          211, 224, 219, 230, 220, 212, 207, 198, 195, 176, 197, 220, 239,\n          259, 277, 280, 663, 295, 293, 264, 250, 247, 244, 240, 240, 243,\n          244, 249, 251, 250, 248, 242, 245, 233, 236, 230, 228, 224, 222,\n          234, 249, 262, 275, 285, 291, 295, 296, 295, 663, 294, 293, 292,\n          289, 294, 277, 271, 269, 268, 265, 264, 264, 264, 272, 260, 248,\n          245, 243, 242, 240, 243, 245, 247, 252, 256, 259, 258, 257, 258,\n          267, 285, 290, 294, 297, 294, 663, 285, 285, 277, 266, 265, 265,\n          265, 277, 266, 268, 269, 269, 269, 268, 268, 267, 267, 264, 248,\n          235, 232, 229, 228, 229, 232, 236, 246, 266, 269, 271, 285, 285,\n          663, 252, 245, 238, 230, 246, 245, 250, 252, 255, 256, 256, 253,\n          249, 242, 231, 214, 208, 208, 227, 244, 252, 258, 262, 262, 261,\n          262, 264, 265, 252, 663, 185, 197, 206, 215, 223, 233, 242, 237,\n          237, 230, 220, 202, 185, 663],\n         [8,   5,   3,   0,  22,  46,  46,  46,  35,  27,  16,  10,  18,\n          22,  28,  38,  27,  26,  33,  41,  52,  52,  52,  30,   8, 595,\n          77,  52,  61,  54,  53,  52,  53,  55,  55,  57,  65,  90, 106,\n          96,  81,  68,  58,  54,  51,  50,  51,  50,  44,  34,  43,  48,\n          61,  77, 595, 135, 104, 102,  83,  79,  76,  74,  74,  79,  84,\n          90, 109, 135, 156, 145, 133, 121, 100,  77,  62,  69,  67,  80,\n          92, 113, 135, 595, 198, 171, 156, 134, 129, 124, 120, 123, 126,\n          129, 138, 149, 161, 175, 188, 202, 177, 144, 116, 110, 105,  99,\n          108, 116, 126, 136, 147, 162, 173, 186, 198, 595, 249, 255, 261,\n          267, 241, 222, 200, 192, 183, 175, 175, 175, 175, 199, 221, 240,\n          245, 250, 256, 245, 233, 222, 207, 194, 180, 172, 162, 153, 154,\n          171, 184, 202, 216, 233, 249, 595, 276, 296, 312, 327, 327, 327,\n          327, 308, 284, 262, 240, 240, 239, 239, 242, 244, 247, 265, 277,\n          290, 293, 296, 300, 291, 282, 274, 253, 236, 213, 235, 252, 276,\n          595, 342, 349, 355, 357, 346, 326, 309, 303, 297, 291, 290, 297,\n          304, 310, 321, 327, 343, 321, 305, 292, 286, 278, 270, 276, 281,\n          287, 306, 328, 342, 595, 379, 369, 355, 343, 333, 326, 318, 328,\n          340, 349, 366, 373, 379, 595]]).T\n    olives_codes = np.array([1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4,\n                             4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 4, 4, 79, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,\n                             4, 4, 79], dtype=np.uint8)\n\n    return matplotlib.path.Path(olives_verts, olives_codes)\n\n\n\nblue = '#4b92db'\n\n# We're drawing a flag with a 3:5 aspect ratio.\nfig = plt.figure(figsize=[7.5, 4.5], facecolor=blue)\n# Put a blue background on the figure.\nblue_background = PathPatch(matplotlib.path.Path.unit_rectangle(),\n                            transform=fig.transFigure, color=blue,\n                            zorder=-1)\nfig.patches.append(blue_background)\n\n# Set up the Azimuthal Equidistant and Plate Carree projections\n# for later use.\naz_eq = ccrs.AzimuthalEquidistant(central_latitude=90)\npc = ccrs.PlateCarree()\n\n# Pick a suitable location for the map (which is in an Azimuthal\n# Equidistant projection).\nax = fig.add_axes([0.25, 0.24, 0.5, 0.54], projection=az_eq)\n\n# The background patch is not needed in this example.\nax.patch.set_facecolor('none')\n# The Axes frame produces the outer meridian line.\nfor spine in ax.spines.values():\n    spine.update({'edgecolor': 'white', 'linewidth': 2})\n\n# We want the map to go down to -60 degrees latitude.\nax.set_extent([-180, 180, -60, 90], ccrs.PlateCarree())\n\n# Importantly, we want the axes to be circular at the -60 latitude\n# rather than cartopy's default behaviour of zooming in and becoming\n# square.\n_, patch_radius = az_eq.transform_point(0, -60, pc)\ncircular_path = matplotlib.path.Path.circle(0, patch_radius)\nax.set_boundary(circular_path)\n\nif filled_land:\n    ax.add_feature(\n        cfeature.LAND, facecolor='white', edgecolor='none')\nelse:\n    ax.stock_img()\n\ngl = ax.gridlines(crs=pc, linewidth=2, color='white', linestyle='-')\n# Meridians every 45 degrees, and 4 parallels.\ngl.xlocator = matplotlib.ticker.FixedLocator(np.arange(-180, 181, 45))\nparallels = np.arange(-30, 70, 30)\ngl.ylocator = matplotlib.ticker.FixedLocator(parallels)\n\n# Now add the olive branches around the axes. We do this in normalised\n# figure coordinates\nolive_leaf = olive_path()\n\nolives_bbox = Bbox.null()\nolives_bbox.update_from_path(olive_leaf)\n\n# The first olive branch goes from left to right.\nolive1_axes_bbox = Bbox([[0.45, 0.15], [0.725, 0.75]])\nolive1_trans = BboxTransform(olives_bbox, olive1_axes_bbox)\n\n# THe second olive branch goes from right to left (mirroring the first).\nolive2_axes_bbox = Bbox([[0.55, 0.15], [0.275, 0.75]])\nolive2_trans = BboxTransform(olives_bbox, olive2_axes_bbox)\n\nolive1 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive1_trans + fig.transFigure)\nolive2 = PathPatch(olive_leaf, facecolor='white', edgecolor='none',\n                    transform=olive2_trans + fig.transFigure)\n\nfig.patches.append(olive1)\nfig.patches.append(olive2)\n\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteSistema UTM - Universal Transverse Mercator\n\n\n\nO Sistema de Coordenadas Universal Transverso de Mercator (UTM) tem sua origem no equador em uma longitude específica. Para diminuir distorções, o mundo é dividido em 60 zonas com 6 graus de comprimento em longitude. As zonas são numeradas entre 1 e 60, em ordem respectiva de oeste a leste.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport cartopy.crs as ccrs\n\n\n# Create a list of integers from 1 - 60\nzones = range(1, 61)\n\n# Create a figure\nfig = plt.figure(figsize=(18, 6))\n\n# Loop through each zone in the list\nfor zone in zones:\n\n    # Add GeoAxes object with specific UTM zone projection to the figure\n    ax = fig.add_subplot(1, len(zones), zone,\n                            projection=ccrs.UTM(zone=zone,\n                                                southern_hemisphere=True))\n\n    # Add coastlines, gridlines and zone number for the subplot\n    ax.coastlines(resolution='110m')\n    ax.gridlines()\n    ax.set_title(zone)\n\n# Add a supertitle for the figure\nfig.suptitle(\"UTM Projection - Zones\")\n\n# Display the figure\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\n\nFalando sobre projeções…\n\n\n\nNovo mapa mundi divulgado pelo Governo do Brasil, 2026. Fonte: IBGE",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html#dados-vetoriais-simple-features",
+    "href": "fundamentals_gis_rs/week1/index.html#dados-vetoriais-simple-features",
+    "title": "Introdução a Mapas de Calor",
+    "section": "Dados Vetoriais: Simple Features",
+    "text": "Dados Vetoriais: Simple Features\n\nPonto (Point) — uma única localização: POINT (25 60.5)\nLinha (LineString) — uma sequência de pontos conectados: estradas, rios\nPolígono (Polygon) — uma área fechada: fronteiras de países, contornos de lagos.\n\n\n\n\nFormas vetoriais mais comuns. Fonte: R-Spatial Book\n\n\n—\nCada uma dessas geometrias pode carregar uma série de atributos, onde esses atributos possuem propriedades. Pense como uma grande planilha de Excel que possui um ponto ou geometria associado a ela. Isso nos dá uma possibilidade muito grande de carregar informações geoespaciais e tirar grandes lições e direções data-driven.\n\n\n\n\n\n\nTip\n\n\n\n“As geometrias te dizem: Onde? A tabela de atributos, te diz: O quê?”\n\n\n\n\n\nIlustração da tabela de attributos. Fonte: Allison Horst\n\n\n\nRepresentações Geoespaciais\nSempre é bom se perguntar: qual é a projeção correta para os meus dados?\n\n\n\n\n\n\nTipNão Existe Receita de Bolo\n\n\n\nProjeções que não possuem distorções não existem, mas algumas projeções são amplamente utilizadas e por vezes referendadas por órgãos federais de cada nação.\nAlguns sites interessantes para visualizar rapidamente as diferentes projeções:\n\nEPSG.IO\nFindMyProjection\nBboxFinder\n\n\n\nDevemos estar cientes das distorções cartográficas.\n\n\n\n\n\n\nNoteElementos Básicos de um Mapa\n\n\n\nTodo mapa apresentado a uma audiência precisa de ao menos:\n\nLegenda — o que as cores significam e quais são as unidades?\nEscala — qual é o tamanho da área em termos do mundo real?\nRosa dos Ventos — orientação cardinal\nTítulo — qual fenômeno está sendo exibido, de qual dado?\nRótulo de Projeção — qual CRS foi utilizado?\nPaleta de Cores - Sua paleta de cores é adequada para o usuário final?",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html#a-ideia-central",
+    "href": "fundamentals_gis_rs/week1/index.html#a-ideia-central",
+    "title": "Introdução a Mapas de Calor",
+    "section": "A Ideia Central",
+    "text": "A Ideia Central\nImagine um antro de pontos distribuidos sobre um plano. Podemos visualmente inferir noções a esses pontos como proximidade relativa, alguma percepção de densidade, e uma noção especial de como esses pontos estao distribuidos sobre um dado plano. Imagine posicionar uma suave “colina” sobre cada ponto observado. A KDE (Kernel Density Estimation) é a soma de todas essas colinas, alta onde as observações se concentram, plana onde são esparsas.\n\\[\\hat{f}(x) = \\frac{1}{n h^2} \\sum_{i=1}^{n} K\\left(\\frac{x - x_i}{h}\\right)\\]\nOnde \\(K\\) é o kernel (a forma da colina) e \\(h\\) é a largura de banda (bandwidth) , o quão larga ela se espalha.\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.neighbors import KernelDensity\n\n# Generate random 2D points\nnp.random.seed(42)\npoints = np.random.rand(100, 2) * 10  # 100 points in [0, 10] x [0, 10]\n\n# Fit Kernel Density Estimation\nkde = KernelDensity(bandwidth=0.5, metric='euclidean')\nkde.fit(points)\n\n# Create a grid for density evaluation\nx_grid, y_grid = np.meshgrid(np.linspace(0, 10, 200), np.linspace(0, 10, 200))\ngrid_points = np.vstack([x_grid.ravel(), y_grid.ravel()]).T\nlog_density = kde.score_samples(grid_points)\ndensity = np.exp(log_density).reshape(x_grid.shape)\n\n# Create a 2-column subplot\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))\n\n# First subplot: Only the points\nax1.scatter(points[:, 0], points[:, 1], s=10, c='red')\nax1.set_title('Random Points')\nax1.set_xlabel('X')\nax1.set_ylabel('Y')\nax1.grid(True)\n\n# Second subplot: Density estimation\ncontour = ax2.contourf(x_grid, y_grid, density, levels=20, cmap='viridis', alpha=0.6)\nfig.colorbar(contour, ax=ax2, label='Density')\nax2.set_title('Kernel Density Estimation')\nax2.set_xlabel('X')\nax2.set_ylabel('Y')\nax2.grid(True)\n\nplt.tight_layout()\nplt.show()",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html#efeito-da-largura-de-banda",
+    "href": "fundamentals_gis_rs/week1/index.html#efeito-da-largura-de-banda",
+    "title": "Introdução a Mapas de Calor",
+    "section": "Efeito da Largura de Banda",
+    "text": "Efeito da Largura de Banda\n\n\nCode\nnp.random.seed(13531)\nn = 60\nx2 = np.concatenate([np.random.uniform(0.05, 0.45, 35),\n                      np.random.uniform(0.55, 0.95, 25)])\ny2 = np.concatenate([np.random.uniform(0.05, 0.95, 35),\n                      np.random.uniform(0.05, 0.55, 25)])\nxy2 = np.vstack([x2, y2])\n\ngrid_x, grid_y = np.meshgrid(\n    np.linspace(0, 1, 200),\n    np.linspace(0, 1, 200)\n)\ngrid_pts = np.vstack([grid_x.ravel(), grid_y.ravel()])\n\nbw_scott = gaussian_kde(xy2).factor\nbandwidths = [\n    (bw_scott * 0.25, f'Muito pequena  h={bw_scott*0.25:.3f}'),\n    (bw_scott,        f'Ótima          h={bw_scott:.3f}  (Scott)'),\n    (bw_scott * 4,    f'Muito grande   h={bw_scott*4:.3f}'),\n]\n\ncmap = mcolors.LinearSegmentedColormap.from_list(\n    'heatmap', ['#0d1b2a', '#457b9d', '#f4a261', '#e63946']\n)\n\nfig, axes = plt.subplots(1, 3, figsize=(14, 4.5))\n\nfor ax, (bw, title) in zip(axes, bandwidths):\n    kde2 = gaussian_kde(xy2, bw_method=bw)\n    z = kde2(grid_pts).reshape(200, 200)\n    ax.imshow(z, extent=[0,1,0,1], origin='lower', cmap=cmap, aspect='equal')\n    ax.scatter(x2, y2, color='white', s=8, alpha=0.5)\n    ax.set_title(title, fontsize=10, fontweight='bold')\n    ax.set_xlabel('x'); ax.set_ylabel('y')\n\nplt.suptitle('Efeito da largura de banda na KDE', fontsize=13, fontweight='bold', y=1.02)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 2: Três escolhas de largura de banda nos mesmos dados. Muito pequena = ruidosa. Muito grande = super-suavizada. A do meio usa a regra de Scott, um seletor automático fundamentado.\n\n\n\n\n\n\n\n\n\n\n\nImportantConclusão Importante\n\n\n\nA largura de banda é uma decisão analítica. Sempre seja explícito sobre como você a escolheu. Por isso importante possuir referencias sobre estimção ideal, para isso, sugiro: a regra de Scott e a regra de Silverman, os quais são seletores the bandwith, automáticos fundamentados.",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html#comparação-de-paletas-de-cores",
+    "href": "fundamentals_gis_rs/week1/index.html#comparação-de-paletas-de-cores",
+    "title": "Introdução a Mapas de Calor",
+    "section": "Comparação de Paletas de Cores",
+    "text": "Comparação de Paletas de Cores\nOs mesmos dados, quatro paletas diferentes. Viridis e plasma são perceptualmente uniformes. O arco-íris cria picos visuais falsos — evite-o.\n\n\nCode\nnp.random.seed(99)\nx3 = np.concatenate([np.random.uniform(0.1, 0.45, 40),\n                      np.random.uniform(0.55, 0.9, 40)])\ny3 = np.random.uniform(0.1, 0.9, 80)\nxy3 = np.vstack([x3, y3])\nkde3 = gaussian_kde(xy3)\nz3 = kde3(grid_pts).reshape(200, 200)\n\npalettes = [\n    ('viridis',  'viridis '),\n    ('plasma',   'plasma '),\n    (mcolors.LinearSegmentedColormap.from_list(\n        'custom', ['#0d1b2a','#457b9d','#f4a261','#e63946']),\n     'sequencial personalizado'),\n    ('hsv',      'arco-iris'),\n]\n\nfig, axes = plt.subplots(2, 2, figsize=(11, 9))\n\nfor ax, (cmap_name, title) in zip(axes.flat, palettes):\n    ax.imshow(z3, extent=[0,1,0,1], origin='lower',\n              cmap=cmap_name, aspect='equal')\n    ax.set_title(title, fontsize=11, fontweight='bold')\n    ax.axis('off')\n\nplt.suptitle('Comparação de paletas de cores', fontsize=13, fontweight='bold')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\nFigure 3: Mesma superfície de densidade, quatro paletas. Viridis e plasma são perceptualmente uniformes. Arco-íris cria picos visuais falsos.",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week1/index.html#exemplos-mapas-de-densidade-interativos",
+    "href": "fundamentals_gis_rs/week1/index.html#exemplos-mapas-de-densidade-interativos",
+    "title": "Introdução a Mapas de Calor",
+    "section": "Exemplos: Mapas de Densidade Interativos",
+    "text": "Exemplos: Mapas de Densidade Interativos\n\nCenário A · Densidade Populacional — Galícia, Espanha\nA pergunta: Onde as pessoas se concentram na Galícia? Como isso se relaciona com a costa?\n\n\nCode\ndf_gal = pd.read_csv(\n    'https://raw.githubusercontent.com/R-CoderDotCom/data/main/sample_datasets/population_galicia.csv'\n)\n\nfig_gal = px.density_mapbox(\n    df_gal,\n    lat='latitude', lon='longitude', z='tot_pob',\n    radius=8,\n    center=dict(lat=42.83, lon=-8.35),\n    zoom=6,\n    mapbox_style='open-street-map',\n    color_continuous_scale='Plasma',\n    title='Densidade Populacional — Galícia, Espanha'\n)\nfig_gal.update_layout(margin=dict(l=0, r=0, t=40, b=0))\nfig_gal.show()\n\n\n\n\n                            \n                                            \n\n\nFigure 4: Mapa de calor de densidade populacional da Galícia. Mais quente = maior concentração.\n\n\n\n\n\n\nCenário B · Riscos Naturais — Terremotos Globais\nA pergunta: Onde a energia sísmica se concentra globalmente?\n\n\nCode\ndf_eq = pd.read_csv(\n    'https://raw.githubusercontent.com/plotly/datasets/master/earthquakes-23k.csv'\n)\n\nfig_eq = px.density_map(\n    df_eq,\n    lat='Latitude', lon='Longitude', z='Magnitude',\n    radius=10,\n    center=dict(lat=0, lon=180),\n    zoom=0,\n    map_style='open-street-map',\n    color_continuous_scale='Inferno',\n    title='Densidade Global de Terremotos — ponderada pela magnitude'\n)\nfig_eq.update_layout(margin=dict(l=0, r=0, t=40, b=0))\nfig_eq.show()\n\n\n\n\n                            \n                                            \n\n\nFigure 5: Densidade global de terremotos ponderada pela magnitude. O Anel de Fogo é inconfundível.\n\n\n\n\n\n\nCenário C · Quantidade de locais para alugar bicicleta em Londres.\n\n\n\n\n\n\nNoteDados do Open Street Map (OSM)\n\n\n\n\nLocais disponíveis para locação de bicicletas e mobilidade urbana em Londres.\n\n\n\n\n\nCode\nimport geopandas as gpd\nimport plotly.express as px\n\n# Load the GeoJSON data from the URL\n#new_gdf = gpd.read_file(geodatasets.get_url('spdata.cycle_hire_osm'))\nurl = \"https://github.com/Nowosad/spData/raw/refs/heads/master/inst/shapes/cycle_hire_osm.geojson\"\ngdf = gpd.read_file(url)\n\n# Extract latitude and longitude from the geometry column\ngdf['lat'] = gdf.geometry.y\ngdf['lon'] = gdf.geometry.x\n\n# Create a density heatmap using Plotly Express\nfig = px.density_mapbox(\n    gdf,\n    lat='lat',\n    lon='lon',\n    z=None,  # Use default density calculation\n    radius=15,\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    mapbox_style='open-street-map',\n    title='Bicycle Hire Points Density in London (OSM)',\n    height=600,\n    width=800\n)\n\n# Show the figure\nfig.show()\n\n\n                            \n                                            \n\n\n\n\nComparação com Scatter Plot\n\n\nCode\nfig = px.scatter_map(\n    gdf,\n    lat='lat',\n    lon='lon',\n    #size='capacity',  # Fixed size for all points\n    #projection='mercator',\n    center=dict(lat=51.5074, lon=-0.1278),  # Center on London\n    zoom=10,\n    #mapbox_style='open-street-map',\n    title='Bicycle Hire Points in London (Scatter Plot)',\n    height=600,\n    width=800\n)\nfig.show()",
+    "crumbs": [
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 1 — Fundamentos em GIS",
+      "Introdução a Mapas de Calor"
+    ]
+  },
+  {
+    "objectID": "fundamentals_gis_rs/week3/index.html",
+    "href": "fundamentals_gis_rs/week3/index.html",
+    "title": "Week 3",
     "section": "",
     "text": "Content coming soon.",
     "crumbs": [
-      "Estado da Arte (State-of-Art)",
-      "Estado da Arte (State-of-Art)"
+      "Fundamentos em GIS e Sensoriamento Remoto",
+      "Week 3",
+      "Week 3"
     ]
   }
 ]
