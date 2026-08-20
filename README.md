@@ -21,15 +21,43 @@ FTL is a joint United Nations initiative by the UNDP Istanbul International Cent
 ## Structure
 
 
-Our ebook is based on [Quarto](https://quarto.org), where the materials are splited into 3 big modules: Fundamentals of GIS and Remote Sensing. Fundamentals of Machine-Learning and Deep-Learning and State-of-Art. 
+Our ebook is based on [Quarto](https://quarto.org), where the materials are split into 3 big modules: Fundamentals of GIS and Remote Sensing, Fundamentals of Machine Learning and Deep Learning, and State-of-the-Art. Each module lives in its own top-level folder, with weekly content nested inside where that applies (currently only the GIS/RS module).
 
 ```text
-_quarto.yml           site config (sidebar navigation, theme, execute options)
-index.qmd             landing page
-assets/logos/         institutional / partner logos shown on the landing page
-course-info/          general-info.md, reading.md, setup.md
-week1/ … week4/       one folder per week
-pyproject.toml        Python dependencies (managed with uv)
+ebook/
+├── _quarto.yml                site config (sidebar navigation, theme, execute options)
+├── index.qmd                  landing page
+├── custom.scss                site theme overrides
+├── pyproject.toml / uv.lock   Python dependencies (managed with uv)
+│
+├── assets/
+│   └── logos/                 institutional / partner logos shown on the landing page
+│
+├── course-info/
+│   ├── general-info.md
+│   ├── reading.md
+│   ├── setup.md
+│   ├── cli-utils.md
+│   └── how-to-contribute.md
+│
+├── fundamentals_gis_rs/        Módulo 1 — Fundamentos em GIS e Sensoriamento Remoto
+│   ├── week0/
+│   │   ├── index.qmd
+│   │   ├── provedores.qmd            diagrama de bolhas: temas x provedores de dados
+│   │   ├── space_tech_ecossystem.ipynb
+│   │   └── data/                     xlsx/json/csv usados pelos notebooks da semana
+│   ├── week1/
+│   │   ├── index.qmd
+│   │   ├── week1_introductionGIS.ipynb
+│   │   └── images/
+│   └── week2/ … week4/         index.md (conteúdo a ser adicionado)
+│
+├── ml-dl/                      Módulo 2 — Fundamentos em ML e Deep Learning (em construção)
+├── state-of-art/               Módulo 3 — Estado da Arte (em construção)
+├── guest-sessions/             Sessões de convidados (em construção)
+├── awesome-geospatial/         lista de ferramentas do ecossistema, curada pelos alunos
+│
+└── .github/workflows/publish.yml   render + deploy automático pro GitHub Pages
 ```
 
 ## Getting Started
@@ -51,4 +79,4 @@ If Quarto can't find Jupyter (it sometimes picks up a system Python instead of `
 We have a page dedicated to whom is willing of contributing into our repo. Please read [contributions](course-info/how-to-contribute.md)
 
 
-![logos](/assets/logos/union_logo.png)
+![logos](assets/logos/union_logo.png)
