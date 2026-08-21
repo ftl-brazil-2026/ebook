@@ -66,6 +66,10 @@ Só adicione `⚠️ *verificar*` no fim da linha se o link ou a descrição ain
 
 ## Python Libraries
 
+### Geospatial Data
+
+- [**Rasterio**](https://rasterio.readthedocs.io/) — biblioteca Python para leitura, escrita e processamento de dados raster geoespaciais, como imagens de satélite e modelos de terreno.
+
 ### Machine Learning
 
 - [**scikit-learn**](https://scikit-learn.org/) — machine learning "tradicional" em Python: regressão, clustering, classificação.
