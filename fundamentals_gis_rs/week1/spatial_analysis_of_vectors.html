@@ -475,7 +475,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="5f297c7b" class="cell" data-execution_count="2">
+<div id="3670a511" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>code_muni <span class="op">=</span> <span class="dv">5107909</span>  <span class="co"># Sinop, MT</span></span>
@@ -746,7 +746,7 @@ Figure&nbsp;6: Convex hull das escolas de Sinop: o menor polígono convexo que c
 <h2 class="anchored" data-anchor-id="relações-topológicas">Relações topológicas</h2>
 <p>Relações topológicas servem para compreender como duas geometrias se relacionam no espaço: <code>intersects</code> (encosta em qualquer parte), <code>within</code> (está totalmente dentro), <code>touches</code> (encosta só na borda, sem sobrepor), <code>disjoint</code> (não tem relação nenhuma). Repare que <code>intersects</code> é simétrica (se X intersecta Y, Y intersecta X), mas <code>within</code>/<code>contains</code> não são.</p>
 <p>Vamos usar isso pra classificar as escolas de Sinop em <strong>urbanas</strong> (dentro de um raio de 2,5 km do centro) e <strong>rurais</strong> (fora dele).</p>
-<div id="a4125809" class="cell" data-execution_count="9">
+<div id="2c8e6633" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estabelecendo um ponto no centro de Sinop</span></span>
@@ -770,7 +770,7 @@ rural     12
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="26023fa3" class="cell" data-execution_count="10">
+<div id="dc73d472" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Agora vamos plots </span></span>
@@ -835,7 +835,7 @@ Name: count, dtype: int64</code></pre>
 </figure>
 </div>
 <p>Mão na massa: <strong>qual a distância de cada escola até o estabelecimento de saúde mais próximo?</strong></p>
-<div id="c23cbdf2" class="cell" data-execution_count="11">
+<div id="b2f65434" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Importante aqui, olha para a reducao utilizando o minimo</span></span>
@@ -894,7 +894,7 @@ Figure&nbsp;7: A mesma geometria (limite de Sinop): original, rotacionada 45° e
 <section id="joins-espaciais-por-distância" class="level2">
 <h2 class="anchored" data-anchor-id="joins-espaciais-por-distância">Joins espaciais por distância</h2>
 <p>Um <strong>join espacial</strong> funciona como um join de atributos (tema batido para quem conhece tabelas relacionais), só que o critério de join é uma relação espacial em vez de uma chave em comum. <code>sjoin_nearest</code> responde a pergunta do capítulo anterior, mas devolve um <code>GeoDataFrame</code> já unido, com a opção de limitar a um raio máximo (<code>max_distance</code>), o que é útil pra não juntar pontos longe demais de fazer sentido:</p>
-<div id="3dab338b" class="cell" data-execution_count="13">
+<div id="e1c5a6c8" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>schools_com_saude <span class="op">=</span> gpd.sjoin_nearest(</span>
@@ -962,7 +962,7 @@ Figure&nbsp;7: A mesma geometria (limite de Sinop): original, rotacionada 45° e
 <section id="agregação-espacial" class="level2">
 <h2 class="anchored" data-anchor-id="agregação-espacial">Agregação espacial</h2>
 <p><strong>Agregação espacial</strong> resume valores de um objeto (o “alvo”) agrupando pela geometria de outro (a “fonte”). A geometria da fonte é quem define os grupos, e o resultado herda a geometria <em>dela</em>, não a do alvo. Vamos agregar pelo grupo mais simples que já temos: urbana vs.&nbsp;rural.</p>
-<div id="8af42509" class="cell" data-execution_count="14">
+<div id="0630d84c" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>resumo_zona <span class="op">=</span> (</span>
