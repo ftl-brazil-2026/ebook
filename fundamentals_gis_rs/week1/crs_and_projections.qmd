@@ -42,7 +42,6 @@ Assim como "10" não quer dizer nada sem uma unidade (10 metros? 10 reais? 10 gr
 
 Um sistema de coordenadas (CRS) define como as representações gráficas nas ferramentas GIS estão localizadas e posicionadas no planeta Terra. Portanto, se partimos da presunção de que a Terra é uma esfera perfeita, poderíamos correlacionar esse ponto com a perspectiva de um ponto tangenciando uma esfera.
 
-
 ```{python}
 import numpy as np
 import plotly.graph_objects as go
@@ -113,39 +112,35 @@ fig = go.Figure(data=[sphere, vector, point] + axes, layout=layout)
 fig.show()
 ```
 
-
-Bom... considerando que a Terra é redonda. Contudo, os dados mostram que o formato da Terra não é exatamente esférico. Sendo ela denominada como um um **elipsoide de revolução** ou **geóide**. Contudo, nem todo elipsóide se ajusta igualmente em todos os cantos do globo, dessa forma, um elipsóide ajusta para a América do Sul pode ser diferente de um ajustado para a Ásia central. 
-Assim, cada um desses ajustes ocasiona um **Datum**. Datum é um modelo matemático que ancora o sistema de coordenadas na Terra. É exatamente por isso que existem vários "WGS84 da vida": cada datum é uma tentativa diferente de responder "onde exatamente essa esfera imaginária encosta no planeta real?
+Bom... considerando que a Terra é redonda. Contudo, os dados mostram que o formato da Terra não é exatamente esférico. Sendo ela denominada como um um **elipsoide de revolução** ou **geóide**. Contudo, nem todo elipsóide se ajusta igualmente em todos os cantos do globo, dessa forma, um elipsóide ajusta para a América do Sul pode ser diferente de um ajustado para a Ásia central. Assim, cada um desses ajustes ocasiona um **Datum**. Datum é um modelo matemático que ancora o sistema de coordenadas na Terra. É exatamente por isso que existem vários "WGS84 da vida": cada datum é uma tentativa diferente de responder "onde exatamente essa esfera imaginária encosta no planeta real?
 
 ![Campo gravitacional terrestre (Geoide). Fonte: ESA](images/geoide.webp){fig-align="center"}
 
 [Animação da Representação do Geoide](https://www.esa.int/ESA_Multimedia/Videos/2021/03/The_geoid) — ESA
 
-Portanto, esse sistema de referência define padrões e afinidades que permitem localizar um ponto em qualquer lugar da Terra. 
-
+Portanto, esse sistema de referência define padrões e afinidades que permitem localizar um ponto em qualquer lugar da Terra.
 
 ::: {.callout-note appearance="simple"}
 ## Conversão vs. transformação
 
 - **Conversão** : trocar de projeção mantendo o mesmo datum. Pura matemática, sem perda, 100% reversível.
-- **Transformação** : trocar de datum. Envolve modelos ajustados empiricamente e pode introduzir alguns metros de incerteza. 
+- **Transformação** : trocar de datum. Envolve modelos ajustados empiricamente e pode introduzir alguns metros de incerteza.
 :::
 
 ## CRS Geográfico vs. Projetado
 
-| | **CRS Geográfico** | **CRS Projetado** |
-|---|---|---|
+|   | **CRS Geográfico** | **CRS Projetado** |
+|------------------------|------------------------|------------------------|
 | Unidade | graus (°) | metros (normalmente) |
 | Exemplo | WGS84 (EPSG:4326), SIRGAS2000 (EPSG:4674) | SIRGAS2000 / UTM 22S (EPSG:31982) |
 | Bom para | dado global, web mapping, GPS | medir distância/área, análise local |
 | Problema | 1° de longitude ≠ 1° de latitude em distância real | só é preciso perto do seu centro/zona |
 
-Um grau de latitude vale sempre ~111 km em qualquer lugar do planeta. Um grau de **longitude**, não — vale ~111 km no equador e encolhe até virar zero nos polos. É por isso que fazer conta de distância/área direto em graus dá resultado errado (a gente mostra isso mais abaixo, na prática).
+Um grau de latitude vale sempre \~111 km em qualquer lugar do planeta. Um grau de **longitude**, não — vale \~111 km no equador e encolhe até virar zero nos polos. É por isso que fazer conta de distância/área direto em graus dá resultado errado (a gente mostra isso mais abaixo, na prática).
 
 ::: {.callout-important appearance="simple"}
-Não existe projeção sem distorção. Toda projeção sacrifica alguma propriedade, seja ela área, ângulo (forma), distância, etc. A pergunta que nos cabe é qual a projeção para a análise que desejamos executar? Contando que não existe uma projeção "correta". 
+Não existe projeção sem distorção. Toda projeção sacrifica alguma propriedade, seja ela área, ângulo (forma), distância, etc. A pergunta que nos cabe é qual a projeção para a análise que desejamos executar? Contando que não existe uma projeção "correta".
 :::
-
 
 ## Planet Terra em três projeções diferentes.
 
@@ -187,9 +182,7 @@ plt.show()
 
 ```
 
-
 ![Novo mapa mundi divulgado pelo Governo do Brasil, 2026. Fonte: IBGE](images/ibge-mapa-mundi.webp){fig-align="center"}
-
 
 ### Fun Fact
 
@@ -269,7 +262,6 @@ plt.show()
 
 O Sistema de Coordenadas Universal Transverso de Mercator (UTM) tem sua origem no equador em uma longitude específica. Para diminuir distorções, o mundo é dividido em 60 zonas com 6 graus de comprimento em longitude. As zonas são numeradas entre 1 e 60, em ordem respectiva de oeste a leste.
 
-
 ```{python}
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
@@ -309,18 +301,17 @@ plt.show()
 Pequeno gafanhoto sempre existirá algum website ou projeto que alguém já criou e que facilita a sua vida.
 
 - **Mapa UTM** - [UTM MAPA](https://www.dmap.co.uk/utmworld.htm)
-- **Matemática por trás** - [UTM Glossario](https://www.tarmacview.com/glossary/utm/) 
-- **BOM DEMAIS** - [Diversas projecoes](https://www.geo-projections.com/ )
+- **Matemática por trás** - [UTM Glossario](https://www.tarmacview.com/glossary/utm/)
+- **BOM DEMAIS** - [Diversas projecoes](https://www.geo-projections.com/)
 - **EPSG.IO** - [EPSG - **Brabo dos brabo**](https://epsg.io/)
 - **Map4s3** - [Salvador da Patria](https://map4s3.com.br/maps/br_utm/)
-
 :::
 
 ## Como podemos reprojetar os dados geoespaciais?
 
 Uma das formas mais clássicas e tradicionais de manipular dados geoespaciais é usando o projeto robusto e estável GDAL.[GDAL-WEBSITE](https://gdal.org/en/stable/). GDAL é a engine rodando por debaixo dos panos de muitos softwares mundo a fora, como por exemplo o nosso querido QGIS. Tudo o que você imagina que é possível fazer, em termos de manipulação de dados geoespaciais como vetores e raster, muito provavelmente alguém já vai ter feito com GDAL. Extremamente completa e poderosa, a biblioteca conta com Open Source Licence e uma comunidade engajada, que promove um dos maiores eventos geoespaciais do mundo: [FOSS4G](https://2026.foss4g.org/en/).
 
-Para ilustrarmos esses conceitos de transformação dos dados e reprojeções, utilizaremos uma engine que trabalha por debaixo dos panos no GDAL para transformar os dados, chamada [PROJ](https://proj.org/en/stable/). Contudo, vamos abordar suas bindings em Python. 
+Para ilustrarmos esses conceitos de transformação dos dados e reprojeções, utilizaremos uma engine que trabalha por debaixo dos panos no GDAL para transformar os dados, chamada [PROJ](https://proj.org/en/stable/). Contudo, vamos abordar suas bindings em Python.
 
 ## `pyproj` por baixo dos panos
 
@@ -389,7 +380,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-A grade projetada deforma conforme se afasta do meridiano central da zona 22S. E isso não é é um bug, mas sim a consequência da projeção. Isso nos leva a compreender o fato de UTM ser dividida em 60 zonas estreitas de 6° cada. Dessa forma, cada zona só é precisa perto do seu próprio centro. 
+A grade projetada deforma conforme se afasta do meridiano central da zona 22S. E isso não é é um bug, mas sim a consequência da projeção. Isso nos leva a compreender o fato de UTM ser dividida em 60 zonas estreitas de 6° cada. Dessa forma, cada zona só é precisa perto do seu próprio centro.
 
 ## Visualizando com Cartopy
 
@@ -422,9 +413,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-
 ### Aprofundando os mapas geográficos em python
-####  Gridlines e rótulos
+
+#### Gridlines e rótulos
 
 O [Cartopy](https://cartopy.readthedocs.io/stable/) será nosso carro chefe aqui para realizar mapas estáticos. Ele tem funcionalidades para tudo. Aqui exploraremos como desenhar os meridianos e paralelos com rótulo direto no eixo.
 
@@ -447,30 +438,24 @@ ax.set_title("Brasil com gridlines rotuladas", fontsize=12, fontweight="bold")
 plt.show()
 ```
 
-
 ::: {.callout-note appearance="simple"}
-TIP: 
-- Onde conseguir dados de delineação dos países? 
-A referência é sempre utilizar [Natural Earth Data](https://www.naturalearthdata.com/about/).
+TIP: - Onde conseguir dados de delineação dos países? A referência é sempre utilizar [Natural Earth Data](https://www.naturalearthdata.com/about/).
 
-Geopandas tem uma integração direta com eles no: [Geodatasets](https://geodatasets.readthedocs.io/en/latest/).
-No R, a biblioteca é melhor estruturada: [R Natural Earth](https://ropensci.github.io/rnaturalearth/)
-
+Geopandas tem uma integração direta com eles no: [Geodatasets](https://geodatasets.readthedocs.io/en/latest/). No R, a biblioteca é melhor estruturada: [R Natural Earth](https://ropensci.github.io/rnaturalearth/)
 :::
-
 
 ## Reprojeção: vetor vs. raster
 
-Quando pensamos nos tipos de dados geoespaciais, a reprojeção dos dois tipos não é a mesma coisa. Quando temos uma matriz de dados (raster) precisamos reprojetar e reamostrar os valores dessa matriz dentro de um novo sistema de coordenadas. 
+Quando pensamos nos tipos de dados geoespaciais, a reprojeção dos dois tipos não é a mesma coisa. Quando temos uma matriz de dados (raster) precisamos reprojetar e reamostrar os valores dessa matriz dentro de um novo sistema de coordenadas.
 
-Olhemos com mais calma: 
+Olhemos com mais calma:
 
 - **Vetor** : cada vértice é um ponto, e um ponto vira outro ponto direto pela fórmula de transformação.
-- **Raster**: reprojetar significa criar uma grade *nova*, com pixels em posições diferentes, e daí **re-amostrar** (interpolar) os valores originais pra essa grade nova. É mais trabalho computacional e costuma perder um pouco de informação. Então ai vai uma dica: Quando você  estiver trabalhando com dados de vetores e raster, tente, sempre que possível, reprojetar os vetores pro CRS do raster, e não o contrário.
+- **Raster**: reprojetar significa criar uma grade *nova*, com pixels em posições diferentes, e daí **re-amostrar** (interpolar) os valores originais pra essa grade nova. É mais trabalho computacional e costuma perder um pouco de informação. Então ai vai uma dica: Quando você estiver trabalhando com dados de vetores e raster, tente, sempre que possível, reprojetar os vetores pro CRS do raster, e não o contrário.
 
-### Vetor: Não existe área em graus. 
+### Vetor: Não existe área em graus.
 
-Um dos erros mais comuns de quem está começando a manipular dados geoespaciais é calcular a área utilizando um sistema geográfico em graus, ao invés de sua projeção. 
+Um dos erros mais comuns de quem está começando a manipular dados geoespaciais é calcular a área utilizando um sistema geográfico em graus, ao invés de sua projeção.
 
 ```{python}
 sc = geobr.read_state(code_state="SC", year=2020)
@@ -534,9 +519,9 @@ plt.show()
 
 **SIRGAS2000** (Sistema de Referência Geocêntrico para as Américas) é o datum oficial do Brasil desde 2005 (IBGE), substituindo os antigos SAD69 e Córrego Alegre. É geocêntrico, compatível com GPS/WGS84 na prática (as diferenças são de centímetros, não de metros), e é o que toda base oficial do IBGE — incluindo os dados do `geobr` que usamos nos notebooks anteriores, já vem por padrão (`EPSG:4674`).
 
-Como o Brasil é largo demais pra uma única zona UTM, o território é coberto por várias zonas SIRGAS2000/UTM, uma a cada 6° de longitude. Da mesma forma que existe WGS84/UTM também existe SIRGAS2000/UTM, como formas projetadas do sistema de referencia. 
+Como o Brasil é largo demais pra uma única zona UTM, o território é coberto por várias zonas SIRGAS2000/UTM, uma a cada 6° de longitude. Da mesma forma que existe WGS84/UTM também existe SIRGAS2000/UTM, como formas projetadas do sistema de referencia.
 
-Abaixo, vamos colorir cada estado pela UTM de seu centróide. 
+Abaixo, vamos colorir cada estado pela UTM de seu centróide.
 
 ```{python}
 #| label: fig-utm-zones
@@ -573,19 +558,17 @@ ax.set_axis_off()
 plt.show()
 ```
 
-
 ## Outras Grades Modernas
 
-Existem muito outros grids que surgem como solução para problemas práticos. Um desses é o H3 hexágonos criado pela Uber, que se espalhou como um grid padrão para análises dinâmicas de preço e ta ganhando muita aquisição pela comunidade geoespacial. 
-
+Existem muito outros grids que surgem como solução para problemas práticos. Um desses é o H3 hexágonos criado pela Uber, que se espalhou como um grid padrão para análises dinâmicas de preço e ta ganhando muita aquisição pela comunidade geoespacial.
 
 ::: {.callout-note appearance="simple"}
-A partir do minuto 9:30 nesse [https://www.youtube.com/watch?v=ay2uwtRO3QE&t=573s](https://www.youtube.com/watch?v=ay2uwtRO3QE&t=573s) esse software engineer da Uber discute sobre como chegaram a solução de hexágonos como forma padrão dos grids da Uber.
+A partir do minuto 9:30 nesse <https://www.youtube.com/watch?v=ay2uwtRO3QE&t=573s> esse software engineer da Uber discute sobre como chegaram a solução de hexágonos como forma padrão dos grids da Uber.
 :::
-###  Hexágonos - H3
 
-Ao invés de grades quadradas com 4 vizinhos, hexágonos apresentam uma solução para esse problema pertinente. De tal forma como a hipotenusa sempre sendo  maior que os catetos, num hexágono todos as distâncias são uniformes entre cada lado. Cada héxagono tem 6 vizinhos, todos a mesma distância do centro. 
-É por isso que virou padrão da indústria pra coisas como precificação dinâmica, densidade de corridas e qualquer análise espacial em escala.
+### Hexágonos - H3
+
+Ao invés de grades quadradas com 4 vizinhos, hexágonos apresentam uma solução para esse problema pertinente. De tal forma como a hipotenusa sempre sendo maior que os catetos, num hexágono todos as distâncias são uniformes entre cada lado. Cada héxagono tem 6 vizinhos, todos a mesma distância do centro. É por isso que virou padrão da indústria pra coisas como precificação dinâmica, densidade de corridas e qualquer análise espacial em escala.
 
 "Squares (like geohash or quadtree grids) have uneven neighbor distances and distort heavily as you move across the map, especially near poles"
 
@@ -660,10 +643,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-Hexagons minimize these distortions, preserve area more uniformly, avoid diagonal inconsistencies, and produce cleaner, more natural-looking spatial clusters  
+Hexagons minimize these distortions, preserve area more uniformly, avoid diagonal inconsistencies, and produce cleaner, more natural-looking spatial clusters
 
 É essa uniformidade de distância — e não só a estética do hexágono — que faz o H3 ser melhor pra análises de vizinhança, roteamento e agregação espacial: a Uber não precisa se preocupar em "corrigir" a distância dependendo de qual dos vizinhos está sendo comparado.
-
 
 ```{python}
 #| label: fig-h3
@@ -757,17 +739,17 @@ Repare que a métrica (`dist_km`) foi calculada uma vez por célula e vive junto
 
 Escolha uma das cidades abaixo (ou outra à sua escolha — busque o `code_muni` no [IBGE](https://www.ibge.gov.br/explica/codigos-dos-municipios.php) ou filtrando `geobr.read_municipality()` pelo nome, como fizemos em @fig-utm-zones) e repita o processo acima:
 
-| Cidade | UF | `code_muni` |
-|---|---|---|
-| Bonito | MS | 5002308 |
-| Paraty | RJ | 3303807 |
-| Lençóis | BA | 2919207 |
-| Bento Gonçalves | RS | 4302105 |
+| Cidade          | UF  | `code_muni` |
+|-----------------|-----|-------------|
+| Bonito          | MS  | 5002308     |
+| Paraty          | RJ  | 3303807     |
+| Lençóis         | BA  | 2919207     |
+| Bento Gonçalves | RS  | 4302105     |
 
-1. Baixe o polígono do município com `geobr.read_municipality(code_muni=..., year=2020)`.
-2. Gere as células com `h3.geo_to_h3shape()` e `h3.h3shape_to_cells()` — teste resoluções diferentes (7, 8, 9) e observe como o número de células muda.
-3. Calcule uma métrica por célula: pode ser a distância ao centro (como aqui), a área de cada hexágono, ou até um valor aleatório simulando "densidade".
-4. Monte o mapa com `folium.GeoJson()` e um `GeoJsonTooltip` mostrando `h3_cell` e a métrica escolhida.
+1.  Baixe o polígono do município com `geobr.read_municipality(code_muni=..., year=2020)`.
+2.  Gere as células com `h3.geo_to_h3shape()` e `h3.h3shape_to_cells()` — teste resoluções diferentes (7, 8, 9) e observe como o número de células muda.
+3.  Calcule uma métrica por célula: pode ser a distância ao centro (como aqui), a área de cada hexágono, ou até um valor aleatório simulando "densidade".
+4.  Monte o mapa com `folium.GeoJson()` e um `GeoJsonTooltip` mostrando `h3_cell` e a métrica escolhida.
 
 Compare com um colega que escolheu outra cidade: o número de hexágonos muda muito entre uma cidade pequena e uma grande? E a resolução 9 ainda é viável pra um município enorme, ou o mapa fica pesado demais?
 :::
@@ -780,3 +762,5 @@ Compare com um colega que escolheu outra cidade: o número de hexágonos muda mu
 - Cartopy gallery — [Raster reprojections](https://cartopy.readthedocs.io/stable/gallery/scalar_data/raster_reprojections.html)
 - [H3 — Uber's Hexagonal Hierarchical Spatial Index](https://h3geo.org/)
 - Uber - [Uber Blog - Dynamic Prices](https://www.uber.com/us/en/blog/h3/)
+
+![Obra de Joaquin Torres Garcia - America Invertida](images/joaquintorresgarcia.jpg){fig-align="left"}
