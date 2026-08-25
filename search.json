@@ -901,7 +901,7 @@
     "href": "fundamentals_gis_rs/week1/crs_and_projections.html#referências",
     "title": "Sistemas de Coordenadas de Referência e Projeções",
     "section": "Referências",
-    "text": "Referências\n\nPebesma, E.; Bivand, R. — Spatial Data Science, cap. 2: Spaces\nLovelace, R.; Nowosad, J.; Muenchow, J. — Geocomputation with R, cap. 7: Reprojecting geographic data\nCartopy gallery — Gridlines and tick labels\nCartopy gallery — Raster reprojections\nH3 — Uber’s Hexagonal Hierarchical Spatial Index\nUber - Uber Blog - Dynamic Prices",
+    "text": "Referências\n\nPebesma, E.; Bivand, R. — Spatial Data Science, cap. 2: Spaces\nLovelace, R.; Nowosad, J.; Muenchow, J. — Geocomputation with R, cap. 7: Reprojecting geographic data\nCartopy gallery — Gridlines and tick labels\nCartopy gallery — Raster reprojections\nH3 — Uber’s Hexagonal Hierarchical Spatial Index\nUber - Uber Blog - Dynamic Prices\n\n\n\n\nObra de Joaquin Torres Garcia - America Invertida",
     "crumbs": [
       "Fundamentos em GIS e Sensoriamento Remoto",
       "Week 1 — Fundamentos em GIS",
