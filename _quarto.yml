@@ -32,8 +32,8 @@ website:
               - fundamentals_gis_rs/week0/space_tech_ecossystem.ipynb
           - section: "Week 1 — Fundamentos em GIS"
             contents:
-              - fundamentals_gis_rs/week1/index.qmd
-              - fundamentals_gis_rs/week1/week1_introductionGIS.ipynb
+              - fundamentals_gis_rs/week1/crs_and_projections.qmd
+              - fundamentals_gis_rs/week1/spatial_analysis_of_vectors.qmd
           - section: "Week 2 - Fundamentos em Sensoriamento Remoto"
             contents:
               - fundamentals_gis_rs/week2/index.md

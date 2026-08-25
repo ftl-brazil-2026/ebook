@@ -8,4 +8,4 @@ Em construção.
 Tudo aqui em construção
 :::
 
-![vov_juju](/assets/memes/vovo_juju.jpeg)
+![vov_juju](../assets/memes/vovo_juju.jpeg)

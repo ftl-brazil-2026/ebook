@@ -1,0 +1,192 @@
+---
+title: "Análise Espacial de Dados Vetoriais"
+subtitle: "Relações topológicas, distância, joins espaciais e agregação"
+author: "Emanuel Goulart"
+date: today
+---
+
+```{python}
+#| include: false
+import numpy as np
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import geobr
+import osmnx as ox
+import h3
+from shapely.geometry import Polygon
+from shapely.affinity import rotate, scale
+```
+
+## Análise Espacial em Dados Vetoriais
+
+Esse notebook explora as operações espaciais mais usadas no dia a dia como as relações topológicas, distância, joins espaciais, agregação, zoneamento e transformações geométricas.
+
+Para o nosso estudo de casa, vamos utilizar a cidade de *Sinop* no *Mato Grosso*, combinando duas fontes de dados:
+
+- **`geobr`** — escolas (INEP) e estabelecimentos de saúde (CNES), dados oficiais e já geolocalizados.
+- **OpenStreetMap** (via `osmnx`) — a malha viária, para explorar interseções e conectividade.
+
+::: {.callout-note appearance="simple"}
+Escolhemos Sinop meio que arbitrariamente, é uma cidade média, longe do eixo Rio-São Paulo que domina a maioria dos exemplos de GIS por aí. Sinta-se livre pra trocar o `code_muni` abaixo pela sua própria cidade e rodar tudo de novo.
+:::
+
+```{python}
+code_muni = 5107909  # Sinop, MT
+CRS_PROJETADO = "EPSG:31981"  # SIRGAS2000 / UTM zone 21S -- cobre o MT ocidental
+
+sinop = geobr.read_municipality(code_muni=code_muni, year=2020)
+schools = geobr.read_schools(year=2020, code_muni=code_muni)
+health = geobr.read_health_facilities(date=202304, code_muni=code_muni)
+
+print(f"{len(schools)} escolas, {len(health)} estabelecimentos de saúde")
+```
+
+```{python}
+#| label: fig-overview
+#| fig-cap: "Sinop, MT: escolas (INEP) e estabelecimentos de saúde (CNES)."
+
+fig, ax = plt.subplots(figsize=(7, 7))
+sinop.plot(ax=ax, color="#f0f0f0", edgecolor="#898781", linewidth=0.8)
+health.plot(ax=ax, markersize=6, color="#2a78d6", alpha=0.5, label="Saúde (CNES)")
+schools.plot(ax=ax, markersize=10, color="#e63946", alpha=0.8, label="Escolas (INEP)")
+ax.legend(loc="lower left")
+ax.set_title("Sinop, MT", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+## Relações topológicas
+
+Relações topológicas servem para compreender como duas geometrias se relacionam no espaço: `intersects` (encosta em qualquer parte), `within` (está totalmente dentro), `touches` (encosta só na borda, sem sobrepor), `disjoint` (não tem relação nenhuma). Repare que `intersects` é simétrica (se X intersecta Y, Y intersecta X), mas `within`/`contains` não são.
+
+Vamos usar isso pra classificar as escolas de Sinop em **urbanas** (dentro de um raio de 2,5 km do centro) e **rurais** (fora dele).
+
+```{python}
+# estabelecendo um ponto no centro de Sinop
+centro = gpd.GeoSeries(
+    [gpd.points_from_xy([-55.5089], [-11.8642])[0]], crs="EPSG:4326"
+).to_crs(CRS_PROJETADO)
+
+area_urbana = centro.buffer(5000).iloc[0]  # 5 km, já em metros 
+
+schools_proj = schools.to_crs(CRS_PROJETADO)
+
+## aqui a analise topologica 
+## se a escola esta dentro da area urbana ( nosso buffer the 5km) entao urbana, senao rural 
+schools_proj["zona"] = np.where(schools_proj.within(area_urbana), "urbana", "rural")
+
+# printa o numero de escolas na area urbana 
+print(schools_proj["zona"].value_counts())
+
+```
+
+```{python}
+## Agora vamos plots 
+fig, ax = plt.subplots(figsize=(7, 7))
+
+# delineacao do municipio 
+sinop.plot(ax=ax, color="#f0f0f0", edgecolor="#898781", linewidth=0.8)
+
+# area_urbana é um shapely Polygon "puro", não um GeoDataFrame
+# por isso não tem .plot(); e está em CRS_PROJETADO (metros), então reprojetamos de volta
+# pro CRS geográfico de sinop/schools/health antes de plotar, senão as escalas não batem
+area_urbana_geo = gpd.GeoSeries([area_urbana], 
+                    crs=CRS_PROJETADO).to_crs(sinop.crs).iloc[0]
+# o truque pra quando nao eh geopandas, ou entao converta para geopandas
+ax.fill(*area_urbana_geo.exterior.xy, 
+            color="#cdea0eb9",          
+          edgecolor="#d4caa7", 
+            linewidth=0.6)
+
+health.plot(ax=ax, markersize=6, color="#2a78d6", alpha=0.5, label="Saúde (CNES)")
+
+schools.plot(ax=ax, markersize=10, color="#e63946", alpha=0.8, label="Escolas (INEP)")
+ax.legend(loc="lower left")
+ax.set_title("Sinop, MT", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+::: {.callout-note appearance="simple"}
+Não mosca!
+
+Se você ainda não está a vontade com as relações topológicas, então da uma olhada na nossa aula de python+GIS, onde olhamos com muito mais calma e a fundo essas relações. Aula 1 e Aula 2. [Python+GIS](https://github.com/ftl-brazil-2026/gis-python-basics/blob/main/python_gis_1.ipynb)
+:::
+
+## Relações de distância
+
+Diferente das relações topológicas que são por natureza boleanas (verdadeiro/falso), relações de **distância** são contínuas. Além disso, existem algumas nuances que precisam ser consideradas dependendo do tipo de vetor que estamos analisando. Certamento a distancia entre dois points é a famosa distância euclideana, muito já batida e amassada pela algebra linear.
+
+![Source:Wikipedia - Euclidean Distance](images/Euclidean_distance_2d.svg){fig-align="center"}
+
+Contudo, observamos a distancia entre duas retas, ou a distancia entre um ponto e um polígono, e então a nuance toma conta. Vamos considerar que a distância entre um ponto e um polígono mais próximas entre os dois elementos. 
+
+![Source:Arcgis - Arcmap Documentacao](images/GUID-6FD5566F-FE23-4289-AA6D-AC1A6CA0CF6E-web.png){fig-align="center"}
+
+
+
+Mão na massa: **qual a distância de cada escola até o estabelecimento de saúde mais próximo?**
+
+```{python}
+# primeiro, PROJETAMOS 
+health_proj = health.to_crs(CRS_PROJETADO)
+
+## Importante aqui, olha para a reducao utilizando o minimo
+dist_para_saude = schools_proj.geometry.apply(
+    lambda pt: health_proj.distance(pt).min()
+)
+
+print(f"Distância média até a saúde mais próxima: {dist_para_saude.mean():.0f} m")
+print(f"Escola mais isolada: {dist_para_saude.max():.0f} m")
+print(f"Escola mais proxima: {dist_para_saude.min():.0f} m")
+```
+
+## Joins espaciais por distância
+
+Um **join espacial** funciona como um join de atributos (tema batido para quem conhece tabelas relacionais), só que o critério de join é uma relação espacial em vez de uma chave em comum. `sjoin_nearest` responde a pergunta do capítulo anterior, mas devolve um `GeoDataFrame` já unido, com a opção de limitar a um raio máximo (`max_distance`), o que é útil pra não juntar pontos longe demais de fazer sentido:
+
+```{python}
+schools_com_saude = gpd.sjoin_nearest(
+    schools_proj,
+    health_proj[["geometry", "no_fantasia"]],
+    distance_col="dist_saude_mais_proxima",
+    max_distance=5000,  # não junta nada além de 5 km
+)
+
+schools_com_saude[["name_school", "no_fantasia", "dist_saude_mais_proxima"]].sort_values(
+    "dist_saude_mais_proxima", ascending=False
+).head(5)
+```
+
+## Agregação espacial
+
+**Agregação espacial** resume valores de um objeto (o "alvo") agrupando pela geometria de outro (a "fonte").  A geometria da fonte é quem define os grupos, e o resultado herda a geometria *dela*, não a do alvo. Vamos agregar pelo grupo mais simples que já temos: urbana vs. rural.
+
+```{python}
+resumo_zona = (
+    schools_com_saude
+    .groupby("zona")
+    .agg(
+        n_escolas=("code_school", "count"),
+        dist_media_saude=("dist_saude_mais_proxima", "mean"),
+        dist_max_saude=("dist_saude_mais_proxima", "max"),
+        # faca aqui a minima distancia 
+    )
+    .round(0)
+)
+resumo_zona
+```
+
+A partir da nossa análise espacial, concluímos que no munícipio de Sinop, as escolas rurais estão, em média, bem mais longe do estabelecimento de saúde mais próximo. Em média, caso um acidente num ambiente escolar aconteça, as escolas da área rural estão a pelo menos 700 metros a mais de uma unidade de saúde comparado as escolas numa área urbana. Esse tipo de análise, é possível quando elencamos nosso conhecimento em manipulação dos dados espaciais: Topologia, Geopandas, transformações, projeções, buffers, análise de distância e agregações espaciais. 
+
+O ecossistema geoespacial nos permite ir muito mais além, e veremos isso com mais calma na nossa próxima aula. 
+
+
+## Referências
+
+- Lovelace, R.; Nowosad, J.; Muenchow, J. — [Geocomputation with R, cap. 8: Spatial operations](https://r.geocompx.org/spatial-operations#spatial-aggr)
+- [geobr](https://github.com/ipea/geobr) — dados oficiais geolocalizados do Brasil (IBGE, INEP, CNES)
+- [OSMnx](https://osmnx.readthedocs.io/) — download e análise de redes urbanas do OpenStreetMap
+- [H3 — Uber's Hexagonal Hierarchical Spatial Index](https://h3geo.org/)
+- [IPEA Data](http://www.ipeadata.gov.br/) — séries históricas socioeconômicas do Brasil

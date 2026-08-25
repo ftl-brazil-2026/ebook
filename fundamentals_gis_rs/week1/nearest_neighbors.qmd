@@ -1,0 +1,342 @@
+---
+title: "Vizinho Mais Próximo (Nearest Neighbour)"
+subtitle: "Distância, proximidade e o ponto onde a análise espacial começa a virar estatística"
+author: "Emanuel Goulart"
+date: today
+---
+
+## Capítulo 5 — Geometria: centroide, buffer e transformações afins
+
+### Centroide
+
+O centroide é o "centro de massa" geométrico — não necessariamente um ponto que faz parte da geometria original (o centroide de um polígono em forma de C, por exemplo, cai fora dele).
+
+```{python}
+centroide_sinop = sinop.geometry.centroid.iloc[0]
+centro_escolas = schools.union_all().centroid  # "centro médio" da nuvem de escolas
+
+print(f"Centroide do município:      {centroide_sinop.x:.4f}, {centroide_sinop.y:.4f}")
+print(f"Centro médio das escolas:    {centro_escolas.x:.4f}, {centro_escolas.y:.4f}")
+```
+
+### Buffer
+
+Buffer cria uma zona de influência ao redor de uma geometria — a base de qualquer análise de "área de cobertura" ou "acessibilidade".
+
+```{python}
+#| label: fig-buffer
+#| fig-cap: "Área coberta por um raio de 1 km ao redor de cada estabelecimento de saúde."
+
+cobertura_saude = health_proj.buffer(1000).union_all()
+
+fig, ax = plt.subplots(figsize=(7, 7))
+sinop.to_crs(CRS_PROJETADO).plot(ax=ax, color="#f0f0f0", edgecolor="#898781", linewidth=0.8)
+gpd.GeoSeries([cobertura_saude], crs=CRS_PROJETADO).plot(
+    ax=ax, color="#2a78d6", alpha=0.3, edgecolor="none"
+)
+health_proj.plot(ax=ax, markersize=8, color="#2a78d6")
+ax.set_title("Cobertura de 1 km ao redor da saúde (CNES)", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+### Transformações afins
+
+Rotação, escala, translação e cisalhamento — operações que distorcem uma geometria sem recalcular nada a partir dos dados originais, só aplicando uma matriz na geometria já existente. Útil pra ajustar geometrias mal-alinhadas ou simplesmente pra entender o que cada operação faz:
+
+```{python}
+#| label: fig-affine
+#| fig-cap: "A mesma geometria (limite de Sinop): original, rotacionada 45° e escalada pela metade — sempre em torno do próprio centro."
+
+geom = sinop.to_crs(CRS_PROJETADO).geometry.iloc[0]
+
+geom_rotacionada = rotate(geom, 45, origin="centroid")
+geom_escalada = scale(geom, xfact=0.5, yfact=0.5, origin="centroid")
+
+fig, axes = plt.subplots(1, 3, figsize=(13, 5))
+for ax, g, title in zip(
+    axes, [geom, geom_rotacionada, geom_escalada], ["Original", "Rotação 45°", "Escala 0.5x"]
+):
+    gpd.GeoSeries([geom], crs=CRS_PROJETADO).boundary.plot(ax=ax, color="#dcdad2", linewidth=0.8)
+    gpd.GeoSeries([g], crs=CRS_PROJETADO).plot(ax=ax, color="#e63946", alpha=0.6)
+    ax.set_title(title)
+    ax.set_aspect("equal")
+    ax.set_axis_off()
+plt.tight_layout()
+plt.show()
+```
+
+## Capítulo 6 — OSM: malha viária e interseções
+
+Chega de pontos oficiais — vamos puxar a malha viária real do OpenStreetMap ao redor do centro de Sinop com `osmnx`, que baixa e já devolve um grafo (`networkx`) pronto pra análise de rede.
+
+```{python}
+G = ox.graph_from_point((-11.8642, -55.5089), dist=2500, network_type="drive")
+nodes, edges = ox.graph_to_gdfs(G)
+
+print(f"{len(nodes)} nós, {len(edges)} trechos de via")
+```
+
+Cada nó já vem com `street_count` — quantas ruas se encontram ali. Isso nos dá interseções (`street_count >= 3`) e becos sem saída (`street_count == 1`) de graça, sem precisar calcular nada na mão:
+
+```{python}
+#| label: fig-osm-intersections
+#| fig-cap: "Malha viária do centro de Sinop: interseções reais (3+ vias) em laranja, becos sem saída em azul."
+
+intersecoes = nodes[nodes["street_count"] >= 3]
+becos_sem_saida = nodes[nodes["street_count"] == 1]
+
+fig, ax = plt.subplots(figsize=(8, 8))
+edges.plot(ax=ax, color="#dcdad2", linewidth=0.6)
+intersecoes.plot(ax=ax, markersize=4, color="#f4a261", label=f"Interseções ({len(intersecoes)})")
+becos_sem_saida.plot(ax=ax, markersize=10, color="#2a78d6", label=f"Becos sem saída ({len(becos_sem_saida)})")
+ax.legend(loc="lower left", fontsize=9)
+ax.set_title("Centro de Sinop — malha viária (OSM)", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+## Capítulo 7 — Estatísticas de grupo com a grade H3
+
+Pra fechar, voltamos à grade hexagonal H3 (vista no notebook de CRS e Projeções) — mas agora usando ela pra **agregação de verdade**: contar quantas escolas caem em cada hexágono. Diferente de agregar por bairro ou zona urbana/rural, a grade H3 dá células do mesmo tamanho e formato em qualquer lugar do mundo, o que facilita muito comparar densidade entre regiões diferentes.
+
+```{python}
+#| label: fig-h3-schools
+#| fig-cap: "Densidade de escolas por hexágono H3 (resolução 8) em Sinop."
+
+schools["h3_cell"] = schools.apply(
+    lambda row: h3.latlng_to_cell(row.geometry.y, row.geometry.x, 8), axis=1
+)
+
+contagem_hex = schools.groupby("h3_cell").size().rename("n_escolas").reset_index()
+
+hex_polygons = [
+    Polygon([(lng, lat) for lat, lng in h3.cell_to_boundary(cell)])
+    for cell in contagem_hex["h3_cell"]
+]
+hex_gdf = gpd.GeoDataFrame(contagem_hex, geometry=hex_polygons, crs="EPSG:4326")
+
+fig, ax = plt.subplots(figsize=(7, 7))
+sinop.plot(ax=ax, color="#f7f7f5", edgecolor="#898781", linewidth=0.8)
+hex_gdf.plot(
+    ax=ax, column="n_escolas", cmap="YlOrRd", edgecolor="white", linewidth=0.5,
+    legend=True, legend_kwds={"label": "Escolas por hexágono", "shrink": 0.6},
+)
+ax.set_title("Densidade de escolas — grade H3 (res. 8)", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+::: {.callout-tip appearance="simple"}
+## Pra explorar mais
+
+Dá pra enriquecer essa mesma grade H3 com qualquer indicador socioeconômico por município do [IPEA](http://www.ipeadata.gov.br/) (via o pacote `ipeadatapy`) — população, renda, o que for — e comparar densidade de serviço público contra densidade populacional, hexágono por hexágono.
+:::
+```{python}
+#| include: false
+import time
+import numpy as np
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import osmnx as ox
+import geobr
+import shapely
+from scipy.stats import gaussian_kde
+```
+
+## A Primeira Lei da Geografia
+
+> "Everything is related to everything else, but near things are more related than distant things."
+> — Waldo Tobler, 1970
+
+Essa frase — hoje conhecida como a **Primeira Lei da Geografia** de Tobler — é basicamente a justificativa de por que "proximidade" é uma das perguntas mais básicas (e mais úteis) que dá pra fazer sobre dado espacial. "Qual é o ponto mais próximo?" parece trivial, mas é a base de coisas como: qual escola atende esse bairro, onde fica a parada de ônibus mais perto de casa, quão bem distribuído está um serviço público pela cidade.
+
+Nesse notebook vamos explorar isso com dados reais de **três bairros de São Paulo** — Pinheiros, Itaim Bibi e Vila Olímpia — puxando **pontos de ônibus direto do OpenStreetMap** e **escolas via `geobr`**.
+
+## Preparando os dados
+
+```{python}
+CRS_PROJETADO = "EPSG:31983"  # SIRGAS2000 / UTM zone 23S -- cobre a cidade de São Paulo
+
+bairros = ["Pinheiros, Sao Paulo, Brazil", "Itaim Bibi, Sao Paulo, Brazil", "Vila Olimpia, Sao Paulo, Brazil"]
+area = ox.geocode_to_gdf(bairros)
+area_uniao = gpd.GeoSeries([area.union_all()], crs="EPSG:4326")
+
+# pontos de ônibus, direto do OSM, só dentro da área de interesse
+pontos_onibus = ox.features_from_polygon(area_uniao.iloc[0], tags={"highway": "bus_stop"})
+pontos_onibus = pontos_onibus[pontos_onibus.geom_type == "Point"].reset_index(drop=True)
+
+# escolas via geobr, filtradas espacialmente pra caber na mesma área
+escolas_sp = geobr.read_schools(year=2020, code_muni=3550308)
+escolas = escolas_sp[escolas_sp.within(area_uniao.iloc[0])].reset_index(drop=True)
+
+print(f"{len(pontos_onibus)} pontos de ônibus, {len(escolas)} escolas")
+```
+
+```{python}
+#| label: fig-overview
+#| fig-cap: "Pinheiros, Itaim Bibi e Vila Olímpia: pontos de ônibus (OSM) e escolas (INEP/geobr)."
+
+fig, ax = plt.subplots(figsize=(8, 8))
+area.plot(ax=ax, color="#f7f7f5", edgecolor="#898781", linewidth=1)
+pontos_onibus.plot(ax=ax, markersize=4, color="#2a78d6", alpha=0.6, label=f"Ônibus ({len(pontos_onibus)})")
+escolas.plot(ax=ax, markersize=12, color="#e63946", label=f"Escolas ({len(escolas)})")
+ax.legend(loc="lower left")
+ax.set_title("Pinheiros / Itaim Bibi / Vila Olímpia", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+## O vizinho mais próximo, na unha
+
+Antes de usar qualquer função pronta, vale entender o que "vizinho mais próximo" realmente significa: pra **um** ponto de ônibus, calcular a distância até **todas** as escolas, e pegar a menor.
+
+```{python}
+onibus_proj = pontos_onibus.to_crs(CRS_PROJETADO)
+escolas_proj = escolas.to_crs(CRS_PROJETADO)
+
+um_ponto = onibus_proj.geometry.iloc[0]
+distancias = escolas_proj.geometry.distance(um_ponto)
+
+print(f"Escola mais próxima desse ponto de ônibus: {distancias.min():.0f} m")
+print(f"Escola mais distante desse mesmo ponto:    {distancias.max():.0f} m")
+```
+
+Agora, o problema: fazer isso pra **todos** os pontos de ônibus, um de cada vez contra todas as escolas, é uma busca **força bruta** — o custo cresce multiplicando o número de pontos dos dois lados.
+
+```{python}
+t0 = time.time()
+resultado_forca_bruta = [
+    escolas_proj.geometry.distance(pt).min() for pt in onibus_proj.geometry
+]
+tempo_forca_bruta = time.time() - t0
+print(f"Força bruta: {tempo_forca_bruta:.3f} s para {len(onibus_proj)}×{len(escolas_proj)} comparações")
+```
+
+Nesse tamanho ainda é rápido — mas repare que dobrar os pontos de ônibus **e** dobrar as escolas quadruplica o trabalho. Em cidades inteiras, com centenas de milhares de feições, isso vira um problema de verdade.
+
+## `sjoin_nearest`: o mesmo resultado, com índice espacial
+
+O GeoPandas resolve isso com uma **estrutura de índice espacial** (uma R-tree, chamada STRtree por baixo dos panos) — em vez de comparar contra todo mundo, ela organiza as geometrias de um jeito que permite descartar regiões inteiras do espaço de uma vez, sem nem calcular a distância pra elas.
+
+```{python}
+t0 = time.time()
+onibus_com_escola = gpd.sjoin_nearest(
+    onibus_proj,
+    escolas_proj[["geometry", "name_school"]],
+    distance_col="dist_escola_mais_proxima",
+)
+tempo_indexado = time.time() - t0
+
+print(f"sjoin_nearest: {tempo_indexado:.3f} s")
+print(f"\nDistância média até a escola mais próxima: {onibus_com_escola['dist_escola_mais_proxima'].mean():.0f} m")
+```
+
+Mesmo resultado da busca força bruta (dá pra conferir: a média bate com o que já vimos), só que resolvido usando a estrutura de índice em vez de comparar par a par.
+
+::: {.callout-note appearance="simple"}
+## Empates e duplicatas
+
+Quando duas escolas estão à exatíssima mesma distância de um ponto de ônibus, `sjoin_nearest` devolve **as duas** — o resultado pode ter mais linhas do que o `onibus_proj` original. Vale sempre conferir:
+:::
+
+```{python}
+duplicatas = onibus_com_escola.index.duplicated().sum()
+print(f"Pontos de ônibus com mais de uma escola empatada como 'mais próxima': {duplicatas}")
+```
+
+## Visualizando: linhas até o vizinho mais próximo
+
+Uma forma direta de validar visualmente se o resultado faz sentido: desenhar uma linha do ponto de ônibus até a escola que ele "casou".
+
+```{python}
+#| label: fig-nn-lines
+#| fig-cap: "Cada ponto de ônibus ligado à escola mais próxima -- uma checagem visual de que o resultado do sjoin_nearest faz sentido geograficamente."
+
+escolas_indexadas = escolas_proj.set_index(escolas_proj.index)
+linhas = [
+    shapely.shortest_line(row.geometry, escolas_indexadas.loc[row.index_right].geometry)
+    for row in onibus_com_escola.itertuples()
+]
+linhas_gdf = gpd.GeoDataFrame(geometry=linhas, crs=CRS_PROJETADO)
+
+fig, ax = plt.subplots(figsize=(8, 8))
+area.to_crs(CRS_PROJETADO).plot(ax=ax, color="#f7f7f5", edgecolor="#898781", linewidth=1)
+linhas_gdf.plot(ax=ax, color="#457b9d", linewidth=0.5, alpha=0.6)
+onibus_proj.plot(ax=ax, markersize=4, color="#2a78d6")
+escolas_proj.plot(ax=ax, markersize=12, color="#e63946")
+ax.set_title("Ponto de ônibus → escola mais próxima", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+## Agrupado ou disperso? O Índice do Vizinho Mais Próximo
+
+Dá pra ir além de "qual é o vizinho mais próximo" e perguntar: **os pontos de ônibus estão espalhados uniformemente pela área, ou concentrados em alguns pontos?** O [Índice do Vizinho Mais Próximo](https://en.wikipedia.org/wiki/Nearest_neighbor_index) (Clark & Evans, 1954) compara a distância média observada entre vizinhos mais próximos com a distância média que **esperaríamos** se os pontos estivessem espalhados aleatoriamente (mesma densidade, posições ao acaso):
+
+$$R = \frac{\bar{d}_{observado}}{\bar{d}_{esperado}}, \qquad \bar{d}_{esperado} = \frac{1}{2\sqrt{densidade}}$$
+
+- $R < 1$ → os pontos estão **mais agrupados** do que o esperado ao acaso
+- $R \approx 1$ → padrão **aleatório**
+- $R > 1$ → os pontos estão **mais dispersos/uniformes** do que o esperado ao acaso
+
+```{python}
+# vizinho mais próximo de cada ponto de ônibus -- ENTRE OS PRÓPRIOS pontos de ônibus dessa vez.
+# exclusive=True evita que cada ponto "case" com ele mesmo (distância 0) --
+# sem isso, o vizinho mais próximo de qualquer ponto seria sempre ele mesmo.
+dist_onibus_onibus = gpd.sjoin_nearest(
+    onibus_proj, onibus_proj, distance_col="dist_vizinho", exclusive=True,
+)
+
+d_observado = dist_onibus_onibus["dist_vizinho"].mean()
+
+area_m2 = area_uniao.to_crs(CRS_PROJETADO).area.iloc[0]
+densidade = len(onibus_proj) / area_m2
+d_esperado = 1 / (2 * np.sqrt(densidade))
+
+R = d_observado / d_esperado
+print(f"Distância média observada:  {d_observado:.1f} m")
+print(f"Distância média esperada (aleatório): {d_esperado:.1f} m")
+print(f"Índice R = {R:.2f}  ->  {'agrupado' if R < 1 else 'disperso' if R > 1 else 'aleatório'}")
+```
+
+## De pares para densidade: o mapa de calor (KDE)
+
+O vizinho mais próximo olha só pra **um** ponto de cada vez. Um mapa de calor (Kernel Density Estimation) generaliza essa ideia: em vez de perguntar "qual é o ponto mais próximo daqui?", pergunta **"quantos pontos tem por perto, e o quão perto?"** — cada ponto de dado "empresta" um pouco de influência pra vizinhança ao redor dele, e a soma de todas essas influências vira uma superfície contínua de densidade.
+
+```{python}
+#| label: fig-kde
+#| fig-cap: "Densidade de pontos de ônibus (KDE) -- mais quente onde a malha de transporte público é mais densa."
+
+coords = np.vstack([onibus_proj.geometry.x, onibus_proj.geometry.y])
+kde = gaussian_kde(coords)
+
+xmin, ymin, xmax, ymax = onibus_proj.total_bounds
+grid_x, grid_y = np.mgrid[xmin:xmax:200j, ymin:ymax:200j]
+grid_coords = np.vstack([grid_x.ravel(), grid_y.ravel()])
+densidade_grid = kde(grid_coords).reshape(grid_x.shape)
+
+fig, ax = plt.subplots(figsize=(8, 8))
+ax.imshow(
+    np.rot90(densidade_grid), cmap="inferno", alpha=0.85,
+    extent=[xmin, xmax, ymin, ymax],
+)
+area.to_crs(CRS_PROJETADO).boundary.plot(ax=ax, color="white", linewidth=1)
+onibus_proj.plot(ax=ax, markersize=3, color="white", alpha=0.4)
+ax.set_title("Densidade de pontos de ônibus (KDE)", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+::: {.callout-tip appearance="simple"}
+Repare como o R do índice de vizinho mais próximo e o mapa de calor contam a mesma história de duas formas diferentes: um resume tudo num único número, o outro mostra *onde* especificamente a concentração acontece.
+:::
+
+## Referências
+
+- Vuolo, F.; et al. — [Python for Geographic Data Science, cap. 6: Nearest neighbour analysis](https://python-gis-book.readthedocs.io/en/develop/part2/chapter-06/nb/07-nearest-neighbour.html)
+- Tobler, W. R. (1970). *A computer movie simulating urban growth in the Detroit region*. Economic Geography, 46(sup1), 234–240.
+- Clark, P. J.; Evans, F. C. (1954). *Distance to nearest neighbor as a measure of spatial relationships in populations*. Ecology, 35(4), 445–453.
+- [GeoPandas — `sjoin_nearest`](https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.sjoin_nearest.html)
+- [OSMnx documentation](https://osmnx.readthedocs.io/)

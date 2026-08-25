@@ -23,6 +23,11 @@ Só adicione `⚠️ *verificar*` no fim da linha se o link ou a descrição ain
 - [**ipeaData**](https://www.ipeadata.gov.br/) — séries históricas macroeconômicas, financeiras e regionais do Ipeadata.
 - **Atlas do Estado Brasileiro** — indicadores institucionais e territoriais do Estado brasileiro. ⚠️ *verificar link*
 
+### Saúde / Epidemiologia 
+
+- [**DataSUS**](https://github.com/rfsaldanha/microdatasus) - Dados compilados e pre-processados do SUS. 
+- [**Sistema de Informação em Saúde no Brasil.**] (https://rfsaldanha.github.io/sis/) - Livro que apresenta os principais Sistemas de Informação em Saúde no Brasil. **R**
+
 ### Hidrologia / Clima
 
 - [**ANA / HidroWeb**](https://www.snirh.gov.br/hidroweb/) — séries históricas de vazão e chuva da Agência Nacional de Águas.
