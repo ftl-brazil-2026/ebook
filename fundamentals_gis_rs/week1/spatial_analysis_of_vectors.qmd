@@ -18,6 +18,10 @@ from shapely.geometry import Polygon
 from shapely.affinity import rotate, scale
 ```
 
+::: {.callout-tip appearance="simple"}
+Prefere rodar tudo num notebook em vez de acompanhar pelo site? [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/fundamentals_gis_rs/week1/AUX_week1.ipynb) abre o `AUX_week1.ipynb` -- todo o conteúdo (texto e código) da Semana 1 num único notebook.
+:::
+
 ## Análise Espacial em Dados Vetoriais
 
 Esse notebook explora as operações espaciais mais usadas no dia a dia como as relações topológicas, distância, joins espaciais, agregação, zoneamento e transformações geométricas.
