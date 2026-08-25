@@ -645,7 +645,7 @@ plt.show()
 
 Hexagons minimize these distortions, preserve area more uniformly, avoid diagonal inconsistencies, and produce cleaner, more natural-looking spatial clusters
 
-É essa uniformidade de distância — e não só a estética do hexágono — que faz o H3 ser melhor pra análises de vizinhança, roteamento e agregação espacial: a Uber não precisa se preocupar em "corrigir" a distância dependendo de qual dos vizinhos está sendo comparado.
+É essa uniformidade de distânciA que faz o H3 ser bastante utilizada para análises de vizinhança, roteamento e agregação espacial. Dessa forma, a Uber não precisa se preocupar em "corrigir" a distância dependendo de qual dos vizinhos está sendo comparado.
 
 ```{python}
 #| label: fig-h3
@@ -733,6 +733,8 @@ m
 ```
 
 Repare que a métrica (`dist_km`) foi calculada uma vez por célula e vive junto com o `h3_cell` no `GeoDataFrame` — é exatamente assim que se agrega qualquer variável (densidade populacional, corridas de app, chamadas de emergência...) numa grade H3, uma linha por célula, um índice, um valor.
+
+Reparou algo de errado nesse cálculo? Vamos tentar corrigir...
 
 ::: {.callout-note appearance="simple"}
 ## Tarefa: monte seu próprio mapa de hexágonos
