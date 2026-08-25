@@ -39,6 +39,11 @@ sinop = geobr.read_municipality(code_muni=code_muni, year=2020)
 schools = geobr.read_schools(year=2020, code_muni=code_muni)
 health = geobr.read_health_facilities(date=202304, code_muni=code_muni)
 
+# versões já projetadas (metros) -- reaproveitadas no notebook inteiro
+sinop_proj = sinop.to_crs(CRS_PROJETADO)
+schools_proj = schools.to_crs(CRS_PROJETADO)
+health_proj = health.to_crs(CRS_PROJETADO)
+
 print(f"{len(schools)} escolas, {len(health)} estabelecimentos de saúde")
 ```
 
@@ -56,6 +61,166 @@ ax.set_axis_off()
 plt.show()
 ```
 
+## Operações Geométricas
+
+Operações geométricas refere-se a um conjunto de métodos que são utlizados para analisar e processar feições geométricas. Ele portanto corrobora em responder como dois ou mais objectos geograficos se relacionam entre si? eles se sobrepoem? se tocam? alguma intersecção? quão longe estão entre eles? 
+
+### Centroid
+
+Centroide é o centro de massa da geometria, seja ela linha, polígono ou geometry collection. Extrair esse centróide é muito útil em diversos casos, como por exemplo para localizar 'labels' na figura, para servir de base em operações espaciais de outros polígonos e etc. Se você tentar calcular o centróide em um CRS não projetado, geopandas calcula mesmo assim, mas avisa que o resultado pode estar errado: grau não é uma unidade de distância uniforme, então o "centro de massa" calculado direto em lat/lon fica levemente deslocado do centro geométrico real. Os dados precisam estar projetados em um sistema de coordenadas projetado (UTM por exemplo) pra esse cálculo fazer sentido de verdade.
+
+```{python}
+#| label: fig-centroid
+#| fig-cap: "Centroide do polígono de Sinop (estrela) e centro geométrico da distribuição de escolas (triângulo) -- ambos calculados já em CRS projetado."
+
+centroide_sinop = sinop_proj.geometry.centroid.iloc[0]
+centro_escolas = schools_proj.geometry.union_all().centroid
+
+# de volta pro CRS geográfico só pra plotar junto com o resto
+centroide_sinop_geo = gpd.GeoSeries([centroide_sinop], crs=CRS_PROJETADO).to_crs(sinop.crs).iloc[0]
+centro_escolas_geo = gpd.GeoSeries([centro_escolas], crs=CRS_PROJETADO).to_crs(sinop.crs).iloc[0]
+
+fig, ax = plt.subplots(figsize=(7, 7))
+sinop.plot(ax=ax, color="#f0f0f0", edgecolor="#898781", linewidth=0.8)
+schools.plot(ax=ax, markersize=6, color="#e63946", alpha=0.35, label="Escolas (INEP)")
+ax.scatter(centroide_sinop_geo.x, centroide_sinop_geo.y, marker="*", s=280,
+           color="#2a78d6", edgecolor="black", linewidth=0.5, zorder=5, label="Centroide do município")
+ax.scatter(centro_escolas_geo.x, centro_escolas_geo.y, marker="^", s=140,
+           color="#e63946", edgecolor="black", linewidth=0.5, zorder=5, label="Centro das escolas")
+ax.legend(loc="lower left")
+ax.set_title("Centroide vs. centro geométrico da distribuição", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+```{python}
+#| label: fig-centroid
+#| fig-cap: "Centroide dos municipios de mato grosso"
+
+muni = geobr.read_municipality(year=2020)
+
+# projetando no SIRGAS 2000 UTM 23 S
+muni = muni.to_crs('EPSG:31983')
+muni_mt = muni.loc[muni['abbrev_state']=='MT']
+
+## project to UTM 22S
+muni_mt['centroide'] = muni_mt.geometry.centroid
+
+fig, ax = plt.subplots(figsize=(7,7))
+muni_mt.plot(ax=ax)
+muni_mt.geometry.centroid.plot(ax=ax,color="#7c2b2b")
+ax.set_axis_off()
+ax.set_title('Municípios de MT e seus respectivos centróide')
+plt.show()
+```
+
+
+### União e Dissolve
+
+Algumas operações serve para unir as geometrias ou dissolve-las a um nível de agregação para formar outros. Você pode dissolver as geometrias das cidades para formar um estado ou região, por exemplo. Olhando de perto, `union_all()` funde todas as geometrias em única geometria. Ele faz isso sem olhar pra nenhum atributo. Já o `dissolve(by=...)` faz a mesma fusão por baixo dos panos, mas primeiro agrupa as linhas pelo dado atributo. As duas funções tem como parâmetro o método `method`: `"unary"` (padrão, robusto, funciona mesmo com geometrias sobrepostas) ou `"coverage"` ,bem mais rápido, mas só vale pra polígonos que já formam uma cobertura sem sobreposição, tipo limites administrativos vizinhos, se você usa as geometrias do CAR aqui vai ser encrenca.
+
+```{python}
+#| label: fig-dissolve
+#| fig-cap: "Área de influência (buffer de 400 m) de cada escola, no núcleo urbano de Sinop. À esquerda, union_all() funde tudo numa geometria só. À direita, dissolve(by='rede') agrupa antes de unir, preservando a rede de ensino."
+
+dependencia_map = {1: "Federal", 
+                    2: "Estadual",
+                     3: "Municipal", 
+                     4: "Privada"}
+schools_proj["rede"] = schools_proj["tp_dependencia"].map(dependencia_map)
+
+influencia = schools_proj[["rede", 
+                            "geometry"]].copy()
+influencia["geometry"] = influencia.buffer(400)
+
+uniao_total = influencia.union_all()
+
+# aqui dissolvendo pelos tipos de escola
+dissolve_por_rede = influencia.dissolve(by="rede").reset_index()
+
+# os buffers (400 m) somem de vista numa figura do município inteiro (~60 km) --
+# damos zoom no maior "blob" resultante da união, que é exatamente o núcleo
+# urbano denso (as escolas isoladas na zona rural viram círculos minúsculos à parte)
+maior_blob = max(uniao_total.geoms, key=lambda g: g.area)
+minx, miny, maxx, maxy = maior_blob.bounds
+folga = 500
+
+fig, axes = plt.subplots(1, 2, figsize=(13, 6))
+
+for ax in axes:
+    sinop_proj.plot(ax=ax, color="#f0f0f0", edgecolor="#898781", linewidth=0.6)
+    ax.set_xlim(minx - folga, maxx + folga)
+    ax.set_ylim(miny - folga, maxy + folga)
+    ax.set_axis_off()
+
+gpd.GeoSeries([uniao_total], crs=CRS_PROJETADO).plot(ax=axes[0], color="#e63946", alpha=0.6)
+axes[0].set_title("Union All")
+
+dissolve_por_rede.plot(ax=axes[1], column="rede", categorical=True, cmap="Set2",
+                        alpha=0.75, legend=True, legend_kwds={"title": "Rede", "loc": "lower left"})
+axes[1].set_title("Dissolve by Tipos de Escola")
+
+plt.tight_layout()
+plt.show()
+```
+
+### Buffer
+
+Buffer é uma operação geométrica que cria uma zona ao redor de uma dada geometria, geralmente representando uma distância (raio de cobertura, zona de segurança, área de influência). Combinar buffer com interseção responde perguntas do tipo "que áreas estão cobertas mais de uma vez?" — por exemplo, existe algum ponto em Sinop dentro do raio de 1 km de *duas* escolas ao mesmo tempo?
+
+```{python}
+#| label: fig-buffer-overlap
+#| fig-cap: "Buffer de 1 km ao redor de cada escola, no núcleo urbano de Sinop. Em vermelho, as regiões cobertas por duas ou mais escolas ao mesmo tempo."
+
+buffers = schools_proj[["code_school", "geometry"]].copy()
+buffers["geometry"] = buffers.buffer(1000)  # 1 km de raio
+
+# cruza os buffers com eles mesmos; code_school_1 < code_school_2 evita
+# contar a interseção de um buffer com ele mesmo e duplicar cada par (A∩B == B∩A)
+pares = gpd.overlay(buffers, buffers, how="intersection")
+pares = pares[pares["code_school_1"] < pares["code_school_2"]]
+cobertura_dupla = pares.union_all()
+
+# zoom na região onde as sobreposições acontecem, em vez do município (~60 km) inteiro
+# minx, miny, maxx, maxy = cobertura_dupla.bounds
+# folga = 1500
+
+fig, ax = plt.subplots(figsize=(7, 7))
+sinop_proj.plot(ax=ax, color="#f0f0f0", edgecolor="#898781", linewidth=0.8)
+buffers.plot(ax=ax, color="#2a78d6", alpha=0.15, edgecolor="#2a78d6", linewidth=0.4)
+gpd.GeoSeries([cobertura_dupla], crs=CRS_PROJETADO).plot(ax=ax, color="#e63946", alpha=0.6)
+schools_proj.plot(ax=ax, markersize=8, color="black")
+# ax.set_xlim(minx - folga, maxx + folga)
+# ax.set_ylim(miny - folga, maxy + folga)
+ax.set_title(f"{len(pares)} pares de escolas com buffer sobreposto (raio 1 km)", fontsize=11, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
+::: {.callout-tip appearance="simple"}
+Um buffer em escala de cidade fica na casa das centenas de metros a poucos quilômetros — 1000 km cobriria o Mato Grosso inteiro (e boa parte dos estados vizinhos) várias vezes. Troque o raio em `buffers.buffer(...)` (em metros, já que estamos em CRS projetado) e rode de novo pra ver como o número de pares sobrepostos muda.
+:::
+
+### Convex Hull
+
+O convex hull é o menor polígono convexo que contém todos os pontos de um conjunto — imagine esticar um elástico em volta de todos os pontos e deixar ele encolher até tocar só nos mais externos. Vamos ilustrar isso a partir dos pontos das escolas de Sinop.
+
+```{python}
+#| label: fig-convex-hull
+#| fig-cap: "Convex hull das escolas de Sinop: o menor polígono convexo que contém todos os pontos."
+
+hull = schools_proj.geometry.union_all().convex_hull
+
+fig, ax = plt.subplots(figsize=(7, 7))
+sinop_proj.plot(ax=ax, color="#f0f0f0", edgecolor="#898781", linewidth=0.8)
+gpd.GeoSeries([hull], crs=CRS_PROJETADO).plot(ax=ax, color="#f4a261", alpha=0.4, edgecolor="#e76f51", linewidth=1.2)
+schools_proj.plot(ax=ax, markersize=10, color="#e63946", label="Escolas (INEP)")
+ax.legend(loc="lower left")
+ax.set_title("Convex hull das escolas de Sinop", fontsize=12, fontweight="bold")
+ax.set_axis_off()
+plt.show()
+```
+
 ## Relações topológicas
 
 Relações topológicas servem para compreender como duas geometrias se relacionam no espaço: `intersects` (encosta em qualquer parte), `within` (está totalmente dentro), `touches` (encosta só na borda, sem sobrepor), `disjoint` (não tem relação nenhuma). Repare que `intersects` é simétrica (se X intersecta Y, Y intersecta X), mas `within`/`contains` não são.
@@ -68,11 +233,9 @@ centro = gpd.GeoSeries(
     [gpd.points_from_xy([-55.5089], [-11.8642])[0]], crs="EPSG:4326"
 ).to_crs(CRS_PROJETADO)
 
-area_urbana = centro.buffer(5000).iloc[0]  # 5 km, já em metros 
+area_urbana = centro.buffer(5000).iloc[0]  # 5 km, já em metros
 
-schools_proj = schools.to_crs(CRS_PROJETADO)
-
-## aqui a analise topologica 
+## aqui a analise topologica
 ## se a escola esta dentro da area urbana ( nosso buffer the 5km) entao urbana, senao rural 
 schools_proj["zona"] = np.where(schools_proj.within(area_urbana), "urbana", "rural")
 
@@ -129,9 +292,6 @@ Contudo, observamos a distancia entre duas retas, ou a distancia entre um ponto 
 Mão na massa: **qual a distância de cada escola até o estabelecimento de saúde mais próximo?**
 
 ```{python}
-# primeiro, PROJETAMOS 
-health_proj = health.to_crs(CRS_PROJETADO)
-
 ## Importante aqui, olha para a reducao utilizando o minimo
 dist_para_saude = schools_proj.geometry.apply(
     lambda pt: health_proj.distance(pt).min()
@@ -151,7 +311,7 @@ Rotação, escala, translação e cisalhamento — operações que distorcem uma
 #| label: fig-affine
 #| fig-cap: "A mesma geometria (limite de Sinop): original, rotacionada 45° e escalada pela metade — sempre em torno do próprio centro."
 
-geom = sinop.to_crs(CRS_PROJETADO).geometry.iloc[0]
+geom = sinop_proj.geometry.iloc[0]
 
 geom_rotacionada = rotate(geom, 45, origin="centroid")
 geom_escalada = scale(geom, xfact=0.5, yfact=0.5, origin="centroid")
@@ -206,6 +366,8 @@ resumo_zona
 ```
 
 A partir da nossa análise espacial, concluímos que no munícipio de Sinop, as escolas rurais estão, em média, bem mais longe do estabelecimento de saúde mais próximo. Em média, caso um acidente num ambiente escolar aconteça, as escolas da área rural estão a pelo menos 700 metros a mais de uma unidade de saúde comparado as escolas numa área urbana. Esse tipo de análise, é possível quando elencamos nosso conhecimento em manipulação dos dados espaciais: Topologia, Geopandas, transformações, projeções, buffers, análise de distância e agregações espaciais. 
+
+Algumas questões que pairam no ar? Como conseguimos analisar as densidades espaciais e entender a respeito de demanda? proximidade? 
 
 O ecossistema geoespacial nos permite ir muito mais além, e veremos isso com mais calma na nossa próxima aula. 
 

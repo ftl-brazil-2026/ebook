@@ -308,6 +308,7 @@ Pequeno gafanhoto sempre existirá algum website ou projeto que alguém já crio
 - **Matemática por trás** - [UTM Glossario](https://www.tarmacview.com/glossary/utm/) 
 - **BOM DEMAIS** - [Diversas projecoes](https://www.geo-projections.com/ )
 - **EPSG.IO** - [EPSG - **Brabo dos brabo**](https://epsg.io/)
+- **Map4s3** - [Salvador da Patria](https://map4s3.com.br/maps/br_utm/)
 
 :::
 
@@ -570,7 +571,14 @@ plt.show()
 
 
 ## Outras Grades Modernas
-###  H3 (o hexágono da Uber)
+
+Existem muito outros grids que surgem como solução para problemas práticos. Um desses é o H3 hexágonos criado pela Uber, que se espalhou como um grid padrão para análises dinâmicas de preço e ta ganhando muita aquisição pela comunidade geoespacial. 
+
+
+::: {.callout-note appearance="simple"}
+A partir do minuto 9:30 nesse [https://www.youtube.com/watch?v=ay2uwtRO3QE&t=573s](https://www.youtube.com/watch?v=ay2uwtRO3QE&t=573s) esse software engineer da Uber discute sobre como chegaram a solução de hexágonos como forma padrão dos grids da Uber.
+:::
+###  Hexágonos - H3
 
 Ao invés de grades quadradas com 4 vizinhos, hexágonos apresentam uma solução para esse problema pertinente. De tal forma como a hipotenusa sempre sendo  maior que os catetos, num hexágono todos as distâncias são uniformes entre cada lado. Cada héxagono tem 6 vizinhos, todos a mesma distância do centro. 
 É por isso que virou padrão da indústria pra coisas como precificação dinâmica, densidade de corridas e qualquer análise espacial em escala.
@@ -767,3 +775,4 @@ Compare com um colega que escolheu outra cidade: o número de hexágonos muda mu
 - Cartopy gallery — [Gridlines and tick labels](https://cartopy.readthedocs.io/stable/gallery/gridlines_and_labels/gridliner.html)
 - Cartopy gallery — [Raster reprojections](https://cartopy.readthedocs.io/stable/gallery/scalar_data/raster_reprojections.html)
 - [H3 — Uber's Hexagonal Hierarchical Spatial Index](https://h3geo.org/)
+- Uber - [Uber Blog - Dynamic Prices](https://www.uber.com/us/en/blog/h3/)
