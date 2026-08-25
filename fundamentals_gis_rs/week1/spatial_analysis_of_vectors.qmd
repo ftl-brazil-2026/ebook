@@ -70,7 +70,7 @@ Operações geométricas refere-se a um conjunto de métodos que são utlizados 
 Centroide é o centro de massa da geometria, seja ela linha, polígono ou geometry collection. Extrair esse centróide é muito útil em diversos casos, como por exemplo para localizar 'labels' na figura, para servir de base em operações espaciais de outros polígonos e etc. Se você tentar calcular o centróide em um CRS não projetado, geopandas calcula mesmo assim, mas avisa que o resultado pode estar errado: grau não é uma unidade de distância uniforme, então o "centro de massa" calculado direto em lat/lon fica levemente deslocado do centro geométrico real. Os dados precisam estar projetados em um sistema de coordenadas projetado (UTM por exemplo) pra esse cálculo fazer sentido de verdade.
 
 ```{python}
-#| label: fig-centroid
+#| label: fig-centroid-d
 #| fig-cap: "Centroide do polígono de Sinop (estrela) e centro geométrico da distribuição de escolas (triângulo) -- ambos calculados já em CRS projetado."
 
 centroide_sinop = sinop_proj.geometry.centroid.iloc[0]
