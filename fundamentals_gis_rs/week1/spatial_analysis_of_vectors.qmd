@@ -142,6 +142,33 @@ print(f"Escola mais isolada: {dist_para_saude.max():.0f} m")
 print(f"Escola mais proxima: {dist_para_saude.min():.0f} m")
 ```
 
+
+### Transformações afins
+
+Rotação, escala, translação e cisalhamento — operações que distorcem uma geometria sem recalcular nada a partir dos dados originais, só aplicando uma matriz na geometria já existente. Útil pra ajustar geometrias mal-alinhadas ou simplesmente pra entender o que cada operação faz:
+
+```{python}
+#| label: fig-affine
+#| fig-cap: "A mesma geometria (limite de Sinop): original, rotacionada 45° e escalada pela metade — sempre em torno do próprio centro."
+
+geom = sinop.to_crs(CRS_PROJETADO).geometry.iloc[0]
+
+geom_rotacionada = rotate(geom, 45, origin="centroid")
+geom_escalada = scale(geom, xfact=0.5, yfact=0.5, origin="centroid")
+
+fig, axes = plt.subplots(1, 3, figsize=(13, 5))
+for ax, g, title in zip(
+    axes, [geom, geom_rotacionada, geom_escalada], ["Original", "Rotação 45°", "Escala 0.5x"]
+):
+    gpd.GeoSeries([geom], crs=CRS_PROJETADO).boundary.plot(ax=ax, color="#dcdad2", linewidth=0.8)
+    gpd.GeoSeries([g], crs=CRS_PROJETADO).plot(ax=ax, color="#e63946", alpha=0.6)
+    ax.set_title(title)
+    ax.set_aspect("equal")
+    ax.set_axis_off()
+plt.tight_layout()
+plt.show()
+```
+
 ## Joins espaciais por distância
 
 Um **join espacial** funciona como um join de atributos (tema batido para quem conhece tabelas relacionais), só que o critério de join é uma relação espacial em vez de uma chave em comum. `sjoin_nearest` responde a pergunta do capítulo anterior, mas devolve um `GeoDataFrame` já unido, com a opção de limitar a um raio máximo (`max_distance`), o que é útil pra não juntar pontos longe demais de fazer sentido:

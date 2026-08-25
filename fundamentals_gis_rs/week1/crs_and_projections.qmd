@@ -525,7 +525,7 @@ for ax in axs:
 plt.show()
 ```
 
-## O Padrão Brasileiro
+## SIRGAS - Padrão Brasileiro
 
 **SIRGAS2000** (Sistema de Referência Geocêntrico para as Américas) é o datum oficial do Brasil desde 2005 (IBGE), substituindo os antigos SAD69 e Córrego Alegre. É geocêntrico, compatível com GPS/WGS84 na prática (as diferenças são de centímetros, não de metros), e é o que toda base oficial do IBGE — incluindo os dados do `geobr` que usamos nos notebooks anteriores, já vem por padrão (`EPSG:4674`).
 
