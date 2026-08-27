@@ -33,7 +33,7 @@ website:
           - section: "Week 1 — Fundamentos em GIS"
             contents:
               - fundamentals_gis_rs/week1/crs_and_projections.qmd
-              - fundamentals_gis_rs/week1/spatial_analysis_of_vectors.qmd
+              - ffundamentals_gis_rs/week1/spatial_analysis_of_vectors.ipynb
           - section: "Week 2 - Fundamentos em Sensoriamento Remoto"
             contents:
               - fundamentals_gis_rs/week2/index.md

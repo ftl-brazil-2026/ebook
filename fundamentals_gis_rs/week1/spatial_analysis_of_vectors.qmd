@@ -32,7 +32,7 @@ Para o nosso estudo de casa, vamos utilizar a cidade de *Sinop* no *Mato Grosso*
 - **OpenStreetMap** (via `osmnx`) — a malha viária, para explorar interseções e conectividade.
 
 ::: {.callout-note appearance="simple"}
-Escolhemos Sinop meio que arbitrariamente, é uma cidade média, longe do eixo Rio-São Paulo que domina a maioria dos exemplos de GIS por aí. Sinta-se livre pra trocar o `code_muni` abaixo pela sua própria cidade e rodar tudo de novo.
+Escolhemos Sinop arbitrariamente, é uma cidade média, longe do eixo Rio-São Paulo que domina a maioria dos exemplos de GIS por aí. Sinta-se livre pra trocar o `code_muni` abaixo pela sua própria cidade e rodar tudo de novo.
 :::
 
 ```{python}
