@@ -828,7 +828,7 @@
     "href": "fundamentals_gis_rs/week0/provedores.html",
     "title": "Provedores de Dados Geoespaciais",
     "section": "",
-    "text": "Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.\n\n\n\n&lt;span class=\"geo-key\"&gt;&lt;i class=\"geo-dot\" style=\"background:#1baf7a\"&gt;&lt;/i&gt;Provedor brasileiro&lt;/span&gt;\n&lt;span class=\"geo-key\"&gt;&lt;i class=\"geo-dot\" style=\"background:#2a78d6\"&gt;&lt;/i&gt;Provedor internacional&lt;/span&gt;\n&lt;span class=\"geo-hint\"&gt;Tamanho do tema = votos no questionário. Clique num tema para abrir; clique num provedor para ir direto ao site.&lt;/span&gt;\n\n\n\nCarregando…\n\n\n\n\n\n\n\n\n\n\nTipQuer adicionar um provedor?\n\n\n\nOs dados desse diagrama vivem em data/provedores.json, editável por qualquer aluno. Veja o passo a passo em Como Contribuir.",
+    "text": "Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.\n\n\n\n\n\n\n\n\nTipQuer adicionar um provedor?\n\n\n\nOs dados desse diagrama vivem em data/provedores.json, editável por qualquer aluno. Veja o passo a passo em Como Contribuir.",
     "crumbs": [
       "Fundamentos em GIS e Sensoriamento Remoto",
       "Week 0 — Ecossistema geoespacial",

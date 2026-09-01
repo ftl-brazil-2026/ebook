@@ -410,167 +410,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.</p>
-<style>
-  :root {
-    --ink: #1a1a19; --ink-2: #52514e; --muted: #898781;
-    --br: #1baf7a; --gl: #2a78d6; --surface: #ffffff; --line: #e1e0d9;
-  }
-  .geo-wrap { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--ink); max-width: 900px; margin: 0 auto; }
-  .geo-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 10px; font-size: 13px; color: var(--ink-2); }
-  .geo-key { display: flex; align-items: center; gap: 6px; }
-  .geo-dot { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
-  .geo-hint { color: var(--muted); font-size: 12px; margin-left: auto; }
-  .geo-svg { width: 100%; height: auto; display: block; cursor: pointer; }
-  .geo-svg text { pointer-events: none; }
-  .geo-panel { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; font-size: 14px; min-height: 110px; }
-  .geo-panel h3 { margin: 0 0 2px; font-size: 16px; font-weight: 500; }
-  .geo-panel .sub { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
-  .geo-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px 20px; }
-  .geo-list li { border-left: 3px solid var(--line); padding: 2px 0 2px 10px; }
-  .geo-list li.br { border-left-color: var(--br); }
-  .geo-list li.gl { border-left-color: var(--gl); }
-  .geo-list a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: 13.5px; }
-  .geo-list a:hover { text-decoration: underline; }
-  .geo-list span { display: block; color: var(--ink-2); font-size: 12.5px; line-height: 1.45; }
-  @media (prefers-color-scheme: dark) {
-    :root { --ink: #f0efec; --ink-2: #c3c2b7; --surface: #1a1a19; --line: #2c2c2a; }
-  }
-</style>
-<div class="geo-wrap">
-<div class="geo-bar">
-<pre><code>&lt;span class="geo-key"&gt;&lt;i class="geo-dot" style="background:#1baf7a"&gt;&lt;/i&gt;Provedor brasileiro&lt;/span&gt;
-&lt;span class="geo-key"&gt;&lt;i class="geo-dot" style="background:#2a78d6"&gt;&lt;/i&gt;Provedor internacional&lt;/span&gt;
-&lt;span class="geo-hint"&gt;Tamanho do tema = votos no questionário. Clique num tema para abrir; clique num provedor para ir direto ao site.&lt;/span&gt;</code></pre>
-</div>
-<svg class="geo-svg" id="geoSvg" role="img" aria-label="Diagrama de bolhas ligando temas de interesse a provedores de dados"></svg>
-<div id="geoPanel" class="geo-panel">
-Carregando…
-</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<iframe id="geoFrame" src="data/temas_provedores_bubble.html" style="width:100%; border:0; display:block; min-height:600px;" scrolling="no" title="Provedores de dados geoespaciais"></iframe>
 <script>
-(function () {
-const BR = "#1baf7a", GL = "#2a78d6";
-const W = 900, H = 760;
-const svg = d3.select("#geoSvg").attr("viewBox", [-W/2, -H/2, W, H]);
-const panel = d3.select("#geoPanel");
-
-// Carrega provedores.json em tempo de execução -- é a única fonte de dados.
-// Editar o JSON é o bastante: não existe mais uma cópia duplicada dos dados aqui no HTML.
-d3.json("data/provedores.json").then(DATA => {
-
-const root = d3.hierarchy({name: "root", children: DATA.categorias.map(c => ({
-    name: c.nome, votos: c.votos,
-    children: c.provedores.map(p => ({name: p.nome, escopo: p.escopo, url: p.url, dado: p.dado, value: 1}))
-  }))})
-  .sum(d => d.value)
-  .sort((a, b) => (b.data.votos || 0) - (a.data.votos || 0));
-
-root.children.forEach(c => { c.value = 6 + (c.data.votos || 1) * 2.2; });
-root.value = d3.sum(root.children, c => c.value);
-
-d3.pack().size([W - 8, H - 8]).padding(6)(root);
-
-let focus = root, view;
-
-const node = svg.append("g").selectAll("circle")
-  .data(root.descendants().slice(1))
-  .join("circle")
-    .attr("fill", d => d.depth === 1 ? (isDark() ? "#232322" : "#f5f4f0") : (d.data.escopo === "BR" ? BR : GL))
-    .attr("fill-opacity", d => d.depth === 1 ? 1 : 0.85)
-    .attr("stroke", d => d.depth === 1 ? (isDark() ? "#3a3a37" : "#dcdad2") : "none")
-    .style("cursor", "pointer")
-    .on("mouseover", function(){ d3.select(this).attr("fill-opacity", 1); })
-    .on("mouseout", function(d){ d3.select(this).attr("fill-opacity", this.__depth === 1 ? 1 : 0.85); })
-    .on("click", (event, d) => {
-      if (d.depth === 1) {
-        zoom(event, d);
-        showCategory(d);
-      } else {
-        // clique num provedor: abre o site direto numa nova aba
-        showProvider(d);
-        if (focus !== d.parent) zoom(event, d.parent);
-        window.open(d.data.url, "_blank", "noopener");
-      }
-      event.stopPropagation();
-    });
-
-node.each(function(d){ this.__depth = d.depth; });
-
-const label = svg.append("g")
-    .style("font-family", "system-ui, sans-serif")
-    .attr("text-anchor", "middle")
-  .selectAll("text")
-  .data(root.descendants().slice(1))
-  .join("text")
-    .style("fill-opacity", d => d.parent === root ? 1 : 0)
-    .style("display", d => d.parent === root ? "inline" : "none")
-    .style("font-size", d => d.depth === 1 ? "13px" : "11px")
-    .style("fill", d => d.depth === 1 ? (isDark() ? "#f0efec" : "#1a1a19") : "#ffffff")
-    .each(function(d){ wrap(d3.select(this), d.data.name, d.depth === 1 ? 15 : 18); });
-
-svg.on("click", (event) => { zoom(event, root); panel.html(intro()); });
-zoomTo([root.x, root.y, root.r * 2]);
-panel.html(intro());
-
-function isDark(){ return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
-
-function wrap(sel, text, maxChars) {
-  const words = String(text).split(/\s+/);
-  const lines = []; let line = "";
-  words.forEach(w => {
-    if ((line + " " + w).trim().length > maxChars && line) { lines.push(line); line = w; }
-    else line = (line + " " + w).trim();
-  });
-  if (line) lines.push(line);
-  const dy0 = -((lines.length - 1) * 0.55);
-  sel.selectAll("tspan").data(lines).join("tspan")
-    .attr("x", 0).attr("dy", (d, i) => (i === 0 ? dy0 : 1.1) + "em").text(d => d);
-}
-
-function zoomTo(v) {
-  const k = W / v[2]; view = v;
-  label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`)
-       .style("font-size", d => (d.depth === 1 ? 13 : 11) * (focus === root ? 1 : Math.min(k / (W / (root.r * 2)), 2.2)) + "px");
-  node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`).attr("r", d => d.r * k);
-}
-
-function zoom(event, d) {
-  focus = d;
-  const t = svg.transition().duration(650).tween("zoom", () => {
-    const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
-    return t2 => zoomTo(i(t2));
-  });
-  label.filter(function(l){ return l.parent === focus || this.style.display === "inline"; })
-    .transition(t)
-      .style("fill-opacity", l => l.parent === focus ? 1 : 0)
-      .on("start", function(l){ if (l.parent === focus) this.style.display = "inline"; })
-      .on("end", function(l){ if (l.parent !== focus) this.style.display = "none"; });
-}
-
-function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
-
-function intro() {
-  const nCat = DATA.categorias.length;
-  const nProv = new Set(DATA.categorias.flatMap(c => c.provedores.map(p => p.nome))).size;
-  return `<h3>${esc(DATA.meta.titulo)}</h3><div class="sub">${nCat} temas, ${nProv} provedores distintos. ${esc(DATA.meta.fonte_votos)}</div>`;
-}
-
-function showCategory(d) {
-  const c = DATA.categorias.find(x => x.nome === d.data.name);
-  const items = c.provedores.map(p => `<li class="${p.escopo === 'BR' ? 'br' : 'gl'}"><a href="${p.url}" target="_blank" rel="noopener">${esc(p.nome)}</a><span>${esc(p.dado)}</span></li>`).join("");
-  panel.html(`<h3>${esc(c.nome)}</h3><div class="sub">${c.provedores.length} provedores &middot; clique num nome ou numa bolha para abrir</div><ul class="geo-list">${items}</ul>`);
-}
-
-function showProvider(d) {
-  panel.html(`<h3><a href="${d.data.url}" target="_blank" rel="noopener" style="color:inherit">${esc(d.data.name)}</a></h3><div class="sub">${d.data.escopo === 'BR' ? 'Provedor brasileiro' : 'Provedor internacional'} &middot; tema: ${esc(d.parent.data.name)}</div><ul class="geo-list"><li class="${d.data.escopo === 'BR' ? 'br' : 'gl'}"><span>${esc(d.data.dado)}</span></li></ul>`);
-}
-
-}).catch(err => {
-  panel.html(`<p style="color:#c0392b">Não foi possível carregar provedores.json: ${err}</p>`);
-  console.error(err);
+window.addEventListener("message", function (e) {
+  if (e.data && e.data.type === "geo-resize") {
+    var f = document.getElementById("geoFrame");
+    if (f) f.style.height = e.data.height + "px";
+  }
 });
-})();
 </script>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1054,22 +901,35 @@ function showProvider(d) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Provedores de Dados Geoespaciais"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Onde encontrar os dados que nos interessam?"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">resources:</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - data/provedores.json</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>{{&lt; include data/temas_provedores_bubble.html &gt;}}</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip appearance="simple"}</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quer adicionar um provedor?</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>Os dados desse diagrama vivem em <span class="co">[</span><span class="ot">`data/provedores.json`</span><span class="co">](data/provedores.json)</span>, editável por qualquer aluno. Veja o passo a passo em <span class="co">[</span><span class="ot">Como Contribuir</span><span class="co">](../../course-info/how-to-contribute.md)</span>.</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Provedores de Dados Geoespaciais"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Onde encontrar os dados que nos interessam?"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">resources:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - data/provedores.json</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - data/temas_provedores_bubble.html</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - data/temas_provedores_bubble.css</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - data/temas_provedores_bubble.js</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;iframe id="geoFrame" src="data/temas_provedores_bubble.html" style="width:100%; border:0; display:block; min-height:600px;" scrolling="no" title="Provedores de dados geoespaciais"&gt;&lt;/iframe&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;script&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="in">window.addEventListener("message", function (e) {</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="in">  if (e.data &amp;&amp; e.data.type === "geo-resize") {</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="in">    var f = document.getElementById("geoFrame");</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="in">    if (f) f.style.height = e.data.height + "px";</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="in">  }</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="in">});</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/script&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip appearance="simple"}</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quer adicionar um provedor?</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>Os dados desse diagrama vivem em <span class="co">[</span><span class="ot">`data/provedores.json`</span><span class="co">](data/provedores.json)</span>, editável por qualquer aluno. Veja o passo a passo em <span class="co">[</span><span class="ot">Como Contribuir</span><span class="co">](../../course-info/how-to-contribute.md)</span>.</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
