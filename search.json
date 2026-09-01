@@ -432,163 +432,135 @@
     ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week2/index.html",
-    "href": "fundamentals_gis_rs/week2/index.html",
-    "title": "Week 2",
+    "objectID": "guest-sessions/index.html",
+    "href": "guest-sessions/index.html",
+    "title": "Sessões de Convidados",
     "section": "",
-    "text": "Tamo na labuta, espera a semana 2, paciencia pequeno gafanhoto.\n\n\n\n\n\n\nTipPattern for adding material to a week\n\n\n\nEm construção\n\n\n\n\n\nbob_esponja"
+    "text": "Content coming soon.\nEm breve, amigos\n\n\n\ntotoro",
+    "crumbs": [
+      "Sessões de Convidados",
+      "Sessões de Convidados"
+    ]
   },
   {
-    "objectID": "course-info/reading.html",
-    "href": "course-info/reading.html",
-    "title": "Leituras",
+    "objectID": "course-info/general-info.html",
+    "href": "course-info/general-info.html",
+    "title": "Informações Gerais",
     "section": "",
-    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano",
+    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
     "crumbs": [
       "Course Information",
-      "Leituras"
+      "Informações Gerais"
     ]
   },
   {
-    "objectID": "course-info/reading.html#leituras-recomendadas",
-    "href": "course-info/reading.html#leituras-recomendadas",
-    "title": "Leituras",
+    "objectID": "course-info/general-info.html#sobre-esse-módulo",
+    "href": "course-info/general-info.html#sobre-esse-módulo",
+    "title": "Informações Gerais",
     "section": "",
-    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano",
+    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
     "crumbs": [
       "Course Information",
-      "Leituras"
+      "Informações Gerais"
     ]
   },
   {
-    "objectID": "course-info/cli-utils.html",
-    "href": "course-info/cli-utils.html",
-    "title": "Utilitários de CLI",
+    "objectID": "course-info/general-info.html#estrutura-de-aulas-semanais",
+    "href": "course-info/general-info.html#estrutura-de-aulas-semanais",
+    "title": "Informações Gerais",
+    "section": "Estrutura de Aulas Semanais",
+    "text": "Estrutura de Aulas Semanais\n\nFundamentos em GIS e Sensoriamento Remoto\n\n\n\nWeek\nTopic\n\n\n\n\n0\nEcossistema de Dados Geoespaciais\n\n\n1\nFundamentos em Análises Espaciais para dados vetoriais.\n\n\n2\nFundamentos em Sensoriamento Remoto e dados raster.\n\n\n3\nExpandindo conhecimentos para análise dados geoespaciais.\n\n\n4\nCubo de Dados (Data Cubes)\n\n\n\n\n\nFundamentos em Machine Learning e Deep Learning\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\nEstado da Arte (State-of-Art)\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\n\n\nlogoAEB",
+    "crumbs": [
+      "Course Information",
+      "Informações Gerais"
+    ]
+  },
+  {
+    "objectID": "course-info/setup.html",
+    "href": "course-info/setup.html",
+    "title": "Standard Set Up",
     "section": "",
-    "text": "Antes de escrever qualquer código em Python, você precisa estar confortável navegando em um terminal — você vai usá-lo para ativar ambientes, rodar scripts e gerenciar arquivos durante todo o bootcamp. Aqui estão os comandos que você vai usar o tempo todo.",
+    "text": "Verifique de seguir esse guia antes de começar a explorar o bootcamp. Aqui ajudamos a como fazer as configurações corretas do Python enviroment e reproduzir os resultados em seu próprio computador.",
     "crumbs": [
       "Course Information",
-      "Utilitários de CLI"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/cli-utils.html#pedindo-ajuda",
-    "href": "course-info/cli-utils.html#pedindo-ajuda",
-    "title": "Utilitários de CLI",
-    "section": "Pedindo ajuda",
-    "text": "Pedindo ajuda\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\nman ls\nAbre a página de manual do ls (pressione q para sair)\n\n\nls --help\nResumo rápido de uso, sem precisar do manual\n\n\nwhich python\nMostra qual executável roda de fato quando você digita python",
+    "objectID": "course-info/setup.html#pré-requisitos",
+    "href": "course-info/setup.html#pré-requisitos",
+    "title": "Standard Set Up",
+    "section": "1. Pré-requisitos",
+    "text": "1. Pré-requisitos\n\nGit — https://git-scm.com/downloads\nuv (Python package/version manager) — https://docs.astral.sh/uv/getting-started/installation/\nVS Code (recommended editor, with the Python + Jupyter extensions) — https://code.visualstudio.com/download\nQuarto — (optional, only if you want to preview the site itself, not just run notebooks) https://quarto.org/docs/get-started/\nPostgreSQL + PostGIS — (optional, only needed once we start working with a spatial database)\n\n\n\n\n\n\n\nLembre-se de usar uv sync para baixar as bibliotecas que utilizamos no decorrer de nossos encontros.",
     "crumbs": [
       "Course Information",
-      "Utilitários de CLI"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/cli-utils.html#se-localizando-no-sistema",
-    "href": "course-info/cli-utils.html#se-localizando-no-sistema",
-    "title": "Utilitários de CLI",
-    "section": "Se localizando no sistema",
-    "text": "Se localizando no sistema\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\npwd\nMostra o diretório atual — “onde eu estou?”\n\n\nls\nLista os arquivos do diretório atual\n\n\nls -la\nLista todos os arquivos (incluindo os ocultos, com .) com detalhes\n\n\ncd &lt;caminho&gt;\nMuda de diretório\n\n\ncd ..\nSobe um nível de diretório\n\n\ncd ~\nVai para o seu diretório home",
+    "objectID": "course-info/setup.html#clone-the-repository",
+    "href": "course-info/setup.html#clone-the-repository",
+    "title": "Standard Set Up",
+    "section": "2. Clone the repository",
+    "text": "2. Clone the repository\ngit clone https://github.com/emanuel-gf/spacetech-gis-ebook.git\ncd spacetech-gis-ebook",
     "crumbs": [
       "Course Information",
-      "Utilitários de CLI"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/cli-utils.html#trabalhando-com-arquivos-e-diretórios",
-    "href": "course-info/cli-utils.html#trabalhando-com-arquivos-e-diretórios",
-    "title": "Utilitários de CLI",
-    "section": "Trabalhando com arquivos e diretórios",
-    "text": "Trabalhando com arquivos e diretórios\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\ncat &lt;arquivo&gt;\nImprime o conteúdo de um arquivo na tela\n\n\nless &lt;arquivo&gt;\nPercorre o conteúdo de um arquivo (pressione q para sair)\n\n\nmkdir &lt;nome&gt;\nCria um novo diretório\n\n\ntouch &lt;arquivo&gt;\nCria um arquivo vazio\n\n\ncp &lt;origem&gt; &lt;destino&gt;\nCopia um arquivo\n\n\nmv &lt;origem&gt; &lt;destino&gt;\nMove ou renomeia um arquivo\n\n\nrm &lt;arquivo&gt;\nApaga um arquivo — sem desfazer, sem lixeira, cuidado\n\n\nrm -r &lt;dir&gt;\nApaga um diretório e tudo dentro dele — mesmo aviso, em dobro",
+    "objectID": "course-info/setup.html#create-your-own-branch",
+    "href": "course-info/setup.html#create-your-own-branch",
+    "title": "Standard Set Up",
+    "section": "3. Create your own branch",
+    "text": "3. Create your own branch\nEste repositório será atualizado semanalmente. Portanto, se você modificar os arquivos diretamente na branch main, você terá um pouco de problema/dificuldade para baixar os novos capítulos que serão disponibilizados (git pull). Dessa forma, sugerimos que você crie sua própria branch e altere seus arquivos nessa branch, deixando sempre a main limpa.\ngit checkout -b semana0\nOU\ngit checkout -b qualquer-nome-aqui\nDessa forma, sempre que o repositório for atualizado, você só precisa ir na branch main e dar um git pull.\ngit checkout main\ngit pull\ngit checkout my-work\ngit merge main\nIsto deixará a main limpa e isolada, evitando possiveis dores de cabeça num futuro não muito distante.",
     "crumbs": [
       "Course Information",
-      "Utilitários de CLI"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/cli-utils.html#buscando",
-    "href": "course-info/cli-utils.html#buscando",
-    "title": "Utilitários de CLI",
-    "section": "Buscando",
-    "text": "Buscando\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\ngrep \"texto\" &lt;arquivo&gt;\nBusca por um trecho de texto dentro de um arquivo\n\n\nfind . -name \"*.py\"\nBusca arquivos por padrão de nome, a partir do diretório atual",
+    "objectID": "course-info/setup.html#sync-as-bibliotecas-de-python",
+    "href": "course-info/setup.html#sync-as-bibliotecas-de-python",
+    "title": "Standard Set Up",
+    "section": "4. Sync as bibliotecas de python",
+    "text": "4. Sync as bibliotecas de python\nCertifique-se de antes ter um ambiente uv, através do uv venv e de que esse ambiente esteja Ativo.\nuv sync\nThis reads pyproject.toml / uv.lock and creates a local .venv with the exact package versions used in class (geopandas, cartopy, plotly, etc).",
     "crumbs": [
       "Course Information",
-      "Utilitários de CLI"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/cli-utils.html#atalhos-essenciais-desde-o-primeiro-dia",
-    "href": "course-info/cli-utils.html#atalhos-essenciais-desde-o-primeiro-dia",
-    "title": "Utilitários de CLI",
-    "section": "Atalhos essenciais desde o primeiro dia",
-    "text": "Atalhos essenciais desde o primeiro dia\n\n\n\n\n\n\n\nAtalho / Comando\nO que faz\n\n\n\n\nTab\nAutocompleta nomes de arquivos e pastas — use sempre, evita erros de digitação\n\n\n↑ / ↓\nPercorre os comandos anteriores\n\n\nCtrl + C\nInterrompe o que estiver rodando no momento\n\n\nCtrl + R\nBusca no histórico de comandos\n\n\nclear\nLimpa a tela do terminal\n\n\nhistory\nLista os comandos executados recentemente",
+    "objectID": "course-info/setup.html#pronto",
+    "href": "course-info/setup.html#pronto",
+    "title": "Standard Set Up",
+    "section": "5. Pronto!",
+    "text": "5. Pronto!\nAgora você já pode rodar o notebook, clique nesse e selecione o kernel, tudo rodará feito magia.",
     "crumbs": [
       "Course Information",
-      "Utilitários de CLI"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/cli-utils.html#combinando-comandos",
-    "href": "course-info/cli-utils.html#combinando-comandos",
-    "title": "Utilitários de CLI",
-    "section": "Combinando comandos",
-    "text": "Combinando comandos\n\n\n\n\n\n\n\nSintaxe\nO que faz\n\n\n\n\ncomando1 \\| comando2\nPipe: envia a saída do comando1 como entrada do comando2\n\n\ncomando &gt; arquivo.txt\nRedireciona a saída para um arquivo (sobrescreve)\n\n\ncomando &gt;&gt; arquivo.txt\nRedireciona a saída para um arquivo (adiciona ao final)\n\n\n\n\n\n\n\n\n\nNotePraticando\n\n\n\nAbra um terminal, dê cd para dentro deste repositório e tente: ls -la, cat README.md, man ls e history.",
+    "objectID": "course-info/setup.html#re-construindo-o-website-com-quarto",
+    "href": "course-info/setup.html#re-construindo-o-website-com-quarto",
+    "title": "Standard Set Up",
+    "section": "6. Re-construindo o website com quarto",
+    "text": "6. Re-construindo o website com quarto\nEssa é para você que deseja explorar um pouco mais as funcionalidades do Quarto. Primeiro de uma lida na documentação. Depois, dentro do projeto, rode isso no terminal.\nuv run quarto preview\n\n\n\n\n\n\nWarning“Jupyter is not available” / Quarto can’t find your kernel\n\n\n\nQuarto sometimes finds a system Python instead of the one uv just created in .venv. If quarto check jupyter reports no Jupyter, point Quarto at the venv explicitly:\nexport QUARTO_PYTHON=$(pwd)/.venv/bin/python\nquarto check jupyter\n\n\n\n\n\n\n\n\nNoteEmpacou meu querido?\n\n\n\nPergunta lá no nosso canal do discord. Algum colega com toda a certeza conseguirá te ajudar. Noiz.",
     "crumbs": [
       "Course Information",
-      "Utilitários de CLI"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/how-to-contribute.html",
-    "href": "course-info/how-to-contribute.html",
-    "title": "Como Contribuir",
+    "objectID": "ml-dl/index.html",
+    "href": "ml-dl/index.html",
+    "title": "Fundamentos em Machine Learning e Deep Learning",
     "section": "",
-    "text": "Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir, contudo o repositório visa ser uma contribução coletiva de muitas formas, então diversas outras maneiras aparecerão ao longo do bootcamp.\nAntes de editar qualquer coisa, crie sua própria branch! Veja o passo 3 da página de Setup. Isso evita conflito com atualizações futuras do repositório.",
+    "text": "Em construção.\n\n\n\n\n\n\nTudo aqui em construção\n\n\n\n\n\n\nvov_juju",
     "crumbs": [
-      "Course Information",
-      "Como Contribuir"
-    ]
-  },
-  {
-    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
-    "href": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
-    "title": "Como Contribuir",
-    "section": "Contribuindo com o Awesome Geospatial",
-    "text": "Contribuindo com o Awesome Geospatial\nA página Awesome Geospatial é uma lista de ferramentas organizadas por plataforma (QGIS, Google Earth Engine, Machine Learning, AI, Databases, Cloud Computing).\nPara adicionar uma ferramenta, edite awesome-geospatial/index.md e inclua um item na lista, sob a seção da plataforma correspondente:\n- [**Nome**](https://link.com) — descrição curta do que é / para que serve.\nSe você não tem certeza que o link ou a descrição estão corretos/atualizados, adicione ⚠️ *verificar* no fim da linha — assim outra pessoa sabe que precisa conferir antes de confiar no item. Sem essa marcação, o item é considerado confiável.\nSe a plataforma que você quer ainda não tem uma seção, crie um novo ## Nome da Plataforma no fim do arquivo.",
-    "crumbs": [
-      "Course Information",
-      "Como Contribuir"
-    ]
-  },
-  {
-    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
-    "href": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
-    "title": "Como Contribuir",
-    "section": "Contribuindo com o diagrama de provedores (bubble chart)",
-    "text": "Contribuindo com o diagrama de provedores (bubble chart)\nO diagrama de bolhas em Provedores de Dados Geoespaciais — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: fundamentals_gis_rs/week0/data/provedores.json. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.\nPara adicionar um provedor a um tema já existente, inclua um novo objeto na lista provedores da categoria correspondente:\n{\n  \"nome\": \"Nome do provedor\",\n  \"escopo\": \"BR\",\n  \"url\": \"https://exemplo.gov.br/\",\n  \"dado\": \"Uma frase curta: qual dado, para qual uso\"\n}\nescopo é sempre \"BR\" ou \"GLOBAL\". Para criar um tema novo inteiro, adicione um objeto à lista categorias (nível raiz do JSON) com nome, votos (pode deixar 0 se não veio do questionário original) e sua própria lista de provedores.\nAntes de commitar, valide que o JSON continua válido:\npython3 -m json.tool fundamentals_gis_rs/week0/data/provedores.json &gt; /dev/null\nSem erro impresso = JSON válido.\n\n\n\n\n\n\nNoteDúvida?\n\n\n\nPergunta no canal do bootcamp antes de gastar muito tempo tentando resolver sozinho.",
-    "crumbs": [
-      "Course Information",
-      "Como Contribuir"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "SpaceTech Bootcamp",
-    "section": "",
-    "text": "Bem-vindo(a)! Este site é o nosso ebook do Future Tech Leaders Brasil - Space Tech Bootcam.\nUse a barra lateral à esquerda para navegar:\n\nCourse Information : informações gerais, leituras recomendadas e como configurar o seu ambiente para dados geoespaciais.\nFundamentos em GIS e Sensoriamento Remoto — Nossas sessões semanais, organizadas referente ao calendário disponibilizado do curso, com python notebooks para as aulas práticas.\nFundamentos em Machine Learning e Deep Learning - Materiais e práticas referente a ML e DL aplicado a observação da terra, bem como atividade de visão computacional.\nEstado da Arte (State-of-Art) - Últimos avanços e paradigmas sobre Deep Learning, incorporando sessões práticas com arquitetura de Deep Learning, Embeddings, Foundation Models, Knowledge Distillation (Destilação) e muito mais!\nSessões de Convidados - Página específica onde disponibizaremos todos os materiais que nossos experts dentro da área de dados geoespaciais apresentarão no decorrer desse bootcamp.\n\n\n\n\n\n\n\nTipPrimeira vez por aqui?\n\n\n\nComece pela página de Setup para configurar o seu ambiente.\n\n\n\n\n\n\nlogoAEB",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "state-of-art/index.html",
-    "href": "state-of-art/index.html",
-    "title": "Estado da Arte (State-of-Art)",
-    "section": "",
-    "text": "Content coming soon.",
-    "crumbs": [
-      "Estado da Arte (State-of-Art)",
-      "Estado da Arte (State-of-Art)"
+      "Fundamentos em Machine Learning e Deep Learning",
+      "Fundamentos em Machine Learning e Deep Learning"
     ]
   },
   {
@@ -692,164 +664,164 @@
     ]
   },
   {
-    "objectID": "ml-dl/index.html",
-    "href": "ml-dl/index.html",
-    "title": "Fundamentos em Machine Learning e Deep Learning",
+    "objectID": "state-of-art/index.html",
+    "href": "state-of-art/index.html",
+    "title": "Estado da Arte (State-of-Art)",
     "section": "",
-    "text": "Em construção.\n\n\n\n\n\n\nTudo aqui em construção\n\n\n\n\n\n\nvov_juju",
+    "text": "Content coming soon.",
     "crumbs": [
-      "Fundamentos em Machine Learning e Deep Learning",
-      "Fundamentos em Machine Learning e Deep Learning"
+      "Estado da Arte (State-of-Art)",
+      "Estado da Arte (State-of-Art)"
     ]
   },
   {
-    "objectID": "course-info/setup.html",
-    "href": "course-info/setup.html",
-    "title": "Standard Set Up",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "SpaceTech Bootcamp",
     "section": "",
-    "text": "Verifique de seguir esse guia antes de começar a explorar o bootcamp. Aqui ajudamos a como fazer as configurações corretas do Python enviroment e reproduzir os resultados em seu próprio computador.",
+    "text": "Bem-vindo(a)! Este site é o nosso ebook do Future Tech Leaders Brasil - Space Tech Bootcam.\nUse a barra lateral à esquerda para navegar:\n\nCourse Information : informações gerais, leituras recomendadas e como configurar o seu ambiente para dados geoespaciais.\nFundamentos em GIS e Sensoriamento Remoto — Nossas sessões semanais, organizadas referente ao calendário disponibilizado do curso, com python notebooks para as aulas práticas.\nFundamentos em Machine Learning e Deep Learning - Materiais e práticas referente a ML e DL aplicado a observação da terra, bem como atividade de visão computacional.\nEstado da Arte (State-of-Art) - Últimos avanços e paradigmas sobre Deep Learning, incorporando sessões práticas com arquitetura de Deep Learning, Embeddings, Foundation Models, Knowledge Distillation (Destilação) e muito mais!\nSessões de Convidados - Página específica onde disponibizaremos todos os materiais que nossos experts dentro da área de dados geoespaciais apresentarão no decorrer desse bootcamp.\n\n\n\n\n\n\n\nTipPrimeira vez por aqui?\n\n\n\nComece pela página de Setup para configurar o seu ambiente.\n\n\n\n\n\n\nlogoAEB",
     "crumbs": [
-      "Course Information",
-      "Standard Set Up"
+      "Home"
     ]
   },
   {
-    "objectID": "course-info/setup.html#pré-requisitos",
-    "href": "course-info/setup.html#pré-requisitos",
-    "title": "Standard Set Up",
-    "section": "1. Pré-requisitos",
-    "text": "1. Pré-requisitos\n\nGit — https://git-scm.com/downloads\nuv (Python package/version manager) — https://docs.astral.sh/uv/getting-started/installation/\nVS Code (recommended editor, with the Python + Jupyter extensions) — https://code.visualstudio.com/download\nQuarto — (optional, only if you want to preview the site itself, not just run notebooks) https://quarto.org/docs/get-started/\nPostgreSQL + PostGIS — (optional, only needed once we start working with a spatial database)\n\n\n\n\n\n\n\nLembre-se de usar uv sync para baixar as bibliotecas que utilizamos no decorrer de nossos encontros.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#clone-the-repository",
-    "href": "course-info/setup.html#clone-the-repository",
-    "title": "Standard Set Up",
-    "section": "2. Clone the repository",
-    "text": "2. Clone the repository\ngit clone https://github.com/emanuel-gf/spacetech-gis-ebook.git\ncd spacetech-gis-ebook",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#create-your-own-branch",
-    "href": "course-info/setup.html#create-your-own-branch",
-    "title": "Standard Set Up",
-    "section": "3. Create your own branch",
-    "text": "3. Create your own branch\nEste repositório será atualizado semanalmente. Portanto, se você modificar os arquivos diretamente na branch main, você terá um pouco de problema/dificuldade para baixar os novos capítulos que serão disponibilizados (git pull). Dessa forma, sugerimos que você crie sua própria branch e altere seus arquivos nessa branch, deixando sempre a main limpa.\ngit checkout -b semana0\nOU\ngit checkout -b qualquer-nome-aqui\nDessa forma, sempre que o repositório for atualizado, você só precisa ir na branch main e dar um git pull.\ngit checkout main\ngit pull\ngit checkout my-work\ngit merge main\nIsto deixará a main limpa e isolada, evitando possiveis dores de cabeça num futuro não muito distante.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#sync-as-bibliotecas-de-python",
-    "href": "course-info/setup.html#sync-as-bibliotecas-de-python",
-    "title": "Standard Set Up",
-    "section": "4. Sync as bibliotecas de python",
-    "text": "4. Sync as bibliotecas de python\nCertifique-se de antes ter um ambiente uv, através do uv venv e de que esse ambiente esteja Ativo.\nuv sync\nThis reads pyproject.toml / uv.lock and creates a local .venv with the exact package versions used in class (geopandas, cartopy, plotly, etc).",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#pronto",
-    "href": "course-info/setup.html#pronto",
-    "title": "Standard Set Up",
-    "section": "5. Pronto!",
-    "text": "5. Pronto!\nAgora você já pode rodar o notebook, clique nesse e selecione o kernel, tudo rodará feito magia.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/setup.html#re-construindo-o-website-com-quarto",
-    "href": "course-info/setup.html#re-construindo-o-website-com-quarto",
-    "title": "Standard Set Up",
-    "section": "6. Re-construindo o website com quarto",
-    "text": "6. Re-construindo o website com quarto\nEssa é para você que deseja explorar um pouco mais as funcionalidades do Quarto. Primeiro de uma lida na documentação. Depois, dentro do projeto, rode isso no terminal.\nuv run quarto preview\n\n\n\n\n\n\nWarning“Jupyter is not available” / Quarto can’t find your kernel\n\n\n\nQuarto sometimes finds a system Python instead of the one uv just created in .venv. If quarto check jupyter reports no Jupyter, point Quarto at the venv explicitly:\nexport QUARTO_PYTHON=$(pwd)/.venv/bin/python\nquarto check jupyter\n\n\n\n\n\n\n\n\nNoteEmpacou meu querido?\n\n\n\nPergunta lá no nosso canal do discord. Algum colega com toda a certeza conseguirá te ajudar. Noiz.",
-    "crumbs": [
-      "Course Information",
-      "Standard Set Up"
-    ]
-  },
-  {
-    "objectID": "course-info/general-info.html",
-    "href": "course-info/general-info.html",
-    "title": "Informações Gerais",
+    "objectID": "course-info/how-to-contribute.html",
+    "href": "course-info/how-to-contribute.html",
+    "title": "Como Contribuir",
     "section": "",
-    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "text": "Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir, contudo o repositório visa ser uma contribução coletiva de muitas formas, então diversas outras maneiras aparecerão ao longo do bootcamp.\nAntes de editar qualquer coisa, crie sua própria branch! Veja o passo 3 da página de Setup. Isso evita conflito com atualizações futuras do repositório.",
     "crumbs": [
       "Course Information",
-      "Informações Gerais"
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "course-info/general-info.html#sobre-esse-módulo",
-    "href": "course-info/general-info.html#sobre-esse-módulo",
-    "title": "Informações Gerais",
-    "section": "",
-    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
+    "href": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
+    "title": "Como Contribuir",
+    "section": "Contribuindo com o Awesome Geospatial",
+    "text": "Contribuindo com o Awesome Geospatial\nA página Awesome Geospatial é uma lista de ferramentas organizadas por plataforma (QGIS, Google Earth Engine, Machine Learning, AI, Databases, Cloud Computing).\nPara adicionar uma ferramenta, edite awesome-geospatial/index.md e inclua um item na lista, sob a seção da plataforma correspondente:\n- [**Nome**](https://link.com) — descrição curta do que é / para que serve.\nSe você não tem certeza que o link ou a descrição estão corretos/atualizados, adicione ⚠️ *verificar* no fim da linha — assim outra pessoa sabe que precisa conferir antes de confiar no item. Sem essa marcação, o item é considerado confiável.\nSe a plataforma que você quer ainda não tem uma seção, crie um novo ## Nome da Plataforma no fim do arquivo.",
     "crumbs": [
       "Course Information",
-      "Informações Gerais"
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "course-info/general-info.html#estrutura-de-aulas-semanais",
-    "href": "course-info/general-info.html#estrutura-de-aulas-semanais",
-    "title": "Informações Gerais",
-    "section": "Estrutura de Aulas Semanais",
-    "text": "Estrutura de Aulas Semanais\n\nFundamentos em GIS e Sensoriamento Remoto\n\n\n\nWeek\nTopic\n\n\n\n\n0\nEcossistema de Dados Geoespaciais\n\n\n1\nFundamentos em Análises Espaciais para dados vetoriais.\n\n\n2\nFundamentos em Sensoriamento Remoto e dados raster.\n\n\n3\nExpandindo conhecimentos para análise dados geoespaciais.\n\n\n4\nCubo de Dados (Data Cubes)\n\n\n\n\n\nFundamentos em Machine Learning e Deep Learning\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\nEstado da Arte (State-of-Art)\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\n\n\nlogoAEB",
+    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
+    "href": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
+    "title": "Como Contribuir",
+    "section": "Contribuindo com o diagrama de provedores (bubble chart)",
+    "text": "Contribuindo com o diagrama de provedores (bubble chart)\nO diagrama de bolhas em Provedores de Dados Geoespaciais — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: fundamentals_gis_rs/week0/data/provedores.json. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.\nPara adicionar um provedor a um tema já existente, inclua um novo objeto na lista provedores da categoria correspondente:\n{\n  \"nome\": \"Nome do provedor\",\n  \"escopo\": \"BR\",\n  \"url\": \"https://exemplo.gov.br/\",\n  \"dado\": \"Uma frase curta: qual dado, para qual uso\"\n}\nescopo é sempre \"BR\" ou \"GLOBAL\". Para criar um tema novo inteiro, adicione um objeto à lista categorias (nível raiz do JSON) com nome, votos (pode deixar 0 se não veio do questionário original) e sua própria lista de provedores.\nAntes de commitar, valide que o JSON continua válido:\npython3 -m json.tool fundamentals_gis_rs/week0/data/provedores.json &gt; /dev/null\nSem erro impresso = JSON válido.\n\n\n\n\n\n\nNoteDúvida?\n\n\n\nPergunta no canal do bootcamp antes de gastar muito tempo tentando resolver sozinho.",
     "crumbs": [
       "Course Information",
-      "Informações Gerais"
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "guest-sessions/index.html",
-    "href": "guest-sessions/index.html",
-    "title": "Sessões de Convidados",
+    "objectID": "course-info/cli-utils.html",
+    "href": "course-info/cli-utils.html",
+    "title": "Utilitários de CLI",
     "section": "",
-    "text": "Content coming soon.\nEm breve, amigos\n\n\n\ntotoro",
+    "text": "Antes de escrever qualquer código em Python, você precisa estar confortável navegando em um terminal — você vai usá-lo para ativar ambientes, rodar scripts e gerenciar arquivos durante todo o bootcamp. Aqui estão os comandos que você vai usar o tempo todo.",
     "crumbs": [
-      "Sessões de Convidados",
-      "Sessões de Convidados"
+      "Course Information",
+      "Utilitários de CLI"
     ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week2/1-RS-STAC.html",
-    "href": "fundamentals_gis_rs/week2/1-RS-STAC.html",
-    "title": "STAC Catalogue",
+    "objectID": "course-info/cli-utils.html#pedindo-ajuda",
+    "href": "course-info/cli-utils.html#pedindo-ajuda",
+    "title": "Utilitários de CLI",
+    "section": "Pedindo ajuda",
+    "text": "Pedindo ajuda\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\nman ls\nAbre a página de manual do ls (pressione q para sair)\n\n\nls --help\nResumo rápido de uso, sem precisar do manual\n\n\nwhich python\nMostra qual executável roda de fato quando você digita python",
+    "crumbs": [
+      "Course Information",
+      "Utilitários de CLI"
+    ]
+  },
+  {
+    "objectID": "course-info/cli-utils.html#se-localizando-no-sistema",
+    "href": "course-info/cli-utils.html#se-localizando-no-sistema",
+    "title": "Utilitários de CLI",
+    "section": "Se localizando no sistema",
+    "text": "Se localizando no sistema\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\npwd\nMostra o diretório atual — “onde eu estou?”\n\n\nls\nLista os arquivos do diretório atual\n\n\nls -la\nLista todos os arquivos (incluindo os ocultos, com .) com detalhes\n\n\ncd &lt;caminho&gt;\nMuda de diretório\n\n\ncd ..\nSobe um nível de diretório\n\n\ncd ~\nVai para o seu diretório home",
+    "crumbs": [
+      "Course Information",
+      "Utilitários de CLI"
+    ]
+  },
+  {
+    "objectID": "course-info/cli-utils.html#trabalhando-com-arquivos-e-diretórios",
+    "href": "course-info/cli-utils.html#trabalhando-com-arquivos-e-diretórios",
+    "title": "Utilitários de CLI",
+    "section": "Trabalhando com arquivos e diretórios",
+    "text": "Trabalhando com arquivos e diretórios\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\ncat &lt;arquivo&gt;\nImprime o conteúdo de um arquivo na tela\n\n\nless &lt;arquivo&gt;\nPercorre o conteúdo de um arquivo (pressione q para sair)\n\n\nmkdir &lt;nome&gt;\nCria um novo diretório\n\n\ntouch &lt;arquivo&gt;\nCria um arquivo vazio\n\n\ncp &lt;origem&gt; &lt;destino&gt;\nCopia um arquivo\n\n\nmv &lt;origem&gt; &lt;destino&gt;\nMove ou renomeia um arquivo\n\n\nrm &lt;arquivo&gt;\nApaga um arquivo — sem desfazer, sem lixeira, cuidado\n\n\nrm -r &lt;dir&gt;\nApaga um diretório e tudo dentro dele — mesmo aviso, em dobro",
+    "crumbs": [
+      "Course Information",
+      "Utilitários de CLI"
+    ]
+  },
+  {
+    "objectID": "course-info/cli-utils.html#buscando",
+    "href": "course-info/cli-utils.html#buscando",
+    "title": "Utilitários de CLI",
+    "section": "Buscando",
+    "text": "Buscando\n\n\n\n\n\n\n\nComando\nO que faz\n\n\n\n\ngrep \"texto\" &lt;arquivo&gt;\nBusca por um trecho de texto dentro de um arquivo\n\n\nfind . -name \"*.py\"\nBusca arquivos por padrão de nome, a partir do diretório atual",
+    "crumbs": [
+      "Course Information",
+      "Utilitários de CLI"
+    ]
+  },
+  {
+    "objectID": "course-info/cli-utils.html#atalhos-essenciais-desde-o-primeiro-dia",
+    "href": "course-info/cli-utils.html#atalhos-essenciais-desde-o-primeiro-dia",
+    "title": "Utilitários de CLI",
+    "section": "Atalhos essenciais desde o primeiro dia",
+    "text": "Atalhos essenciais desde o primeiro dia\n\n\n\n\n\n\n\nAtalho / Comando\nO que faz\n\n\n\n\nTab\nAutocompleta nomes de arquivos e pastas — use sempre, evita erros de digitação\n\n\n↑ / ↓\nPercorre os comandos anteriores\n\n\nCtrl + C\nInterrompe o que estiver rodando no momento\n\n\nCtrl + R\nBusca no histórico de comandos\n\n\nclear\nLimpa a tela do terminal\n\n\nhistory\nLista os comandos executados recentemente",
+    "crumbs": [
+      "Course Information",
+      "Utilitários de CLI"
+    ]
+  },
+  {
+    "objectID": "course-info/cli-utils.html#combinando-comandos",
+    "href": "course-info/cli-utils.html#combinando-comandos",
+    "title": "Utilitários de CLI",
+    "section": "Combinando comandos",
+    "text": "Combinando comandos\n\n\n\n\n\n\n\nSintaxe\nO que faz\n\n\n\n\ncomando1 \\| comando2\nPipe: envia a saída do comando1 como entrada do comando2\n\n\ncomando &gt; arquivo.txt\nRedireciona a saída para um arquivo (sobrescreve)\n\n\ncomando &gt;&gt; arquivo.txt\nRedireciona a saída para um arquivo (adiciona ao final)\n\n\n\n\n\n\n\n\n\nNotePraticando\n\n\n\nAbra um terminal, dê cd para dentro deste repositório e tente: ls -la, cat README.md, man ls e history.",
+    "crumbs": [
+      "Course Information",
+      "Utilitários de CLI"
+    ]
+  },
+  {
+    "objectID": "course-info/reading.html",
+    "href": "course-info/reading.html",
+    "title": "Leituras",
     "section": "",
-    "text": "Nós vimos que é facil entrar em um provedor, pesquisar uma data e encontrar as images que queremos. Porém baixar tudo na mão parece ser extremamente trabalhoso, demandando muito tempo para prosseguir. Dessa forma, a comunidade engajada do mundo geoespacial criou o STAC (Spatial Temporal Asset Catalogue), que basicamente reune todos os provedores e dados em um sistema organizado que te permite buscar, localizar e baixar as images de sua preferência. Primeiramente vamos nos familiarizar um pouco com o STAC antes de prosseguirmos com operações mais avançadas de sensoriamento remoto.\nCode\nfrom pystac_client import Client\nCode\nClient?\nPrecisamos entao encontrar a nossa API para depois conseguir baixar os dados. Assim, o próprio site da STAC favorece uma lista de API STAC-API-catalogo\nCode\ncbers_inpe = \"https://data.inpe.br/bdc/stac/v1/\"\nCode\nclient = Client.open(cbers_inpe)\nCode\n# vamos listar todas as colecoes\nfor collection in client.get_collections():\n    print(collection)\n\n\n&lt;CollectionClient id=GOES19-L2-CMI-1&gt;\n&lt;CollectionClient id=S2_L2A-1&gt;\n&lt;CollectionClient id=AMZ1-WFI-L2-DN-1&gt;\n&lt;CollectionClient id=mosaic-cbers4a-paraiba-3m-1&gt;\n&lt;CollectionClient id=mosaic-landsat-sp-6m-1&gt;\n&lt;CollectionClient id=mosaic-s2-paraiba-3m-1&gt;\n&lt;CollectionClient id=mosaic-s2-yanomami_territory-6m-1&gt;\n&lt;CollectionClient id=modisa-ocsmart-rrs-monthly-1&gt;\n&lt;CollectionClient id=landsat-2&gt;\n&lt;CollectionClient id=s3-olci-rrs-water-1&gt;\n&lt;CollectionClient id=AMZ1-WFI-L4-DN-1&gt;\n&lt;CollectionClient id=s3-olci-pc-tiete-1&gt;\n&lt;CollectionClient id=mod13q1-6.1&gt;\n&lt;CollectionClient id=sentinel-1-grd-bundle-1&gt;\n&lt;CollectionClient id=s2_msi_mq_wqp-1&gt;\n&lt;CollectionClient id=sentinel-1-rtc-1&gt;\n&lt;CollectionClient id=sentinel-3-olci-l1-bundle-1&gt;\n&lt;CollectionClient id=CB4-MUX-L2-DN-1&gt;\n&lt;CollectionClient id=s2_msi_mq_rrs-1&gt;\n&lt;CollectionClient id=S2-16D-2&gt;\n&lt;CollectionClient id=GOES-GL-DSWRF-Daily-1&gt;\n&lt;CollectionClient id=mosaic-landsat-amazon-3m-1&gt;\n&lt;CollectionClient id=CBERS4-WFI-16D-2&gt;\n&lt;CollectionClient id=mosaic-s2-amazon-3m-1&gt;\n&lt;CollectionClient id=landsat-tsirf-bimonthly-1&gt;\n&lt;CollectionClient id=mosaic-landsat-brazil-6m-1&gt;\n&lt;CollectionClient id=myd13q1-6.1&gt;\n&lt;CollectionClient id=CB4-WFI-L4-SR-1&gt;\n&lt;CollectionClient id=CB2B-HRC-L2-DN-1&gt;\n&lt;CollectionClient id=CB4A-WPM-L2-DN-1&gt;\n&lt;CollectionClient id=charter-wfi-1&gt;\n&lt;CollectionClient id=topodata-1&gt;\n&lt;CollectionClient id=mosaic-s2-cerrado-4m-1&gt;\n&lt;CollectionClient id=modisa-ocsmart-biogeochemical-monthly-1&gt;\n&lt;CollectionClient id=samet_hourly-1&gt;\n&lt;CollectionClient id=mosaic-cbers4-brazil-3m-1&gt;\n&lt;CollectionClient id=CBERS-WFI-8D-1&gt;\n&lt;CollectionClient id=S2_L1C_BUNDLE-1&gt;\n&lt;CollectionClient id=CB4A-MUX-L2-DN-1&gt;\n&lt;CollectionClient id=landsat-tsirf-yearly-1&gt;\n&lt;CollectionClient id=modisa-ocsmart-biogeochemical-daily-1&gt;\n&lt;CollectionClient id=mosaic-s2-cerrado-2m-1&gt;\n&lt;CollectionClient id=CB4-PAN10M-L2-DN-1&gt;\n&lt;CollectionClient id=landsat-lgi-1&gt;\n&lt;CollectionClient id=AMZ1-WFI-L4-SR-1&gt;\n&lt;CollectionClient id=CB4-PAN5M-L4-DN-1&gt;\n&lt;CollectionClient id=CBERS4-MUX-2M-1&gt;\n&lt;CollectionClient id=CB4A-WFI-L4-SR-1&gt;\n&lt;CollectionClient id=charter-mux-1&gt;\n&lt;CollectionClient id=CB4-WFI-L2-DN-1&gt;\n&lt;CollectionClient id=CB4A-WPM-L4-DN-1&gt;\n&lt;CollectionClient id=mod11a2-6.1&gt;\n&lt;CollectionClient id=CB4A-WFI-L2-DN-1&gt;\n&lt;CollectionClient id=CB4-PAN10M-L4-DN-1&gt;\n&lt;CollectionClient id=CB4-PAN5M-L2-DN-1&gt;\n&lt;CollectionClient id=mosaic-s2-brazil-3m-1&gt;\n&lt;CollectionClient id=mosaic-s2-amazon-1m-1&gt;\n&lt;CollectionClient id=CB4A-MUX-L4-DN-1&gt;\n&lt;CollectionClient id=CB4A-WFI-L4-DN-1&gt;\n&lt;CollectionClient id=GOES13-L3-IMAGER-1&gt;\n&lt;CollectionClient id=CB2B-CCD-L2-DN-1&gt;\n&lt;CollectionClient id=myd11a2-6.1&gt;\n&lt;CollectionClient id=CB2B-WFI-L2-DN-1&gt;\n&lt;CollectionClient id=modisa-ocsmart-rrs-daily-1&gt;\n&lt;CollectionClient id=charter-wpm-1&gt;\n&lt;CollectionClient id=LANDSAT-16D-1&gt;\n&lt;CollectionClient id=topodata_bundle-1&gt;\n&lt;CollectionClient id=charter-pan-1&gt;\n&lt;CollectionClient id=CB4A-MUX-L4-SR-1&gt;\n&lt;CollectionClient id=CB4-MUX-L4-SR-1&gt;\n&lt;CollectionClient id=prec_merge_hourly-1&gt;\n&lt;CollectionClient id=CB4-WFI-L4-DN-1&gt;\n&lt;CollectionClient id=CB4-MUX-L4-DN-1&gt;\n&lt;CollectionClient id=samet_daily-1&gt;\n&lt;CollectionClient id=CB4A-WPM-PCA-FUSED-1&gt;\n&lt;CollectionClient id=mosaic-s2-amazon-3m-b08b04b03-1&gt;\n&lt;CollectionClient id=EtaCCDay_CMIP5-1&gt;\n&lt;CollectionClient id=GOES16-L2-CMI-1&gt;\n&lt;CollectionClient id=CB2-CCD-L2-DN-1&gt;\n&lt;CollectionClient id=prec_merge_daily-1&gt;\nCode\n# vamos ver a metadata\ncollection = client.get_collection('CB4-MUX-L4-SR-1')\nCode\ncollection\n\n\n\n\n\n\n\n    &lt;CollectionClient id=CB4-MUX-L4-SR-1&gt;\n\n\n    \n        \n            \n                \n                    \n        \n            type\n            \"Collection\"\n        \n    \n                \n            \n                \n                    \n        \n            id\n            \"CB4-MUX-L4-SR-1\"\n        \n    \n                \n            \n                \n                    \n        \n            stac_version\n            \"1.1.0\"\n        \n    \n                \n            \n                \n                    \n        \n            description\n            \"CBERS-4/MUX - Level-4 Surface Reflectance product over Brazil and part of South America. L4 SR product provides orthorectified surface reflectance images. This dataset is provided as Cloud Optimized GeoTIFF (COG).\"\n        \n    \n                \n            \n                \n                    \n        links[] 5 items\n        \n            \n        \n            \n                \n        \n            0\n            \n        \n            \n                \n        \n            rel\n            \"self\"\n        \n    \n            \n        \n            \n                \n        \n            href\n            \"https://data.inpe.br/bdc/stac/v1/collections/CB4-MUX-L4-SR-1\"\n        \n    \n            \n        \n            \n                \n        \n            type\n            \"application/json\"\n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Link to this document\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \n        \n            \n                \n        \n            rel\n            \"items\"\n        \n    \n            \n        \n            \n                \n        \n            href\n            \"https://data.inpe.br/bdc/stac/v1/collections/CB4-MUX-L4-SR-1/items\"\n        \n    \n            \n        \n            \n                \n        \n            type\n            \"application/json\"\n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Items of the collection CB4-MUX-L4-SR-1\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \n        \n            \n                \n        \n            rel\n            \"parent\"\n        \n    \n            \n        \n            \n                \n        \n            href\n            \"https://data.inpe.br/bdc/stac/v1/\"\n        \n    \n            \n        \n            \n                \n        \n            type\n            \"application/json\"\n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Link to catalog collections\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            3\n            \n        \n            \n                \n        \n            rel\n            \"root\"\n        \n    \n            \n        \n            \n                \n        \n            href\n            \"https://data.inpe.br/bdc/stac/v1/\"\n        \n    \n            \n        \n            \n                \n        \n            type\n            \"application/json\"\n        \n    \n            \n        \n            \n                \n        \n            title\n            \"INPE STAC Server\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            4\n            \n        \n            \n                \n        \n            rel\n            \"license\"\n        \n    \n            \n        \n            \n                \n        \n            href\n            \"https://creativecommons.org/licenses/by/4.0/\"\n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Creative-Commons-Attribution-4.0-International\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        stac_extensions[] 4 items\n        \n            \n        \n            \n                \n        \n            0\n            \"https://stac-extensions.github.io/version/v1.0.0/schema.json\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \"https://stac-extensions.github.io/processing/v1.0.0/schema.json\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \"https://stac-extensions.github.io/item-assets/v1.0.0/schema.json\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            3\n            \"https://stac-extensions.github.io/eo/v1.0.0/schema.json\"\n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        \n            version\n            \"1\"\n        \n    \n                \n            \n                \n                    \n        \n            deprecated\n            False\n        \n    \n                \n            \n                \n                    \n        \n            item_assets\n            \n        \n            \n                \n        \n            BAND5\n            \n        \n            \n                \n        \n            type\n            \"image/tiff; application=geotiff; profile=cloud-optimized\"\n        \n    \n            \n        \n            \n                \n        roles[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"data\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Band blue\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            BAND6\n            \n        \n            \n                \n        \n            type\n            \"image/tiff; application=geotiff; profile=cloud-optimized\"\n        \n    \n            \n        \n            \n                \n        roles[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"data\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Band green\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            BAND7\n            \n        \n            \n                \n        \n            type\n            \"image/tiff; application=geotiff; profile=cloud-optimized\"\n        \n    \n            \n        \n            \n                \n        roles[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"data\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Band red\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            BAND8\n            \n        \n            \n                \n        \n            type\n            \"image/tiff; application=geotiff; profile=cloud-optimized\"\n        \n    \n            \n        \n            \n                \n        roles[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"data\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Band nir\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            CMASK\n            \n        \n            \n                \n        \n            type\n            \"image/tiff; application=geotiff; profile=cloud-optimized\"\n        \n    \n            \n        \n            \n                \n        roles[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"data\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Band cmask\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            thumbnail\n            \n        \n            \n                \n        \n            type\n            \"image/png\"\n        \n    \n            \n        \n            \n                \n        \n            bands\n            \n        \n            \n                \n        \n            red\n            \"BAND7\"\n        \n    \n            \n        \n            \n                \n        \n            blue\n            \"BAND5\"\n        \n    \n            \n        \n            \n                \n        \n            green\n            \"BAND8\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        roles[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"thumbnail\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            title\n            \"Thumbnail\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        \n            properties\n            \n        \n            \n                \n        \n            renders\n            \n        \n            \n                \n        \n            rgb\n            \n        \n            \n                \n        \n            title\n            \"True Color\"\n        \n    \n            \n        \n            \n                \n        assets[] 3 items\n        \n            \n        \n            \n                \n        \n            0\n            \"BAND7\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \"BAND6\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \"BAND5\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        rescale[] 3 items\n        \n            \n        \n            \n                \n        0[] 2 items\n        \n            \n        \n            \n                \n        \n            0\n            0\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            3000\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        1[] 2 items\n        \n            \n        \n            \n                \n        \n            0\n            0\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            3000\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        2[] 2 items\n        \n            \n        \n            \n                \n        \n            0\n            0\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            3000\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            resampling\n            \"nearest\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        sources[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"http://www.inpe.br\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            bdc:visual\n            \n        \n            \n                \n        rgb[] 3 items\n        \n            \n        \n            \n                \n        \n            0\n            \"BAND7\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \"BAND6\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \"BAND5\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        rescale[] 3 items\n        \n            \n        \n            \n                \n        0[] 2 items\n        \n            \n        \n            \n                \n        \n            0\n            0\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            3000\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        1[] 2 items\n        \n            \n        \n            \n                \n        \n            0\n            0\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            3000\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        2[] 2 items\n        \n            \n        \n            \n                \n        \n            0\n            0\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            3000\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        bdc:applications[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"BDCExplorer\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            created\n            \"2024-03-05T17:06:15.788121Z\"\n        \n    \n            \n        \n            \n                \n        \n            updated\n            \"2024-03-05T17:06:15.788130Z\"\n        \n    \n            \n        \n            \n                \n        eo:bands[] 5 items\n        \n            \n        \n            \n                \n        \n            0\n            \n        \n            \n                \n        \n            name\n            \"BAND5\"\n        \n    \n            \n        \n            \n                \n        \n            common_name\n            \"blue\"\n        \n    \n            \n        \n            \n                \n        \n            description\n            \"B5 blue band from 0.45 to 0.52 micrometers\"\n        \n    \n            \n        \n            \n                \n        \n            min\n            0.0\n        \n    \n            \n        \n            \n                \n        \n            max\n            10000.0\n        \n    \n            \n        \n            \n                \n        \n            nodata\n            -9999.0\n        \n    \n            \n        \n            \n                \n        \n            scale\n            0.0001\n        \n    \n            \n        \n            \n                \n        \n            scale_add\n            None\n        \n    \n            \n        \n            \n                \n        \n            data_type\n            \"int16\"\n        \n    \n            \n        \n            \n                \n        \n            resolution_x\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            resolution_y\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            center_wavelength\n            0.485\n        \n    \n            \n        \n            \n                \n        \n            full_width_half_max\n            0.07\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \n        \n            \n                \n        \n            name\n            \"CMASK\"\n        \n    \n            \n        \n            \n                \n        \n            common_name\n            \"quality\"\n        \n    \n            \n        \n            \n                \n        \n            description\n            \"Cloud Mask Product\"\n        \n    \n            \n        \n            \n                \n        \n            min\n            0.0\n        \n    \n            \n        \n            \n                \n        \n            max\n            4.0\n        \n    \n            \n        \n            \n                \n        \n            nodata\n            255.0\n        \n    \n            \n        \n            \n                \n        \n            scale\n            1.0\n        \n    \n            \n        \n            \n                \n        \n            scale_add\n            None\n        \n    \n            \n        \n            \n                \n        \n            data_type\n            \"uint8\"\n        \n    \n            \n        \n            \n                \n        \n            resolution_x\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            resolution_y\n            20.0\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \n        \n            \n                \n        \n            name\n            \"BAND7\"\n        \n    \n            \n        \n            \n                \n        \n            common_name\n            \"red\"\n        \n    \n            \n        \n            \n                \n        \n            description\n            \"B7 red band from 0.63 to 0.69 micrometers\"\n        \n    \n            \n        \n            \n                \n        \n            min\n            0.0\n        \n    \n            \n        \n            \n                \n        \n            max\n            10000.0\n        \n    \n            \n        \n            \n                \n        \n            nodata\n            -9999.0\n        \n    \n            \n        \n            \n                \n        \n            scale\n            0.0001\n        \n    \n            \n        \n            \n                \n        \n            scale_add\n            None\n        \n    \n            \n        \n            \n                \n        \n            data_type\n            \"int16\"\n        \n    \n            \n        \n            \n                \n        \n            resolution_x\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            resolution_y\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            center_wavelength\n            0.66\n        \n    \n            \n        \n            \n                \n        \n            full_width_half_max\n            0.06\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            3\n            \n        \n            \n                \n        \n            name\n            \"BAND8\"\n        \n    \n            \n        \n            \n                \n        \n            common_name\n            \"nir\"\n        \n    \n            \n        \n            \n                \n        \n            description\n            \"B8 nir band from 0.77 to 0.89 micrometers\"\n        \n    \n            \n        \n            \n                \n        \n            min\n            0.0\n        \n    \n            \n        \n            \n                \n        \n            max\n            10000.0\n        \n    \n            \n        \n            \n                \n        \n            nodata\n            -9999.0\n        \n    \n            \n        \n            \n                \n        \n            scale\n            0.0001\n        \n    \n            \n        \n            \n                \n        \n            scale_add\n            None\n        \n    \n            \n        \n            \n                \n        \n            data_type\n            \"int16\"\n        \n    \n            \n        \n            \n                \n        \n            resolution_x\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            resolution_y\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            center_wavelength\n            0.83\n        \n    \n            \n        \n            \n                \n        \n            full_width_half_max\n            0.12\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            4\n            \n        \n            \n                \n        \n            name\n            \"BAND6\"\n        \n    \n            \n        \n            \n                \n        \n            common_name\n            \"green\"\n        \n    \n            \n        \n            \n                \n        \n            description\n            \"B6 green band from 0.52 to 0.59 micrometers\"\n        \n    \n            \n        \n            \n                \n        \n            min\n            0.0\n        \n    \n            \n        \n            \n                \n        \n            max\n            10000.0\n        \n    \n            \n        \n            \n                \n        \n            nodata\n            -9999.0\n        \n    \n            \n        \n            \n                \n        \n            scale\n            0.0001\n        \n    \n            \n        \n            \n                \n        \n            scale_add\n            None\n        \n    \n            \n        \n            \n                \n        \n            data_type\n            \"int16\"\n        \n    \n            \n        \n            \n                \n        \n            resolution_x\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            resolution_y\n            20.0\n        \n    \n            \n        \n            \n                \n        \n            center_wavelength\n            0.555\n        \n    \n            \n        \n            \n                \n        \n            full_width_half_max\n            0.07\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        \n            bdc:type\n            \"collection\"\n        \n    \n                \n            \n                \n                    \n        \n            bdc:public\n            True\n        \n    \n                \n            \n                \n                    \n        \n            bdc:grs\n            \"CBERS4_MUX_GRID\"\n        \n    \n                \n            \n                \n                    \n        bdc:bands_quicklook[] 3 items\n        \n            \n        \n            \n                \n        \n            0\n            \"BAND7\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \"BAND8\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \"BAND5\"\n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        \n            title\n            \"CBERS-4/MUX - Level-4-SR - Cloud Optimized GeoTIFF\"\n        \n    \n                \n            \n                \n                    \n        \n            extent\n            \n        \n            \n                \n        \n            spatial\n            \n        \n            \n                \n        bbox[] 1 items\n        \n            \n        \n            \n                \n        0[] 4 items\n        \n            \n        \n            \n                \n        \n            0\n            -79.86115089672425\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            -40.79283317617634\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            100.42739064486346\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            3\n            54.005907068086806\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            temporal\n            \n        \n            \n                \n        interval[] 1 items\n        \n            \n        \n            \n                \n        0[] 2 items\n        \n            \n        \n            \n                \n        \n            0\n            \"2016-01-01T00:00:00Z\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \"2026-08-29T00:00:00Z\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        \n            license\n            \"Creative-Commons-Attribution-4.0-International\"\n        \n    \n                \n            \n                \n                    \n        keywords[] 10 items\n        \n            \n        \n            \n                \n        \n            0\n            \"cbers\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \"cbers-4\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \"mux\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            3\n            \"level-4\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            4\n            \"surface reflectance\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            5\n            \"cloud optimized geotiff\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            6\n            \"cog\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            7\n            \"earth observation\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            8\n            \"brazil\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            9\n            \"visible imagery\"\n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        providers[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \n        \n            \n                \n        \n            name\n            \"National Institute for Space Research (INPE)\"\n        \n    \n            \n        \n            \n                \n        roles[] 4 items\n        \n            \n        \n            \n                \n        \n            0\n            \"producer\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            1\n            \"licensor\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            2\n            \"host\"\n        \n    \n            \n        \n    \n        \n            \n        \n            \n                \n        \n            3\n            \"processor\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        \n            url\n            \"https://data.inpe.br/big/\"\n        \n    \n            \n        \n            \n                \n        \n            processing:level\n            \"L4 SR\"\n        \n    \n            \n        \n            \n                \n        \n            processing:lineage\n            \"Generation of L4 in Cloud Optimized GeoTIFF\"\n        \n    \n            \n        \n            \n                \n        \n            processing:facility\n            \"LGI\"\n        \n    \n            \n        \n            \n                \n        \n            processing:software\n            \n        \n            \n                \n        \n            rio-cogeo\n            \"3.0\"\n        \n    \n            \n        \n            \n                \n        \n            bdc-collection-builder\n            \"1.0\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n            \n        \n    \n        \n    \n                \n            \n                \n                    \n        \n            summaries\n            \n        \n            \n                \n        gsd[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            20\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        platform[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"cbers-4\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        instruments[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"mux\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        constellation[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            \"cbers-4\"\n        \n    \n            \n        \n    \n        \n    \n            \n        \n            \n                \n        view:off_nadir[] 1 items\n        \n            \n        \n            \n                \n        \n            0\n            0"
+    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano",
+    "crumbs": [
+      "Course Information",
+      "Leituras"
+    ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week2/1-RS-STAC.html#buscando-as-cenas-para-mesma-área",
-    "href": "fundamentals_gis_rs/week2/1-RS-STAC.html#buscando-as-cenas-para-mesma-área",
-    "title": "STAC Catalogue",
-    "section": "1. Buscando as cenas para mesma área",
-    "text": "1. Buscando as cenas para mesma área\nO bbox abaixo pode ser trocado por qualquer área do Brasil (use o bbox finder lá em cima). Vamos buscar cenas CBERS-4/MUX com poucas nuvens em dois anos bem separados, para o desmatamento ficar evidente.\n\n\nCode\n# Novo Progresso (PA), fronteira de desmatamento ao longo da BR-163\nbbox = [-55.30, -8.35, -55.05, -8.15]\n\nclient = Client.open(\"https://data.inpe.br/bdc/stac/v1/\")\n\nfor ano in [\"2017-01-01/2017-12-31\", \"2023-01-01/2023-12-31\"]:\n    s = client.search(collections=[\"CB4-MUX-L4-SR-1\"], \n                      bbox=bbox, \n                      datetime=ano,\n                       query={\"eo:cloud_cover\": {\"lt\": 15}}\n                       )\n    print(ano, \"- imagens encontradas:\", s.matched())\n    for it in s.items():\n        print(\" \", it.id, \"- nuvens:\", round(it.properties[\"eo:cloud_cover\"], 1), \"%\")\n    print()\n\n\n2017-01-01/2017-12-31 - imagens encontradas: 10\n  CBERS_4_MUX_20171103_167_109_L4 - nuvens: 13.1 %\n  CBERS_4_MUX_20171103_167_110_L4 - nuvens: 10.5 %\n  CBERS_4_MUX_20170912_167_109_L4 - nuvens: 1.0 %\n  CBERS_4_MUX_20170912_167_110_L4 - nuvens: 0.4 %\n  CBERS_4_MUX_20170626_167_109_L4 - nuvens: 0.0 %\n  CBERS_4_MUX_20170626_167_110_L4 - nuvens: 0.0 %\n  CBERS_4_MUX_20170505_167_109_L4 - nuvens: 1.7 %\n  CBERS_4_MUX_20170505_167_110_L4 - nuvens: 4.1 %\n  CBERS_4_MUX_20170409_167_109_L4 - nuvens: 4.1 %\n  CBERS_4_MUX_20170409_167_110_L4 - nuvens: 13.5 %\n\n2023-01-01/2023-12-31 - imagens encontradas: 13\n  CBERS_4_MUX_20231027_168_109_L4 - nuvens: 10.4 %\n  CBERS_4_MUX_20231001_168_109_L4 - nuvens: 2.2 %\n  CBERS_4_MUX_20230908_167_109_L4 - nuvens: 6.7 %\n  CBERS_4_MUX_20230905_168_109_L4 - nuvens: 2.8 %\n  CBERS_4_MUX_20230813_167_109_L4 - nuvens: 0.8 %\n  CBERS_4_MUX_20230813_167_110_L4 - nuvens: 0.7 %\n  CBERS_4_MUX_20230810_168_110_L4 - nuvens: 1.9 %\n  CBERS_4_MUX_20230718_167_109_L4 - nuvens: 0.0 %\n  CBERS_4_MUX_20230718_167_110_L4 - nuvens: 0.0 %\n  CBERS_4_MUX_20230622_167_109_L4 - nuvens: 0.0 %\n  CBERS_4_MUX_20230622_167_110_L4 - nuvens: 0.3 %\n  CBERS_4_MUX_20230527_167_109_L4 - nuvens: 0.1 %\n  CBERS_4_MUX_20230527_167_110_L4 - nuvens: 1.4 %\n\n\n\nVamos escolher duas cenas do mesmo tile (167_109), uma de cada ano, ambas com 0% de nuvens.\n\n\nCode\nitem_2017 = list(client.search(collections=[\"CB4-MUX-L4-SR-1\"], \n                               ids=[\"CBERS_4_MUX_20170626_167_109_L4\"]).items())[0]\nitem_2023 = list(client.search(collections=[\"CB4-MUX-L4-SR-1\"], \n                               ids=[\"CBERS_4_MUX_20230718_167_109_L4\"]).items())[0]\n\nprint(item_2017)\nprint(item_2023)\n\n\n&lt;Item id=CBERS_4_MUX_20170626_167_109_L4&gt;\n&lt;Item id=CBERS_4_MUX_20230718_167_109_L4&gt;\n\n\n\n2. Lendo por bbox e montando as composições RGB\nVamos reaproveitar o transform_bounds e o from_bounds que já vimos, e o check_memory da aula, para ler só a nossa área de interesse em cada cena.\n\n\nCode\ndef read_bbox(href: str, bbox: list, masked: bool = True):\n    \"\"\"Lê a janela do raster correspondente ao bbox (em EPSG:4326), com a georreferência da janela.\"\"\"\n    with rasterio.open(href) as src:\n        reprojected_bounds = transform_bounds(bbox, \"EPSG:4326\", src.crs)\n        window = from_bounds(*reprojected_bounds, src.transform).round_offsets().round_lengths()\n        data = read(href, window=window, masked=masked)\n        return data, window_transform(window, src.transform), src.crs\n\n\ndef read_rgb(item, bbox):\n    assets = item.assets\n    red, transform, crs = read_bbox(assets[\"BAND7\"].href, bbox)\n    green, _, _ = read_bbox(assets[\"BAND6\"].href, bbox)\n    blue, _, _ = read_bbox(assets[\"BAND5\"].href, bbox)\n    return red.astype(\"float64\"), green.astype(\"float64\"), blue.astype(\"float64\"), transform, crs\n\n\nred_2017, green_2017, blue_2017, transform_2017, crs_2017 = read_rgb(item_2017, bbox)\ncheck_memory(\"depois de ler a cena de 2017\")\n\nred_2023, green_2023, blue_2023, transform_2023, crs_2023 = read_rgb(item_2023, bbox)\ncheck_memory(\"depois de ler a cena de 2023\")\n\nprint(\"shape:\", red_2017.shape)\n\n\n[RAM] depois de ler a cena de 2017: 8.77 GB usados de 32.00 GB (70.7%) | disponível: 9.39 GB\n[RAM] depois de ler a cena de 2023: 8.83 GB usados de 32.00 GB (70.8%) | disponível: 9.35 GB\nshape: (1100, 1382)\n\n\nPara essa cena vamos usar um contraste por percentil ao invés de min/max que usamos antes. Esse constrate por percentil evitar de a sensibilidade de pixels ficarem muito claros ou muito escuros..\n\n\nCode\ndef stretch(array, \n            low_pct=2, \n            high_pct=98):\n    \"\"\"Normaliza um array usando contraste por percentil.\"\"\"\n    data = np.ma.filled(array, np.nan)\n    valid = data[np.isfinite(data)]\n    p_lo, p_hi = np.percentile(valid, [low_pct, high_pct])\n    return np.clip((array - p_lo) / (p_hi - p_lo), 0, 1)\n\n# essa funcao converte em int 8 bits of quantization\ndef make_rgb_uint8(red, green, blue):\n    rgb = np.dstack((stretch(red), stretch(green), stretch(blue)))\n    return (np.ma.filled(rgb, 0) * 255).astype(\"uint8\")\n\n\nrgb_2017 = make_rgb_uint8(red_2017, green_2017, blue_2017)\nrgb_2023 = make_rgb_uint8(red_2023, green_2023, blue_2023)\n\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))\nax1.imshow(rgb_2017)\nax1.set_title(\"2017\")\nax1.axis(\"off\")\nax2.imshow(rgb_2023)\nax2.set_title(\"2023\")\nax2.axis(\"off\")\nplt.tight_layout()\nplt.show()"
+    "objectID": "course-info/reading.html#leituras-recomendadas",
+    "href": "course-info/reading.html#leituras-recomendadas",
+    "title": "Leituras",
+    "section": "",
+    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano",
+    "crumbs": [
+      "Course Information",
+      "Leituras"
+    ]
   },
   {
-    "objectID": "fundamentals_gis_rs/week2/1-RS-STAC.html#salvando-como-geotiff",
-    "href": "fundamentals_gis_rs/week2/1-RS-STAC.html#salvando-como-geotiff",
-    "title": "STAC Catalogue",
-    "section": "3. Salvando como GeoTIFF",
-    "text": "3. Salvando como GeoTIFF\nAqui vamos salvar cada composição como um GeoTIFF em disco, usando a transformação e o CRS da própria janela que lemos. Esse raster processado pode ser facilmente aberto no QGIS.\n\n\nCode\noutput_dir = \"outputs\"\nos.makedirs(output_dir, exist_ok=True)\n\n\ndef write_rgb_geotiff(red, green, blue, transform, crs, out_path):\n    \"\"\"Salva uma composição RGB (uint8) como GeoTIFF local.\"\"\"\n    rgb_uint8 = make_rgb_uint8(red, green, blue)  # (linhas, colunas, bandas)\n    rgb_uint8 = np.transpose(rgb_uint8, (2, 0, 1))  # rasterio espera (bandas, linhas, colunas)\n    with rasterio.open(\n        out_path, \"w\",\n        driver=\"GTiff\",\n        height=rgb_uint8.shape[1],\n        width=rgb_uint8.shape[2],\n        count=3,\n        dtype=\"uint8\",\n        crs=crs,\n        transform=transform,\n    ) as dst:\n        dst.write(rgb_uint8)\n    return out_path\n\n\ntif_2017 = write_rgb_geotiff(red_2017, green_2017, blue_2017, transform_2017, crs_2017,\n                              os.path.join(output_dir, \"novo_progresso_2017.tif\"))\ntif_2023 = write_rgb_geotiff(red_2023, green_2023, blue_2023, transform_2023, crs_2023,\n                              os.path.join(output_dir, \"novo_progresso_2023.tif\"))\n\nprint(tif_2017)\nprint(tif_2023)\n\n\noutputs/novo_progresso_2017.tif\noutputs/novo_progresso_2023.tif"
-  },
-  {
-    "objectID": "fundamentals_gis_rs/week2/1-RS-STAC.html#montando-o-painel-com-leafmap",
-    "href": "fundamentals_gis_rs/week2/1-RS-STAC.html#montando-o-painel-com-leafmap",
-    "title": "STAC Catalogue",
-    "section": "4. Montando o painel com leafmap",
-    "text": "4. Montando o painel com leafmap\nleafmap.foliumap.Map é uma subclasse de folium.Map, então ela renderiza como HTML puro. O split_map recebe os dois caminhos de arquivo e cuida de servir cada GeoTIFF como tiles (via localtileserver) e de montar o controle de swipe.\n\n\nCode\nm = leafmap.Map()\nm.split_map(\n    left_layer=tif_2017,\n    right_layer=tif_2023,\n    left_label=\"2017\",\n    right_label=\"2023\",\n)\nm\n\n\n\n\n\n\n\n\n\nNota: diferente da tentativa anterior com uma imagem estática, agora as duas camadas são servidas como tiles de verdade pelo localtileserver (um servidor local que roda junto com o kernel), então elas não pixelam ao aproximar o zoom. Isso também significa que o mapa só funciona enquanto o kernel do notebook estiver rodando na sua máquina."
+    "objectID": "fundamentals_gis_rs/week2/index.html",
+    "href": "fundamentals_gis_rs/week2/index.html",
+    "title": "Week 2",
+    "section": "",
+    "text": "Tamo na labuta, espera a semana 2, paciencia pequeno gafanhoto.\n\n\n\n\n\n\nTipPattern for adding material to a week\n\n\n\nEm construção\n\n\n\n\n\nbob_esponja"
   },
   {
     "objectID": "fundamentals_gis_rs/week0/provedores.html",
