@@ -3,11 +3,24 @@ title: "Provedores de Dados Geoespaciais"
 subtitle: "Onde encontrar os dados que nos interessam?"
 resources:
   - data/provedores.json
+  - data/temas_provedores_bubble.html
+  - data/temas_provedores_bubble.css
+  - data/temas_provedores_bubble.js
 ---
 
 Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.
 
-{{< include data/temas_provedores_bubble.html >}}
+```{=html}
+<iframe id="geoFrame" src="data/temas_provedores_bubble.html" style="width:100%; border:0; display:block; min-height:600px;" scrolling="no" title="Provedores de dados geoespaciais"></iframe>
+<script>
+window.addEventListener("message", function (e) {
+  if (e.data && e.data.type === "geo-resize") {
+    var f = document.getElementById("geoFrame");
+    if (f) f.style.height = e.data.height + "px";
+  }
+});
+</script>
+```
 
 ::: {.callout-tip appearance="simple"}
 ## Quer adicionar um provedor?
