@@ -37,7 +37,7 @@ website:
 
           - section: "Week 2 - Fundamentos em Sensoriamento Remoto"
             contents:
-              - fundamentals_gis_rs/week2/index.md
+              - fundamentals_gis_rs/week2/RS-STAC.ipynb
           - section: "Week 3"
             contents:
               - fundamentals_gis_rs/week3/index.md
