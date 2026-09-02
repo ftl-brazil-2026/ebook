@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças – FTL-Brasil-SpaceTech-Bootcamp</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-cc68adaa40d76c9009f84d3e780a3553.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">FTL-Brasil-SpaceTech-Bootcamp</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ftl-brazil-2026/ebook"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Course Information</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/general-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Informações Gerais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/reading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Leituras</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standard Set Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/cli-utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilitários de CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/how-to-contribute.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Como Contribuir</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em GIS e Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 0 — Ecossistema geoespacial</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ecossistema Geoespacial</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week0/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week0/space_tech_ecossystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessao 0 - 19/08/2026</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 1 — Fundamentos em GIS</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week1/crs_and_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de Coordenadas de Referência e Projeções</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análise Espacial de Dados Vetoriais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 - Fundamentos em Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week2/RS-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">STAC Catalogue</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week3/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Week 3</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week4/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Week 4</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em Machine Learning e Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../ml-dl/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentos em Machine Learning e Deep Learning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../state-of-art/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessões de Convidados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../guest-sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessões de Convidados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../awesome-geospatial/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Awesome Geospatial</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#buscando-as-imagens-no-stac" id="toc-buscando-as-imagens-no-stac" class="nav-link active" data-scroll-target="#buscando-as-imagens-no-stac">Buscando as imagens no STAC</a></li>
+  <li><a href="#lendo-as-bandas-por-janela-window" id="toc-lendo-as-bandas-por-janela-window" class="nav-link" data-scroll-target="#lendo-as-bandas-por-janela-window">Lendo as bandas por janela (window)</a></li>
+  <li><a href="#criando-uma-composiçoes-rgb-para-antes-e-depois-do-evento" id="toc-criando-uma-composiçoes-rgb-para-antes-e-depois-do-evento" class="nav-link" data-scroll-target="#criando-uma-composiçoes-rgb-para-antes-e-depois-do-evento">Criando uma Composiçoes RGB para antes e depois do evento</a></li>
+  <li><a href="#índices-espectrais" id="toc-índices-espectrais" class="nav-link" data-scroll-target="#índices-espectrais">Índices espectrais</a></li>
+  <li><a href="#histograma" id="toc-histograma" class="nav-link" data-scroll-target="#histograma">Histograma</a></li>
+  <li><a href="#classificação-por-limiar-thresholding" id="toc-classificação-por-limiar-thresholding" class="nav-link" data-scroll-target="#classificação-por-limiar-thresholding">Classificação por limiar (thresholding)</a></li>
+  <li><a href="#diferença-entre-as-imagens-antes-x-depois" id="toc-diferença-entre-as-imagens-antes-x-depois" class="nav-link" data-scroll-target="#diferença-entre-as-imagens-antes-x-depois">Diferença entre as imagens (antes x depois)</a></li>
+  <li><a href="#e-a-água" id="toc-e-a-água" class="nav-link" data-scroll-target="#e-a-água">8. E a água?</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Nesta aula vamos colocar em prática o que aprendemos sobre STAC para investigar um evento real. <strong>O rompimento da barragem de rejeitos da Vale em Brumadinho (MG)</strong>, ocorrido em 25 de janeiro de 2019.</p>
+<p>Nosso fluxo de trabalho será: 1. Buscar imagens CBERS-4/MUX de <strong>antes</strong> e <strong>depois</strong> do rompimento; 2. Calcular índices espectrais (<strong>NDVI</strong>, <strong>NDWI</strong> e <strong>EVI</strong>); 3. Analisar o histograma desses índices; 4. Classificar a imagem por limiares (thresholding); 5. Calcular a <strong>diferença entre as duas datas</strong> para visualizar o impacto do desastre.</p>
+<div id="42f28112" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:30:51.474580Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:30:51.474378Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:30:52.692100Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:30:52.691647Z&quot;}}" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pystac_client <span class="im">import</span> Client</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rasterio</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.windows <span class="im">import</span> from_bounds</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyproj <span class="im">import</span> Transformer</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> ListedColormap</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> psutil</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="d398aa9a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:30:52.693320Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:30:52.693221Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:30:52.695398Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:30:52.695069Z&quot;}}" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_memory(label: <span class="bu">str</span> <span class="op">=</span> <span class="st">""</span>, warn_threshold: <span class="bu">float</span> <span class="op">=</span> <span class="fl">85.0</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Imprime o uso atual de RAM e alerta se estiver perto do limite da máquina."""</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    mem <span class="op">=</span> psutil.virtual_memory()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    used_gb <span class="op">=</span> mem.used <span class="op">/</span> (<span class="dv">1024</span> <span class="op">**</span> <span class="dv">3</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    total_gb <span class="op">=</span> mem.total <span class="op">/</span> (<span class="dv">1024</span> <span class="op">**</span> <span class="dv">3</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    available_gb <span class="op">=</span> mem.available <span class="op">/</span> (<span class="dv">1024</span> <span class="op">**</span> <span class="dv">3</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    prefix <span class="op">=</span> <span class="ss">f"[RAM] </span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">: "</span> <span class="cf">if</span> label <span class="cf">else</span> <span class="st">"[RAM] "</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>prefix<span class="sc">}{</span>used_gb<span class="sc">:.2f}</span><span class="ss"> GB usados de </span><span class="sc">{</span>total_gb<span class="sc">:.2f}</span><span class="ss"> GB (</span><span class="sc">{</span>mem<span class="sc">.</span>percent<span class="sc">:.1f}</span><span class="ss">%) | disponível: </span><span class="sc">{</span>available_gb<span class="sc">:.2f}</span><span class="ss"> GB"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mem.percent <span class="op">&gt;=</span> warn_threshold:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"ATENÇÃO: uso de RAM acima de </span><span class="sc">{</span>warn_threshold<span class="sc">:.0f}</span><span class="ss">%! Considere reiniciar o kernel "</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>              <span class="st">"ou reduzir a área de interesse (bbox/window)."</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>check_memory()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[RAM] 15.60 GB usados de 32.00 GB (58.2%) | disponível: 13.39 GB</code></pre>
+</div>
+</div>
+<section id="buscando-as-imagens-no-stac" class="level2">
+<h2 class="anchored" data-anchor-id="buscando-as-imagens-no-stac">Buscando as imagens no STAC</h2>
+<p>Na aula passada utilizamos os dados do CBERS4, nessa aula vamos utilizar os dados de sentinel-2 para ter acesso as bandas SWIR. Vamos buscar cenas sobre a região da barragem, tanto <strong>antes</strong> quanto <strong>depois</strong> de 25/01/2019.</p>
+<p>Área de interesse: entorno da mina Córrego do Feijão / Brumadinho-MG.</p>
+<p>Caso voce queira cobrir uma outra área de interesse, pode usar esse link aqui para definir a bbox facilmente: <a href="https://rodostoteknoloji.com/online-tools/bbox-tool-en.html">bbox finder</a></p>
+<p>Para baixar as imagens do Sentinel-2, é preciso gerar as API keys. Siga esse link aqui para mais informações: <a href="https://documentation.dataspace.copernicus.eu/APIs/S3.html">API - CDSE</a>.</p>
+<p>Se você já tem uma conta, só precisa acessar esse link: <a href="https://eodata-s3keysmanager.dataspace.copernicus.eu/panel/s3-credentials">CDSE-API-KEYS-GENERATION</a>, depois gerar uma nova chave API, cole tanto a sua Acess Key como Secret Key dentro do .env, como indicado em nosso .env_copy.</p>
+<div id="36ed07b7" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div id="f0876743" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#os.environ["GDAL_HTTP_TCP_KEEPALIVE"] = "YES"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_S3_ENDPOINT"</span>] <span class="op">=</span> <span class="st">"eodata.dataspace.copernicus.eu"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_ACCESS_KEY_ID"</span>] <span class="op">=</span> os.environ.get(<span class="st">"CDSE_CLIENT"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_SECRET_ACCESS_KEY"</span>] <span class="op">=</span> os.environ.get(<span class="st">"CDSE_SECRET"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_HTTPS"</span>] <span class="op">=</span> <span class="st">"YES"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_VIRTUAL_HOSTING"</span>] <span class="op">=</span> <span class="st">"FALSE"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># endpoint da AWS pro ecossistema copernicus no STAC</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>cdse_stac <span class="op">=</span> <span class="st">"https://stac.dataspace.copernicus.eu/v1/"</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> Client.<span class="bu">open</span>(cdse_stac)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="e1cbe224" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(client.get_all_collections())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>[&lt;CollectionClient id=ccm-optical&gt;,
+ &lt;CollectionClient id=ccm-sar&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_daily_v4_cog&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_daily_v4_nc&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_monthly_v3_cog&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_monthly_v3_nc&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_monthly_v4_cog&gt;,
+ &lt;CollectionClient id=clms_ba_global_300m_monthly_v4_nc&gt;,
+ &lt;CollectionClient id=clms_clcplus_lulucf-instance_europe_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_dmp_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_dmp_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_dmp_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_dmp_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_dmp_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_dmp_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_eta_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_fapar_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_fapar_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_fapar_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_fapar_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_fapar_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_fapar_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_fcover_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_fcover_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_fcover_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_fcover_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_fcover_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_fcover_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_gdmp_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_gdmp_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_gdmp_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_gdmp_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_gdmp_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_gdmp_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_gpp_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_gpp_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_gpp_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_gpp_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_hf_global_300m_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lai_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lai_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lai_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lai_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lai_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lai_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lc_global_100m_yearly_v3_cog&gt;,
+ &lt;CollectionClient id=clms_lcm_global_10m_yearly_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lie_baltic_250m_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lie_baltic_250m_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lie_europe_250m_daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lie_europe_250m_daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lie_global_500m_daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lie_global_500m_daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lie_northernhemisphere_500m_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lie_northernhemisphere_500m_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lsp_global_300m_yearly_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lsp_global_300m_yearly_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lst-daily-cycle_global_3km_10daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_lst-daily-cycle_global_3km_10daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_lst-daily-cycle_global_5km_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lst-daily-cycle_global_5km_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lst-daily-cycle_global_5km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lst-daily-cycle_global_5km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lst-tci_global_3km_10daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_lst-tci_global_3km_10daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_lst-tci_global_5km_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lst-tci_global_5km_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lst-tci_global_5km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lst-tci_global_5km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lst_global_3km_hourly_v3_cog&gt;,
+ &lt;CollectionClient id=clms_lst_global_3km_hourly_v3_nc&gt;,
+ &lt;CollectionClient id=clms_lst_global_5km_hourly_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lst_global_5km_hourly_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lst_global_5km_hourly_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lst_global_5km_hourly_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lswt-nrt_global_1km_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lswt-nrt_global_1km_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lswt-offline_global_1km_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lswt-offline_global_1km_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_100m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_100m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_100m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_100m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_lwq-nrt_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_lwq-reproc_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_lwq-reproc_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi-lts_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_ndvi-lts_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi-lts_global_1km_10daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_ndvi-lts_global_1km_10daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi-sts_global_1km_10daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_1km_10daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_1km_10daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_300m_10daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_ndvi_global_300m_10daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_npp_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_npp_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_npp_global_300m_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_npp_global_300m_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_sce_europe_500m_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_sce_europe_500m_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_sce_global_1km_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_sce_global_1km_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_sce_northernhemisphere_1km_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_sce_northernhemisphere_1km_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_ssm_europe_1km_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_ssm_europe_1km_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_swe_northernhemisphere_5km_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_swe_northernhemisphere_5km_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_swe_northernhemisphere_5km_daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_swe_northernhemisphere_5km_daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_swi-static_global_12.5km_daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_swi-static_global_12.5km_daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_swi-timeseries_global_12.5km_daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_swi-timeseries_global_12.5km_daily_v4_nc&gt;,
+ &lt;CollectionClient id=clms_swi_europe_1km_daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_swi_europe_1km_daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_swi_europe_1km_daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_swi_europe_1km_daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_10daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_10daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_10daily_v4_cog&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_10daily_v4_nc&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_daily_v3_cog&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_daily_v3_nc&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_daily_v4_cog&gt;,
+ &lt;CollectionClient id=clms_swi_global_12.5km_daily_v4_nc&gt;,
+ &lt;CollectionClient id=clms_tcd_pantropical_10m_yearly_v1_cog&gt;,
+ &lt;CollectionClient id=clms_toc_global_300m_daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_ua_building-height_europe_10m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_urban-atlas_land-cover-use-change_europe_V010ha_vector_static_v01&gt;,
+ &lt;CollectionClient id=clms_urban-atlas_land-cover-use_europe_V025ha_vector_static_v01&gt;,
+ &lt;CollectionClient id=clms_urban-atlas_street-tree-layer_europe_V005ha_vector_static_v01&gt;,
+ &lt;CollectionClient id=clms_vlcc_bare-soil-after-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_bare-soil-after_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_bare-soil-before-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_bare-soil-before_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_broadleaved-cover-density_europe_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_coniferous-cover-density_europe_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_crop-types-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_crop-types_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_cropping-seasons-types_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_cropping-seasons_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_dominant-leaf-type-change_europe_20m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_dominant-leaf-type-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_dominant-leaf-type_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_fallow-land-duration-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_fallow-land-duration_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_fallow-land-presence-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_fallow-land-presence_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_forest-additional-support-layer_europe_10m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_forest-type_europe_100m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_forest-type_europe_10m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland-change-confidence-layer_europe_20m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland-change_europe_20m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland-mowing-dates_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland-mowing-events-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland-mowing-events_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland_europe_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_grassland_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_herbaceous-cover_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_main-crop-duration-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_main-crop-duration_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_main-crop-emergence-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_main-crop-emergence_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_main-crop-harvest-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_main-crop-harvest_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_ploughing-indicator_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_secondary-crop-duration-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_secondary-crop-duration_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_secondary-crop-emergence_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_secondary-crop-types_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_tree-cover-density-confidence-layer_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_tree-cover-density_europe_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_tree-cover-density_europe_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_tree-cover-presence-change-confidence-layer_europe_20m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_vlcc_tree-cover-presence-change_europe_20m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wb_global_100m_monthly_v1_cog&gt;,
+ &lt;CollectionClient id=clms_wb_global_100m_monthly_v1_nc&gt;,
+ &lt;CollectionClient id=clms_wb_global_1km_10daily_v2_cog&gt;,
+ &lt;CollectionClient id=clms_wb_global_1km_10daily_v2_nc&gt;,
+ &lt;CollectionClient id=clms_wb_global_300m_10daily_v1_cog&gt;,
+ &lt;CollectionClient id=clms_wb_global_300m_10daily_v1_nc&gt;,
+ &lt;CollectionClient id=clms_wb_global_300m_monthly_v2_cog&gt;,
+ &lt;CollectionClient id=clms_wb_global_300m_monthly_v2_nc&gt;,
+ &lt;CollectionClient id=clms_wl-lakes_global_vector_daily_v2_geojson&gt;,
+ &lt;CollectionClient id=clms_wl-rivers_global_vector_daily_v2_geojson&gt;,
+ &lt;CollectionClient id=clms_wsi_cloud-classification_europe_utm_20m_daily_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_fractional-snow-cover_europe_utm_20m_daily_v2&gt;,
+ &lt;CollectionClient id=clms_wsi_gap-filled-fractional-snow-cover_europe_utm_60m_daily_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_high-resolution-water-layer_europe_laea_100m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_high-resolution-water-layer_europe_laea_10m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_high-resolution-water-layer_europe_utm_10m_3yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_ice-cover-duration_europe_laea_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_ice-cover-duration_europe_laea_20m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_ice-cover-duration_europe_utm_20m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_sar-wet-snow_europe_utm_60m_daily_v2&gt;,
+ &lt;CollectionClient id=clms_wsi_snow-phenology-s1-s2_europe_laea_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_snow-phenology-s1-s2_europe_laea_60m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_snow-phenology-s1-s2_europe_utm_60m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_snow-phenology-s2_europe_laea_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_snow-phenology-s2_europe_laea_20m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_snow-phenology-s2_europe_utm_20m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_water-cover-duration_europe_laea_100m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_water-cover-duration_europe_laea_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_water-cover-duration_europe_utm_10m_yearly_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_water-ice-cover-s1-s2_europe_utm_20m_daily_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_water-ice-cover-s1_europe_utm_60m_daily_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_water-ice-cover-s2_europe_utm_20m_daily_v1&gt;,
+ &lt;CollectionClient id=clms_wsi_wet-dry-snow_europe_utm_60m_daily_v2&gt;,
+ &lt;CollectionClient id=cop-dem-eea-10-laea-tif&gt;,
+ &lt;CollectionClient id=cop-dem-glo-30-dged-cog&gt;,
+ &lt;CollectionClient id=cop-dem-glo-90-dged-cog&gt;,
+ &lt;CollectionClient id=landsat-c2-l1-oli&gt;,
+ &lt;CollectionClient id=landsat-c2-l1-oli-tirs&gt;,
+ &lt;CollectionClient id=landsat-c2-l1-tirs&gt;,
+ &lt;CollectionClient id=modis-aqua-myd09a1&gt;,
+ &lt;CollectionClient id=modis-aqua-myd09q1&gt;,
+ &lt;CollectionClient id=modis-aqua-myd10a1&gt;,
+ &lt;CollectionClient id=modis-aqua-myd10a2&gt;,
+ &lt;CollectionClient id=modis-aqua-myd11a1&gt;,
+ &lt;CollectionClient id=modis-aqua-myd11a2&gt;,
+ &lt;CollectionClient id=modis-aqua-myd13a1&gt;,
+ &lt;CollectionClient id=modis-aqua-myd13a2&gt;,
+ &lt;CollectionClient id=modis-aqua-myd13q1&gt;,
+ &lt;CollectionClient id=modis-aqua-myd14a1&gt;,
+ &lt;CollectionClient id=modis-aqua-myd14a2&gt;,
+ &lt;CollectionClient id=modis-aqua-myd15a2h&gt;,
+ &lt;CollectionClient id=modis-aqua-myd16a3gf&gt;,
+ &lt;CollectionClient id=modis-aqua-myd17a2h&gt;,
+ &lt;CollectionClient id=modis-aqua-myd17a2hgf&gt;,
+ &lt;CollectionClient id=modis-aqua-myd17a3hgf&gt;,
+ &lt;CollectionClient id=modis-aqua-myd21a2&gt;,
+ &lt;CollectionClient id=modis-terra-mod09a1&gt;,
+ &lt;CollectionClient id=modis-terra-mod09q1&gt;,
+ &lt;CollectionClient id=modis-terra-mod10a1&gt;,
+ &lt;CollectionClient id=modis-terra-mod10a2&gt;,
+ &lt;CollectionClient id=modis-terra-mod11a1&gt;,
+ &lt;CollectionClient id=modis-terra-mod11a2&gt;,
+ &lt;CollectionClient id=modis-terra-mod13a1&gt;,
+ &lt;CollectionClient id=modis-terra-mod13a2&gt;,
+ &lt;CollectionClient id=modis-terra-mod13q1&gt;,
+ &lt;CollectionClient id=modis-terra-mod14a1&gt;,
+ &lt;CollectionClient id=modis-terra-mod14a2&gt;,
+ &lt;CollectionClient id=modis-terra-mod15a2h&gt;,
+ &lt;CollectionClient id=modis-terra-mod16a2gf&gt;,
+ &lt;CollectionClient id=modis-terra-mod16a3gf&gt;,
+ &lt;CollectionClient id=modis-terra-mod17a2h&gt;,
+ &lt;CollectionClient id=modis-terra-mod17a2hgf&gt;,
+ &lt;CollectionClient id=modis-terra-mod17a3hgf&gt;,
+ &lt;CollectionClient id=modis-terra-mod21a2&gt;,
+ &lt;CollectionClient id=modis-terraaqua-mcd12q1&gt;,
+ &lt;CollectionClient id=modis-terraaqua-mcd15a2h&gt;,
+ &lt;CollectionClient id=modis-terraaqua-mcd15a3h&gt;,
+ &lt;CollectionClient id=modis-terraaqua-mcd43a4&gt;,
+ &lt;CollectionClient id=modis-terraaqua-mcd64a1&gt;,
+ &lt;CollectionClient id=opengeohub-landsat-bimonthly-mosaic-v1.0.1&gt;,
+ &lt;CollectionClient id=sentinel-1-etad&gt;,
+ &lt;CollectionClient id=sentinel-1-global-mosaics&gt;,
+ &lt;CollectionClient id=sentinel-1-grd&gt;,
+ &lt;CollectionClient id=sentinel-1-ocn&gt;,
+ &lt;CollectionClient id=sentinel-1-ocn-wv&gt;,
+ &lt;CollectionClient id=sentinel-1-slc&gt;,
+ &lt;CollectionClient id=sentinel-1-slc-burst&gt;,
+ &lt;CollectionClient id=sentinel-1-slc-wv&gt;,
+ &lt;CollectionClient id=sentinel-2-global-mosaics&gt;,
+ &lt;CollectionClient id=sentinel-2-gri-l1c&gt;,
+ &lt;CollectionClient id=sentinel-2-gri-l1c-gcp&gt;,
+ &lt;CollectionClient id=sentinel-2-l1c&gt;,
+ &lt;CollectionClient id=sentinel-2-l2a&gt;,
+ &lt;CollectionClient id=sentinel-2-l2a-tlm&gt;,
+ &lt;CollectionClient id=sentinel-2-night-time-acquisitions&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-1-efr-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-1-efr-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-1-err-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-1-err-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-lfr-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-lfr-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-lrr-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-lrr-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-wfr-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-wfr-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-wrr-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-olci-2-wrr-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-1-rbt-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-1-rbt-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-2-aod-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-2-frp-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-2-frp-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-2-lst-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-2-lst-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-2-wst-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sl-2-wst-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-1-sra-a-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-1-sra-a-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-1-sra-a-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-1-sra-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-hy-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-hy-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-hy-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-li-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-li-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-li-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-si-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-si-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-lan-si-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-wat-nrt&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-wat-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-sr-2-wat-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-aod-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-syn-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-syn-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-v10-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-v10-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-vg1-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-vg1-stc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-vgp-ntc&gt;,
+ &lt;CollectionClient id=sentinel-3-syn-2-vgp-stc&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd1-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd1-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd1-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd2-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd2-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd2-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd3-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd3-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd3-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd4-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd4-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd4-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd5-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd5-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd5-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd6-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd6-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd6-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd7-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd7-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd7-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd8-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd8-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-bd8-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l1-ra-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-ai&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-ai-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-ai-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-ai-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-lh&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-lh-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-lh-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-aer-lh-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-ch4&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-ch4-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-ch4-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-ch4-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-cloud&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-cloud-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-cloud-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-cloud-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-co&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-co-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-co-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-co-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-hcho&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-hcho-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-hcho-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-hcho-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-no2&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-no2-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-no2-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-no2-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd3&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd3-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd3-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd6&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd6-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd6-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd7&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd7-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-np-bd7-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-pr&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-pr-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-pr-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-pr-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-tcl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-tcl-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-tcl-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-o3-tcl-rpro&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-so2&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-so2-nrti&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-so2-offl&gt;,
+ &lt;CollectionClient id=sentinel-5p-l2-so2-rpro&gt;,
+ &lt;CollectionClient id=sentinel-6-amr-c-nrt&gt;,
+ &lt;CollectionClient id=sentinel-6-amr-c-ntc&gt;,
+ &lt;CollectionClient id=sentinel-6-amr-c-stc&gt;,
+ &lt;CollectionClient id=sentinel-6-p4-1b-nrt&gt;,
+ &lt;CollectionClient id=sentinel-6-p4-1b-ntc&gt;,
+ &lt;CollectionClient id=sentinel-6-p4-1b-stc&gt;,
+ &lt;CollectionClient id=sentinel-6-p4-2-nrt&gt;,
+ &lt;CollectionClient id=sentinel-6-p4-2-ntc&gt;,
+ &lt;CollectionClient id=sentinel-6-p4-2-stc&gt;]</code></pre>
+</div>
+</div>
+<div id="8b005c26" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:30:52.696295Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:30:52.696242Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:30:54.411816Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:30:54.411086Z&quot;}}" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bbox aproximado cobrindo a barragem de Brumadinho / Córrego do Feijão</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># lembrando que nosso bbox ta em WGS84 - EPSG4326 (classico de qualquer análise, mas não é um sistema projetado! )</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> [<span class="op">-</span><span class="fl">44.142273</span>, <span class="op">-</span><span class="fl">20.144694</span>, <span class="op">-</span><span class="fl">44.103469</span>, <span class="op">-</span><span class="fl">20.110041</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="c403db99" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> box</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>bounds_polygon <span class="op">=</span> box(<span class="op">*</span>bbox)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>centro_lat <span class="op">=</span> (bbox[<span class="dv">1</span>] <span class="op">+</span> bbox[<span class="dv">3</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>centro_lon <span class="op">=</span> (bbox[<span class="dv">0</span>] <span class="op">+</span> bbox[<span class="dv">2</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> folium.Map(location<span class="op">=</span>[centro_lat, centro_lon], zoom_start<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>folium.GeoJson(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    bounds_polygon.__geo_interface__,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"Bounds"</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    style_function<span class="op">=</span><span class="kw">lambda</span> x: {</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fillColor'</span>: <span class="st">'none'</span>,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">'color'</span>: <span class="st">'blue'</span>,</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'weight'</span>: <span class="dv">3</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fillOpacity'</span>: <span class="dv">0</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>).add_to(m)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; />
+    <script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;></script>
+    <script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;></script>
+    <script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;></script>
+    <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;></script>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/>
+    
+            <meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
+            <style>
+                #map_ad5bb3e108f0a01a2a565a97548608af {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class=&quot;folium-map&quot; id=&quot;map_ad5bb3e108f0a01a2a565a97548608af&quot; ></div>
+        
+</body>
+<script>
+    
+    
+            var map_ad5bb3e108f0a01a2a565a97548608af = L.map(
+                &quot;map_ad5bb3e108f0a01a2a565a97548608af&quot;,
+                {
+                    center: [-20.1273675, -44.122871],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 15,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_82075745d8156fce3e61a0ac71d0fa1d = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+        
+    
+            tile_layer_82075745d8156fce3e61a0ac71d0fa1d.addTo(map_ad5bb3e108f0a01a2a565a97548608af);
+        
+    
+        function geo_json_a7e49556348db16557e5a3cc5fec8320_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {&quot;color&quot;: &quot;blue&quot;, &quot;fillColor&quot;: &quot;none&quot;, &quot;fillOpacity&quot;: 0, &quot;weight&quot;: 3};
+            }
+        }
+
+        function geo_json_a7e49556348db16557e5a3cc5fec8320_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_a7e49556348db16557e5a3cc5fec8320 = L.geoJson(null, {
+                onEachFeature: geo_json_a7e49556348db16557e5a3cc5fec8320_onEachFeature,
+            
+                style: geo_json_a7e49556348db16557e5a3cc5fec8320_styler,
+            ...{
+}
+        });
+
+        function geo_json_a7e49556348db16557e5a3cc5fec8320_add (data) {
+            geo_json_a7e49556348db16557e5a3cc5fec8320
+                .addData(data);
+        }
+            geo_json_a7e49556348db16557e5a3cc5fec8320_add({&quot;features&quot;: [{&quot;geometry&quot;: {&quot;coordinates&quot;: [[[-44.103469, -20.144694], [-44.103469, -20.110041], [-44.142273, -20.110041], [-44.142273, -20.144694], [-44.103469, -20.144694]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;0&quot;, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+            geo_json_a7e49556348db16557e5a3cc5fec8320.addTo(map_ad5bb3e108f0a01a2a565a97548608af);
+        
+</script>
+</html>" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen=""></iframe></div></div>
+</div>
+</div>
+<div id="cfee225b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:30:54.413623Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:30:54.413490Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:30:55.754575Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:30:55.753827Z&quot;}}" data-execution_count="19">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>search_antes <span class="op">=</span> client.search(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>[<span class="st">"sentinel-2-l2a"</span>],</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bbox,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    datetime<span class="op">=</span><span class="st">"2018-10-01/2019-01-24"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    query<span class="op">=</span>{<span class="st">"eo:cloud_cover"</span>: {<span class="st">"lt"</span>: <span class="dv">15</span>}}</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>search_depois <span class="op">=</span> client.search(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>[<span class="st">"sentinel-2-l2a"</span>],</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bbox,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    datetime<span class="op">=</span><span class="st">"2019-01-26/2019-04-30"</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    query<span class="op">=</span>{<span class="st">"eo:cloud_cover"</span>: {<span class="st">"lt"</span>: <span class="dv">15</span>}}</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Imagens antes do rompimento:"</span>, search_antes.matched())</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> search_antes.items():</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">" "</span>, item.<span class="bu">id</span>, <span class="st">"- nuvens:"</span>, <span class="bu">round</span>(item.properties[<span class="st">"eo:cloud_cover"</span>], <span class="dv">1</span>), <span class="st">"%"</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Imagens depois do rompimento:"</span>, search_depois.matched())</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> search_depois.items():</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">" "</span>, item.<span class="bu">id</span>, <span class="st">"- nuvens:"</span>, <span class="bu">round</span>(item.properties[<span class="st">"eo:cloud_cover"</span>], <span class="dv">1</span>), <span class="st">"%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Imagens antes do rompimento: None
+  S2A_MSIL2A_20190122T131241_N0500_R138_T23KNT_20221210T105448 - nuvens: 2.2 %
+  S2B_MSIL2A_20190117T131239_N0500_R138_T23KNT_20221220T235155 - nuvens: 3.4 %
+  S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510 - nuvens: 0.8 %
+
+Imagens depois do rompimento: None
+  S2B_MSIL2A_20190427T131249_N0500_R138_T23KNT_20221021T034403 - nuvens: 2.9 %
+  S2B_MSIL2A_20190308T131239_N0500_R138_T23KNT_20221114T091205 - nuvens: 5.1 %
+  S2A_MSIL2A_20190201T131241_N0500_R138_T23KNT_20221206T064832 - nuvens: 1.0 %</code></pre>
+</div>
+</div>
+<p>Vamos escolher duas cenas da <strong>mesma órbita/tile</strong> (mesmo enquadramento), uma de cada período, com baixa cobertura de nuvens.</p>
+<div id="aa396e9d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:30:55.757193Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:30:55.756988Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:30:56.314558Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:30:56.313727Z&quot;}}" data-execution_count="20">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>item_antes <span class="op">=</span> <span class="bu">list</span>(<span class="bu">list</span>(search_antes.items()))[<span class="dv">2</span>]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>item_depois <span class="op">=</span> <span class="bu">list</span>(<span class="bu">list</span>(search_depois.items()))[<span class="dv">1</span>]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(item_antes)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(item_depois)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;Item id=S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510&gt;
+&lt;Item id=S2B_MSIL2A_20190308T131239_N0500_R138_T23KNT_20221114T091205&gt;</code></pre>
+</div>
+</div>
+<div id="0c643298" class="cell" data-execution_count="21">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>item_antes.assets</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>{'AOT_10m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R10m/T23KNT_20190107T131239_AOT_10m.jp2&gt;,
+ 'AOT_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_AOT_20m.jp2&gt;,
+ 'AOT_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_AOT_60m.jp2&gt;,
+ 'B01_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B01_20m.jp2&gt;,
+ 'B01_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B01_60m.jp2&gt;,
+ 'B02_10m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R10m/T23KNT_20190107T131239_B02_10m.jp2&gt;,
+ 'B02_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B02_20m.jp2&gt;,
+ 'B02_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B02_60m.jp2&gt;,
+ 'B03_10m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R10m/T23KNT_20190107T131239_B03_10m.jp2&gt;,
+ 'B03_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B03_20m.jp2&gt;,
+ 'B03_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B03_60m.jp2&gt;,
+ 'B04_10m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R10m/T23KNT_20190107T131239_B04_10m.jp2&gt;,
+ 'B04_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B04_20m.jp2&gt;,
+ 'B04_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B04_60m.jp2&gt;,
+ 'B05_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B05_20m.jp2&gt;,
+ 'B05_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B05_60m.jp2&gt;,
+ 'B06_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B06_20m.jp2&gt;,
+ 'B06_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B06_60m.jp2&gt;,
+ 'B07_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B07_20m.jp2&gt;,
+ 'B07_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B07_60m.jp2&gt;,
+ 'B08_10m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R10m/T23KNT_20190107T131239_B08_10m.jp2&gt;,
+ 'B09_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B09_60m.jp2&gt;,
+ 'B11_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B11_20m.jp2&gt;,
+ 'B11_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B11_60m.jp2&gt;,
+ 'B12_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B12_20m.jp2&gt;,
+ 'B12_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B12_60m.jp2&gt;,
+ 'B8A_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_B8A_20m.jp2&gt;,
+ 'B8A_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_B8A_60m.jp2&gt;,
+ 'CLD_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/QI_DATA/MSK_CLDPRB_20m.jp2&gt;,
+ 'CLD_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/QI_DATA/MSK_CLDPRB_60m.jp2&gt;,
+ 'Product': &lt;Asset href=https://download.dataspace.copernicus.eu/odata/v1/Products(412233a3-f94b-400b-8f9c-f5fbb15c7e60)/$value&gt;,
+ 'SCL_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_SCL_20m.jp2&gt;,
+ 'SCL_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_SCL_60m.jp2&gt;,
+ 'SNW_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/QI_DATA/MSK_SNWPRB_20m.jp2&gt;,
+ 'SNW_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/QI_DATA/MSK_SNWPRB_60m.jp2&gt;,
+ 'TCI_10m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R10m/T23KNT_20190107T131239_TCI_10m.jp2&gt;,
+ 'TCI_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_TCI_20m.jp2&gt;,
+ 'TCI_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_TCI_60m.jp2&gt;,
+ 'WVP_10m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R10m/T23KNT_20190107T131239_WVP_10m.jp2&gt;,
+ 'WVP_20m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R20m/T23KNT_20190107T131239_WVP_20m.jp2&gt;,
+ 'WVP_60m': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/IMG_DATA/R60m/T23KNT_20190107T131239_WVP_60m.jp2&gt;,
+ 'thumbnail': &lt;Asset href=https://datahub.creodias.eu/odata/v1/Assets(0f756242-9d94-4914-ba65-f0108a093f27)/$value&gt;,
+ 'safe_manifest': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/manifest.safe&gt;,
+ 'granule_metadata': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/GRANULE/L2A_T23KNT_A009602_20190107T131241/MTD_TL.xml&gt;,
+ 'inspire_metadata': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/INSPIRE.xml&gt;,
+ 'product_metadata': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/MTD_MSIL2A.xml&gt;,
+ 'datastrip_metadata': &lt;Asset href=s3://eodata/Sentinel-2/MSI/L2A_N0500/2019/01/07/S2B_MSIL2A_20190107T131239_N0500_R138_T23KNT_20221216T195510.SAFE/DATASTRIP/DS_S2RP_20221216T195510_S20190107T131241/MTD_DS.xml&gt;}</code></pre>
+</div>
+</div>
+</section>
+<section id="lendo-as-bandas-por-janela-window" class="level2">
+<h2 class="anchored" data-anchor-id="lendo-as-bandas-por-janela-window">Lendo as bandas por janela (window)</h2>
+<p>Como aprendemos na aula anterior, não precisamos baixar a cena inteira, vamos ler só a janela correspondente à nossa área de interesse, economizando nossa memória RAM e focando apenas em nossa área de interesse.</p>
+<div id="28d9516c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:30:56.317224Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:30:56.317014Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:30:56.321816Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:30:56.321405Z&quot;}}" data-execution_count="24">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># criando duas funcoes auxiliares para ajudar a ler as bandas dentro da janela </span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_window(uri: <span class="bu">str</span>, bbox: <span class="bu">list</span>, masked: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span>) <span class="op">-&gt;</span> np.ma.MaskedArray:</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Lê a janela do raster correspondente ao bbox (em EPSG:4326)."""</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> rasterio.<span class="bu">open</span>(uri) <span class="im">as</span> src:</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        transformer <span class="op">=</span> Transformer.from_crs(<span class="st">"EPSG:4326"</span>, </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                                           src.crs, </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                                           always_xy<span class="op">=</span><span class="va">True</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                                           )</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        minx, miny <span class="op">=</span> transformer.transform(bbox[<span class="dv">0</span>], bbox[<span class="dv">1</span>])</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        maxx, maxy <span class="op">=</span> transformer.transform(bbox[<span class="dv">2</span>], bbox[<span class="dv">3</span>])</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        window <span class="op">=</span> from_bounds(minx, miny, maxx, maxy, src.transform).round_offsets().round_lengths()</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> src.read(<span class="dv">1</span>, </span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>                        window<span class="op">=</span>window, </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                        masked<span class="op">=</span>masked</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_bands(item, bbox):</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Lê as bandas azul, verde, vermelho e NIR (MUX: BAND5, 6, 7, 8)"""</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    assets <span class="op">=</span> item.assets</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    blue <span class="op">=</span> read_window(assets[<span class="st">"B02_10m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    green <span class="op">=</span> read_window(assets[<span class="st">"B03_10m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    red <span class="op">=</span> read_window(assets[<span class="st">"B04_10m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    nir <span class="op">=</span> read_window(assets[<span class="st">"B08_10m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blue, green, red, nir </span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_bands_20m(item, bbox):</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    assets <span class="op">=</span> item.assets</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    blue_20 <span class="op">=</span> read_window(assets[<span class="st">"B02_20m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    green_20 <span class="op">=</span> read_window(assets[<span class="st">"B03_20m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    red_20 <span class="op">=</span> read_window(assets[<span class="st">"B04_20m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    swir1_20 <span class="op">=</span> read_window(assets[<span class="st">"B11_20m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    swir2_20 <span class="op">=</span> read_window(assets[<span class="st">"B12_20m"</span>].href, bbox).astype(<span class="st">"float32"</span>)</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blue_20, green_20, red_20, swir1_20, swir2_20</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="1810f905" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:30:56.323723Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:30:56.323584Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:49.975847Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:49.975221Z&quot;}}" data-execution_count="25">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># antes do evento</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>blue_antes, green_antes, red_antes, nir_antes  <span class="op">=</span> read_bands(item_antes, bbox)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>check_memory(<span class="st">""</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># depois do evento</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>blue_depois, green_depois, red_depois, nir_depois <span class="op">=</span> read_bands(item_depois, bbox)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>check_memory(<span class="st">""</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, red_antes.shape)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">## fazendo a mesma coisa mas para a resolucao de 20 metros</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>blue_antes_20, green_antes_20, red_antes_20, swir1_antes_20, swir2_antes_20 <span class="op">=</span> read_bands_20m(item_antes, bbox)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>blue_depois_20, green_depois_20, red_depois_20, swir1_depois_20, swir2_depois_20 <span class="op">=</span> read_bands_20m(item_depois, bbox)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[RAM] 14.39 GB usados de 32.00 GB (55.5%) | disponível: 14.25 GB
+[RAM] 14.49 GB usados de 32.00 GB (55.8%) | disponível: 14.14 GB
+shape: (381, 408)</code></pre>
+</div>
+</div>
+</section>
+<section id="criando-uma-composiçoes-rgb-para-antes-e-depois-do-evento" class="level2">
+<h2 class="anchored" data-anchor-id="criando-uma-composiçoes-rgb-para-antes-e-depois-do-evento">Criando uma Composiçoes RGB para antes e depois do evento</h2>
+<div id="9f08559d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:49.977843Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:49.977691Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:50.165927Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:50.165576Z&quot;}}" data-execution_count="26">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aqui normalizando por percentil mas poderia ser normalizado por min/max</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize(array, lo_pct<span class="op">=</span><span class="dv">2</span>, hi_pct<span class="op">=</span><span class="dv">98</span>):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Normaliza um array numpy usando um contraste por percentil"""</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> np.ma.filled(array, np.nan).astype(<span class="st">"float64"</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    valid <span class="op">=</span> data[np.isfinite(data)]</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    p_lo, p_hi <span class="op">=</span> np.percentile(valid, [lo_pct, hi_pct])</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    normalized <span class="op">=</span> (array <span class="op">-</span> p_lo) <span class="op">/</span> (p_hi <span class="op">-</span> p_lo)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.clip(normalized, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co"># apenas empilha as imagens em um unico object numpy</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_rgb(red, green, blue):</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.dstack((normalize(red), normalize(green), normalize(blue)))</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>rgb_antes <span class="op">=</span> make_rgb(red_antes, green_antes, blue_antes)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>rgb_depois <span class="op">=</span> make_rgb(red_depois, green_depois, blue_depois)</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>ax1.imshow(rgb_antes)</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">"Antes (23/10/2018)"</span>)</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>ax1.axis(<span class="st">"off"</span>)</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>ax2.imshow(rgb_depois)</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">"Depois (22/05/2019)"</span>)</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>ax2.axis(<span class="st">"off"</span>)</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="19454978" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">### Criando uma composicao falsa cor</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># aqui normalizando por percentil mas poderia ser normalizado por min/max</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>rgb_antes <span class="op">=</span> make_rgb(nir_antes, green_antes, blue_antes)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>rgb_depois <span class="op">=</span> make_rgb(nir_depois, green_depois, blue_depois)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>ax1.imshow(rgb_antes)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">"Antes (23/10/2018)"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>ax1.axis(<span class="st">"off"</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>ax2.imshow(rgb_depois)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">"Depois (22/05/2019)"</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>ax2.axis(<span class="st">"off"</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="índices-espectrais" class="level2">
+<h2 class="anchored" data-anchor-id="índices-espectrais">Índices espectrais</h2>
+<p>Agora vamos calcular três índices amplamente usados em sensoriamento remoto:</p>
+<ul>
+<li><strong>NDVI</strong> (Normalized Difference Vegetation Index)</li>
+<li><strong>NDWI</strong> (Normalized Difference Water Index): presença de água/umidade</li>
+<li><strong>EVI</strong> (Enhanced Vegetation Index): parecido com o NDVI, mas corrige efeitos atmosféricos e de solo</li>
+</ul>
+<p>Alem disso, vamos tentar utilizar um indice espectral para realçar a quantidade de material particulado presente na agua ou solo exposto, para isso, utilizando o catálogo de indices espectrais presente em: <a href="https://awesome-spectral-indices.github.io/awesome-spectral-indices/">Awesome Spectral Indices</a></p>
+<p>Vamos prosseguir com os índices - **** - ****</p>
+<div id="74482eb5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:50.168823Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:50.168762Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:50.170711Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:50.170408Z&quot;}}" data-execution_count="46">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_ndvi(nir, red):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""NDVI = (NIR - RED) / (NIR + RED)"""</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> np.errstate(divide<span class="op">=</span><span class="st">"ignore"</span>, invalid<span class="op">=</span><span class="st">"ignore"</span>):</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (nir <span class="op">-</span> red) <span class="op">/</span> (nir <span class="op">+</span> red)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_ndwi(green, nir):</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""NDWI (McFeeters) = (GREEN - NIR) / (GREEN + NIR)"""</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> np.errstate(divide<span class="op">=</span><span class="st">"ignore"</span>, invalid<span class="op">=</span><span class="st">"ignore"</span>):</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (green <span class="op">-</span> nir) <span class="op">/</span> (green <span class="op">+</span> nir)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_evi(nir, red, blue, G<span class="op">=</span><span class="fl">2.5</span>, C1<span class="op">=</span><span class="dv">6</span>, C2<span class="op">=</span><span class="fl">7.5</span>, L<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""EVI = G * (NIR - RED) / (NIR + C1*RED - C2*BLUE + L)"""</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> np.errstate(divide<span class="op">=</span><span class="st">"ignore"</span>, invalid<span class="op">=</span><span class="st">"ignore"</span>):</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> G <span class="op">*</span> (nir <span class="op">-</span> red) <span class="op">/</span> (nir <span class="op">+</span> C1 <span class="op">*</span> red <span class="op">-</span> C2 <span class="op">*</span> blue <span class="op">+</span> L)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_soil_index(B, G, R, N, S1, S2):</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Normalized Shortwave Infrared Difference Soil-Moisture"</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> np.errstate(divide<span class="op">=</span><span class="st">"ignore"</span>,invalid<span class="op">=</span><span class="st">"ignore"</span>):</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (S1 <span class="op">-</span> S2)<span class="op">/</span>(S1 <span class="op">+</span> S2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="e8d5903b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:50.171597Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:50.171546Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:50.185106Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:50.184792Z&quot;}}" data-execution_count="44">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ndvi_antes <span class="op">=</span> calc_ndvi(nir_antes, red_antes)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>ndvi_depois <span class="op">=</span> calc_ndvi(nir_depois, red_depois)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>ndwi_antes <span class="op">=</span> calc_ndwi(green_antes, nir_antes)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>ndwi_depois <span class="op">=</span> calc_ndwi(green_depois, nir_depois)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>evi_antes <span class="op">=</span> calc_evi(nir_antes, red_antes, blue_antes)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>evi_depois <span class="op">=</span> calc_evi(nir_depois, red_depois, blue_depois)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">## soil index</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">## quando calculamos a banda SWIR1 temos um problema, já que sua resolução é 20 metros e a resolucao de R,G,B,N é 10 metros. </span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">## Portanto, ou resampleamos com numpy todas as bandas para 20 metros, ou pegamos direto do STAC as bandas já em 20 metros. </span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co">## Irei pegar direto do STAC</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co">## a banda de NIR vou resamplear na mao usando o scikit-image</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> skimage <span class="im">as</span> ski</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>nir_antes_20 <span class="op">=</span> ski.transform.resize(nir_antes,(swir1_antes_20.shape))</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>nir_depois_20 <span class="op">=</span> ski.transform.resize(nir_depois,(swir1_depois_20.shape))</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>soil_antes <span class="op">=</span> calc_soil_index(blue_antes_20,green_antes_20,red_antes_20, nir_antes_20, swir1_antes_20, swir2_antes_20)</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>soil_depois <span class="op">=</span> calc_soil_index(blue_depois_20, green_depois_20, red_depois_20, nir_depois_20, swir1_depois_20, swir2_depois_20)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>check_memory(<span class="st">"depois de calcular os índices"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[RAM] depois de calcular os índices: 14.65 GB usados de 32.00 GB (56.1%) | disponível: 14.04 GB</code></pre>
+</div>
+</div>
+<div id="65c8bf02" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:50.186075Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:50.186029Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:50.514425Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:50.514044Z&quot;}}" data-execution_count="45">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">4</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">14</span>))</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, data, title <span class="kw">in</span> <span class="bu">zip</span>(axes[<span class="dv">0</span>], [ndvi_antes, ndvi_depois], [<span class="st">"NDVI - Antes"</span>, <span class="st">"NDVI - Depois"</span>]):</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> ax.imshow(data, cmap<span class="op">=</span><span class="st">"RdYlGn"</span>, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    fig.colorbar(im, ax<span class="op">=</span>ax, fraction<span class="op">=</span><span class="fl">0.046</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, data, title <span class="kw">in</span> <span class="bu">zip</span>(axes[<span class="dv">1</span>], [ndwi_antes, ndwi_depois], [<span class="st">"NDWI - Antes"</span>, <span class="st">"NDWI - Depois"</span>]):</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> ax.imshow(data, cmap<span class="op">=</span><span class="st">"Blues"</span>, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    fig.colorbar(im, ax<span class="op">=</span>ax, fraction<span class="op">=</span><span class="fl">0.046</span>)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, data, title <span class="kw">in</span> <span class="bu">zip</span>(axes[<span class="dv">2</span>], [evi_antes, evi_depois], [<span class="st">"EVI - Antes"</span>, <span class="st">"EVI - Depois"</span>]):</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> ax.imshow(data, cmap<span class="op">=</span><span class="st">"RdYlGn"</span>, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    fig.colorbar(im, ax<span class="op">=</span>ax, fraction<span class="op">=</span><span class="fl">0.046</span>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, data, title <span class="kw">in</span> <span class="bu">zip</span>(axes[<span class="dv">3</span>], [soil_antes, soil_depois], [<span class="st">"Soil - Antes"</span>, <span class="st">"Soil - Depois"</span>]):</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> ax.imshow(data, cmap<span class="op">=</span><span class="st">"RdYlGn"</span>, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    fig.colorbar(im, ax<span class="op">=</span>ax, fraction<span class="op">=</span><span class="fl">0.046</span>)</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="histograma" class="level2">
+<h2 class="anchored" data-anchor-id="histograma">Histograma</h2>
+<p>O histograma mostra como os valores do índice estão distribuídos na imagem. Vamos olhar o NDVI de antes do rompimento.</p>
+<div id="60b98a0f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:50.516945Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:50.516871Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:50.908368Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:50.907973Z&quot;}}">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ndvi_flat <span class="op">=</span> np.ma.filled(ndvi_antes, np.nan).ravel()</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>ndvi_flat <span class="op">=</span> ndvi_flat[np.isfinite(ndvi_flat)]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>sns.histplot(ndvi_flat, kde<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">"seagreen"</span>, </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>             binrange<span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>             bins<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>             )</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="fl">0.2</span>, color<span class="op">=</span><span class="st">"orange"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"limiar 0.2"</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="fl">0.45</span>, color<span class="op">=</span><span class="st">"darkgreen"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"limiar 0.45"</span>)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribuição dos valores de NDVI (antes do rompimento)"</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"NDVI"</span>)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="19da71ae" class="cell" data-execution_count="71">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>evi_normalized</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="71">
+<pre><code>array([0.87793689, 0.87822718, 0.87827761, ..., 0.87648972, 0.87642845,
+       0.87650834], shape=(155447,))</code></pre>
+</div>
+</div>
+<div id="07ef96cc" class="cell" data-execution_count="73">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>evi_flat <span class="op">=</span> np.ma.filled(evi_antes, np.nan).ravel()</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>evi_flat <span class="op">=</span> evi_flat[np.isfinite(evi_flat)]</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>evi_normalized <span class="op">=</span> (evi_flat <span class="op">-</span> evi_flat.<span class="bu">min</span>()) <span class="op">/</span> (evi_flat.<span class="bu">max</span>() <span class="op">-</span> evi_flat.<span class="bu">min</span>())</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>sns.histplot(evi_normalized, </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>             kde<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">"seagreen"</span>, </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>             binrange<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>), </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>             bins<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="fl">0.2</span>, color<span class="op">=</span><span class="st">"orange"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"limiar 0.2"</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="fl">0.45</span>, color<span class="op">=</span><span class="st">"darkgreen"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"limiar 0.45"</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribuição dos valores de EVI (antes do rompimento)"</span>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"EVI"</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classificação-por-limiar-thresholding" class="level2">
+<h2 class="anchored" data-anchor-id="classificação-por-limiar-thresholding">Classificação por limiar (thresholding)</h2>
+<p>Com base no histograma, podemos definir limiares para classificar a imagem em classes. Para o NDVI:</p>
+<ul>
+<li><code>&lt; 0.2</code>: solo exposto / água / área urbana</li>
+<li><code>0.2 – 0.45</code>: vegetação esparsa/fraca</li>
+<li><code>&gt;= 0.45</code>: vegetação vigorosa</li>
+</ul>
+<div id="d79fa94b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:50.909426Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:50.909366Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:51.027762Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:51.027391Z&quot;}}" data-execution_count="76">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_ndvi(ndvi):</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""0 = sem dado, 1 = solo/água/urbano, 2 = vegetação fraca, 3 = vegetação vigorosa"""</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    ndvi_filled <span class="op">=</span> np.ma.filled(ndvi, np.nan)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    classes <span class="op">=</span> np.zeros_like(ndvi_filled, dtype<span class="op">=</span>np.int8)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    classes[ndvi_filled <span class="op">&lt;</span> <span class="fl">0.2</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    classes[(ndvi_filled <span class="op">&gt;=</span> <span class="fl">0.2</span>) <span class="op">&amp;</span> (ndvi_filled <span class="op">&lt;</span> <span class="fl">0.45</span>)] <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    classes[ndvi_filled <span class="op">&gt;=</span> <span class="fl">0.45</span>] <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> classes</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>classes_antes <span class="op">=</span> classify_ndvi(ndvi_antes)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>classes_depois <span class="op">=</span> classify_ndvi(ndvi_depois)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> ListedColormap([<span class="st">"black"</span>, <span class="st">"#d9b38c"</span>, <span class="st">"#a8d08d"</span>, <span class="st">"#1a7a1a"</span>])</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>ax1.imshow(classes_antes, cmap<span class="op">=</span>cmap, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">"Classes NDVI - Antes"</span>)</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>ax1.axis(<span class="st">"off"</span>)</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>ax2.imshow(classes_depois, cmap<span class="op">=</span>cmap, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">"Classes NDVI - Depois"</span>)</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>ax2.axis(<span class="st">"off"</span>)</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="a1c471d9" class="cell" data-execution_count="77">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_evi(evi):</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""0 = sem dado, </span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">    1 = solo/água/urbano,  </span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">    2 = vegetação"""</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    evi_filled <span class="op">=</span> np.ma.filled(evi, np.nan)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    classes <span class="op">=</span> np.zeros_like(evi_filled, dtype<span class="op">=</span>np.int8)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    classes[evi_filled <span class="op">&lt;</span> <span class="fl">0.75</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    classes[(evi_filled <span class="op">&gt;=</span> <span class="fl">0.75</span>)] <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> classes</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>classes_antes <span class="op">=</span> classify_ndvi(evi_antes)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>classes_depois <span class="op">=</span> classify_ndvi(evi_depois)</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> ListedColormap([<span class="st">"black"</span>, <span class="st">"#d9b38c"</span>, <span class="st">"#a8d08d"</span>, <span class="st">"#1a7a1a"</span>])</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>ax1.imshow(classes_antes, cmap<span class="op">=</span>cmap, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">"Classes EVI - Antes"</span>)</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>ax1.axis(<span class="st">"off"</span>)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>ax2.imshow(classes_depois, cmap<span class="op">=</span>cmap, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">"Classes EVI - Depois"</span>)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>ax2.axis(<span class="st">"off"</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-23-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="bafc2b2d" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># FAÇA AQUI A CLASSIFICAO DO NDWI </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="diferença-entre-as-imagens-antes-x-depois" class="level2">
+<h2 class="anchored" data-anchor-id="diferença-entre-as-imagens-antes-x-depois">Diferença entre as imagens (antes x depois)</h2>
+<p>Agora vamos para uma parte importante, vamos avaliar a diferença entre uma image e outra. Note que essa diferença é feita pixel-to-pixel, onde cada entrada de um pixel é analisada especificamente referente ao pixel da outra imagem na mesma posição. Isso requer que os rasteres estejam alinhandos, projetados no mesmo CRS e possuam o mesmo np.shape.</p>
+<p>Subtraindo o NDVI de depois pelo de antes, conseguimos visualizar exatamente onde a vegetação foi destruída pela onda de rejeitos. Valores bem negativos (azul) indicam perda de vegetação/solo coberto pela lama.</p>
+<div id="ccdaf30b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:51.029397Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:51.029336Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:51.098252Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:51.097893Z&quot;}}" data-execution_count="78">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ndvi_diff <span class="op">=</span> np.ma.filled(ndvi_depois, np.nan) <span class="op">-</span> np.ma.filled(ndvi_antes, np.nan)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> plt.imshow(ndvi_diff, cmap<span class="op">=</span><span class="st">"RdBu"</span>, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plt.colorbar(im, label<span class="op">=</span><span class="st">"Diferença de NDVI (depois - antes)"</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Impacto do rompimento da barragem — diferença de NDVI"</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Diferença média de NDVI:"</span>, np.nanmean(ndvi_diff))</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Pixels com forte perda de vegetação (diff &lt; -0.3):"</span>, np.<span class="bu">sum</span>(ndvi_diff <span class="op">&lt;</span> <span class="op">-</span><span class="fl">0.3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-25-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Diferença média de NDVI: -0.037199162
+Pixels com forte perda de vegetação (diff &lt; -0.3): 13679</code></pre>
+</div>
+</div>
+<p>Se eu tenho 13.000 pixels que mudaram a vegetação, e portanto, eu sei o tamanho de cada pixel, isso significa que eu posso estimar a área afetada.</p>
+<div id="9ad635e9" class="cell" data-execution_count="83">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aqui eu considero que toda a mudança na image que foi maior que 0.3 foi portanto perda de vegetação em função do rompimento da barragem</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>total_pixels_alterados <span class="op">=</span> np.<span class="bu">sum</span>(ndvi_diff <span class="op">&lt;</span> <span class="op">-</span><span class="fl">0.3</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sabendo que cada pixel tem a resolução de 10m</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>area_m2 <span class="op">=</span> total_pixels_alterados<span class="op">*</span><span class="dv">10</span><span class="op">*</span><span class="dv">10</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>area_km2 <span class="op">=</span> area_m2 <span class="op">/</span> <span class="fl">1e6</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Area afetada em m2: </span><span class="sc">{</span>area_m2<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Area afetada em km2:</span><span class="sc">{</span>area_km2<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area afetada em m2: 1367900
+Area afetada em km2:1.3679</code></pre>
+</div>
+</div>
+</section>
+<section id="e-a-água" class="level2">
+<h2 class="anchored" data-anchor-id="e-a-água">8. E a água?</h2>
+<p>O rejeito de mineração se comporta de forma parecida com água/lama nas bandas espectrais. Vamos ver a diferença de NDWI também, que pode evidenciar a lama e o assoreamento do Rio Paraopeba.</p>
+<div id="ad813e59" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T14:31:51.099211Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T14:31:51.099159Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T14:31:51.168707Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T14:31:51.168315Z&quot;}}">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ndwi_diff <span class="op">=</span> np.ma.filled(ndwi_depois, np.nan) <span class="op">-</span> np.ma.filled(ndwi_antes, np.nan)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> plt.imshow(ndwi_diff, cmap<span class="op">=</span><span class="st">"RdBu_r"</span>, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>plt.colorbar(im, label<span class="op">=</span><span class="st">"Diferença de NDWI (depois - antes)"</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Diferença de NDWI — possível assoreamento do Rio Paraopeba"</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RS-Image_Processing_files/figure-html/cell-27-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[RAM] fim do notebook: 15.29 GB usados de 32.00 GB (58.1%) | disponível: 13.41 GB</code></pre>
+</div>
+</div>
+</section>
+<section id="referências" class="level1">
+<h1>Referências</h1>
+<ul>
+<li><a href="https://github.com/brazil-data-cube/code-gallery/blob/master/jupyter/Python/stac/stac-image-processing.ipynb">Brazil Data Cube - stac-image-processing.ipynb</a></li>
+<li>Catálogo STAC: <a href="https://data.inpe.br/bdc/stac/v1/">https://data.inpe.br/bdc/stac/v1/</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ftl-brazil-2026\.github\.io\/ebook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>SpaceTech Bootcamp · Emanuel Goulart</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
