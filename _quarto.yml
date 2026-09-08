@@ -39,9 +39,9 @@ website:
             contents:
               - fundamentals_gis_rs/week2/RS-STAC.ipynb
               - fundamentals_gis_rs/week2/RS-Image_Processing.ipynb
-          - section: "Week 3"
+          - section: "Week 3 - Analises Espaciais Complexas"
             contents:
-              - fundamentals_gis_rs/week3/index.md
+              - fundamentals_gis_rs/week3/dem.ipynb
           - section: "Week 4"
             contents:
               - fundamentals_gis_rs/week4/index.md
