@@ -421,6 +421,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#escolhendo-um-exutório-e-delineando-a-bacia" id="toc-escolhendo-um-exutório-e-delineando-a-bacia" class="nav-link" data-scroll-target="#escolhendo-um-exutório-e-delineando-a-bacia">Escolhendo um exutório e delineando a bacia</a></li>
   <li><a href="#vetorizando-a-bacia-e-extraindo-a-rede-de-rios" id="toc-vetorizando-a-bacia-e-extraindo-a-rede-de-rios" class="nav-link" data-scroll-target="#vetorizando-a-bacia-e-extraindo-a-rede-de-rios">Vetorizando a bacia e extraindo a rede de rios</a></li>
   </ul></li>
+  <li><a href="#bonus" id="toc-bonus" class="nav-link" data-scroll-target="#bonus">Bonus!</a></li>
   </ul>
 </nav>
     </div>
@@ -3031,9 +3032,22 @@ Rede de rios: 2610 trechos</code></pre>
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="bonus" class="level1">
+<h1>Bonus!</h1>
+<p>E se misturarmos diferentes rasters que conseguimos acessar através do STAC e transformarmos em diferentes tipos de dados para visualizações interativas?</p>
+<p>Aqui nesse próximo exemplo, vamos usar dados do Sentinel-2 com os dados de DEM para gerarmos um point-cloud. Point-cloud são um “novo” tipo de dados de nuvem de pontos que estão ganhando bastante tração nos últimos anos com avanços de tecnologias como o Lidar. Basicamente esses sensores permitem milhares de pontos sejam lançados no ambiente que está sendo medido e são o padrão ouro para muito tipo de análises como mensuração de biomassa, carros autônomos utilizam esses dados para navegação bem como robos autônomos.</p>
+<p>Dessa forma, quando mesclamos dados de Sentinel-2 com os modelos digitais de elevação conseguimos interpolar e reproduzir ‘artificialmente’ essa nuvem de pontos para criarmos visualizações poderosas.</p>
+<p>Curioso, dê uma olhada nesse <a href="https://github.com/emanuel-gf/EO-Point-Cloud">repo</a> aqui que ensina como fazer.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/gif_image.gif" class="img-fluid figure-img"></p>
+<figcaption>alt text</figcaption>
+</figure>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
