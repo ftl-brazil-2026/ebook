@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-cc68adaa40d76c9009f84d3e780a3553.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-a6765147b6446e4cffb9cdea7865c701.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -298,7 +298,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 3</span></a>
+ <span class="menu-text">Week 3 - Analises Espaciais Complexas</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -306,8 +306,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../fundamentals_gis_rs/week3/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Week 3</span></a>
+  <a href="../../fundamentals_gis_rs/week3/dem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
   </div>
 </li>
       </ul>
@@ -3496,7 +3496,7 @@ thumbnail</code></pre>
 </section>
 <section id="rasterio-e-numpy-para-acessar-as-images-de-satélite" class="level1">
 <h1>Rasterio e Numpy para acessar as images de satélite</h1>
-<div id="e7d0907b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:51:18.115728Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:51:18.115583Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:51:18.345994Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:51:18.345580Z&quot;}}" data-execution_count="22">
+<div id="e7d0907b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:51:18.115728Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:51:18.115583Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:51:18.345994Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:51:18.345580Z&quot;}}" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rasterio</span>
@@ -3661,13 +3661,13 @@ thumbnail</code></pre>
 <section id="rasterio---window" class="level3">
 <h3 class="anchored" data-anchor-id="rasterio---window">Rasterio - Window</h3>
 <p>Ao inves de acessar a imagem inteira (7000x7000 pixels), a gente pode utilizar uma função para só acessar um pedacinho dessa imagem, a nossa área de interesse</p>
-<div id="44a0a3dc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:55.499471Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:55.499377Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:55.501251Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:55.500978Z&quot;}}" data-execution_count="34">
+<div id="44a0a3dc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:55.499471Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:55.499377Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:55.501251Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:55.500978Z&quot;}}" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.windows <span class="im">import</span> Window</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="d1c8512f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:55.502126Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:55.502072Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:55.503859Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:55.503540Z&quot;}}" data-execution_count="35">
+<div id="d1c8512f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:55.502126Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:55.502072Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:55.503859Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:55.503540Z&quot;}}" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read(uri: <span class="bu">str</span>, </span>
@@ -3698,13 +3698,13 @@ thumbnail</code></pre>
 </div>
 </div>
 <p>ao invés de passar os valores dos posição de pixel, você poderia passar somente as coordenadas</p>
-<div id="d2daf373" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:58.861526Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:58.861467Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:58.863127Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:58.862820Z&quot;}}" data-execution_count="38">
+<div id="d2daf373" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:58.861526Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:58.861467Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:58.863127Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:58.862820Z&quot;}}" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.windows <span class="im">import</span> from_bounds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="40c411d6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:58.863929Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:58.863874Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:58.865878Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:58.865553Z&quot;}}" data-execution_count="39">
+<div id="40c411d6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:52:58.863929Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:52:58.863874Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:52:58.865878Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:52:58.865553Z&quot;}}" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyproj <span class="im">import</span> Transformer</span>
@@ -3850,7 +3850,7 @@ thumbnail</code></pre>
 <p>Vamos fechar essa aula com um painel interativo, aquele painel que você vê por aí no LinkedIn ou como Google Earth Engine webgis. Vamos montar o mesmo efeito com o <a href="https://leafmap.org/"><code>leafmap</code></a>, usando o seu backend baseado em <code>folium</code> (<code>leafmap.foliumap</code>).</p>
 <p>Fluxo de ponta a ponta: 1. Escolher uma área em qualquer lugar do Brasil; 2. Buscar no STAC duas cenas da mesma área, em anos diferentes; 3. Ler as bandas por janela (bbox) e montar duas composições RGB; 4. Salvar cada composição como um GeoTIFF local (com a georreferência da janela); 5. Servir os dois GeoTIFFs com <code>leafmap.foliumap.Map().split_map(...)</code>, que já vem com o controle de swipe.</p>
 <p>Vamos usar como exemplo o <strong>avanço do desmatamento na Amazônia</strong>, na região de Novo Progresso (PA), ao longo da BR-163 — uma área com um recorte antes/depois bem marcante.</p>
-<div id="adbcc1d1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:25.962533Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:25.962463Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:53:26.369605Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:53:26.369163Z&quot;}}" data-execution_count="144">
+<div id="adbcc1d1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:25.962533Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:25.962463Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:53:26.369605Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:53:26.369163Z&quot;}}" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -3862,7 +3862,7 @@ thumbnail</code></pre>
 <section id="buscando-as-cenas-para-mesma-área" class="level2">
 <h2 class="anchored" data-anchor-id="buscando-as-cenas-para-mesma-área">1. Buscando as cenas para mesma área</h2>
 <p>O <code>bbox</code> abaixo pode ser trocado por qualquer área do Brasil (use o <a href="https://rodostoteknoloji.com/online-tools/bbox-tool-en.html">bbox finder</a> lá em cima). Vamos buscar cenas CBERS-4/MUX com poucas nuvens em dois anos bem separados, para o desmatamento ficar evidente.</p>
-<div id="2c72e18b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:26.370755Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:26.370686Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:53:28.834800Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:53:28.833839Z&quot;}}" data-execution_count="145">
+<div id="2c72e18b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:26.370755Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:26.370686Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:53:28.834800Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:53:28.833839Z&quot;}}" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Novo Progresso (PA), fronteira de desmatamento ao longo da BR-163</span></span>
@@ -3912,7 +3912,7 @@ thumbnail</code></pre>
 </div>
 </div>
 <p>Vamos escolher duas cenas do <strong>mesmo tile</strong> (167_109), uma de cada ano, ambas com 0% de nuvens.</p>
-<div id="3d75e322" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:28.837507Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:28.837292Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:53:29.468787Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:53:29.467858Z&quot;}}" data-execution_count="148">
+<div id="3d75e322" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:28.837507Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:28.837292Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:53:29.468787Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:53:29.467858Z&quot;}}" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>item_2017 <span class="op">=</span> <span class="bu">list</span>(client.search(collections<span class="op">=</span>[<span class="st">"CB4-MUX-L4-SR-1"</span>], </span>
@@ -3931,7 +3931,7 @@ thumbnail</code></pre>
 <section id="lendo-por-bbox-e-montando-as-composições-rgb" class="level3">
 <h3 class="anchored" data-anchor-id="lendo-por-bbox-e-montando-as-composições-rgb">2. Lendo por bbox e montando as composições RGB</h3>
 <p>Vamos reaproveitar o <code>transform_bounds</code> e o <code>from_bounds</code> que já vimos, e o <code>check_memory</code> da aula, para ler só a nossa área de interesse em cada cena.</p>
-<div id="662314d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:29.471932Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:29.471653Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:09.964007Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:09.963539Z&quot;}}" data-execution_count="149">
+<div id="662314d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:53:29.471932Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:53:29.471653Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:09.964007Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:09.963539Z&quot;}}" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_bbox(href: <span class="bu">str</span>, bbox: <span class="bu">list</span>, masked: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span>):</span>
@@ -3952,21 +3952,19 @@ thumbnail</code></pre>
 <span id="cb73-16"><a href="#cb73-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb73-17"><a href="#cb73-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb73-18"><a href="#cb73-18" aria-hidden="true" tabindex="-1"></a>red_2017, green_2017, blue_2017, transform_2017, crs_2017 <span class="op">=</span> read_rgb(item_2017, bbox)</span>
-<span id="cb73-19"><a href="#cb73-19" aria-hidden="true" tabindex="-1"></a>check_memory(<span class="st">"depois de ler a cena de 2017"</span>)</span>
+<span id="cb73-19"><a href="#cb73-19" aria-hidden="true" tabindex="-1"></a><span class="co">#check_memory("depois de ler a cena de 2017")</span></span>
 <span id="cb73-20"><a href="#cb73-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb73-21"><a href="#cb73-21" aria-hidden="true" tabindex="-1"></a>red_2023, green_2023, blue_2023, transform_2023, crs_2023 <span class="op">=</span> read_rgb(item_2023, bbox)</span>
-<span id="cb73-22"><a href="#cb73-22" aria-hidden="true" tabindex="-1"></a>check_memory(<span class="st">"depois de ler a cena de 2023"</span>)</span>
+<span id="cb73-22"><a href="#cb73-22" aria-hidden="true" tabindex="-1"></a><span class="co">#check_memory("depois de ler a cena de 2023")</span></span>
 <span id="cb73-23"><a href="#cb73-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb73-24"><a href="#cb73-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, red_2017.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[RAM] depois de ler a cena de 2017: 8.77 GB usados de 32.00 GB (70.7%) | disponível: 9.39 GB
-[RAM] depois de ler a cena de 2023: 8.83 GB usados de 32.00 GB (70.8%) | disponível: 9.35 GB
-shape: (1100, 1382)</code></pre>
+<pre><code>shape: (1100, 1382)</code></pre>
 </div>
 </div>
 <p>Para essa cena vamos usar um contraste por percentil ao invés de min/max que usamos antes. Esse constrate por percentil evitar de a sensibilidade de pixels ficarem muito claros ou muito escuros..</p>
-<div id="3537359a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:54:09.965480Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:54:09.965391Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:10.266993Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:10.266574Z&quot;}}" data-execution_count="150">
+<div id="3537359a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:54:09.965480Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:54:09.965391Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:10.266993Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:10.266574Z&quot;}}" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> stretch(array, </span>
@@ -4010,7 +4008,7 @@ shape: (1100, 1382)</code></pre>
 <section id="salvando-como-geotiff" class="level2">
 <h2 class="anchored" data-anchor-id="salvando-como-geotiff">3. Salvando como GeoTIFF</h2>
 <p>Aqui vamos salvar cada composição como um <strong>GeoTIFF</strong> em disco, usando a transformação e o CRS da própria janela que lemos. Esse raster processado pode ser facilmente aberto no QGIS.</p>
-<div id="e6afedb0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:54:10.270206Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:54:10.270131Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:10.370880Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:10.370502Z&quot;}}" data-execution_count="151">
+<div id="e6afedb0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:54:10.270206Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:54:10.270131Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:10.370880Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:10.370502Z&quot;}}" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>output_dir <span class="op">=</span> <span class="st">"outputs"</span></span>
@@ -4052,7 +4050,7 @@ outputs/novo_progresso_2023.tif</code></pre>
 <section id="montando-o-painel-com-leafmap" class="level2">
 <h2 class="anchored" data-anchor-id="montando-o-painel-com-leafmap">4. Montando o painel com leafmap</h2>
 <p><code>leafmap.foliumap.Map</code> é uma subclasse de <code>folium.Map</code>, então ela renderiza como HTML puro. O <code>split_map</code> recebe os dois caminhos de arquivo e cuida de servir cada GeoTIFF como tiles (via <code>localtileserver</code>) e de montar o controle de swipe.</p>
-<div id="0b2febc1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:54:10.371795Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:54:10.371741Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:12.684425Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:12.684049Z&quot;}}" data-execution_count="152">
+<div id="0b2febc1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-01T15:54:10.371795Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-01T15:54:10.371741Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-01T15:54:12.684425Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-01T15:54:12.684049Z&quot;}}" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> leafmap.Map()</span>
@@ -4066,10 +4064,10 @@ outputs/novo_progresso_2023.tif</code></pre>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"dd086e34edcb4c799603d0f77c2caa75","version_major":2,"version_minor":1,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"4876c2d82c9848bf8efcf3f613dba3ce","version_major":2,"version_minor":1,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="152">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <iframe srcdoc="<!DOCTYPE html>
 <html>
 <head>
@@ -4089,7 +4087,7 @@ outputs/novo_progresso_2023.tif</code></pre>
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_b8dbbd936e0be83eb0bf4873745613ed {
+                #map_9227eb43ac7c890f25ec1baa093df1b5 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -4129,14 +4127,14 @@ outputs/novo_progresso_2023.tif</code></pre>
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_b8dbbd936e0be83eb0bf4873745613ed&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_9227eb43ac7c890f25ec1baa093df1b5&quot; ></div>
         
 </body>
 <script>
     
     
-            var map_b8dbbd936e0be83eb0bf4873745613ed = L.map(
-                &quot;map_b8dbbd936e0be83eb0bf4873745613ed&quot;,
+            var map_9227eb43ac7c890f25ec1baa093df1b5 = L.map(
+                &quot;map_9227eb43ac7c890f25ec1baa093df1b5&quot;,
                 {
                     center: [20.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -4150,13 +4148,13 @@ outputs/novo_progresso_2023.tif</code></pre>
 
                 }
             );
-            L.control.scale().addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+            L.control.scale().addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
 
             
 
         
     
-            var tile_layer_261d027829282f524a09ced408ddfe90 = L.tileLayer(
+            var tile_layer_add17c298c5f5c8b09dcaaed339c2e2d = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -4173,7 +4171,7 @@ outputs/novo_progresso_2023.tif</code></pre>
             );
         
     
-            tile_layer_261d027829282f524a09ced408ddfe90.addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+            tile_layer_add17c298c5f5c8b09dcaaed339c2e2d.addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
         
     
             L.control.fullscreen(
@@ -4183,17 +4181,17 @@ outputs/novo_progresso_2023.tif</code></pre>
   &quot;titleCancel&quot;: &quot;Exit Full Screen&quot;,
   &quot;forceSeparateButton&quot;: false,
 }
-            ).addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+            ).addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
         
     
-            map_b8dbbd936e0be83eb0bf4873745613ed.fitBounds(
+            map_9227eb43ac7c890f25ec1baa093df1b5.fitBounds(
                 [[20, 0], [20, 0]],
                 {&quot;maxZoom&quot;: 2}
             );
         
     
-            var tile_layer_d13633f8db0d4781726689adfd720239 = L.tileLayer(
-                &quot;http://127.0.0.1:56198/api/tiles/{z}/{x}/{y}.png?\u0026filename=%2FUsers%2Fmacuser%2FDocuments%2FUN%2Febook%2Ffundamentals_gis_rs%2Fweek2%2Foutputs%2Fnovo_progresso_2017.tif&quot;,
+            var tile_layer_d6cc7a7a6d4ab6fd1ac0a9f3df46f443 = L.tileLayer(
+                &quot;http://127.0.0.1:58460/api/tiles/{z}/{x}/{y}.png?\u0026filename=%2FUsers%2Fmacuser%2FDocuments%2FUN%2Febook%2Ffundamentals_gis_rs%2Fweek2%2Foutputs%2Fnovo_progresso_2017.tif&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 30,
@@ -4211,11 +4209,11 @@ outputs/novo_progresso_2023.tif</code></pre>
             );
         
     
-            tile_layer_d13633f8db0d4781726689adfd720239.addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+            tile_layer_d6cc7a7a6d4ab6fd1ac0a9f3df46f443.addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
         
     
-            var tile_layer_b98752328c490343834acc8dec13929d = L.tileLayer(
-                &quot;http://127.0.0.1:56198/api/tiles/{z}/{x}/{y}.png?\u0026filename=%2FUsers%2Fmacuser%2FDocuments%2FUN%2Febook%2Ffundamentals_gis_rs%2Fweek2%2Foutputs%2Fnovo_progresso_2023.tif&quot;,
+            var tile_layer_3894b71bb279eb5f369430d3b1b14892 = L.tileLayer(
+                &quot;http://127.0.0.1:58460/api/tiles/{z}/{x}/{y}.png?\u0026filename=%2FUsers%2Fmacuser%2FDocuments%2FUN%2Febook%2Ffundamentals_gis_rs%2Fweek2%2Foutputs%2Fnovo_progresso_2023.tif&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 30,
@@ -4233,12 +4231,12 @@ outputs/novo_progresso_2023.tif</code></pre>
             );
         
     
-            tile_layer_b98752328c490343834acc8dec13929d.addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+            tile_layer_3894b71bb279eb5f369430d3b1b14892.addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
         
     
-            var side_by_side_layers_9baa030d205b5987a561d79029b3314e = L.control.sideBySide(
-                tile_layer_d13633f8db0d4781726689adfd720239, tile_layer_b98752328c490343834acc8dec13929d
-            ).addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+            var side_by_side_layers_febd1b0460d57cf3d84614b8126708fe = L.control.sideBySide(
+                tile_layer_d6cc7a7a6d4ab6fd1ac0a9f3df46f443, tile_layer_3894b71bb279eb5f369430d3b1b14892
+            ).addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
         
     
         L.Control.CustomControl = L.Control.extend({
@@ -4256,7 +4254,7 @@ outputs/novo_progresso_2023.tif</code></pre>
         }
         L.control.customControl(
             { position: &quot;bottomleft&quot; }
-        ).addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+        ).addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
         
     
         L.Control.CustomControl = L.Control.extend({
@@ -4274,33 +4272,33 @@ outputs/novo_progresso_2023.tif</code></pre>
         }
         L.control.customControl(
             { position: &quot;bottomright&quot; }
-        ).addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+        ).addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
         
     
-            map_b8dbbd936e0be83eb0bf4873745613ed.fitBounds(
+            map_9227eb43ac7c890f25ec1baa093df1b5.fitBounds(
                 [[-8.350049, -55.300867], [-8.150009, -55.049108]],
                 {}
             );
         
     
-            var layer_control_f8a99afefcedcdb5c32b2786d7e7d68d_layers = {
+            var layer_control_4efd6110053ab223029da6e67504f754_layers = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_261d027829282f524a09ced408ddfe90,
+                    &quot;openstreetmap&quot; : tile_layer_add17c298c5f5c8b09dcaaed339c2e2d,
                 },
                 overlays :  {
-                    &quot;Left Layer&quot; : tile_layer_d13633f8db0d4781726689adfd720239,
-                    &quot;Right Layer&quot; : tile_layer_b98752328c490343834acc8dec13929d,
+                    &quot;Left Layer&quot; : tile_layer_d6cc7a7a6d4ab6fd1ac0a9f3df46f443,
+                    &quot;Right Layer&quot; : tile_layer_3894b71bb279eb5f369430d3b1b14892,
                 },
             };
-            let layer_control_f8a99afefcedcdb5c32b2786d7e7d68d = L.control.layers(
-                layer_control_f8a99afefcedcdb5c32b2786d7e7d68d_layers.base_layers,
-                layer_control_f8a99afefcedcdb5c32b2786d7e7d68d_layers.overlays,
+            let layer_control_4efd6110053ab223029da6e67504f754 = L.control.layers(
+                layer_control_4efd6110053ab223029da6e67504f754_layers.base_layers,
+                layer_control_4efd6110053ab223029da6e67504f754_layers.overlays,
                 {
   &quot;position&quot;: &quot;topright&quot;,
   &quot;collapsed&quot;: true,
   &quot;autoZIndex&quot;: true,
 }
-            ).addTo(map_b8dbbd936e0be83eb0bf4873745613ed);
+            ).addTo(map_9227eb43ac7c890f25ec1baa093df1b5);
 
         
 </script>
