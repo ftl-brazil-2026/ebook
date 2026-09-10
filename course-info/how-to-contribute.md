@@ -22,7 +22,7 @@ Se a plataforma que você quer ainda não tem uma seção, crie um novo `## Nome
 
 ## Contribuindo com o diagrama de provedores (bubble chart)
 
-O diagrama de bolhas em [Provedores de Dados Geoespaciais](../fundamentals_gis_rs/week0/provedores.qmd) — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: [`fundamentals_gis_rs/week0/data/provedores.json`](../fundamentals_gis_rs/week0/data/provedores.json). Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.
+O diagrama de bolhas em [Provedores de Dados Geoespaciais](provedores.qmd) — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: [`course-info/data/provedores.json`](data/provedores.json). Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.
 
 Para adicionar um provedor a um tema já existente, inclua um novo objeto na lista `provedores` da categoria correspondente:
 
@@ -40,7 +40,7 @@ Para adicionar um provedor a um tema já existente, inclua um novo objeto na lis
 Antes de commitar, valide que o JSON continua válido:
 
 ``` bash
-python3 -m json.tool fundamentals_gis_rs/week0/data/provedores.json > /dev/null
+python3 -m json.tool course-info/data/provedores.json > /dev/null
 ```
 
 Sem erro impresso = JSON válido.

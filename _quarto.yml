@@ -23,12 +23,12 @@ website:
           - course-info/setup.md
           - course-info/cli-utils.md
           - course-info/how-to-contribute.md
+          - course-info/provedores.qmd
       - section: "Fundamentos em GIS e Sensoriamento Remoto"
         contents:
           - section: "Week 0 — Ecossistema geoespacial"
             contents:
               - fundamentals_gis_rs/week0/index.qmd
-              - fundamentals_gis_rs/week0/provedores.qmd
               - fundamentals_gis_rs/week0/space_tech_ecossystem.ipynb
           - section: "Week 1 — Fundamentos em GIS"
             contents:
@@ -42,9 +42,10 @@ website:
           - section: "Week 3 - Analises Espaciais Complexas"
             contents:
               - fundamentals_gis_rs/week3/dem.ipynb
+              - fundamentals_gis_rs/week3/image_processing2.ipynb
           - section: "Week 4"
             contents:
-              - fundamentals_gis_rs/week4/index.md
+              - fundamentals_gis_rs/week4/xarray.ipynb
       - section: "Fundamentos em Machine Learning e Deep Learning"
         contents:
           - ml-dl/index.md

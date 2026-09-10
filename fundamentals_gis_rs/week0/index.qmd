@@ -41,4 +41,4 @@ No questionário inicial, cada um de vocês votou nos assuntos que mais têm int
 
 Para cada um desses grandes temas, mapeamos alguns provedores de dados que podem ajudar quando analisarmos os dados para projetos e desafios diários. Entre na página de provedores para explorar os provedores e ajude-nos a contribuir com as devidas urls diretamente ao nosso site. 
 
-➡️ [**Provedores de Dados Geoespaciais**](provedores.qmd) — o diagrama completo 
+➡️ [**Provedores de Dados Geoespaciais**](../../course-info/provedores.qmd) — o diagrama completo 

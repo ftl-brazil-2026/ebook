@@ -41,12 +41,13 @@ ebook/
 │   ├── reading.md
 │   ├── setup.md
 │   ├── cli-utils.md
-│   └── how-to-contribute.md
+│   ├── how-to-contribute.md
+│   ├── provedores.qmd         diagrama de bolhas: temas x provedores de dados
+│   └── data/                  provedores.json + o widget da bubble chart (html/css/js)
 │
 ├── fundamentals_gis_rs/        Módulo 1 — Fundamentos em GIS e Sensoriamento Remoto
 │   ├── week0/
 │   │   ├── index.qmd
-│   │   ├── provedores.qmd            diagrama de bolhas: temas x provedores de dados
 │   │   ├── space_tech_ecossystem.ipynb
 │   │   └── data/                     xlsx/json/csv usados pelos notebooks da semana
 │   ├── week1/
