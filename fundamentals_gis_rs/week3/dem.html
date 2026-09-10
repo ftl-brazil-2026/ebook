@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../fundamentals_gis_rs/week4/index.html" rel="next">
+<link href="../../fundamentals_gis_rs/week3/image_processing2.html" rel="next">
 <link href="../../fundamentals_gis_rs/week2/RS-Image_Processing.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -208,6 +208,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Como Contribuir</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -232,12 +238,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Ecossistema Geoespacial</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../fundamentals_gis_rs/week0/provedores.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -309,6 +309,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
       </ul>
   </li>
           <li class="sidebar-item sidebar-item-section">
@@ -322,8 +328,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../fundamentals_gis_rs/week4/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Week 4</span></a>
+  <a href="../../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xarray: Trabalhando com Dados Multidimensionais Rotulados</span></a>
   </div>
 </li>
       </ul>
@@ -471,22 +477,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Os modelo digital de elevação é uma representação digital da altitude da superfície terrestre, em que cada célula do grid contém um valor de elevação. Ele normalmente é utilizado para análises de declives, relevos para projetos de infraestrutura bem como planejamento urbano. Muito utilizado também dentro da hidrologia para escoamento das águas, bacias hidrográficas e análise de riscos de inundação.</p>
 <p>Utilizaremos o DEM do Copernicus, que é um DEM produzido principalmente a partir de dados de radar obtidos pela missão espacial TanDEM-X, da Airbus/DLR. Os satélites adquiriram imagens radar da superfície terrestre de diferentes posições; através de interferometria radar (InSAR) foi possível calcular a altitude dos pontos da superfície. Esses dados foram depois processados, corrigidos e editados para gerar uma superfície de elevação contínua. O resultado é disponibilizado, entre outras resoluções, a 30 m (GLO-30) e 90 m (GLO-90).</p>
 <p>Uma importante consideração é que o Copernicus DEM representa um modelo digital de superfície (Digital Surface Model (DSM)) e não o modelo digital do terreno (Digital Terrain Model) onde este sim representaria a altitude de cada ponto sem contar a utilização da superfície. Dessa forma, o DSM do Copernicus pode incluir altura de edificios, altura de árvores e outras estruturas, apesar de suas correções que melhorar a qualidade do modelo, a remoção sistemática desses artefatos não é feita, pois o modelo visa representar a superfície terrestre, diferentemente de representar o terreno em si.</p>
+<p>Link Colab<a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/fundamentals_gis_rs/week3/dem.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid" alt="Open In Colab"></a></p>
+<div id="635ff1a1" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rode isso apenas se voce estiver no colab! # git clone https://github.com/ftl-brazil-2026/ebook.git# pip install -r requirements.txt</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <section id="chaves-de-api-de-acesso." class="level3">
 <h3 class="anchored" data-anchor-id="chaves-de-api-de-acesso.">Chaves de API de acesso.</h3>
 <p>Para baixarmos os rasters referente a nossa análise, precisamos primeiro ter registrado uma chave api no CDSE. Olhe a última aula com a explicação de como criar essa chave.</p>
 <div id="4f38f993" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.203414Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.203304Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.483955Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.483383Z&quot;}}" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#os.environ["GDAL_HTTP_TCP_KEEPALIVE"] = "YES"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_S3_ENDPOINT"</span>] <span class="op">=</span> <span class="st">"eodata.dataspace.copernicus.eu"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_ACCESS_KEY_ID"</span>] <span class="op">=</span> os.environ.get(<span class="st">"CDSE_CLIENT"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_SECRET_ACCESS_KEY"</span>] <span class="op">=</span> os.environ.get(<span class="st">"CDSE_SECRET"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_HTTPS"</span>] <span class="op">=</span> <span class="st">"YES"</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_VIRTUAL_HOSTING"</span>] <span class="op">=</span> <span class="st">"FALSE"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># endpoint da AWS pro ecossistema copernicus no STAC</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>cdse_stac <span class="op">=</span> <span class="st">"https://stac.dataspace.copernicus.eu/v1/"</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> Client.<span class="bu">open</span>(cdse_stac)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#os.environ["GDAL_HTTP_TCP_KEEPALIVE"] = "YES"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_S3_ENDPOINT"</span>] <span class="op">=</span> <span class="st">"eodata.dataspace.copernicus.eu"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_ACCESS_KEY_ID"</span>] <span class="op">=</span> os.environ.get(<span class="st">"CDSE_CLIENT"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_SECRET_ACCESS_KEY"</span>] <span class="op">=</span> os.environ.get(<span class="st">"CDSE_SECRET"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_HTTPS"</span>] <span class="op">=</span> <span class="st">"YES"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"AWS_VIRTUAL_HOSTING"</span>] <span class="op">=</span> <span class="st">"FALSE"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># endpoint da AWS pro ecossistema copernicus no STAC</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>cdse_stac <span class="op">=</span> <span class="st">"https://stac.dataspace.copernicus.eu/v1/"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> Client.<span class="bu">open</span>(cdse_stac)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -495,7 +508,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="c130b94d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.485565Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.485455Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.581671Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.581175Z&quot;}}" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>client.get_collection(<span class="st">'cop-dem-glo-30-dged-cog'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>client.get_collection(<span class="st">'cop-dem-glo-30-dged-cog'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="3">
 
@@ -2064,36 +2077,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="6a49c848" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.582841Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.582763Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.584564Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.584080Z&quot;}}" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">## minha bbox para cubatao</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> [<span class="op">-</span><span class="fl">46.80215</span>, <span class="op">-</span><span class="fl">24.10</span>, <span class="op">-</span><span class="fl">46.158748</span>, <span class="op">-</span><span class="fl">23.754701</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">## minha bbox para cubatao</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> [<span class="op">-</span><span class="fl">46.80215</span>, <span class="op">-</span><span class="fl">24.10</span>, <span class="op">-</span><span class="fl">46.158748</span>, <span class="op">-</span><span class="fl">23.754701</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="7e54b1c5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.585553Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.585474Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.660908Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.660637Z&quot;}}" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> box</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>bounds_polygon <span class="op">=</span> box(<span class="op">*</span>bbox)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>centro_lat <span class="op">=</span> (bbox[<span class="dv">1</span>] <span class="op">+</span> bbox[<span class="dv">3</span>]) <span class="op">/</span> <span class="dv">2</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>centro_lon <span class="op">=</span> (bbox[<span class="dv">0</span>] <span class="op">+</span> bbox[<span class="dv">2</span>]) <span class="op">/</span> <span class="dv">2</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> folium.Map(location<span class="op">=</span>[centro_lat, centro_lon], zoom_start<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>folium.GeoJson(</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    bounds_polygon.__geo_interface__,</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"Bounds"</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    style_function<span class="op">=</span><span class="kw">lambda</span> x: {</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fillColor'</span>: <span class="st">'none'</span>,</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">'color'</span>: <span class="st">'blue'</span>,</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'weight'</span>: <span class="dv">3</span>,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fillOpacity'</span>: <span class="dv">0</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>).add_to(m)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> box</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bounds_polygon <span class="op">=</span> box(<span class="op">*</span>bbox)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>centro_lat <span class="op">=</span> (bbox[<span class="dv">1</span>] <span class="op">+</span> bbox[<span class="dv">3</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>centro_lon <span class="op">=</span> (bbox[<span class="dv">0</span>] <span class="op">+</span> bbox[<span class="dv">2</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> folium.Map(location<span class="op">=</span>[centro_lat, centro_lon], zoom_start<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>folium.GeoJson(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    bounds_polygon.__geo_interface__,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"Bounds"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    style_function<span class="op">=</span><span class="kw">lambda</span> x: {</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fillColor'</span>: <span class="st">'none'</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">'color'</span>: <span class="st">'blue'</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'weight'</span>: <span class="dv">3</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fillOpacity'</span>: <span class="dv">0</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>).add_to(m)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
@@ -2236,17 +2249,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="0001e443" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.661950Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.661835Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.663453Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.663149Z&quot;}}" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dem <span class="op">=</span> client.search(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>[<span class="st">"cop-dem-glo-30-dged-cog"</span>],</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bbox</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dem <span class="op">=</span> client.search(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>[<span class="st">"cop-dem-glo-30-dged-cog"</span>],</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bbox</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="69d85f3e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.664211Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.664165Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.855240Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.854469Z&quot;}}" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> dem.items():</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> dem.items():</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;Item id=Copernicus_DSM_COG_10_S25_00_W047_00_DEM&gt;
@@ -2256,17 +2269,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="fb3ee339" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.857731Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.857535Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.954618Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.953726Z&quot;}}" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect the two DEM assets</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dem_paths <span class="op">=</span> [</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    item.assets[<span class="st">"data"</span>].href</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> dem.items()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect the two DEM assets</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dem_paths <span class="op">=</span> [</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    item.assets[<span class="st">"data"</span>].href</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> dem.items()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="47af27a1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.957280Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.957095Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:25:39.960559Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:25:39.959896Z&quot;}}" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dem_paths</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dem_paths</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>['s3://eodata/auxdata/CopDEM_COG/copernicus-dem-30m/Copernicus_DSM_COG_10_S25_00_W047_00_DEM/Copernicus_DSM_COG_10_S25_00_W047_00_DEM.tif',
@@ -2276,44 +2289,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="a126ec11" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:25:39.962284Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:25:39.962155Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:15.070162Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:15.069574Z&quot;}}" data-execution_count="42">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Open the DEMs as Rasterio datasets</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>srcs <span class="op">=</span> [rasterio.<span class="bu">open</span>(path) <span class="cf">for</span> path <span class="kw">in</span> dem_paths]</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CRS of the DEMs</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    dem_crs <span class="op">=</span> srcs[<span class="dv">0</span>].crs</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transform bbox from EPSG:4326 to DEM CRS</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    transformer <span class="op">=</span> Transformer.from_crs(</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"EPSG:4326"</span>,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        dem_crs,</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        always_xy<span class="op">=</span><span class="va">True</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    minx, miny <span class="op">=</span> transformer.transform(bbox[<span class="dv">0</span>], bbox[<span class="dv">1</span>])</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    maxx, maxy <span class="op">=</span> transformer.transform(bbox[<span class="dv">2</span>], bbox[<span class="dv">3</span>])</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge the two DEM tiles and clip to bbox</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    mosaic, mosaic_transform <span class="op">=</span> merge(</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>        srcs,</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        bounds<span class="op">=</span>(minx, miny, maxx, maxy),</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>        masked<span class="op">=</span><span class="va">True</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove the band dimension</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    dem_array <span class="op">=</span> mosaic[<span class="dv">0</span>]</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="cf">finally</span>:</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Close the datasets</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> src <span class="kw">in</span> srcs:</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        src.close()</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape:"</span>, dem_array.shape)</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CRS:"</span>, dem_crs)</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transform:"</span>, mosaic_transform)</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Open the DEMs as Rasterio datasets</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>srcs <span class="op">=</span> [rasterio.<span class="bu">open</span>(path) <span class="cf">for</span> path <span class="kw">in</span> dem_paths]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CRS of the DEMs</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    dem_crs <span class="op">=</span> srcs[<span class="dv">0</span>].crs</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transform bbox from EPSG:4326 to DEM CRS</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    transformer <span class="op">=</span> Transformer.from_crs(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"EPSG:4326"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        dem_crs,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        always_xy<span class="op">=</span><span class="va">True</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    minx, miny <span class="op">=</span> transformer.transform(bbox[<span class="dv">0</span>], bbox[<span class="dv">1</span>])</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    maxx, maxy <span class="op">=</span> transformer.transform(bbox[<span class="dv">2</span>], bbox[<span class="dv">3</span>])</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge the two DEM tiles and clip to bbox</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    mosaic, mosaic_transform <span class="op">=</span> merge(</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>        srcs,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        bounds<span class="op">=</span>(minx, miny, maxx, maxy),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        masked<span class="op">=</span><span class="va">True</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove the band dimension</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    dem_array <span class="op">=</span> mosaic[<span class="dv">0</span>]</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="cf">finally</span>:</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Close the datasets</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> src <span class="kw">in</span> srcs:</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>        src.close()</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape:"</span>, dem_array.shape)</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CRS:"</span>, dem_crs)</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Transform:"</span>, mosaic_transform)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Shape: (1243, 2316)
@@ -2326,7 +2339,7 @@ Transform: | 0.00, 0.00,-46.80|
 <div id="82c1d0a1" class="cell" data-execution_count="45">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dem_array</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dem_array</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="45">
 <pre><code>masked_array(
@@ -2361,17 +2374,17 @@ Transform: | 0.00, 0.00,-46.80|
 <div id="d5702d00" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:15.076060Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:15.075962Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:15.223821Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:15.223541Z&quot;}}" data-execution_count="47">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(dem_array, cmap<span class="op">=</span><span class="st">"terrain"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Elevação (m)"</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Modelo Digital de Elevação para Cubatão/SP (Copernicus DEM 30m)"</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(dem_array, cmap<span class="op">=</span><span class="st">"terrain"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Elevação (m)"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Modelo Digital de Elevação para Cubatão/SP (Copernicus DEM 30m)"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2384,7 +2397,7 @@ Transform: | 0.00, 0.00,-46.80|
 <div id="1546573e" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mosaic_transform.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mosaic_transform.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>Affine(0.0002777777777777778, 0.0, -46.80215,
@@ -2394,36 +2407,36 @@ Transform: | 0.00, 0.00,-46.80|
 <div id="6610fdaa" class="cell" data-execution_count="57">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray  </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pegamos o numero de colunas e linhas </span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>rows, cols <span class="op">=</span> dem_array.shape</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">## transformamos cada coluna e linha dado a transformacao affine do CRS</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">## essa soma do 0.5 visa mudar a posicao do canto esquerdo para o centro de cada pixel</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">## pense que um pixel de raster esta na coordenada 100 em seu canto superior esquerdo e esse pixel tem 30m de largura</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">## entao para movermos para o meio, precisamos somar com 15m, ou 0.5 vezes o tamanho original do pixel.</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> mosaic_transform.c <span class="op">+</span> (np.arange(cols) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">*</span> mosaic_transform.a</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> mosaic_transform.f <span class="op">+</span> (np.arange(rows) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">*</span> mosaic_transform.e</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co"># vamos criar um XARRAY para utilizar as funções já existentes </span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>dem_da <span class="op">=</span> xr.DataArray(</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    np.ma.filled(dem_array, np.nan),</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>(<span class="st">"y"</span>, <span class="st">"x"</span>),</span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"y"</span>: ys, <span class="st">"x"</span>: xs},</span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"elevation"</span>,</span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Aqui ordenamos o CRS que esta em 4326 - WGS84</span></span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>dem_da <span class="op">=</span> dem_da.rio.write_crs(dem_crs)</span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co"># xarray tem funcoes uteis para estiamr o CRS, apesar de podermos reprojetar na mao também. </span></span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>utm_crs <span class="op">=</span> dem_da.rio.estimate_utm_crs()</span>
-<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>dem_utm <span class="op">=</span> dem_da.rio.reproject(utm_crs)</span>
-<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>dem_utm.rio.write_nodata(np.nan, inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CRS estimado:"</span>, utm_crs)</span>
-<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, dem_utm.shape, <span class="st">"| resolução (m):"</span>, dem_utm.rio.resolution())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray  </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pegamos o numero de colunas e linhas </span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>rows, cols <span class="op">=</span> dem_array.shape</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">## transformamos cada coluna e linha dado a transformacao affine do CRS</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">## essa soma do 0.5 visa mudar a posicao do canto esquerdo para o centro de cada pixel</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">## pense que um pixel de raster esta na coordenada 100 em seu canto superior esquerdo e esse pixel tem 30m de largura</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">## entao para movermos para o meio, precisamos somar com 15m, ou 0.5 vezes o tamanho original do pixel.</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> mosaic_transform.c <span class="op">+</span> (np.arange(cols) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">*</span> mosaic_transform.a</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> mosaic_transform.f <span class="op">+</span> (np.arange(rows) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">*</span> mosaic_transform.e</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co"># vamos criar um XARRAY para utilizar as funções já existentes </span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>dem_da <span class="op">=</span> xr.DataArray(</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    np.ma.filled(dem_array, np.nan),</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>(<span class="st">"y"</span>, <span class="st">"x"</span>),</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"y"</span>: ys, <span class="st">"x"</span>: xs},</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"elevation"</span>,</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Aqui ordenamos o CRS que esta em 4326 - WGS84</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>dem_da <span class="op">=</span> dem_da.rio.write_crs(dem_crs)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co"># xarray tem funcoes uteis para estiamr o CRS, apesar de podermos reprojetar na mao também. </span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>utm_crs <span class="op">=</span> dem_da.rio.estimate_utm_crs()</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>dem_utm <span class="op">=</span> dem_da.rio.reproject(utm_crs)</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>dem_utm.rio.write_nodata(np.nan, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CRS estimado:"</span>, utm_crs)</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, dem_utm.shape, <span class="st">"| resolução (m):"</span>, dem_utm.rio.resolution())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>CRS estimado: EPSG:32723
@@ -2433,7 +2446,7 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="a571d1c7" class="cell" data-execution_count="56">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>xs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>xs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>array([-46.80201111, -46.80173333, -46.80145556, ..., -46.15951111,
@@ -2453,43 +2466,43 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="37cd2ec2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:15.224879Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:15.224808Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:15.473841Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:15.473579Z&quot;}}" data-execution_count="59">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hillshade(array, azimuth<span class="op">=</span><span class="dv">315</span>, angle_altitude<span class="op">=</span><span class="dv">45</span>, </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>              cellsize_x<span class="op">=</span><span class="dv">30</span>, cellsize_y<span class="op">=</span><span class="dv">30</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>              ):</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calcula um relevo sombreado a partir de um DEM."""</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> np.ma.filled(array, np.nan).astype(<span class="st">"float64"</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    dy, dx <span class="op">=</span> np.gradient(data, cellsize_y, cellsize_x)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    slope <span class="op">=</span> np.pi <span class="op">/</span> <span class="dv">2</span> <span class="op">-</span> np.arctan(np.hypot(dx, dy))</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    aspect <span class="op">=</span> np.arctan2(<span class="op">-</span>dx, dy)</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    azimuth_rad <span class="op">=</span> np.radians(<span class="dv">360</span> <span class="op">-</span> azimuth <span class="op">+</span> <span class="dv">90</span>)</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    altitude_rad <span class="op">=</span> np.radians(angle_altitude)</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    shaded <span class="op">=</span> (np.sin(altitude_rad) <span class="op">*</span> np.sin(slope)</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>              <span class="op">+</span> np.cos(altitude_rad) <span class="op">*</span> np.cos(slope) <span class="op">*</span> np.cos(azimuth_rad <span class="op">-</span> aspect))</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.clip(shaded, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co"># resolução nominal do Copernicus DEM 30m. 1 arco-segundo (graus) &gt; metros</span></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>resolucao_graus <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> <span class="dv">3600</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>lat_media <span class="op">=</span> (bbox[<span class="dv">1</span>] <span class="op">+</span> bbox[<span class="dv">3</span>]) <span class="op">/</span> <span class="dv">2</span></span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>cellsize_y <span class="op">=</span> resolucao_graus <span class="op">*</span> <span class="dv">111_320</span></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>cellsize_x <span class="op">=</span> resolucao_graus <span class="op">*</span> <span class="dv">111_320</span> <span class="op">*</span> np.cos(np.radians(lat_media))</span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>shade <span class="op">=</span> hillshade(dem_array, cellsize_x<span class="op">=</span>cellsize_x, cellsize_y<span class="op">=</span>cellsize_y)</span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>ax.imshow(shade, cmap<span class="op">=</span><span class="st">"gray"</span>)</span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(dem, cmap<span class="op">=</span><span class="st">"terrain"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Elevação (m)"</span>)</span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"DEM com relevo sombreado - NUMPY"</span>)</span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hillshade(array, azimuth<span class="op">=</span><span class="dv">315</span>, angle_altitude<span class="op">=</span><span class="dv">45</span>, </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>              cellsize_x<span class="op">=</span><span class="dv">30</span>, cellsize_y<span class="op">=</span><span class="dv">30</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>              ):</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calcula um relevo sombreado a partir de um DEM."""</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> np.ma.filled(array, np.nan).astype(<span class="st">"float64"</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    dy, dx <span class="op">=</span> np.gradient(data, cellsize_y, cellsize_x)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    slope <span class="op">=</span> np.pi <span class="op">/</span> <span class="dv">2</span> <span class="op">-</span> np.arctan(np.hypot(dx, dy))</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    aspect <span class="op">=</span> np.arctan2(<span class="op">-</span>dx, dy)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    azimuth_rad <span class="op">=</span> np.radians(<span class="dv">360</span> <span class="op">-</span> azimuth <span class="op">+</span> <span class="dv">90</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    altitude_rad <span class="op">=</span> np.radians(angle_altitude)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    shaded <span class="op">=</span> (np.sin(altitude_rad) <span class="op">*</span> np.sin(slope)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>              <span class="op">+</span> np.cos(altitude_rad) <span class="op">*</span> np.cos(slope) <span class="op">*</span> np.cos(azimuth_rad <span class="op">-</span> aspect))</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.clip(shaded, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="co"># resolução nominal do Copernicus DEM 30m. 1 arco-segundo (graus) &gt; metros</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>resolucao_graus <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> <span class="dv">3600</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>lat_media <span class="op">=</span> (bbox[<span class="dv">1</span>] <span class="op">+</span> bbox[<span class="dv">3</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>cellsize_y <span class="op">=</span> resolucao_graus <span class="op">*</span> <span class="dv">111_320</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>cellsize_x <span class="op">=</span> resolucao_graus <span class="op">*</span> <span class="dv">111_320</span> <span class="op">*</span> np.cos(np.radians(lat_media))</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>shade <span class="op">=</span> hillshade(dem_array, cellsize_x<span class="op">=</span>cellsize_x, cellsize_y<span class="op">=</span>cellsize_y)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>ax.imshow(shade, cmap<span class="op">=</span><span class="st">"gray"</span>)</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(dem, cmap<span class="op">=</span><span class="st">"terrain"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Elevação (m)"</span>)</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"DEM com relevo sombreado - NUMPY"</span>)</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2500,23 +2513,23 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="16289655" class="cell" data-execution_count="64">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xrspatial <span class="im">import</span> slope <span class="im">as</span> xrs_slope</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>slope_da <span class="op">=</span> xrs_slope(dem_utm)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(slope_da, cmap<span class="op">=</span><span class="st">"YlOrRd"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">60</span>)</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Inclinação (graus)"</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Slope — Cubatão/SP"</span>)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Inclinação média: </span><span class="sc">{</span><span class="bu">float</span>(slope_da.mean())<span class="sc">:.1f}</span><span class="ss">°  |  máxima: </span><span class="sc">{</span><span class="bu">float</span>(slope_da.<span class="bu">max</span>())<span class="sc">:.1f}</span><span class="ss">°"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xrspatial <span class="im">import</span> slope <span class="im">as</span> xrs_slope</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>slope_da <span class="op">=</span> xrs_slope(dem_utm)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(slope_da, cmap<span class="op">=</span><span class="st">"YlOrRd"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">60</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Inclinação (graus)"</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Slope — Cubatão/SP"</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Inclinação média: </span><span class="sc">{</span><span class="bu">float</span>(slope_da.mean())<span class="sc">:.1f}</span><span class="ss">°  |  máxima: </span><span class="sc">{</span><span class="bu">float</span>(slope_da.<span class="bu">max</span>())<span class="sc">:.1f}</span><span class="ss">°"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2532,22 +2545,22 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="3ba49687" class="cell" data-execution_count="65">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xrspatial <span class="im">import</span> aspect <span class="im">as</span> xrs_aspect</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>aspect_da <span class="op">=</span> xrs_aspect(dem_utm)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>aspect_plot <span class="op">=</span> aspect_da.where(aspect_da <span class="op">&gt;=</span> <span class="dv">0</span>)  <span class="co"># esconde os pixels planos (-1) do mapa</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(aspect_plot, cmap<span class="op">=</span><span class="st">"twilight"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">360</span>)</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Aspect (graus, 0°=Norte)"</span>)</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Aspect — Cubatão/SP"</span>)</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xrspatial <span class="im">import</span> aspect <span class="im">as</span> xrs_aspect</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>aspect_da <span class="op">=</span> xrs_aspect(dem_utm)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>aspect_plot <span class="op">=</span> aspect_da.where(aspect_da <span class="op">&gt;=</span> <span class="dv">0</span>)  <span class="co"># esconde os pixels planos (-1) do mapa</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(aspect_plot, cmap<span class="op">=</span><span class="st">"twilight"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">360</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Aspect (graus, 0°=Norte)"</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Aspect — Cubatão/SP"</span>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-20-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2559,23 +2572,23 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="e4e64bd4" class="cell" data-execution_count="63">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xrspatial <span class="im">import</span> hillshade <span class="im">as</span> xrs_hillshade</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>shade_xrs <span class="op">=</span> xrs_hillshade(dem_utm, </span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                          azimuth<span class="op">=</span><span class="dv">315</span>, </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                          angle_altitude<span class="op">=</span><span class="dv">45</span>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>ax.imshow(shade_xrs, cmap<span class="op">=</span><span class="st">"terrain"</span>)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Hillshade (xarray-spatial)"</span>)</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co">#fig.colorbar(im, ax=ax, label="Elevação (m)")</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xrspatial <span class="im">import</span> hillshade <span class="im">as</span> xrs_hillshade</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>shade_xrs <span class="op">=</span> xrs_hillshade(dem_utm, </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                          azimuth<span class="op">=</span><span class="dv">315</span>, </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                          angle_altitude<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>ax.imshow(shade_xrs, cmap<span class="op">=</span><span class="st">"terrain"</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Hillshade (xarray-spatial)"</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">#fig.colorbar(im, ax=ax, label="Elevação (m)")</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-20-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2589,13 +2602,13 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="fc802aca" class="cell" data-execution_count="70">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>intervalo <span class="op">=</span> <span class="dv">100</span>  <span class="co"># metros</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>nivel_min <span class="op">=</span> np.floor(dem_array.<span class="bu">min</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>nivel_max <span class="op">=</span> np.ceil(dem_array.<span class="bu">max</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>niveis <span class="op">=</span> np.arange(nivel_min, nivel_max <span class="op">+</span> intervalo, intervalo)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Níveis (m):"</span>, niveis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>intervalo <span class="op">=</span> <span class="dv">100</span>  <span class="co"># metros</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>nivel_min <span class="op">=</span> np.floor(dem_array.<span class="bu">min</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>nivel_max <span class="op">=</span> np.ceil(dem_array.<span class="bu">max</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>niveis <span class="op">=</span> np.arange(nivel_min, nivel_max <span class="op">+</span> intervalo, intervalo)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Níveis (m):"</span>, niveis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Níveis (m): [-100.    0.  100.  200.  300.  400.  500.  600.  700.  800.  900. 1000.
@@ -2605,25 +2618,25 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="2d35e7e1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:15.474984Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:15.474912Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:15.719376Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:15.719065Z&quot;}}" data-execution_count="72">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>intervalo <span class="op">=</span> <span class="dv">100</span>  <span class="co"># metros</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>nivel_min <span class="op">=</span> np.floor(dem_array.<span class="bu">min</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>nivel_max <span class="op">=</span> np.ceil(dem_array.<span class="bu">max</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo </span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>niveis <span class="op">=</span> np.arange(nivel_min, nivel_max <span class="op">+</span> intervalo, intervalo)</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Níveis (m):"</span>, niveis)</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(dem_array, cmap<span class="op">=</span><span class="st">"terrain"</span>)</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Elevação (m)"</span>)</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>contornos <span class="op">=</span> ax.contour(dem_array, levels<span class="op">=</span>niveis, colors<span class="op">=</span><span class="st">"black"</span>, linewidths<span class="op">=</span><span class="fl">0.4</span>)</span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="co"># só rotula a cada 200 m (de 100 em 100 fica ilegível no platô, onde o relevo é mais suave)</span></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>ax.clabel(contornos, levels<span class="op">=</span>niveis[::<span class="dv">2</span>], inline<span class="op">=</span><span class="va">True</span>, fontsize<span class="op">=</span><span class="dv">7</span>, fmt<span class="op">=</span><span class="st">"</span><span class="sc">%d</span><span class="st"> m"</span>)</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Curvas de nível a cada </span><span class="sc">{</span>intervalo<span class="sc">}</span><span class="ss"> m"</span>)</span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>intervalo <span class="op">=</span> <span class="dv">100</span>  <span class="co"># metros</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>nivel_min <span class="op">=</span> np.floor(dem_array.<span class="bu">min</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>nivel_max <span class="op">=</span> np.ceil(dem_array.<span class="bu">max</span>()<span class="op">/</span>intervalo) <span class="op">*</span>intervalo </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>niveis <span class="op">=</span> np.arange(nivel_min, nivel_max <span class="op">+</span> intervalo, intervalo)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Níveis (m):"</span>, niveis)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(dem_array, cmap<span class="op">=</span><span class="st">"terrain"</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Elevação (m)"</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>contornos <span class="op">=</span> ax.contour(dem_array, levels<span class="op">=</span>niveis, colors<span class="op">=</span><span class="st">"black"</span>, linewidths<span class="op">=</span><span class="fl">0.4</span>)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co"># só rotula a cada 200 m (de 100 em 100 fica ilegível no platô, onde o relevo é mais suave)</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>ax.clabel(contornos, levels<span class="op">=</span>niveis[::<span class="dv">2</span>], inline<span class="op">=</span><span class="va">True</span>, fontsize<span class="op">=</span><span class="dv">7</span>, fmt<span class="op">=</span><span class="st">"</span><span class="sc">%d</span><span class="st"> m"</span>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Curvas de nível a cada </span><span class="sc">{</span>intervalo<span class="sc">}</span><span class="ss"> m"</span>)</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Níveis (m): [-100.    0.  100.  200.  300.  400.  500.  600.  700.  800.  900. 1000.
@@ -2632,7 +2645,7 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-22-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-23-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2640,7 +2653,7 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="d7c4a124" class="cell" data-execution_count="76">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(contornos.allsegs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(contornos.allsegs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="76">
 <pre><code>14</code></pre>
@@ -2661,31 +2674,31 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="2bedd41b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:15.720421Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:15.720350Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:15.838296Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:15.837950Z&quot;}}" data-execution_count="78">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> LineString</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.transform <span class="im">import</span> xy <span class="im">as</span> transform_xy</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> contours_to_geodataframe(contour_set, transform, crs) <span class="op">-&gt;</span> gpd.GeoDataFrame:</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converte um QuadContourSet do matplotlib em um GeoDataFrame de linhas (uma por segmento)."""</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    geometries <span class="op">=</span> []</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    elevations <span class="op">=</span> []</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> level, segments <span class="kw">in</span> <span class="bu">zip</span>(contour_set.levels, contour_set.allsegs):</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> seg <span class="kw">in</span> segments:</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(seg) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span>  <span class="co"># precisa de pelo menos 2 pontos pra formar uma linha</span></span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>            cols, rows <span class="op">=</span> seg[:, <span class="dv">0</span>], seg[:, <span class="dv">1</span>]</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>            xs, ys <span class="op">=</span> transform_xy(transform, rows, cols)  <span class="co"># pixel para coordenadas reais</span></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>            geometries.append(LineString(<span class="bu">zip</span>(xs, ys)))</span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>            elevations.append(level)</span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gpd.GeoDataFrame({<span class="st">"elevation"</span>: elevations}, geometry<span class="op">=</span>geometries, crs<span class="op">=</span>crs)</span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>contornos_gdf <span class="op">=</span> contours_to_geodataframe(contornos, mosaic_transform, dem_crs)</span>
-<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(contornos_gdf)<span class="sc">}</span><span class="ss"> segmentos de curva de nível"</span>)</span>
-<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>contornos_gdf.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> LineString</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.transform <span class="im">import</span> xy <span class="im">as</span> transform_xy</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> contours_to_geodataframe(contour_set, transform, crs) <span class="op">-&gt;</span> gpd.GeoDataFrame:</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converte um QuadContourSet do matplotlib em um GeoDataFrame de linhas (uma por segmento)."""</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    geometries <span class="op">=</span> []</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    elevations <span class="op">=</span> []</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> level, segments <span class="kw">in</span> <span class="bu">zip</span>(contour_set.levels, contour_set.allsegs):</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> seg <span class="kw">in</span> segments:</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(seg) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span>  <span class="co"># precisa de pelo menos 2 pontos pra formar uma linha</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>            cols, rows <span class="op">=</span> seg[:, <span class="dv">0</span>], seg[:, <span class="dv">1</span>]</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>            xs, ys <span class="op">=</span> transform_xy(transform, rows, cols)  <span class="co"># pixel para coordenadas reais</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>            geometries.append(LineString(<span class="bu">zip</span>(xs, ys)))</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>            elevations.append(level)</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gpd.GeoDataFrame({<span class="st">"elevation"</span>: elevations}, geometry<span class="op">=</span>geometries, crs<span class="op">=</span>crs)</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>contornos_gdf <span class="op">=</span> contours_to_geodataframe(contornos, mosaic_transform, dem_crs)</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(contornos_gdf)<span class="sc">}</span><span class="ss"> segmentos de curva de nível"</span>)</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>contornos_gdf.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>2221 segmentos de curva de nível</code></pre>
@@ -2737,7 +2750,7 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="20586535" class="cell" data-execution_count="79">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>contornos_gdf[<span class="st">'elevation'</span>].unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>contornos_gdf[<span class="st">'elevation'</span>].unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="79">
 <pre><code>array([   0.,  100.,  200.,  300.,  400.,  500.,  600.,  700.,  800.,
@@ -2747,22 +2760,22 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="4fd662c4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:15.839248Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:15.839201Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:16.063910Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:16.063556Z&quot;}}" data-execution_count="84">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>contornos_gdf.plot(column<span class="op">=</span><span class="st">"elevation"</span>, </span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                   cmap<span class="op">=</span><span class="st">"terrain"</span>, </span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                   legend<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>                    legend_kwds<span class="op">=</span>{<span class="st">"label"</span>: <span class="st">"Elevação (m)"</span>}, </span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>                    linewidth<span class="op">=</span><span class="fl">0.6</span>, </span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                    ax<span class="op">=</span>ax)</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Curvas de nível como vetor, coloridas por altura"</span>)</span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>)</span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>contornos_gdf.plot(column<span class="op">=</span><span class="st">"elevation"</span>, </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                   cmap<span class="op">=</span><span class="st">"terrain"</span>, </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                   legend<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                    legend_kwds<span class="op">=</span>{<span class="st">"label"</span>: <span class="st">"Elevação (m)"</span>}, </span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>                    linewidth<span class="op">=</span><span class="fl">0.6</span>, </span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>                    ax<span class="op">=</span>ax)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Curvas de nível como vetor, coloridas por altura"</span>)</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-26-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-27-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2771,20 +2784,20 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="5469b5e1" class="cell" data-execution_count="92">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely <span class="im">import</span> Point</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemplo: Vamos achar todas as curvas a menos de 200 metros do centroid de um ponto</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pra consultas com distância em metros, reprojetamos pra um CRS métrico</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>contornos_gdf_utm <span class="op">=</span> contornos_gdf.to_crs(contornos_gdf.estimate_utm_crs())</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ponto exemplo: -23.85, -46.7</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>ponto_exemplo <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[Point(<span class="op">-</span><span class="fl">46.7</span>,<span class="op">-</span><span class="fl">23.85</span>)],crs<span class="op">=</span><span class="st">"4326"</span>).to_crs(contornos_gdf_utm.crs)</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>ponto <span class="op">=</span> ponto_exemplo.geometry.iloc[<span class="dv">0</span>]</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>curvas_proximas <span class="op">=</span> contornos_gdf_utm[contornos_gdf_utm.geometry.distance(ponto) <span class="op">&lt;</span> <span class="dv">500</span>]</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(curvas_proximas)<span class="sc">}</span><span class="ss"> segmentos de curva a menos de 200 m do ponto de exemplo"</span>)</span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="co"># é exatamente esse tipo de consulta espacial que vamos usar depois para</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="co"># cruzar pontos (ex: nascentes, trilhas) com a curva de nível mais próxima</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely <span class="im">import</span> Point</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemplo: Vamos achar todas as curvas a menos de 200 metros do centroid de um ponto</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pra consultas com distância em metros, reprojetamos pra um CRS métrico</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>contornos_gdf_utm <span class="op">=</span> contornos_gdf.to_crs(contornos_gdf.estimate_utm_crs())</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ponto exemplo: -23.85, -46.7</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>ponto_exemplo <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[Point(<span class="op">-</span><span class="fl">46.7</span>,<span class="op">-</span><span class="fl">23.85</span>)],crs<span class="op">=</span><span class="st">"4326"</span>).to_crs(contornos_gdf_utm.crs)</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>ponto <span class="op">=</span> ponto_exemplo.geometry.iloc[<span class="dv">0</span>]</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>curvas_proximas <span class="op">=</span> contornos_gdf_utm[contornos_gdf_utm.geometry.distance(ponto) <span class="op">&lt;</span> <span class="dv">500</span>]</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(curvas_proximas)<span class="sc">}</span><span class="ss"> segmentos de curva a menos de 200 m do ponto de exemplo"</span>)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="co"># é exatamente esse tipo de consulta espacial que vamos usar depois para</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="co"># cruzar pontos (ex: nascentes, trilhas) com a curva de nível mais próxima</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>2 segmentos de curva a menos de 200 m do ponto de exemplo</code></pre>
@@ -2793,7 +2806,7 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="002d479b" class="cell" data-execution_count="93">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>curvas_proximas</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>curvas_proximas</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="93">
 <div>
@@ -2832,33 +2845,33 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="fdf5469e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:17.593099Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:17.593042Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:17.678923Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:17.678542Z&quot;}}" data-execution_count="94">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="dv">3</span>  <span class="co"># amostragem pra manter a interação fluida</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>dem_sample <span class="op">=</span> dem_utm.values[::step, ::step]</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>x_res, y_res <span class="op">=</span> dem_utm.rio.resolution()</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>x_extent <span class="op">=</span> dem_sample.shape[<span class="dv">1</span>] <span class="op">*</span> <span class="bu">abs</span>(x_res) <span class="op">*</span> step</span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>y_extent <span class="op">=</span> dem_sample.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="bu">abs</span>(y_res) <span class="op">*</span> step</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>z_extent <span class="op">=</span> <span class="bu">float</span>(np.nanmax(dem_sample) <span class="op">-</span> np.nanmin(dem_sample))</span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>exagero_vertical <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>aspect_z <span class="op">=</span> (z_extent <span class="op">/</span> x_extent) <span class="op">*</span> exagero_vertical</span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>[go.Surface(z<span class="op">=</span>dem_sample, colorscale<span class="op">=</span><span class="st">"earth"</span>,</span>
-<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>                                  colorbar<span class="op">=</span><span class="bu">dict</span>(title<span class="op">=</span><span class="st">"m"</span>))])</span>
-<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
-<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="ss">f"DEM 3D — Cubatão/SP (exagero vertical </span><span class="sc">{</span>exagero_vertical<span class="sc">}</span><span class="ss">x)"</span>,</span>
-<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>    scene<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>        xaxis_title<span class="op">=</span><span class="st">"x (amostrado)"</span>,</span>
-<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>        yaxis_title<span class="op">=</span><span class="st">"y (amostrado)"</span>,</span>
-<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>        zaxis_title<span class="op">=</span><span class="st">"Elevação (m)"</span>,</span>
-<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>        aspectmode<span class="op">=</span><span class="st">"manual"</span>,</span>
-<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>        aspectratio<span class="op">=</span><span class="bu">dict</span>(x<span class="op">=</span><span class="dv">1</span>, y<span class="op">=</span>y_extent <span class="op">/</span> x_extent, z<span class="op">=</span>aspect_z),</span>
-<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">900</span>, height<span class="op">=</span><span class="dv">600</span>,</span>
-<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="dv">3</span>  <span class="co"># amostragem pra manter a interação fluida</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>dem_sample <span class="op">=</span> dem_utm.values[::step, ::step]</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>x_res, y_res <span class="op">=</span> dem_utm.rio.resolution()</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>x_extent <span class="op">=</span> dem_sample.shape[<span class="dv">1</span>] <span class="op">*</span> <span class="bu">abs</span>(x_res) <span class="op">*</span> step</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>y_extent <span class="op">=</span> dem_sample.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="bu">abs</span>(y_res) <span class="op">*</span> step</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>z_extent <span class="op">=</span> <span class="bu">float</span>(np.nanmax(dem_sample) <span class="op">-</span> np.nanmin(dem_sample))</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>exagero_vertical <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>aspect_z <span class="op">=</span> (z_extent <span class="op">/</span> x_extent) <span class="op">*</span> exagero_vertical</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>[go.Surface(z<span class="op">=</span>dem_sample, colorscale<span class="op">=</span><span class="st">"earth"</span>,</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>                                  colorbar<span class="op">=</span><span class="bu">dict</span>(title<span class="op">=</span><span class="st">"m"</span>))])</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="ss">f"DEM 3D — Cubatão/SP (exagero vertical </span><span class="sc">{</span>exagero_vertical<span class="sc">}</span><span class="ss">x)"</span>,</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>    scene<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>        xaxis_title<span class="op">=</span><span class="st">"x (amostrado)"</span>,</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>        yaxis_title<span class="op">=</span><span class="st">"y (amostrado)"</span>,</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>        zaxis_title<span class="op">=</span><span class="st">"Elevação (m)"</span>,</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>        aspectmode<span class="op">=</span><span class="st">"manual"</span>,</span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>        aspectratio<span class="op">=</span><span class="bu">dict</span>(x<span class="op">=</span><span class="dv">1</span>, y<span class="op">=</span>y_extent <span class="op">/</span> x_extent, z<span class="op">=</span>aspect_z),</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">900</span>, height<span class="op">=</span><span class="dv">600</span>,</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <pre><code>Unable to display output for mime type(s): application/vnd.plotly.v1+json</code></pre>
@@ -2881,26 +2894,26 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="8a44aabb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:17.681735Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:17.681666Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:18.302290Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:18.301785Z&quot;}}" data-execution_count="95">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># o pysheds ainda usa `np.in1d`, que foi removido do numpy 2.x (virou `np.isin`).</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co"># esse "remendo" resolve a incompatibilidade sem precisar trocar de versão do numpy.</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> <span class="bu">hasattr</span>(np, <span class="st">"in1d"</span>):</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    np.in1d <span class="op">=</span> np.isin</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pysheds.grid <span class="im">import</span> Grid</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># o pysheds ainda usa `np.in1d`, que foi removido do numpy 2.x (virou `np.isin`).</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># esse "remendo" resolve a incompatibilidade sem precisar trocar de versão do numpy.</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> <span class="bu">hasattr</span>(np, <span class="st">"in1d"</span>):</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    np.in1d <span class="op">=</span> np.isin</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pysheds.grid <span class="im">import</span> Grid</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>O <code>pysheds</code> lê de um arquivo raster no disco (não de um array em memória), então vamos exportar o <code>dem_utm</code> (o mesmo tipo de exportação que já fizemos antes) e carregar a partir dele.</p>
 <div id="d2adeac3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:18.303369Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:18.303300Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:18.335659Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:18.335390Z&quot;}}" data-execution_count="96">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>output_dir <span class="op">=</span> <span class="st">"outputs"</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>os.makedirs(output_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>dem_utm_path <span class="op">=</span> os.path.join(output_dir, <span class="st">"cubatao_dem_utm.tif"</span>)</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>dem_utm.rio.to_raster(dem_utm_path)</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> Grid.from_raster(dem_utm_path)</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>dem_grid <span class="op">=</span> grid.read_raster(dem_utm_path)</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"grid shape:"</span>, grid.shape, <span class="st">"| crs:"</span>, grid.crs.srs <span class="cf">if</span> <span class="bu">hasattr</span>(grid.crs, <span class="st">"srs"</span>) <span class="cf">else</span> grid.crs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>output_dir <span class="op">=</span> <span class="st">"outputs"</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>os.makedirs(output_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>dem_utm_path <span class="op">=</span> os.path.join(output_dir, <span class="st">"cubatao_dem_utm.tif"</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>dem_utm.rio.to_raster(dem_utm_path)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> Grid.from_raster(dem_utm_path)</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>dem_grid <span class="op">=</span> grid.read_raster(dem_utm_path)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"grid shape:"</span>, grid.shape, <span class="st">"| crs:"</span>, grid.crs.srs <span class="cf">if</span> <span class="bu">hasattr</span>(grid.crs, <span class="st">"srs"</span>) <span class="cf">else</span> grid.crs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>grid shape: (1349, 2284) | crs: PROJCS["WGS 84 / UTM zone 23S",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-45],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",10000000],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32723"]]</code></pre>
@@ -2912,29 +2925,29 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="848d4cfb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:18.336749Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:18.336694Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:19.631676Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:19.631309Z&quot;}}" data-execution_count="97">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. preenche buracos e "pits" isolados</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>pit_filled_dem <span class="op">=</span> grid.fill_pits(dem_grid)</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>flooded_dem <span class="op">=</span> grid.fill_depressions(pit_filled_dem)</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>inflated_dem <span class="op">=</span> grid.resolve_flats(flooded_dem)</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. direção de fluxo (D8: 8 direções possíveis por pixel)</span></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>dirmap <span class="op">=</span> (<span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>)</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>fdir <span class="op">=</span> grid.flowdir(inflated_dem, dirmap<span class="op">=</span>dirmap)</span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. fluxo acumulado</span></span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> grid.accumulation(fdir, dirmap<span class="op">=</span>dirmap)</span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(np.log1p(acc), cmap<span class="op">=</span><span class="st">"cubehelix"</span>)</span>
-<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"log(1 + fluxo acumulado)"</span>)</span>
-<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Fluxo acumulado"</span>)</span>
-<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. preenche buracos e "pits" isolados</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>pit_filled_dem <span class="op">=</span> grid.fill_pits(dem_grid)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>flooded_dem <span class="op">=</span> grid.fill_depressions(pit_filled_dem)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>inflated_dem <span class="op">=</span> grid.resolve_flats(flooded_dem)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. direção de fluxo (D8: 8 direções possíveis por pixel)</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>dirmap <span class="op">=</span> (<span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>fdir <span class="op">=</span> grid.flowdir(inflated_dem, dirmap<span class="op">=</span>dirmap)</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. fluxo acumulado</span></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> grid.accumulation(fdir, dirmap<span class="op">=</span>dirmap)</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(np.log1p(acc), cmap<span class="op">=</span><span class="st">"cubehelix"</span>)</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"log(1 + fluxo acumulado)"</span>)</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Fluxo acumulado"</span>)</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-32-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-33-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2949,26 +2962,26 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="956ae471" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:19.632895Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:19.632752Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:19.864600Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:19.864205Z&quot;}}" data-execution_count="98">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>row_pour, col_pour <span class="op">=</span> np.unravel_index(np.argmax(acc), acc.shape)</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>x_pour, y_pour <span class="op">=</span> grid.affine <span class="op">*</span> (col_pour, row_pour)</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Ponto de saída escolhido: (</span><span class="sc">{</span>x_pour<span class="sc">:.0f}</span><span class="ss">, </span><span class="sc">{</span>y_pour<span class="sc">:.0f}</span><span class="ss">) | fluxo acumulado: </span><span class="sc">{</span>acc<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.0f}</span><span class="ss"> pixels"</span>)</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>catchment <span class="op">=</span> grid.catchment(x<span class="op">=</span>x_pour, y<span class="op">=</span>y_pour, fdir<span class="op">=</span>fdir, dirmap<span class="op">=</span>dirmap, xytype<span class="op">=</span><span class="st">"coordinate"</span>)</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>cellsize <span class="op">=</span> <span class="bu">abs</span>(grid.affine[<span class="dv">0</span>])</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>area_km2 <span class="op">=</span> catchment.<span class="bu">sum</span>() <span class="op">*</span> (cellsize <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> <span class="fl">1e6</span></span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Área da bacia: </span><span class="sc">{</span>area_km2<span class="sc">:.1f}</span><span class="ss"> km²  (</span><span class="sc">{</span>catchment<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> pixels)"</span>)</span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="co"># repare: o número de pixels da bacia é EXATAMENTE o fluxo acumulado no ponto de saída —</span></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="co"># não é coincidência, é a própria definição de fluxo acumulado!</span></span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>ax.imshow(dem_utm, cmap<span class="op">=</span><span class="st">"terrain"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>ax.imshow(np.where(catchment, <span class="dv">1</span>, np.nan), cmap<span class="op">=</span><span class="st">"Blues"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>ax.scatter([col_pour], [row_pour], color<span class="op">=</span><span class="st">"red"</span>, marker<span class="op">=</span><span class="st">"v"</span>, s<span class="op">=</span><span class="dv">80</span>, label<span class="op">=</span><span class="st">"Ponto de saída"</span>)</span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Bacia delineada — </span><span class="sc">{</span>area_km2<span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
-<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>row_pour, col_pour <span class="op">=</span> np.unravel_index(np.argmax(acc), acc.shape)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>x_pour, y_pour <span class="op">=</span> grid.affine <span class="op">*</span> (col_pour, row_pour)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Ponto de saída escolhido: (</span><span class="sc">{</span>x_pour<span class="sc">:.0f}</span><span class="ss">, </span><span class="sc">{</span>y_pour<span class="sc">:.0f}</span><span class="ss">) | fluxo acumulado: </span><span class="sc">{</span>acc<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.0f}</span><span class="ss"> pixels"</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>catchment <span class="op">=</span> grid.catchment(x<span class="op">=</span>x_pour, y<span class="op">=</span>y_pour, fdir<span class="op">=</span>fdir, dirmap<span class="op">=</span>dirmap, xytype<span class="op">=</span><span class="st">"coordinate"</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>cellsize <span class="op">=</span> <span class="bu">abs</span>(grid.affine[<span class="dv">0</span>])</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>area_km2 <span class="op">=</span> catchment.<span class="bu">sum</span>() <span class="op">*</span> (cellsize <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> <span class="fl">1e6</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Área da bacia: </span><span class="sc">{</span>area_km2<span class="sc">:.1f}</span><span class="ss"> km²  (</span><span class="sc">{</span>catchment<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> pixels)"</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="co"># repare: o número de pixels da bacia é EXATAMENTE o fluxo acumulado no ponto de saída —</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="co"># não é coincidência, é a própria definição de fluxo acumulado!</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>ax.imshow(dem_utm, cmap<span class="op">=</span><span class="st">"terrain"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>ax.imshow(np.where(catchment, <span class="dv">1</span>, np.nan), cmap<span class="op">=</span><span class="st">"Blues"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>ax.scatter([col_pour], [row_pour], color<span class="op">=</span><span class="st">"red"</span>, marker<span class="op">=</span><span class="st">"v"</span>, s<span class="op">=</span><span class="dv">80</span>, label<span class="op">=</span><span class="st">"Ponto de saída"</span>)</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Bacia delineada — </span><span class="sc">{</span>area_km2<span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Ponto de saída escolhido: (350235, 7344724) | fluxo acumulado: 961366 pixels
@@ -2977,7 +2990,7 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-33-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-34-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2994,31 +3007,31 @@ shape: (1349, 2284) | resolução (m): (28.85130642918404, -28.85130642918404)</
 <div id="c9e29411" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-03T13:26:19.865577Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-03T13:26:19.865511Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-03T13:26:20.491755Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-03T13:26:20.491371Z&quot;}}" data-execution_count="99">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> shape <span class="im">as</span> shapely_shape</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. bacia como polígono</span></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>shapes <span class="op">=</span> <span class="bu">list</span>(grid.polygonize(data<span class="op">=</span>catchment.astype(<span class="st">"int32"</span>), mask<span class="op">=</span>catchment))</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>bacia_gdf <span class="op">=</span> gpd.GeoDataFrame(</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    geometry<span class="op">=</span>[shapely_shape(geom) <span class="cf">for</span> geom, _ <span class="kw">in</span> shapes],</span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    crs<span class="op">=</span>grid.crs,</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Bacia: </span><span class="sc">{</span><span class="bu">len</span>(bacia_gdf)<span class="sc">}</span><span class="ss"> polígono(s), área = </span><span class="sc">{</span>bacia_gdf<span class="sc">.</span>geometry<span class="sc">.</span>area<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> <span class="fl">1e6</span><span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. rede de rios: qualquer pixel com fluxo acumulado acima de um limiar vira "rio"</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>limiar_rio <span class="op">=</span> <span class="dv">500</span>  <span class="co"># em número de pixels contribuindo (500 px * ~28x28m ≈ 0.4 km² de área de captação)</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>branches <span class="op">=</span> grid.extract_river_network(fdir, acc <span class="op">&gt;</span> limiar_rio, dirmap<span class="op">=</span>dirmap)</span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>rios_gdf <span class="op">=</span> gpd.GeoDataFrame.from_features(branches[<span class="st">"features"</span>], crs<span class="op">=</span>grid.crs)</span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Rede de rios: </span><span class="sc">{</span><span class="bu">len</span>(rios_gdf)<span class="sc">}</span><span class="ss"> trechos"</span>)</span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>ax.imshow(dem_utm, cmap<span class="op">=</span><span class="st">"Greys_r"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>          extent<span class="op">=</span>[dem_utm.x.<span class="bu">min</span>(), dem_utm.x.<span class="bu">max</span>(), dem_utm.y.<span class="bu">min</span>(), dem_utm.y.<span class="bu">max</span>()])</span>
-<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>bacia_gdf.boundary.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"red"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"Limite da bacia"</span>)</span>
-<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>rios_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"blue"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, label<span class="op">=</span><span class="st">"Rede de drenagem"</span>)</span>
-<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Bacia delineada + rede de rios extraída do DEM"</span>)</span>
-<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> shape <span class="im">as</span> shapely_shape</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. bacia como polígono</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>shapes <span class="op">=</span> <span class="bu">list</span>(grid.polygonize(data<span class="op">=</span>catchment.astype(<span class="st">"int32"</span>), mask<span class="op">=</span>catchment))</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>bacia_gdf <span class="op">=</span> gpd.GeoDataFrame(</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    geometry<span class="op">=</span>[shapely_shape(geom) <span class="cf">for</span> geom, _ <span class="kw">in</span> shapes],</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    crs<span class="op">=</span>grid.crs,</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Bacia: </span><span class="sc">{</span><span class="bu">len</span>(bacia_gdf)<span class="sc">}</span><span class="ss"> polígono(s), área = </span><span class="sc">{</span>bacia_gdf<span class="sc">.</span>geometry<span class="sc">.</span>area<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> <span class="fl">1e6</span><span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. rede de rios: qualquer pixel com fluxo acumulado acima de um limiar vira "rio"</span></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>limiar_rio <span class="op">=</span> <span class="dv">500</span>  <span class="co"># em número de pixels contribuindo (500 px * ~28x28m ≈ 0.4 km² de área de captação)</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>branches <span class="op">=</span> grid.extract_river_network(fdir, acc <span class="op">&gt;</span> limiar_rio, dirmap<span class="op">=</span>dirmap)</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>rios_gdf <span class="op">=</span> gpd.GeoDataFrame.from_features(branches[<span class="st">"features"</span>], crs<span class="op">=</span>grid.crs)</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Rede de rios: </span><span class="sc">{</span><span class="bu">len</span>(rios_gdf)<span class="sc">}</span><span class="ss"> trechos"</span>)</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>ax.imshow(dem_utm, cmap<span class="op">=</span><span class="st">"Greys_r"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>          extent<span class="op">=</span>[dem_utm.x.<span class="bu">min</span>(), dem_utm.x.<span class="bu">max</span>(), dem_utm.y.<span class="bu">min</span>(), dem_utm.y.<span class="bu">max</span>()])</span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>bacia_gdf.boundary.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"red"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"Limite da bacia"</span>)</span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>rios_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"blue"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, label<span class="op">=</span><span class="st">"Rede de drenagem"</span>)</span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Bacia delineada + rede de rios extraída do DEM"</span>)</span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Bacia: 12 polígono(s), área = 800.2 km²
@@ -3027,7 +3040,7 @@ Rede de rios: 2610 trechos</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="dem_files/figure-html/cell-34-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="dem_files/figure-html/cell-35-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -3509,8 +3522,8 @@ Rede de rios: 2610 trechos</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../fundamentals_gis_rs/week4/index.html" class="pagination-link" aria-label="Week 4">
-        <span class="nav-page-text">Week 4</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../fundamentals_gis_rs/week3/image_processing2.html" class="pagination-link" aria-label="Processamento de Imagens">
+        <span class="nav-page-text">Processamento de Imagens</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

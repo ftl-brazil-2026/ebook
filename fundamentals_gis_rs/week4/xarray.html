@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>xarray: Trabalhando com Dados Multidimensionais Rotulados – FTL-Brasil-SpaceTech-Bootcamp</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../ml-dl/index.html" rel="next">
+<link href="../../fundamentals_gis_rs/week3/image_processing2.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a6765147b6446e4cffb9cdea7865c701.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">FTL-Brasil-SpaceTech-Bootcamp</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ftl-brazil-2026/ebook"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Fundamentos em GIS e Sensoriamento Remoto</li><li class="breadcrumb-item"><a href="../../fundamentals_gis_rs/week4/xarray.html">Week 4</a></li><li class="breadcrumb-item"><a href="../../fundamentals_gis_rs/week4/xarray.html">xarray: Trabalhando com Dados Multidimensionais Rotulados</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Course Information</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/general-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Informações Gerais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/reading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Leituras</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standard Set Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/cli-utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilitários de CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/how-to-contribute.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Como Contribuir</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos em GIS e Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 0 — Ecossistema geoespacial</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ecossistema Geoespacial</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week0/space_tech_ecossystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessao 0 - 19/08/2026</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 1 — Fundamentos em GIS</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week1/crs_and_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de Coordenadas de Referência e Projeções</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análise Espacial de Dados Vetoriais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 - Fundamentos em Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week2/RS-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">STAC Catalogue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week2/RS-Image_Processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 - Analises Espaciais Complexas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week3/dem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 4</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">xarray: Trabalhando com Dados Multidimensionais Rotulados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em Machine Learning e Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../ml-dl/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentos em Machine Learning e Deep Learning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../state-of-art/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessões de Convidados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../guest-sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessões de Convidados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../awesome-geospatial/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Awesome Geospatial</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#parte-1-fundamentos-de-xarray" id="toc-parte-1-fundamentos-de-xarray" class="nav-link active" data-scroll-target="#parte-1-fundamentos-de-xarray">Parte 1 — Fundamentos de xarray</a>
+  <ul class="collapse">
+  <li><a href="#por-que-xarray" id="toc-por-que-xarray" class="nav-link" data-scroll-target="#por-que-xarray">1. Por que xarray?</a></li>
+  <li><a href="#estruturas-centrais-dataarray-e-dataset" id="toc-estruturas-centrais-dataarray-e-dataset" class="nav-link" data-scroll-target="#estruturas-centrais-dataarray-e-dataset">2. Estruturas centrais: <code>DataArray</code> e <code>Dataset</code></a></li>
+  <li><a href="#dataset-agrupando-várias-variáveis" id="toc-dataset-agrupando-várias-variáveis" class="nav-link" data-scroll-target="#dataset-agrupando-várias-variáveis">3. <code>Dataset</code>: agrupando várias variáveis</a></li>
+  <li><a href="#indexação-e-seleção-.isel-vs-.sel" id="toc-indexação-e-seleção-.isel-vs-.sel" class="nav-link" data-scroll-target="#indexação-e-seleção-.isel-vs-.sel">4. Indexação e seleção: <code>.isel</code> vs <code>.sel</code></a></li>
+  <li><a href="#operações-vetorizadas-com-broadcasting-por-nome-de-dimensão" id="toc-operações-vetorizadas-com-broadcasting-por-nome-de-dimensão" class="nav-link" data-scroll-target="#operações-vetorizadas-com-broadcasting-por-nome-de-dimensão">5. Operações vetorizadas com <em>broadcasting</em> por nome de dimensão</a></li>
+  <li><a href="#redução-e-agregação-por-dimensão-nomeada" id="toc-redução-e-agregação-por-dimensão-nomeada" class="nav-link" data-scroll-target="#redução-e-agregação-por-dimensão-nomeada">6. Redução e agregação por dimensão nomeada</a></li>
+  <li><a href="#groupby-e-resample-climatologia-e-agregações-temporais" id="toc-groupby-e-resample-climatologia-e-agregações-temporais" class="nav-link" data-scroll-target="#groupby-e-resample-climatologia-e-agregações-temporais">7. <code>groupby</code> e <code>resample</code>: climatologia e agregações temporais</a></li>
+  <li><a href="#dask-e-chunks-dados-que-não-cabem-na-memória" id="toc-dask-e-chunks-dados-que-não-cabem-na-memória" class="nav-link" data-scroll-target="#dask-e-chunks-dados-que-não-cabem-na-memória">8. Dask e <code>chunks</code>: dados que não cabem na memória</a></li>
+  <li><a href="#zarr-o-formato-cloud-native-por-trás-do-era5-moderno" id="toc-zarr-o-formato-cloud-native-por-trás-do-era5-moderno" class="nav-link" data-scroll-target="#zarr-o-formato-cloud-native-por-trás-do-era5-moderno">9. Zarr: o formato cloud-native por trás do ERA5 moderno</a></li>
+  <li><a href="#ponte-com-o-ecossistema-gis-rioxarray" id="toc-ponte-com-o-ecossistema-gis-rioxarray" class="nav-link" data-scroll-target="#ponte-com-o-ecossistema-gis-rioxarray">10. Ponte com o ecossistema GIS: <code>rioxarray</code></a></li>
+  </ul></li>
+  <li><a href="#parte-2-estudo-de-caso-era5-land-em-petrolina-pe-juazeiro-ba" id="toc-parte-2-estudo-de-caso-era5-land-em-petrolina-pe-juazeiro-ba" class="nav-link" data-scroll-target="#parte-2-estudo-de-caso-era5-land-em-petrolina-pe-juazeiro-ba">Parte 2 — Estudo de caso: ERA5-Land em Petrolina (PE) / Juazeiro (BA)</a>
+  <ul class="collapse">
+  <li><a href="#autenticação" id="toc-autenticação" class="nav-link" data-scroll-target="#autenticação">Autenticação</a></li>
+  <li><a href="#duas-pegadinhas-comuns-do-era5" id="toc-duas-pegadinhas-comuns-do-era5" class="nav-link" data-scroll-target="#duas-pegadinhas-comuns-do-era5">Duas pegadinhas comuns do ERA5</a></li>
+  <li><a href="#área-de-estudo-petrolina-pe-juazeiro-ba" id="toc-área-de-estudo-petrolina-pe-juazeiro-ba" class="nav-link" data-scroll-target="#área-de-estudo-petrolina-pe-juazeiro-ba">Área de estudo: Petrolina (PE) / Juazeiro (BA)</a></li>
+  <li><a href="#conversão-de-unidades" id="toc-conversão-de-unidades" class="nav-link" data-scroll-target="#conversão-de-unidades">Conversão de unidades</a></li>
+  <li><a href="#agregação-diáriamensal" id="toc-agregação-diáriamensal" class="nav-link" data-scroll-target="#agregação-diáriamensal">Agregação diária/mensal</a></li>
+  <li><a href="#climatologia-sazonal-20152023" id="toc-climatologia-sazonal-20152023" class="nav-link" data-scroll-target="#climatologia-sazonal-20152023">Climatologia sazonal (2015–2023)</a></li>
+  <li><a href="#série-temporal-e-anomalias" id="toc-série-temporal-e-anomalias" class="nav-link" data-scroll-target="#série-temporal-e-anomalias">Série temporal e anomalias</a></li>
+  <li><a href="#mapa-da-área-de-estudo" id="toc-mapa-da-área-de-estudo" class="nav-link" data-scroll-target="#mapa-da-área-de-estudo">Mapa da área de estudo</a></li>
+  <li><a href="#bônus-exportando-o-recorte" id="toc-bônus-exportando-o-recorte" class="nav-link" data-scroll-target="#bônus-exportando-o-recorte">Bônus: exportando o recorte</a></li>
+  </ul></li>
+  <li><a href="#para-refletir" id="toc-para-refletir" class="nav-link" data-scroll-target="#para-refletir">Para refletir</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Fundamentos em GIS e Sensoriamento Remoto</li><li class="breadcrumb-item"><a href="../../fundamentals_gis_rs/week4/xarray.html">Week 4</a></li><li class="breadcrumb-item"><a href="../../fundamentals_gis_rs/week4/xarray.html">xarray: Trabalhando com Dados Multidimensionais Rotulados</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">xarray: Trabalhando com Dados Multidimensionais Rotulados</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Até agora trabalhamos com vetores e rasters. Esses dados até agora eram normalmente bidimensionais ou tridimensionais, as vezes imagens espectrais contendo mais de uma banda. Contudo, quando falamos em Cubo de Dados Mas boa parte dos dados de sensoriamento remoto e, principalmente, de <strong>reanálises climáticas</strong> (ERA5, CMIP, previsão numérica do tempo) tem várias dimensões ao mesmo tempo: tempo, latitude, longitude e às vezes nível vertical (altitude/pressão).</p>
+<p>O <a href="https://docs.xarray.dev/">xarray</a> estende o numpy e o pandas para esse mundo N-dimensional, dando <strong>nomes e rótulos</strong> para cada eixo (dimensão), em vez de você ter que lembrar “o eixo 0 é tempo, o eixo 1 é latitude…”.</p>
+<p>Nesta aula vamos: (1) entender os conceitos centrais do xarray com dados sintéticos, e (2) aplicar isso numa análise real de clima semiárido usando <strong>ERA5-Land</strong> para a região de <strong>Petrolina (PE) / Juazeiro (BA)</strong>, no Vale do São Francisco.</p>
+<p>Link Colab</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/fundamentals_gis_rs/week3/xarray.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Open In Colab</figcaption>
+</figure>
+</div>
+<div id="f7c98308" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rode isso apenas se voce estiver no colab! </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># git clone https://github.com/ftl-brazil-2026/ebook.git</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install -r requirements.txt</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="c002" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray  <span class="co"># noqa: F401 - registra o acessor .rio em DataArray/Dataset</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>load_dotenv()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="parte-1-fundamentos-de-xarray" class="level2">
+<h2 class="anchored" data-anchor-id="parte-1-fundamentos-de-xarray">Parte 1 — Fundamentos de xarray</h2>
+<section id="por-que-xarray" class="level3">
+<h3 class="anchored" data-anchor-id="por-que-xarray">1. Por que xarray?</h3>
+<ul>
+<li><strong>numpy</strong> te dá arrays N-dimensionais rápidos, mas “cegos”: <code>dados[3, 12, 40]</code> não diz nada sobre o que é o eixo 0, 1 ou 2.</li>
+<li><strong>pandas</strong> dá rótulos (index/columns), mas é essencialmente 1D/2D — não é natural para tempo × latitude × longitude × nível.</li>
+<li><strong>xarray</strong> junta o melhor dos dois: arrays N-D (numpy ou dask por baixo) com <strong>dimensões nomeadas</strong>, <strong>coordenadas rotuladas</strong> e <strong>metadados (atributos)</strong> — e é o formato padrão para dados climáticos/geoespaciais em NetCDF e Zarr (ERA5, CMIP6, MODIS, previsão numérica do tempo).</li>
+</ul>
+</section>
+<section id="estruturas-centrais-dataarray-e-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="estruturas-centrais-dataarray-e-dataset">2. Estruturas centrais: <code>DataArray</code> e <code>Dataset</code></h3>
+<ul>
+<li><strong><code>DataArray</code></strong>: um array N-D + <code>dims</code> (nomes dos eixos) + <code>coords</code> (os valores de cada eixo: datas, latitudes…) + <code>attrs</code> (metadados livres: unidade, nome longo, etc).</li>
+<li><strong><code>Dataset</code></strong>: um dicionário de <code>DataArray</code>s que compartilham as mesmas coordenadas — por exemplo, temperatura e precipitação vivendo no mesmo grid de tempo/lat/lon.</li>
+</ul>
+<p>Vamos criar dados sintéticos (não é ERA5 ainda) só para explorar a mecânica do xarray sem depender de rede.</p>
+<div id="c005" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> pd.date_range(<span class="st">"2015-01-01"</span>, periods<span class="op">=</span><span class="dv">24</span>, freq<span class="op">=</span><span class="st">"MS"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lat <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">9.6</span>, <span class="op">-</span><span class="fl">9.2</span>, <span class="dv">5</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>lon <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">40.7</span>, <span class="op">-</span><span class="fl">40.3</span>, <span class="dv">5</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ciclo_sazonal <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> (np.arange(<span class="dv">24</span>) <span class="op">/</span> <span class="dv">12</span>))[:, <span class="va">None</span>, <span class="va">None</span>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>temp_valores <span class="op">=</span> <span class="dv">27</span> <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> ciclo_sazonal <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="fl">0.5</span>, (<span class="dv">24</span>, <span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> xr.DataArray(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    temp_valores,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>[<span class="st">"time"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>],</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"time"</span>: time, <span class="st">"lat"</span>: lat, <span class="st">"lon"</span>: lon},</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"t2m"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    attrs<span class="op">=</span>{<span class="st">"units"</span>: <span class="st">"degC"</span>, <span class="st">"long_name"</span>: <span class="st">"Temperatura do ar a 2m (sintético)"</span>},</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>temp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Repare no <code>repr</code> acima: ele já mostra as dimensões, o tamanho de cada uma, as coordenadas e os atributos — muito mais informativo que um <code>array.shape</code> puro.</p>
+<div id="c007" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dims:"</span>, temp.dims)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, temp.shape)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"atributos:"</span>, temp.attrs)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>temp.coords</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="dataset-agrupando-várias-variáveis" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-agrupando-várias-variáveis">3. <code>Dataset</code>: agrupando várias variáveis</h3>
+<p>Um regime semiárido como o de Petrolina/Juazeiro fica mais claro olhando temperatura <strong>e</strong> precipitação juntas. Vamos criar uma precipitação sintética (chuva concentrada em poucos meses, típico da Caatinga) e juntar tudo em um <code>Dataset</code>.</p>
+<div id="c009" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>estacao_chuvosa <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> ((np.arange(<span class="dv">24</span>) <span class="op">-</span> <span class="dv">8</span>) <span class="op">/</span> <span class="dv">12</span>))[:, <span class="va">None</span>, <span class="va">None</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>precip_valores <span class="op">=</span> np.clip(<span class="dv">50</span> <span class="op">+</span> <span class="dv">120</span> <span class="op">*</span> estacao_chuvosa <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="dv">15</span>, (<span class="dv">24</span>, <span class="dv">5</span>, <span class="dv">5</span>)), <span class="dv">0</span>, <span class="va">None</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>precip <span class="op">=</span> xr.DataArray(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    precip_valores,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>[<span class="st">"time"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>],</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"time"</span>: time, <span class="st">"lat"</span>: lat, <span class="st">"lon"</span>: lon},</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"tp"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    attrs<span class="op">=</span>{<span class="st">"units"</span>: <span class="st">"mm"</span>, <span class="st">"long_name"</span>: <span class="st">"Precipitação mensal (sintético)"</span>},</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>ds_sintetico <span class="op">=</span> xr.Dataset({<span class="st">"t2m"</span>: temp, <span class="st">"tp"</span>: precip})</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>ds_sintetico</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="indexação-e-seleção-.isel-vs-.sel" class="level3">
+<h3 class="anchored" data-anchor-id="indexação-e-seleção-.isel-vs-.sel">4. Indexação e seleção: <code>.isel</code> vs <code>.sel</code></h3>
+<ul>
+<li><code>.isel()</code> seleciona <strong>por posição</strong> (como <code>array[0]</code>), igual numpy.</li>
+<li><code>.sel()</code> seleciona <strong>por rótulo</strong> (uma data, uma coordenada), o jeito que você realmente pensa sobre os dados.</li>
+<li><code>method="nearest"</code> acha o ponto de grade mais próximo de uma coordenada que não é exata — essencial quando você quer o valor “em cima” de uma cidade.</li>
+</ul>
+<div id="c011" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>primeiro_passo <span class="op">=</span> ds_sintetico.isel(time<span class="op">=</span><span class="dv">0</span>)               <span class="co"># por posição</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>junho_2015 <span class="op">=</span> ds_sintetico.sel(time<span class="op">=</span><span class="st">"2015-06"</span>)             <span class="co"># por rótulo</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ponto_petrolina <span class="op">=</span> ds_sintetico.sel(lat<span class="op">=-</span><span class="fl">9.389</span>, lon<span class="op">=-</span><span class="fl">40.502</span>, method<span class="op">=</span><span class="st">"nearest"</span>)  <span class="co"># célula mais próxima</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>ponto_petrolina[<span class="st">"t2m"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="operações-vetorizadas-com-broadcasting-por-nome-de-dimensão" class="level3">
+<h3 class="anchored" data-anchor-id="operações-vetorizadas-com-broadcasting-por-nome-de-dimensão">5. Operações vetorizadas com <em>broadcasting</em> por nome de dimensão</h3>
+<p>No numpy puro, somar dois arrays exige que as formas “batam” na ordem certa. No xarray, o alinhamento é feito <strong>pelo nome das dimensões e pelos valores das coordenadas</strong> — muito mais seguro contra erros silenciosos.</p>
+<div id="c013" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>temp_fahrenheit <span class="op">=</span> ds_sintetico[<span class="st">"t2m"</span>] <span class="op">*</span> <span class="dv">9</span> <span class="op">/</span> <span class="dv">5</span> <span class="op">+</span> <span class="dv">32</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>amplitude_termica <span class="op">=</span> ds_sintetico[<span class="st">"t2m"</span>].<span class="bu">max</span>(<span class="st">"time"</span>) <span class="op">-</span> ds_sintetico[<span class="st">"t2m"</span>].<span class="bu">min</span>(<span class="st">"time"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>amplitude_termica</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="redução-e-agregação-por-dimensão-nomeada" class="level3">
+<h3 class="anchored" data-anchor-id="redução-e-agregação-por-dimensão-nomeada">6. Redução e agregação por dimensão nomeada</h3>
+<p>Reduzir ao longo de <code>["lat", "lon"]</code> dá uma <strong>série temporal</strong> (1 valor por tempo). Reduzir ao longo de <code>"time"</code> dá um <strong>mapa</strong> (1 valor por célula). É só trocar o nome da dimensão — nada de lembrar posições de eixo.</p>
+<div id="c015" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>media_espacial <span class="op">=</span> ds_sintetico.mean(dim<span class="op">=</span>[<span class="st">"lat"</span>, <span class="st">"lon"</span>])  <span class="co"># série temporal</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>media_temporal <span class="op">=</span> ds_sintetico.mean(dim<span class="op">=</span><span class="st">"time"</span>)           <span class="co"># mapa médio</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>media_espacial[<span class="st">"t2m"</span>].plot(marker<span class="op">=</span><span class="st">"o"</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">3</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Temperatura média espacial ao longo do tempo (sintético)"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="groupby-e-resample-climatologia-e-agregações-temporais" class="level3">
+<h3 class="anchored" data-anchor-id="groupby-e-resample-climatologia-e-agregações-temporais">7. <code>groupby</code> e <code>resample</code>: climatologia e agregações temporais</h3>
+<ul>
+<li><code>groupby("time.month")</code> agrupa todos os janeiros juntos, todos os fevereiros juntos etc. — a base para calcular uma <strong>climatologia</strong> (ciclo sazonal médio).</li>
+<li><code>resample("YE")</code> (ou <code>"1D"</code>, <code>"1MS"</code>…) reagrupa por uma nova frequência temporal, como o <code>resample</code> do pandas.</li>
+</ul>
+<div id="c017" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>climatologia_sintetica <span class="op">=</span> ds_sintetico.groupby(<span class="st">"time.month"</span>).mean()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">3</span>))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>climatologia_sintetica[<span class="st">"t2m"</span>].mean(dim<span class="op">=</span>[<span class="st">"lat"</span>, <span class="st">"lon"</span>]).plot(marker<span class="op">=</span><span class="st">"o"</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Ciclo sazonal médio de temperatura (sintético)"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Mês"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Temperatura (°C)"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="dask-e-chunks-dados-que-não-cabem-na-memória" class="level3">
+<h3 class="anchored" data-anchor-id="dask-e-chunks-dados-que-não-cabem-na-memória">8. Dask e <code>chunks</code>: dados que não cabem na memória</h3>
+<p>Reanálises como o ERA5 têm dezenas de terabytes no total. Não dá para carregar tudo na RAM. Quando você abre um dataset com <code>chunks={...}</code> (ou <code>chunks="auto"</code>), o xarray usa <strong>Dask</strong> por baixo: as operações ficam <strong>preguiçosas</strong> (lazy) — nada é lido de fato até você chamar <code>.load()</code> ou <code>.compute()</code>. Isso permite selecionar (<code>.sel</code>) um recorte pequeno de um dataset gigante e só então materializá-lo.</p>
+</section>
+<section id="zarr-o-formato-cloud-native-por-trás-do-era5-moderno" class="level3">
+<h3 class="anchored" data-anchor-id="zarr-o-formato-cloud-native-por-trás-do-era5-moderno">9. Zarr: o formato cloud-native por trás do ERA5 moderno</h3>
+<p>O NetCDF tradicional é um único arquivo binário — para ler um pedacinho, muitas vezes é preciso baixar o arquivo inteiro. O <strong>Zarr</strong> quebra o array em <strong>chunks</strong> (blocos) guardados como objetos separados, o que combina perfeitamente com armazenamento em nuvem (S3, Azure Blob) e acesso via HTTP: você lê só os blocos que precisa. É por isso que provedores modernos de reanálise — como o <strong>Earth Data Hub</strong> da DestinE, que usaremos na Parte 2 — distribuem o ERA5 em Zarr em vez de NetCDF.</p>
+</section>
+<section id="ponte-com-o-ecossistema-gis-rioxarray" class="level3">
+<h3 class="anchored" data-anchor-id="ponte-com-o-ecossistema-gis-rioxarray">10. Ponte com o ecossistema GIS: <code>rioxarray</code></h3>
+<p>O <code>rioxarray</code> adiciona o acessor <code>.rio</code> a qualquer <code>DataArray</code>/<code>Dataset</code>, trazendo tudo que você já usa com <code>rasterio</code>/<code>geopandas</code>: CRS, reprojeção, recorte por geometria.</p>
+<div id="c021" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ds_geo <span class="op">=</span> ds_sintetico.rio.write_crs(<span class="st">"EPSG:4326"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CRS:"</span>, ds_geo.rio.crs)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"bounds:"</span>, ds_geo.rio.bounds())</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ds_geo.rio.reproject("EPSG:31984")  # ex.: reprojetar para UTM 24S</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ds_geo.rio.clip(gdf.geometry)       # ex.: recortar por um GeoDataFrame (como o de semanas anteriores)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<hr>
+</section>
+</section>
+<section id="parte-2-estudo-de-caso-era5-land-em-petrolina-pe-juazeiro-ba" class="level2">
+<h2 class="anchored" data-anchor-id="parte-2-estudo-de-caso-era5-land-em-petrolina-pe-juazeiro-ba">Parte 2 — Estudo de caso: ERA5-Land em Petrolina (PE) / Juazeiro (BA)</h2>
+<p>Petrolina e Juazeiro são cidades-irmãs separadas pelo rio São Francisco, no coração do semiárido nordestino (bioma Caatinga). O clima é quente e com chuvas escassas e concentradas — e, ainda assim, a região é um dos maiores polos de <strong>fruticultura irrigada de exportação</strong> do Brasil (manga, uva), graças à irrigação a partir do rio São Francisco. Essa tensão entre clima semiárido e agricultura irrigada é um ótimo motivo para olhar com cuidado para os dados climáticos da região.</p>
+<p>Vamos usar o <strong>ERA5-Land</strong> (reanálise da ECMWF, ~9 km de resolução), acessado via <strong>Earth Data Hub (EDH)</strong> da plataforma DestinE — um espelho do ERA5 em Zarr na nuvem, que permite abrir o dataset inteiro de forma preguiçosa (lazy) e baixar só o recorte espaço-temporal de que precisamos.</p>
+<section id="autenticação" class="level3">
+<h3 class="anchored" data-anchor-id="autenticação">Autenticação</h3>
+<p>Para acessar o Earth Data Hub, registre-se em <a href="https://platform.destine.eu/">platform.destine.eu</a> e gere um <em>personal access token</em> na seção <strong>Quota &amp; API Keys</strong>. Guarde-o no seu <code>.env</code> como <code>EARTH_HUB_API_KEY</code> (a chave já está prevista no <code>.env_copy</code> deste repositório).</p>
+<p><strong>Atenção à cota:</strong> a conta gratuita tem um limite de requisições por mês. <strong>Nunca chame <code>.load()</code>/<code>.compute()</code> no dataset inteiro</strong> — sempre recorte com <code>.sel()</code> primeiro (uma cidade, uma pequena caixa delimitadora, um intervalo de datas) e só então materialize.</p>
+<div id="c024" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>edh_token <span class="op">=</span> os.environ.get(<span class="st">"EARTH_HUB_API_KEY"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> edh_token, <span class="st">"Defina EARTH_HUB_API_KEY no seu .env (veja earthdatahub.destine.eu)"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Catálogo completo de datasets ERA5 disponíveis: https://earthdatahub.destine.eu/collections/era5</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Confira lá o slug exato do dataset que quer usar (hourly, daily, monthly-means...) -</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># o nome abaixo é o exemplo oficial da documentação e pode mudar; valide antes de rodar em aula.</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ERA5_LAND_HOURLY <span class="op">=</span> <span class="st">"reanalysis-era5-land-no-antartica-v0"</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>era5_url <span class="op">=</span> <span class="ss">f"https://edh:</span><span class="sc">{</span>edh_token<span class="sc">}</span><span class="ss">@data.earthdatahub.destine.eu/era5/</span><span class="sc">{</span>ERA5_LAND_HOURLY<span class="sc">}</span><span class="ss">.zarr"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="c025" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Abertura preguiçosa: só metadados são lidos aqui, nenhum dado ainda.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ds_era5 <span class="op">=</span> xr.open_dataset(era5_url, chunks<span class="op">=</span>{}, engine<span class="op">=</span><span class="st">"zarr"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>ds_era5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="duas-pegadinhas-comuns-do-era5" class="level3">
+<h3 class="anchored" data-anchor-id="duas-pegadinhas-comuns-do-era5">Duas pegadinhas comuns do ERA5</h3>
+<ol type="1">
+<li><strong>Convenção de longitude</strong>: alguns espelhos do ERA5 usam 0°–360° em vez de -180°–180°.</li>
+<li><strong>Ordem da latitude</strong>: o ERA5 costuma vir com latitude <strong>decrescente</strong> (de 90° a -90°) — um <code>slice(min, max)</code> “ao contrário” retorna vazio.</li>
+</ol>
+<p>Vamos checar os dois antes de recortar.</p>
+<div id="c027" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lon_name <span class="op">=</span> <span class="st">"longitude"</span> <span class="cf">if</span> <span class="st">"longitude"</span> <span class="kw">in</span> ds_era5.coords <span class="cf">else</span> <span class="st">"lon"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lat_name <span class="op">=</span> <span class="st">"latitude"</span> <span class="cf">if</span> <span class="st">"latitude"</span> <span class="kw">in</span> ds_era5.coords <span class="cf">else</span> <span class="st">"lat"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>lon_min_raw <span class="op">=</span> <span class="bu">float</span>(ds_era5[lon_name].<span class="bu">min</span>())</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>lon_max_raw <span class="op">=</span> <span class="bu">float</span>(ds_era5[lon_name].<span class="bu">max</span>())</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>lat_descendente <span class="op">=</span> <span class="bu">float</span>(ds_era5[lat_name][<span class="dv">0</span>]) <span class="op">&gt;</span> <span class="bu">float</span>(ds_era5[lat_name][<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>usa_0_360 <span class="op">=</span> lon_max_raw <span class="op">&gt;</span> <span class="dv">180</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>lon_name<span class="sc">}</span><span class="ss">: [</span><span class="sc">{</span>lon_min_raw<span class="sc">:.2f}</span><span class="ss">, </span><span class="sc">{</span>lon_max_raw<span class="sc">:.2f}</span><span class="ss">] -&gt; usa 0-360? </span><span class="sc">{</span>usa_0_360<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>lat_name<span class="sc">}</span><span class="ss">: descendente? </span><span class="sc">{</span>lat_descendente<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="área-de-estudo-petrolina-pe-juazeiro-ba" class="level3">
+<h3 class="anchored" data-anchor-id="área-de-estudo-petrolina-pe-juazeiro-ba">Área de estudo: Petrolina (PE) / Juazeiro (BA)</h3>
+<p>Ponto central aproximado: <code>-9.389, -40.502</code>. Vamos usar uma pequena caixa delimitadora ao redor das duas cidades.</p>
+<div id="c029" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lat_min, lat_max <span class="op">=</span> <span class="op">-</span><span class="fl">9.6</span>, <span class="op">-</span><span class="fl">9.2</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>lon_min, lon_max <span class="op">=</span> <span class="op">-</span><span class="fl">40.7</span>, <span class="op">-</span><span class="fl">40.3</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ANO_INICIO, ANO_FIM <span class="op">=</span> <span class="st">"2015-01-01"</span>, <span class="st">"2023-12-31"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ajusta_lon(lon):</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> lon <span class="op">%</span> <span class="dv">360</span> <span class="cf">if</span> usa_0_360 <span class="cf">else</span> lon</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>fatia_lat <span class="op">=</span> <span class="bu">slice</span>(lat_max, lat_min) <span class="cf">if</span> lat_descendente <span class="cf">else</span> <span class="bu">slice</span>(lat_min, lat_max)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>fatia_lon <span class="op">=</span> <span class="bu">slice</span>(ajusta_lon(lon_min), ajusta_lon(lon_max))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>variaveis <span class="op">=</span> [v <span class="cf">for</span> v <span class="kw">in</span> [<span class="st">"t2m"</span>, <span class="st">"tp"</span>] <span class="cf">if</span> v <span class="kw">in</span> ds_era5.data_vars]</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variáveis disponíveis usadas:"</span>, variaveis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="c030" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>recorte <span class="op">=</span> ds_era5[variaveis].sel(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    time<span class="op">=</span><span class="bu">slice</span>(ANO_INICIO, ANO_FIM),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>{lat_name: fatia_lat, lon_name: fatia_lon},</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>recorte  <span class="co"># ainda preguiçoso: confira o tamanho estimado antes de carregar</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Só agora, com o recorte pequeno definido, materializamos os dados de fato. Se estiver muito grande/lento na sua conexão, reduza <code>ANO_INICIO</code>/<code>ANO_FIM</code> primeiro.</p>
+<div id="c032" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>recorte <span class="op">=</span> recorte.load()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="conversão-de-unidades" class="level3">
+<h3 class="anchored" data-anchor-id="conversão-de-unidades">Conversão de unidades</h3>
+<p>O ERA5 guarda temperatura em <strong>Kelvin</strong> e precipitação acumulada em <strong>metros</strong>. Convertendo para °C e mm (mais intuitivos):</p>
+<div id="c034" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dados <span class="op">=</span> xr.Dataset()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"t2m"</span> <span class="kw">in</span> recorte:</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    dados[<span class="st">"t2m_celsius"</span>] <span class="op">=</span> recorte[<span class="st">"t2m"</span>] <span class="op">-</span> <span class="fl">273.15</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    dados[<span class="st">"t2m_celsius"</span>].attrs <span class="op">=</span> {<span class="st">"units"</span>: <span class="st">"degC"</span>, <span class="st">"long_name"</span>: <span class="st">"Temperatura do ar a 2m"</span>}</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"tp"</span> <span class="kw">in</span> recorte:</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    dados[<span class="st">"tp_mm"</span>] <span class="op">=</span> recorte[<span class="st">"tp"</span>] <span class="op">*</span> <span class="dv">1000</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    dados[<span class="st">"tp_mm"</span>].attrs <span class="op">=</span> {<span class="st">"units"</span>: <span class="st">"mm"</span>, <span class="st">"long_name"</span>: <span class="st">"Precipitação"</span>}</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>dados</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="agregação-diáriamensal" class="level3">
+<h3 class="anchored" data-anchor-id="agregação-diáriamensal">Agregação diária/mensal</h3>
+<p>Se os dados vieram em resolução horária, primeiro agregamos para diário/mensal (temperatura: média; precipitação: soma) antes de seguir para a climatologia.</p>
+<div id="c036" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dados_diarios <span class="op">=</span> xr.Dataset()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"t2m_celsius"</span> <span class="kw">in</span> dados:</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    dados_diarios[<span class="st">"t2m_celsius"</span>] <span class="op">=</span> dados[<span class="st">"t2m_celsius"</span>].resample(time<span class="op">=</span><span class="st">"1D"</span>).mean()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"tp_mm"</span> <span class="kw">in</span> dados:</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    dados_diarios[<span class="st">"tp_mm"</span>] <span class="op">=</span> dados[<span class="st">"tp_mm"</span>].resample(time<span class="op">=</span><span class="st">"1D"</span>).<span class="bu">sum</span>()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>dados_mensais <span class="op">=</span> xr.Dataset()</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"t2m_celsius"</span> <span class="kw">in</span> dados_diarios:</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    dados_mensais[<span class="st">"t2m_celsius"</span>] <span class="op">=</span> dados_diarios[<span class="st">"t2m_celsius"</span>].resample(time<span class="op">=</span><span class="st">"1MS"</span>).mean()</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"tp_mm"</span> <span class="kw">in</span> dados_diarios:</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    dados_mensais[<span class="st">"tp_mm"</span>] <span class="op">=</span> dados_diarios[<span class="st">"tp_mm"</span>].resample(time<span class="op">=</span><span class="st">"1MS"</span>).<span class="bu">sum</span>()</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>dados_mensais</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="climatologia-sazonal-20152023" class="level3">
+<h3 class="anchored" data-anchor-id="climatologia-sazonal-20152023">Climatologia sazonal (2015–2023)</h3>
+<p>Ciclo médio mensal, tirando a média espacial sobre a caixa delimitadora — a assinatura climática do semiárido: temperaturas altas o ano todo e chuva concentrada em poucos meses.</p>
+<div id="c038" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>media_espacial_mensal <span class="op">=</span> dados_mensais.mean(dim<span class="op">=</span>[lat_name, lon_name])</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>climatologia <span class="op">=</span> media_espacial_mensal.groupby(<span class="st">"time.month"</span>).mean()</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"t2m_celsius"</span> <span class="kw">in</span> climatologia:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    climatologia[<span class="st">"t2m_celsius"</span>].plot(ax<span class="op">=</span>ax1, marker<span class="op">=</span><span class="st">"o"</span>, color<span class="op">=</span><span class="st">"firebrick"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    ax1.set_title(<span class="st">"Temperatura média mensal"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    ax1.set_xlabel(<span class="st">"Mês"</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    ax1.set_ylabel(<span class="st">"°C"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"tp_mm"</span> <span class="kw">in</span> climatologia:</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    climatologia[<span class="st">"tp_mm"</span>].plot.bar(ax<span class="op">=</span>ax2, color<span class="op">=</span><span class="st">"steelblue"</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    ax2.set_title(<span class="st">"Precipitação média mensal"</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    ax2.set_xlabel(<span class="st">"Mês"</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    ax2.set_ylabel(<span class="st">"mm"</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="série-temporal-e-anomalias" class="level3">
+<h3 class="anchored" data-anchor-id="série-temporal-e-anomalias">Série temporal e anomalias</h3>
+<p>Uma <strong>anomalia</strong> é o desvio de cada mês em relação à sua climatologia (o normal esperado para aquele mês). Anomalias negativas de chuva persistentes indicam períodos de seca.</p>
+<div id="c040" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>anomalia <span class="op">=</span> media_espacial_mensal.groupby(<span class="st">"time.month"</span>) <span class="op">-</span> climatologia</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"tp_mm"</span> <span class="kw">in</span> anomalia:</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">3.5</span>))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    anomalia[<span class="st">"tp_mm"</span>].plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"steelblue"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">"Anomalia mensal de precipitação — Petrolina/Juazeiro"</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Anomalia (mm)"</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="mapa-da-área-de-estudo" class="level3">
+<h3 class="anchored" data-anchor-id="mapa-da-área-de-estudo">Mapa da área de estudo</h3>
+<p>Um mapa rápido da grade ERA5-Land sobre a caixa delimitadora, para dar contexto espacial ao que só vimos como série temporal até agora.</p>
+<div id="c042" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"t2m_celsius"</span> <span class="kw">in</span> dados_mensais:</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    dados_mensais[<span class="st">"t2m_celsius"</span>].mean(dim<span class="op">=</span><span class="st">"time"</span>).plot(cmap<span class="op">=</span><span class="st">"YlOrRd"</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"Temperatura média (2015-2023) — Petrolina/Juazeiro"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="bônus-exportando-o-recorte" class="level3">
+<h3 class="anchored" data-anchor-id="bônus-exportando-o-recorte">Bônus: exportando o recorte</h3>
+<p>Depois de recortado (poucos MB), o dataset pode ser salvo para reuso sem precisar consultar o Earth Data Hub de novo.</p>
+<div id="c044" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dados_mensais.to_netcdf("era5_land_petrolina_juazeiro_mensal.nc")</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># media_espacial_mensal.to_dataframe().to_csv("era5_land_petrolina_juazeiro_mensal.csv")</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dados_mensais["t2m_celsius"].rio.write_crs("EPSG:4326").rio.to_raster("temperatura_media.tif")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="para-refletir" class="level2">
+<h2 class="anchored" data-anchor-id="para-refletir">Para refletir</h2>
+<p>Petrolina/Juazeiro tem um regime de chuva curto e concentrado, com temperaturas altas o ano todo — a definição de um clima semiárido. Ainda assim, a região virou um dos maiores polos de fruticultura irrigada de exportação do Brasil (manga, uva), sustentada pela água do rio São Francisco e não pela chuva local. Os mesmos dados climáticos que explicam a vulnerabilidade à seca também explicam por que a irrigação virou infraestrutura essencial ali — e por que monitorar anomalias de precipitação com dados como o ERA5 importa tanto para o planejamento agrícola da região.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ftl-brazil-2026\.github\.io\/ebook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../fundamentals_gis_rs/week3/image_processing2.html" class="pagination-link" aria-label="Processamento de Imagens">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Processamento de Imagens</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../ml-dl/index.html" class="pagination-link" aria-label="Fundamentos em Machine Learning e Deep Learning">
+        <span class="nav-page-text">Fundamentos em Machine Learning e Deep Learning</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>SpaceTech Bootcamp · Emanuel Goulart</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../fundamentals_gis_rs/week0/index.html" rel="next">
+<link href="../course-info/provedores.html" rel="next">
 <link href="../course-info/cli-utils.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -205,6 +205,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Como Contribuir</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -229,12 +235,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Ecossistema Geoespacial</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../fundamentals_gis_rs/week0/provedores.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -306,6 +306,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
       </ul>
   </li>
           <li class="sidebar-item sidebar-item-section">
@@ -319,8 +325,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../fundamentals_gis_rs/week4/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Week 4</span></a>
+  <a href="../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xarray: Trabalhando com Dados Multidimensionais Rotulados</span></a>
   </div>
 </li>
       </ul>
@@ -433,7 +439,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="contribuindo-com-o-diagrama-de-provedores-bubble-chart" class="level2">
 <h2 class="anchored" data-anchor-id="contribuindo-com-o-diagrama-de-provedores-bubble-chart">Contribuindo com o diagrama de provedores (bubble chart)</h2>
-<p>O diagrama de bolhas em <a href="../fundamentals_gis_rs/week0/provedores.html">Provedores de Dados Geoespaciais</a> — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: <a href="../fundamentals_gis_rs/week0/data/provedores.json"><code>fundamentals_gis_rs/week0/data/provedores.json</code></a>. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.</p>
+<p>O diagrama de bolhas em <a href="../course-info/provedores.html">Provedores de Dados Geoespaciais</a> — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: <a href="data/provedores.json"><code>course-info/data/provedores.json</code></a>. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.</p>
 <p>Para adicionar um provedor a um tema já existente, inclua um novo objeto na lista <code>provedores</code> da categoria correspondente:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"nome"</span><span class="fu">:</span> <span class="st">"Nome do provedor"</span><span class="fu">,</span></span>
@@ -443,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>escopo</code> é sempre <code>"BR"</code> ou <code>"GLOBAL"</code>. Para criar um tema novo inteiro, adicione um objeto à lista <code>categorias</code> (nível raiz do JSON) com <code>nome</code>, <code>votos</code> (pode deixar <code>0</code> se não veio do questionário original) e sua própria lista de <code>provedores</code>.</p>
 <p>Antes de commitar, valide que o JSON continua válido:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> json.tool fundamentals_gis_rs/week0/data/provedores.json <span class="op">&gt;</span> /dev/null</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> json.tool course-info/data/provedores.json <span class="op">&gt;</span> /dev/null</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Sem erro impresso = JSON válido.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -923,8 +929,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../fundamentals_gis_rs/week0/index.html" class="pagination-link" aria-label="Ecossistema Geoespacial">
-        <span class="nav-page-text">Ecossistema Geoespacial</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../course-info/provedores.html" class="pagination-link" aria-label="Provedores de Dados Geoespaciais">
+        <span class="nav-page-text">Provedores de Dados Geoespaciais</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -952,7 +958,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="in">## Contribuindo com o diagrama de provedores (bubble chart)</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="in">O diagrama de bolhas em [Provedores de Dados Geoespaciais](../fundamentals_gis_rs/week0/provedores.qmd) — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: [`fundamentals_gis_rs/week0/data/provedores.json`](../fundamentals_gis_rs/week0/data/provedores.json). Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="in">O diagrama de bolhas em [Provedores de Dados Geoespaciais](provedores.qmd) — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: [`course-info/data/provedores.json`](data/provedores.json). Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.</span></span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="in">Para adicionar um provedor a um tema já existente, inclua um novo objeto na lista `provedores` da categoria correspondente:</span></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
@@ -970,7 +976,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>Antes de commitar, valide que o JSON continua válido:</span>
 <span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="in">``` bash</span></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> json.tool fundamentals_gis_rs/week0/data/provedores.json <span class="op">&gt;</span> /dev/null</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> json.tool course-info/data/provedores.json <span class="op">&gt;</span> /dev/null</span>
 <span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>Sem erro impresso = JSON válido.</span>
