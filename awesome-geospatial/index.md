@@ -33,6 +33,10 @@ Só adicione `⚠️ *verificar*` no fim da linha se o link ou a descrição ain
 - [**ANA / HidroWeb**](https://www.snirh.gov.br/hidroweb/) — séries históricas de vazão e chuva da Agência Nacional de Águas.
 - [**CPTEC / INPE**](https://www.cptec.inpe.br/) — previsão numérica do tempo e projeções climáticas regionalizadas.
 
+### Uso e Cobertura da Terra / Sensoriamento Remoto
+
+- [**MapBiomas**](https://brasil.mapbiomas.org/) — mapas anuais de cobertura e uso da terra do Brasil produzidos a partir de imagens de satélite, com séries históricas e diferentes produtos de monitoramento ambiental.
+
 ## QGIS Plugins
 
 - [**NetFlora**](https://plugins.qgis.org/plugins/Netflora/) — plugin para inventário florestal com drones, geotecnologias e inteligência artificial.
