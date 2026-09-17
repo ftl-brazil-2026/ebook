@@ -43,7 +43,7 @@ website:
             contents:
               - fundamentals_gis_rs/week3/dem.ipynb
               - fundamentals_gis_rs/week3/image_processing2.ipynb
-          - section: "Week 4"
+          - section: "Week 4 - Series Temporais"
             contents:
               - fundamentals_gis_rs/week4/xarray.ipynb
       - section: "Fundamentos em Machine Learning e Deep Learning"
