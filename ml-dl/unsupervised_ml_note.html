@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Unsupervised Learning – FTL-Brasil-SpaceTech-Bootcamp</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../state-of-art/index.html" rel="next">
+<link href="../fundamentals_gis_rs/week4/xarray.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-a6765147b6446e4cffb9cdea7865c701.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">FTL-Brasil-SpaceTech-Bootcamp</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ftl-brazil-2026/ebook"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ml-dl/unsupervised_ml_note.html">Fundamentos em Machine Learning e Deep Learning</a></li><li class="breadcrumb-item"><a href="../ml-dl/unsupervised_ml_note.html">Unsupervised Learning</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Course Information</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/general-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Informações Gerais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/reading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Leituras</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standard Set Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/cli-utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilitários de CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/how-to-contribute.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Como Contribuir</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em GIS e Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 0 — Ecossistema geoespacial</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ecossistema Geoespacial</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/space_tech_ecossystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessao 0 - 19/08/2026</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 1 — Fundamentos em GIS</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/crs_and_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de Coordenadas de Referência e Projeções</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análise Espacial de Dados Vetoriais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 - Fundamentos em Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">STAC Catalogue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-Image_Processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 - Analises Espaciais Complexas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/dem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 - Series Temporais</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dados Multidimensionais e Séries Temporais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos em Machine Learning e Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/unsupervised_ml_note.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Unsupervised Learning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../state-of-art/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessões de Convidados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guest-sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessões de Convidados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../awesome-geospatial/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Awesome Geospatial</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#clustering" id="toc-clustering" class="nav-link active" data-scroll-target="#clustering">Clustering</a></li>
+  <li><a href="#kmeans-cluster" id="toc-kmeans-cluster" class="nav-link" data-scroll-target="#kmeans-cluster">KMeans Cluster</a></li>
+  <li><a href="#contra-do-kmeans" id="toc-contra-do-kmeans" class="nav-link" data-scroll-target="#contra-do-kmeans">Contra do KMeans</a></li>
+  <li><a href="#dbscan" id="toc-dbscan" class="nav-link" data-scroll-target="#dbscan">DBSCAN</a></li>
+  <li><a href="#contra-do-dbscan" id="toc-contra-do-dbscan" class="nav-link" data-scroll-target="#contra-do-dbscan">Contra do DBSCAN</a></li>
+  <li><a href="#hdbscan" id="toc-hdbscan" class="nav-link" data-scroll-target="#hdbscan">HDBSCAN</a></li>
+  <li><a href="#spectral-clustering" id="toc-spectral-clustering" class="nav-link" data-scroll-target="#spectral-clustering">Spectral Clustering</a></li>
+  <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering">Hierarchical Clustering</a></li>
+  <li><a href="#contra-do-hierarchical-clustering" id="toc-contra-do-hierarchical-clustering" class="nav-link" data-scroll-target="#contra-do-hierarchical-clustering">Contra do Hierarchical Clustering</a></li>
+  <li><a href="#aplicação-clustering-espacial-de-estações-de-qualidade-da-água" id="toc-aplicação-clustering-espacial-de-estações-de-qualidade-da-água" class="nav-link" data-scroll-target="#aplicação-clustering-espacial-de-estações-de-qualidade-da-água">Aplicação: Clustering Espacial de Estações de Qualidade da Água</a>
+  <ul class="collapse">
+  <li><a href="#clustering-apenas-por-localização" id="toc-clustering-apenas-por-localização" class="nav-link" data-scroll-target="#clustering-apenas-por-localização">Clustering apenas por localização</a></li>
+  <li><a href="#clustering-por-localização-qualidade-da-água" id="toc-clustering-por-localização-qualidade-da-água" class="nav-link" data-scroll-target="#clustering-por-localização-qualidade-da-água">Clustering por localização + qualidade da água</a>
+  <ul class="collapse">
+  <li><a href="#somente-as-variáveis-de-qualidade-da-água" id="toc-somente-as-variáveis-de-qualidade-da-água" class="nav-link" data-scroll-target="#somente-as-variáveis-de-qualidade-da-água">Somente as variáveis de qualidade da água</a></li>
+  </ul></li>
+  <li><a href="#o-que-muda-entre-as-duas-abordagens" id="toc-o-que-muda-entre-as-duas-abordagens" class="nav-link" data-scroll-target="#o-que-muda-entre-as-duas-abordagens">O que muda entre as duas abordagens?</a></li>
+  </ul></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ml-dl/unsupervised_ml_note.html">Fundamentos em Machine Learning e Deep Learning</a></li><li class="breadcrumb-item"><a href="../ml-dl/unsupervised_ml_note.html">Unsupervised Learning</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Unsupervised Learning</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="MJUe" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo <span class="im">as</span> mo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Aprendizado Nao Supervisionado</p>
+<p>Motivação</p>
+<p><a href="https://www.mdpi.com/2072-4292/18/13/2162">Artigo do INPE</a></p>
+<section id="clustering" class="level1">
+<h1>Clustering</h1>
+<p>Existem diferentes tipos de metodos e clusters algoritmos que fazem essa agragegação dos dados. Esses algoritmos possuem no fundo uma estrutura parecida baseada em unir e aproximar os dados dado a caracteristica que o compõe. Esses algoritmos ajustam a matriz dos dados tabulares, portanto caso seus dados sejam ex. dados de qualidade da água para múltiplo pontos, com diferente parâmetros de qualidade, esses tais parâmetro irão compõem a matriz de dados tabulares que os algoritmos irão utilizar para calcular essa agregação (clustering).</p>
+<p>O clustering é um método muito útil porquê não precisa de label! Nenhum dado precisa ter uma anotação associada a ele para que o algoritmo aprenda, como é no caso do aprendizado supervisionado, os dados simplesmente usam outras técnicas por baixo dos panos para calcular essa distância de agregação.</p>
+<p>Vamos destrinchar essas técnicas com mais calma.</p>
+<p>Aqui, alguns dos algoritmos mais utilizados para clustering.</p>
+<ul>
+<li>KMeans</li>
+<li>DBSCAN</li>
+<li>Mean Shift</li>
+<li>Spectral Clustering</li>
+<li>HDBSCAN</li>
+<li>Hierarchical Clustering</li>
+</ul>
+</section>
+<section id="kmeans-cluster" class="level1">
+<h1>KMeans Cluster</h1>
+<p>KMeans é o algoritmo mais popular para no processo de clustering. Seu objetivo é simples, ele tenta minimizar a variância intra-cluster, de forma que observações similares cairão sobre o mesmo cluster. E ao mesmo tempo maximizar a distância entre diferente clusters. Esse critério também é conhecido como inercia.</p>
+<p>KMeans depende da escolha inicial do valor de K (número de cluster). E ele funciona da seguinte forma</p>
+<p>1 - Dado um valor de K, inicialize K centróides de forma aleatória, onde os pontos mais próximos daquele centróide são atribuidos a um cluster <span class="math inline">\(c_i\)</span>. 2 - Calcula a distância entre cada ponto e o centróide desse cluster e atribui a um novo cluster se esse centróide for mais próximo do que o presente centroide. 3- Depois de reatribuir os pontos, o centróide de cada cluster é atualizado através do cálculo da média dos dados do cluster. 4 - O passo 2 e 3 é repetido até que o algoritmo tenha minimizado essa distância entre a média e o centróide.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gif_kmeans.gif" class="img-fluid figure-img"></p>
+<figcaption>gif</figcaption>
+</figure>
+</div>
+<p><a href="https://www.naftaliharris.com/blog/visualizing-k-means-clustering">Kmeans-Algoritmo-Visualmente-Explicado</a></p>
+<div id="SFPL" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> drawdata <span class="im">import</span> ScatterWidget</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="BYtC" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>widget <span class="op">=</span> mo.ui.anywidget(ScatterWidget(height<span class="op">=</span><span class="dv">400</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>widget</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="RGSE" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> widget.data_as_pandas</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="Kclp" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="emfo" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="Hstk" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>               init<span class="op">=</span><span class="st">"k-means++"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>               )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="nWHF" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit (ajuste)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>kmeans.fit(data[[<span class="st">'x'</span>,<span class="st">'y'</span>]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="iLit" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># atribuir cada ponto em um cluster</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>clusters <span class="op">=</span> kmeans.predict(data[[<span class="st">'x'</span>,<span class="st">'y'</span>]])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'clusters'</span>] <span class="op">=</span> clusters</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="ZHCJ" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(data).mark_circle(size<span class="op">=</span><span class="dv">40</span>).encode(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"clusters"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    tooltip <span class="op">=</span> [<span class="st">"clusters"</span>]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>).interactive()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="contra-do-kmeans" class="level1">
+<h1>Contra do KMeans</h1>
+<p>Como o KMeans tenta minimizar a inercia, o que por si é uma médida do como internamente os cluster são coerentes, acaba sofrendo com alguns contras.</p>
+<ul>
+<li>Inercia possue por assumpção que os cluster sejam convexos e isotrópicos. Dessa forma, quando os clusters são alongados o KMeans tende a responder mal.</li>
+<li>Em espaços hiperdimensionais, as distâncias euclideanas tendem a ser infladas (curse of dimensionality). Então reduzindo esses hiperdimensionais espaço com o PCA (análise de componentes principais) pode aliviar esse problema.</li>
+<li>KMeans funciona muito bem para clusters que são mais esféricos e com distribuição gaussiana.</li>
+<li>Quando os clusters não possuem o mesmo tamanho.</li>
+</ul>
+<p>A pergunta que resta é como selecionar um número correto de K clusters, o que normalmente é atribuído pela análise de silhueta. Silhouette Analysis.</p>
+<div id="qnkX" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> data[[<span class="st">'x'</span>,<span class="st">'y'</span>]]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>wcss <span class="op">=</span>[]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">10</span>):</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>i)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    y_kmeans <span class="op">=</span> model.fit_predict(x)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    wcss.append(model.inertia_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="TqIu" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="Vxnm" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>plt.plot(<span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">10</span>),wcss,<span class="st">'go--'</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of cluster'</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Within Cluster Sum of Squares - Inertia'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="DnEU" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> DBSCAN</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="dbscan" class="level1">
+<h1>DBSCAN</h1>
+<p>DBSCAN (Density-Based Spatial Clustering of Applications with Noise) segue uma lógica bem diferente do KMeans: ao invés de minimizar a distância até centróides, ele agrupa pontos que estão densamente conectados no espaço. A ideia central é que um cluster é uma região de alta densidade de pontos, separada de outras regiões por áreas de baixa densidade.</p>
+<p>O algoritmo depende de dois parâmetros:</p>
+<ul>
+<li><strong>eps (ε)</strong>: o raio de vizinhança ao redor de cada ponto.</li>
+<li><strong>min_samples</strong>: o número mínimo de pontos que precisam existir dentro desse raio para que a região seja considerada densa.</li>
+</ul>
+<p>A partir disso, cada ponto é classificado em um dos três tipos:</p>
+<p>1 - <strong>Core point</strong>: possui pelo menos <code>min_samples</code> vizinhos dentro do raio <code>eps</code>. 2 - <strong>Border point</strong>: está dentro do raio <code>eps</code> de um core point, mas não tem vizinhos suficientes para ser um core point. 3 - <strong>Noise point</strong>: não é core nem border, ou seja, não pertence a nenhum cluster (recebe o rótulo -1).</p>
+<p>Diferente do KMeans, o DBSCAN <strong>não exige que definamos o número de clusters antecipadamente</strong> — ele descobre isso sozinho a partir da densidade dos dados. Além disso, ele consegue identificar clusters com formatos arbitrários (não apenas esféricos) e naturalmente separa outliers como ruído.</p>
+<p><a href="https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/">Visualizando o DBSCAN algoritmo</a></p>
+<div id="ecfG" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>eps_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">1</span>, stop<span class="op">=</span><span class="dv">100</span>, step<span class="op">=</span><span class="dv">1</span>, value<span class="op">=</span><span class="dv">20</span>, label<span class="op">=</span><span class="st">"eps"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>min_samples_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">1</span>, stop<span class="op">=</span><span class="dv">20</span>, step<span class="op">=</span><span class="dv">1</span>, value<span class="op">=</span><span class="dv">5</span>, label<span class="op">=</span><span class="st">"min_samples"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>mo.hstack([eps_slider, min_samples_slider])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="Pvdt" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dbscan <span class="op">=</span> DBSCAN(eps<span class="op">=</span>eps_slider.value, </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                min_samples<span class="op">=</span>min_samples_slider.value</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>dbscan_labels <span class="op">=</span> dbscan.fit_predict(data[[<span class="st">'x'</span>, <span class="st">'y'</span>]])</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'dbscan_cluster'</span>] <span class="op">=</span> dbscan_labels</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="ZBYS" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(data).mark_circle(size<span class="op">=</span><span class="dv">40</span>).encode(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"dbscan_cluster:N"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">=</span>[<span class="st">"dbscan_cluster"</span>]</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>).interactive()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="contra-do-dbscan" class="level1">
+<h1>Contra do DBSCAN</h1>
+<ul>
+<li>A escolha de <code>eps</code> e <code>min_samples</code> não é trivial e afeta bastante o resultado. Valores errados podem juntar tudo em um único cluster ou classificar quase tudo como ruído.</li>
+<li>DBSCAN assume que todos os clusters têm densidade parecida. Quando os dados possuem clusters com densidades muito diferentes entre si, ele tende a falhar, ou junta os clusters mais esparsos como ruído, ou funde clusters densos próximos.</li>
+<li>Em espaços de alta dimensionalidade, a noção de densidade (distância) também sofre com a curse of dimensionality, assim como no KMeans.</li>
+</ul>
+<p>É justamente para resolver o problema da densidade variável que existe o HDBSCAN.</p>
+</section>
+<section id="hdbscan" class="level1">
+<h1>HDBSCAN</h1>
+<p>HDBSCAN (Hierarchical DBSCAN) estende o DBSCAN transformando-o em um método hierárquico, removendo a necessidade de escolher um <code>eps</code> fixo. Ao invés de um raio único aplicado a todo o dataset, o HDBSCAN constrói uma hierarquia de clusters variando a densidade e depois “condensa” essa hierarquia, extraindo os clusters mais estáveis ao longo dessa variação.</p>
+<p>De forma resumida, o algoritmo:</p>
+<p>1 - Constrói um grafo de distância baseado em uma métrica de densidade (mutual reachability distance), que reduz a distância entre pontos em regiões densas e aumenta em regiões esparsas.</p>
+<p>2 - Constrói uma árvore geradora mínima (minimum spanning tree) sobre esse grafo.</p>
+<p>3 - Converte essa árvore em uma hierarquia de clusters (dendrograma).</p>
+<p>4 - “Condensa” a hierarquia, mantendo apenas as divisões de cluster que persistem por mais tempo (mais estáveis), e extrai os clusters finais dessa árvore condensada.</p>
+<p>O principal parâmetro agora é o <code>min_cluster_size</code> (tamanho mínimo de um cluster), muito mais intuitivo que <code>eps</code>. Como resultado, o HDBSCAN lida bem com clusters de densidades diferentes e ainda mantém as vantagens do DBSCAN: não precisa de K definido a priori e identifica ruído (-1) naturalmente.</p>
+<div id="xXTn" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> HDBSCAN</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="AjVT" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>min_cluster_size_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">2</span>, stop<span class="op">=</span><span class="dv">50</span>, step<span class="op">=</span><span class="dv">1</span>, value<span class="op">=</span><span class="dv">5</span>, label<span class="op">=</span><span class="st">"min_cluster_size"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>min_cluster_size_slider</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="pHFh" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>hdbscan_model <span class="op">=</span> HDBSCAN(min_cluster_size<span class="op">=</span>min_cluster_size_slider.value)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>hdbscan_labels <span class="op">=</span> hdbscan_model.fit_predict(data[[<span class="st">'x'</span>, <span class="st">'y'</span>]])</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'hdbscan_cluster'</span>] <span class="op">=</span> hdbscan_labels</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="NCOB" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(data).mark_circle(size<span class="op">=</span><span class="dv">40</span>).encode(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"hdbscan_cluster:N"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">=</span>[<span class="st">"hdbscan_cluster"</span>]</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>).interactive()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="spectral-clustering" class="level1">
+<h1>Spectral Clustering</h1>
+<p>Spectral Clustering aborda o problema de agregação de uma forma completamente diferente dos algoritmos anteriores. Ao invés de trabalhar diretamente nas coordenadas originais dos dados, ele trata o problema como um problema de teoria dos grafos.</p>
+<p>Sua lógica seria algo como:</p>
+<p>1 - Constrói um grafo de similaridade entre os pontos (por exemplo, usando os k-vizinhos mais próximos ou uma função de kernel gaussiana), onde cada ponto é um nó e as arestas representam o quão “próximos” ou similares dois pontos são.</p>
+<p>2 - A partir desse grafo, calcula a matriz Laplaciana.</p>
+<p>3 - Calcula os autovetores (eigenvectors) dessa matriz Laplaciana associados aos menores autovalores (aqui já é bastante algebra linear), essa é a etapa de “redução de dimensionalidade” que dá nome ao método (espectro = conjunto de autovalores).</p>
+<p>4 - Esses autovetores formam um novo espaço de representação dos dados, onde clusters que originalmente tinham formatos complexos e não-convexos tornam-se muito mais separáveis.</p>
+<p>5 - Aplica um algoritmo simples, como o KMeans, nesse novo espaço para obter os clusters finais.</p>
+<p>Por isso, assim como o KMeans, o Spectral Clustering ainda exige que definamos o número de clusters (<code>n_clusters</code>) a priori, a diferença é que ele consegue capturar estruturas não-convexas (espirais, luas, anéis) que o KMeans não consegue, justamente por operar sobre a similaridade entre pontos e não sobre a distância direta ao centróide. Em compensação, é computacionalmente mais custoso, pois depende da decomposição espectral de uma matriz que cresce com o número de amostras.</p>
+<div id="TRpd" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>spectral_k_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">2</span>, stop<span class="op">=</span><span class="dv">10</span>, step<span class="op">=</span><span class="dv">1</span>, value<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"n_clusters"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>spectral_k_slider</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="TXez" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> SpectralClustering</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="dNNg" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>spectral_model <span class="op">=</span> SpectralClustering(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    n_clusters<span class="op">=</span>spectral_k_slider.value,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    affinity<span class="op">=</span><span class="st">"nearest_neighbors"</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>spectral_labels <span class="op">=</span> spectral_model.fit_predict(data[[<span class="st">'x'</span>, <span class="st">'y'</span>]])</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'spectral_cluster'</span>] <span class="op">=</span> spectral_labels</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="yCnT" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(data).mark_circle(size<span class="op">=</span><span class="dv">40</span>).encode(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"spectral_cluster:N"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">=</span>[<span class="st">"spectral_cluster"</span>]</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>).interactive()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="hierarchical-clustering" class="level1">
+<h1>Hierarchical Clustering</h1>
+<p>Hierarchical Clustering (Clustering Hierárquico) constrói uma hierarquia de clusters ao invés de uma partição única dos dados. A variante mais comum é a <strong>aglomerativa</strong> (bottom-up):</p>
+<p>1 - Cada ponto começa como seu próprio cluster.</p>
+<p>2 - A cada passo, os dois clusters mais “próximos” são unidos em um único cluster.</p>
+<p>3 - O passo 2 se repete até que reste apenas um único cluster contendo todos os pontos.</p>
+<p>O resultado desse processo é um <strong>dendrograma</strong>: uma árvore que registra a ordem e a distância em que os clusters foram unidos. A grande vantagem é que não precisamos decidir o número de clusters <em>antes</em> de rodar o algoritmo. Primeiro construímos a hierarquia e decidimos depois, “cortando” o dendrograma na altura desejada, quantos clusters queremos extrair.</p>
+<p>A forma como medimos a distância entre dois clusters (não apenas entre dois pontos) é chamada de <strong>linkage</strong>, e existem algumas escolhas comuns:</p>
+<ul>
+<li><strong>single</strong>: distância entre os pontos mais próximos de cada cluster (tende a criar clusters alongados/encadeados).</li>
+<li><strong>complete</strong>: distância entre os pontos mais distantes de cada cluster (tende a criar clusters mais compactos).</li>
+<li><strong>average</strong>: média das distâncias entre todos os pares de pontos dos dois clusters.</li>
+<li><strong>ward</strong>: minimiza o aumento da variância intra-cluster ao unir dois clusters, normalmente o mais usado na prática, e o mais parecido em espírito com a inércia do KMeans.</li>
+</ul>
+<div id="kqZH" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> dendrogram, linkage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="wAgl" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>linkage_matrix <span class="op">=</span> linkage(data[[<span class="st">'x'</span>, <span class="st">'y'</span>]], method<span class="op">=</span><span class="st">"ward"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="rEll" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>dendrogram(linkage_matrix)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Dendrograma. Hierarchical Clustering"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Amostras"</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Distância"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Olhando o dendrograma, podemos escolher onde “cortar” a árvore (uma linha horizontal). Quanto mais baixo o corte, mais clusters obtemos; quanto mais alto, menos clusters (e mais heterogêneos). Na prática, usamos o <code>AgglomerativeClustering</code> do scikit-learn passando diretamente o número de clusters desejado, que internamente faz esse corte por nós.</p>
+<div id="SdmI" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> AgglomerativeClustering</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="lgWD" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>hier_n_clusters_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">2</span>, stop<span class="op">=</span><span class="dv">10</span>, step<span class="op">=</span><span class="dv">1</span>, value<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"n_clusters"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>hier_n_clusters_slider</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="yOPj" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>hier_model <span class="op">=</span> AgglomerativeClustering(n_clusters<span class="op">=</span>hier_n_clusters_slider.value, linkage<span class="op">=</span><span class="st">"ward"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>hier_labels <span class="op">=</span> hier_model.fit_predict(data[[<span class="st">'x'</span>, <span class="st">'y'</span>]])</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'hier_cluster'</span>] <span class="op">=</span> hier_labels</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="fwwy" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(data).mark_circle(size<span class="op">=</span><span class="dv">40</span>).encode(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"hier_cluster:N"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">=</span>[<span class="st">"hier_cluster"</span>]</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>).interactive()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="contra-do-hierarchical-clustering" class="level1">
+<h1>Contra do Hierarchical Clustering</h1>
+<ul>
+<li>Custo computacional alto: a implementação clássica é O(n²) em memória e O(n² log n) a O(n³) em tempo, o que a torna inviável para datasets muito grandes (diferente do KMeans/DBSCAN, que escalam melhor).</li>
+<li>Uma vez que dois pontos são unidos em um cluster, essa decisão é definitiva, o algoritmo não desfaz uniões anteriores, então um erro de agrupamento no início do processo se propaga.</li>
+<li>A escolha do linkage e da métrica de distância afeta bastante o formato dos clusters encontrados (assim como acontece com o <code>eps</code> no DBSCAN).</li>
+<li>Em compensação, o dendrograma é uma ferramenta de visualização e interpretação muito rica e útil quando queremos entender a estrutura de similaridade dos dados em múltiplas escalas, não apenas obter uma única partição.</li>
+</ul>
+<div id="jxvo" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="aplicação-clustering-espacial-de-estações-de-qualidade-da-água" class="level1">
+<h1>Aplicação: Clustering Espacial de Estações de Qualidade da Água</h1>
+<p>Lá no início lançamos o exemplo de dados de qualidade da água coletados em múltiplos pontos, agora vamos construir esse caso de uso de verdade, unindo clustering com dados geoespaciais.</p>
+<p><strong>Cenário:</strong> uma rede de estações de monitoramento de qualidade da água espalhadas por uma bacia hidrográfica. Cada estação possui uma localização (<code>lat</code>, <code>lon</code>) e medições de parâmetros de qualidade, como turbidez e oxigênio dissolvido. Algumas estações estão fisicamente próximas porque monitoram o mesmo trecho do rio ou a mesma sub-bacia, já outras estão isoladas.</p>
+<p>A pergunta que queremos responder com clustering é se as <strong>estações que estão geograficamente próximas também apresentam qualidade da água parecida? Ou existem sub-regiões, dentro de uma mesma área geográfica, que se comportam de forma muito diferente (por exemplo, por causa de uma fonte de poluição pontual)?</strong></p>
+<p>Vamos comparar duas abordagens:</p>
+<p>1 - Clustering usando <strong>apenas coordenadas geográficas</strong> (lat/lon), agrupa estações puramente pela proximidade espacial. 2 - Clustering usando <strong>coordenadas + parâmetros de qualidade da água</strong> (padronizados), agrupa estações que são parecidas tanto no espaço quanto na qualidade da água medida.</p>
+<p>Isso mostra na prática por que a escolha de <em>quais features entram na matriz de dados</em> muda completamente o resultado do clustering, mesmo usando o mesmo algoritmo.</p>
+<blockquote class="blockquote">
+<p>Nota: para simplificar, tratamos <code>lat</code>/<code>lon</code> com distância euclidiana. Numa aplicação real, para áreas geográficas maiores, o ideal é usar uma métrica de distância adequada (ex. haversine) ou projetar as coordenadas para um CRS métrico antes de calcular distâncias. Assunto que já vimos no módulo de fundamentos em GIS e RS.</p>
+</blockquote>
+<div id="CcZR" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>_rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>_cluster_centers <span class="op">=</span> [</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    (<span class="op">-</span><span class="fl">15.72</span>, <span class="op">-</span><span class="fl">47.93</span>),  <span class="co"># zona 1 - alto curso</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    (<span class="op">-</span><span class="fl">15.79</span>, <span class="op">-</span><span class="fl">47.88</span>),  <span class="co"># zona 2 - trecho urbano</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    (<span class="op">-</span><span class="fl">15.74</span>, <span class="op">-</span><span class="fl">47.80</span>),  <span class="co"># zona 3 - trecho rural</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>_turbidity_means <span class="op">=</span> [<span class="dv">8</span>, <span class="dv">45</span>, <span class="dv">12</span>]</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>_oxygen_means <span class="op">=</span> [<span class="fl">8.5</span>, <span class="fl">4.0</span>, <span class="fl">7.8</span>]</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>_rows <span class="op">=</span> []</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _zone, ((_lat_c, _lon_c), _turb_m, _ox_m) <span class="kw">in</span> <span class="bu">enumerate</span>(</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">zip</span>(_cluster_centers, _turbidity_means, _oxygen_means)</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">15</span>):</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>        _rows.append({</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">"lat"</span>: _lat_c <span class="op">+</span> _rng.normal(<span class="dv">0</span>, <span class="fl">0.006</span>),</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">"lon"</span>: _lon_c <span class="op">+</span> _rng.normal(<span class="dv">0</span>, <span class="fl">0.006</span>),</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">"turbidity"</span>: <span class="bu">max</span>(<span class="dv">0</span>, _rng.normal(_turb_m, <span class="dv">3</span>)),</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">"oxygen"</span>: <span class="bu">max</span>(<span class="dv">0</span>, _rng.normal(_ox_m, <span class="fl">0.6</span>)),</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"zone"</span>: <span class="ss">f"zona_</span><span class="sc">{</span>_zone <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a><span class="co"># estações isoladas / anômalas (ex. sensor com defeito ou foco pontual de poluição)</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>    _rows.append({</span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"lat"</span>: _rng.uniform(<span class="op">-</span><span class="fl">15.82</span>, <span class="op">-</span><span class="fl">15.70</span>),</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"lon"</span>: _rng.uniform(<span class="op">-</span><span class="fl">47.97</span>, <span class="op">-</span><span class="fl">47.76</span>),</span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"turbidity"</span>: _rng.random(<span class="dv">60</span>, <span class="dv">90</span>),</span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"oxygen"</span>: _rng.random(<span class="fl">1.5</span>, <span class="fl">3.0</span>),</span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"zone"</span>: <span class="st">"anomalia"</span>,</span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>stations <span class="op">=</span> pd.DataFrame(_rows)</span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a>stations[<span class="st">"station_id"</span>] <span class="op">=</span> [<span class="ss">f"st_</span><span class="sc">{</span>_i<span class="sc">:02d}</span><span class="ss">"</span> <span class="cf">for</span> _i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(stations))]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="YWSi" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>stations</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="zlud" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>px.scatter_map(</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    stations,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    lat<span class="op">=</span><span class="st">"lat"</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    lon<span class="op">=</span><span class="st">"lon"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"turbidity"</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span><span class="st">"turbidity"</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    hover_name<span class="op">=</span><span class="st">"station_id"</span>,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    hover_data<span class="op">=</span>[<span class="st">"oxygen"</span>, <span class="st">"zone"</span>],</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    zoom<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    map_style<span class="op">=</span><span class="st">"open-street-map"</span>,</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Estações de monitoramento (cor = turbidez)"</span>,</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="clustering-apenas-por-localização" class="level2">
+<h2 class="anchored" data-anchor-id="clustering-apenas-por-localização">Clustering apenas por localização</h2>
+<p>Aqui usamos o HDBSCAN considerando somente <code>lat</code> e <code>lon</code>.</p>
+<div id="xvXZ" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>geo_min_cluster_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">2</span>, stop<span class="op">=</span><span class="dv">15</span>, step<span class="op">=</span><span class="dv">1</span>, value<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"min_cluster_size (geo)"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>geo_min_cluster_slider</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="CLip" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>geo_model <span class="op">=</span> HDBSCAN(min_cluster_size<span class="op">=</span>geo_min_cluster_slider.value)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>stations[<span class="st">"geo_cluster"</span>] <span class="op">=</span> geo_model.fit_predict(stations[[<span class="st">"lat"</span>, <span class="st">"lon"</span>]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="YECM" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>px.scatter_map(</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    stations,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    lat<span class="op">=</span><span class="st">"lat"</span>,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    lon<span class="op">=</span><span class="st">"lon"</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"geo_cluster"</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    hover_name<span class="op">=</span><span class="st">"station_id"</span>,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    hover_data<span class="op">=</span>[<span class="st">"turbidity"</span>, <span class="st">"oxygen"</span>, <span class="st">"zone"</span>],</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    zoom<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    map_style<span class="op">=</span><span class="st">"open-street-map"</span>,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Clusters por localização (lat/lon)"</span>,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="clustering-por-localização-qualidade-da-água" class="level2">
+<h2 class="anchored" data-anchor-id="clustering-por-localização-qualidade-da-água">Clustering por localização + qualidade da água</h2>
+<p>Agora adicionamos turbidez e oxigenio dissolvido à matriz de dados. Como essas variáveis estão em escalas bem diferentes de <code>lat</code>/<code>lon</code> (e entre si), precisamos <strong>padronizar</strong> (<code>StandardScaler</code>) antes de calcular distâncias.</p>
+<p>Vamos começar a tratar bastante essa idéia de padronização daqui para frente, pois ela é extremamente necessária para que nossos algoritmos de ML convergir. Senão padronizarmos, a variável com maior magnitude domina o cálculo.</p>
+<div id="iXej" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="EJmg" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>combined_min_cluster_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">2</span>, stop<span class="op">=</span><span class="dv">15</span>, step<span class="op">=</span><span class="dv">1</span>, value<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"min_cluster_size (combinado)"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>combined_min_cluster_slider</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="UmEG" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>combined_features <span class="op">=</span> stations[[<span class="st">"lat"</span>, <span class="st">"lon"</span>, <span class="st">"turbidity"</span>, <span class="st">"oxygen"</span>]]</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>combined_scaled <span class="op">=</span> StandardScaler().fit_transform(combined_features)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>combined_model <span class="op">=</span> HDBSCAN(min_cluster_size<span class="op">=</span>combined_min_cluster_slider.value)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>stations[<span class="st">"combined_cluster"</span>] <span class="op">=</span> combined_model.fit_predict(combined_scaled)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="vEBW" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>px.scatter_map(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    stations,</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    lat<span class="op">=</span><span class="st">"lat"</span>,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    lon<span class="op">=</span><span class="st">"lon"</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"combined_cluster"</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    hover_name<span class="op">=</span><span class="st">"station_id"</span>,</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    hover_data<span class="op">=</span>[<span class="st">"turbidity"</span>, <span class="st">"oxygen"</span>, <span class="st">"zone"</span>],</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    zoom<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    map_style<span class="op">=</span><span class="st">"open-street-map"</span>,</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Clusters por localização + qualidade da água"</span>,</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="somente-as-variáveis-de-qualidade-da-água" class="level3">
+<h3 class="anchored" data-anchor-id="somente-as-variáveis-de-qualidade-da-água">Somente as variáveis de qualidade da água</h3>
+<div id="IpqN" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>water_features <span class="op">=</span> stations[[<span class="st">"turbidity"</span>, <span class="st">"oxygen"</span>]]</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>water_scaled <span class="op">=</span> StandardScaler().fit_transform(water_features)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>water_model <span class="op">=</span> HDBSCAN(min_cluster_size<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>stations[<span class="st">"water_cluster"</span>] <span class="op">=</span> water_model.fit_predict(water_scaled)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="dxZZ" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>px.scatter_map(</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    stations,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    lat<span class="op">=</span><span class="st">"lat"</span>,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    lon<span class="op">=</span><span class="st">"lon"</span>,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"water_cluster"</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    hover_name<span class="op">=</span><span class="st">"station_id"</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    hover_data<span class="op">=</span>[<span class="st">"turbidity"</span>, <span class="st">"oxygen"</span>, <span class="st">"zone"</span>],</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    zoom<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    map_style<span class="op">=</span><span class="st">"open-street-map"</span>,</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Clusters por localização + qualidade da água"</span>,</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="o-que-muda-entre-as-duas-abordagens" class="level2">
+<h2 class="anchored" data-anchor-id="o-que-muda-entre-as-duas-abordagens">O que muda entre as duas abordagens?</h2>
+<ul>
+<li>No <strong>clustering geográfico</strong>, estações próximas fisicamente ficam no mesmo grupo, independente da qualidade da água. Inclusive as estações “anômalas” espalhadas tendem a virar ruído (-1) por estarem isoladas espacialmente.</li>
+<li>No <strong>clustering combinado</strong>, a zona urbana (alta turbidez, baixo oxigênio) tende a se separar da zona rural/alto curso mesmo quando geograficamente próximas, e estações com valores extremos de qualidade da água (mesmo perto de um cluster geográfico “normal”) podem virar ruído, sinalizando possíveis sensores com defeito ou pontos de poluição a investigar.</li>
+<li>Essa comparação é exatamente o tipo de análise exploratória que clustering possibilita: descobrir estrutura nos dados sem ter rótulos prontos, seja para planejar novas estações de monitoramento, identificar zonas de risco, ou sinalizar sensores para inspeção.</li>
+</ul>
+</section>
+</section>
+<section id="referencias" class="level1">
+<h1>Referencias</h1>
+<ul>
+<li><a href="https://scikit-learn.org/stable/modules/clustering.html#overview-of-clustering-methods">SKlearn Clustering</a></li>
+<li><a href="https://docs.opencv.org/3.4.8/de/d4d/tutorial_py_kmeans_understanding.html">OpenCV - Understanding KMeans</a></li>
+<li><a href="https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/">Visualizing Clustering</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Curse_of_dimensionality">Curse of Dimensionality</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ftl-brazil-2026\.github\.io\/ebook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../fundamentals_gis_rs/week4/xarray.html" class="pagination-link" aria-label="Dados Multidimensionais e Séries Temporais">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Dados Multidimensionais e Séries Temporais</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../state-of-art/index.html" class="pagination-link" aria-label="Estado da Arte (State-of-Art)">
+        <span class="nav-page-text">Estado da Arte (State-of-Art)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>SpaceTech Bootcamp · Emanuel Goulart</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

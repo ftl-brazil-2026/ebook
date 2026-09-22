@@ -2,94 +2,98 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/awesome-geospatial/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.384Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.847Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/AUX_week1.html</loc>
-    <lastmod>2026-09-17T22:29:08.433Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.889Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/crs_and_projections.html</loc>
-    <lastmod>2026-09-17T22:29:08.446Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.898Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week4/xarray.html</loc>
-    <lastmod>2026-09-17T22:29:08.936Z</lastmod>
+    <lastmod>2026-09-22T19:51:23.254Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week0/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.393Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.855Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week3/dem.html</loc>
-    <lastmod>2026-09-17T22:29:08.809Z</lastmod>
+    <lastmod>2026-09-22T19:51:23.162Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week2/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.544Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.971Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.936Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/provedores.html</loc>
-    <lastmod>2026-09-17T22:29:08.386Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/general-info.html</loc>
-    <lastmod>2026-09-17T22:29:08.386Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/reading.html</loc>
-    <lastmod>2026-09-17T22:29:08.386Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.936Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/state-of-art/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.936Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/how-to-contribute.html</loc>
-    <lastmod>2026-09-17T22:29:08.386Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/cli-utils.html</loc>
-    <lastmod>2026-09-17T22:29:08.385Z</lastmod>
+    <lastmod>2026-09-22T19:51:23.256Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/course-info/setup.html</loc>
-    <lastmod>2026-09-17T22:29:08.386Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.849Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/cli-utils.html</loc>
+    <lastmod>2026-09-22T19:51:22.848Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/how-to-contribute.html</loc>
+    <lastmod>2026-09-22T19:51:22.849Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/state-of-art/index.html</loc>
+    <lastmod>2026-09-22T19:51:23.256Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/index.html</loc>
+    <lastmod>2026-09-22T19:51:23.254Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/reading.html</loc>
+    <lastmod>2026-09-22T19:51:22.849Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/general-info.html</loc>
+    <lastmod>2026-09-22T19:51:22.849Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/provedores.html</loc>
+    <lastmod>2026-09-22T19:51:22.849Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/unsupervised_ml_note.html</loc>
+    <lastmod>2026-09-22T19:51:23.256Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week2/RS-STAC.html</loc>
-    <lastmod>2026-09-17T22:29:08.544Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.971Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week2/RS-Image_Processing.html</loc>
-    <lastmod>2026-09-17T22:29:08.528Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.959Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week3/image_processing2.html</loc>
-    <lastmod>2026-09-17T22:29:08.897Z</lastmod>
+    <lastmod>2026-09-22T19:51:23.225Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week0/space_tech_ecossystem.html</loc>
-    <lastmod>2026-09-17T22:29:08.419Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.878Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week4/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.932Z</lastmod>
+    <lastmod>2026-09-22T19:51:23.251Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html</loc>
-    <lastmod>2026-09-17T22:29:08.488Z</lastmod>
+    <lastmod>2026-09-22T19:51:22.931Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/guest-sessions/index.html</loc>
-    <lastmod>2026-09-17T22:29:08.936Z</lastmod>
+    <lastmod>2026-09-22T19:51:23.254Z</lastmod>
   </url>
 </urlset>

@@ -575,130 +575,83 @@
     "href": "ml-dl/index.html",
     "title": "Fundamentos em Machine Learning e Deep Learning",
     "section": "",
-    "text": "Em construção.\n\n\n\n\n\n\nTudo aqui em construção\n\n\n\n\n\n\nvov_juju",
-    "crumbs": [
-      "Fundamentos em Machine Learning e Deep Learning",
-      "Fundamentos em Machine Learning e Deep Learning"
-    ]
+    "text": "Em construção.\n\n\n\n\n\n\nTudo aqui em construção\n\n\n\n\n\n\nvov_juju"
   },
   {
-    "objectID": "course-info/provedores.html",
-    "href": "course-info/provedores.html",
-    "title": "Provedores de Dados Geoespaciais",
+    "objectID": "course-info/setup.html",
+    "href": "course-info/setup.html",
+    "title": "Standard Set Up",
     "section": "",
-    "text": "Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.\n\n\n\n\n\n\n\n\nTipQuer adicionar um provedor?\n\n\n\nOs dados desse diagrama vivem em data/provedores.json, editável por qualquer aluno. Veja o passo a passo em Como Contribuir.",
+    "text": "Verifique de seguir esse guia antes de começar a explorar o bootcamp. Aqui ajudamos a como fazer as configurações corretas do Python enviroment e reproduzir os resultados em seu próprio computador.",
     "crumbs": [
       "Course Information",
-      "Provedores de Dados Geoespaciais"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/general-info.html",
-    "href": "course-info/general-info.html",
-    "title": "Informações Gerais",
-    "section": "",
-    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "objectID": "course-info/setup.html#pré-requisitos",
+    "href": "course-info/setup.html#pré-requisitos",
+    "title": "Standard Set Up",
+    "section": "1. Pré-requisitos",
+    "text": "1. Pré-requisitos\n\nGit — https://git-scm.com/downloads\nuv (Python package/version manager) — https://docs.astral.sh/uv/getting-started/installation/\nVS Code (recommended editor, with the Python + Jupyter extensions) — https://code.visualstudio.com/download\nQuarto — (optional, only if you want to preview the site itself, not just run notebooks) https://quarto.org/docs/get-started/\nPostgreSQL + PostGIS — (optional, only needed once we start working with a spatial database)\n\n\n\n\n\n\n\nLembre-se de usar uv sync para baixar as bibliotecas que utilizamos no decorrer de nossos encontros.",
     "crumbs": [
       "Course Information",
-      "Informações Gerais"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/general-info.html#sobre-esse-módulo",
-    "href": "course-info/general-info.html#sobre-esse-módulo",
-    "title": "Informações Gerais",
-    "section": "",
-    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "objectID": "course-info/setup.html#clone-the-repository",
+    "href": "course-info/setup.html#clone-the-repository",
+    "title": "Standard Set Up",
+    "section": "2. Clone the repository",
+    "text": "2. Clone the repository\ngit clone https://github.com/emanuel-gf/spacetech-gis-ebook.git\ncd spacetech-gis-ebook",
     "crumbs": [
       "Course Information",
-      "Informações Gerais"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/general-info.html#estrutura-de-aulas-semanais",
-    "href": "course-info/general-info.html#estrutura-de-aulas-semanais",
-    "title": "Informações Gerais",
-    "section": "Estrutura de Aulas Semanais",
-    "text": "Estrutura de Aulas Semanais\n\nFundamentos em GIS e Sensoriamento Remoto\n\n\n\nWeek\nTopic\n\n\n\n\n0\nEcossistema de Dados Geoespaciais\n\n\n1\nFundamentos em Análises Espaciais para dados vetoriais.\n\n\n2\nFundamentos em Sensoriamento Remoto e dados raster.\n\n\n3\nExpandindo conhecimentos para análise dados geoespaciais.\n\n\n4\nCubo de Dados (Data Cubes)\n\n\n\n\n\nFundamentos em Machine Learning e Deep Learning\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\nEstado da Arte (State-of-Art)\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\n\n\nlogoAEB",
+    "objectID": "course-info/setup.html#create-your-own-branch",
+    "href": "course-info/setup.html#create-your-own-branch",
+    "title": "Standard Set Up",
+    "section": "3. Create your own branch",
+    "text": "3. Create your own branch\nEste repositório será atualizado semanalmente. Portanto, se você modificar os arquivos diretamente na branch main, você terá um pouco de problema/dificuldade para baixar os novos capítulos que serão disponibilizados (git pull). Dessa forma, sugerimos que você crie sua própria branch e altere seus arquivos nessa branch, deixando sempre a main limpa.\ngit checkout -b semana0\nOU\ngit checkout -b qualquer-nome-aqui\nDessa forma, sempre que o repositório for atualizado, você só precisa ir na branch main e dar um git pull.\ngit checkout main\ngit pull\ngit checkout my-work\ngit merge main\nIsto deixará a main limpa e isolada, evitando possiveis dores de cabeça num futuro não muito distante.",
     "crumbs": [
       "Course Information",
-      "Informações Gerais"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/reading.html",
-    "href": "course-info/reading.html",
-    "title": "Leituras",
-    "section": "",
-    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano",
+    "objectID": "course-info/setup.html#sync-as-bibliotecas-de-python",
+    "href": "course-info/setup.html#sync-as-bibliotecas-de-python",
+    "title": "Standard Set Up",
+    "section": "4. Sync as bibliotecas de python",
+    "text": "4. Sync as bibliotecas de python\nCertifique-se de antes ter um ambiente uv, através do uv venv e de que esse ambiente esteja Ativo.\nuv sync\nThis reads pyproject.toml / uv.lock and creates a local .venv with the exact package versions used in class (geopandas, cartopy, plotly, etc).",
     "crumbs": [
       "Course Information",
-      "Leituras"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "course-info/reading.html#leituras-recomendadas",
-    "href": "course-info/reading.html#leituras-recomendadas",
-    "title": "Leituras",
-    "section": "",
-    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano",
+    "objectID": "course-info/setup.html#pronto",
+    "href": "course-info/setup.html#pronto",
+    "title": "Standard Set Up",
+    "section": "5. Pronto!",
+    "text": "5. Pronto!\nAgora você já pode rodar o notebook, clique nesse e selecione o kernel, tudo rodará feito magia.",
     "crumbs": [
       "Course Information",
-      "Leituras"
+      "Standard Set Up"
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "SpaceTech Bootcamp",
-    "section": "",
-    "text": "Bem-vindo(a)! Este site é o nosso ebook do Future Tech Leaders Brasil - Space Tech Bootcam.\nUse a barra lateral à esquerda para navegar:\n\nCourse Information : informações gerais, leituras recomendadas e como configurar o seu ambiente para dados geoespaciais.\nFundamentos em GIS e Sensoriamento Remoto — Nossas sessões semanais, organizadas referente ao calendário disponibilizado do curso, com python notebooks para as aulas práticas.\nFundamentos em Machine Learning e Deep Learning - Materiais e práticas referente a ML e DL aplicado a observação da terra, bem como atividade de visão computacional.\nEstado da Arte (State-of-Art) - Últimos avanços e paradigmas sobre Deep Learning, incorporando sessões práticas com arquitetura de Deep Learning, Embeddings, Foundation Models, Knowledge Distillation (Destilação) e muito mais!\nSessões de Convidados - Página específica onde disponibizaremos todos os materiais que nossos experts dentro da área de dados geoespaciais apresentarão no decorrer desse bootcamp.\n\n\n\n\n\n\n\nTipPrimeira vez por aqui?\n\n\n\nComece pela página de Setup para configurar o seu ambiente.\n\n\n\n\n\n\nlogoAEB",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "state-of-art/index.html",
-    "href": "state-of-art/index.html",
-    "title": "Estado da Arte (State-of-Art)",
-    "section": "",
-    "text": "Content coming soon.",
-    "crumbs": [
-      "Estado da Arte (State-of-Art)",
-      "Estado da Arte (State-of-Art)"
-    ]
-  },
-  {
-    "objectID": "course-info/how-to-contribute.html",
-    "href": "course-info/how-to-contribute.html",
-    "title": "Como Contribuir",
-    "section": "",
-    "text": "Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir, contudo o repositório visa ser uma contribução coletiva de muitas formas, então diversas outras maneiras aparecerão ao longo do bootcamp.\nAntes de editar qualquer coisa, crie sua própria branch! Veja o passo 3 da página de Setup. Isso evita conflito com atualizações futuras do repositório.",
+    "objectID": "course-info/setup.html#re-construindo-o-website-com-quarto",
+    "href": "course-info/setup.html#re-construindo-o-website-com-quarto",
+    "title": "Standard Set Up",
+    "section": "6. Re-construindo o website com quarto",
+    "text": "6. Re-construindo o website com quarto\nEssa é para você que deseja explorar um pouco mais as funcionalidades do Quarto. Primeiro de uma lida na documentação. Depois, dentro do projeto, rode isso no terminal.\nuv run quarto preview\n\n\n\n\n\n\nWarning“Jupyter is not available” / Quarto can’t find your kernel\n\n\n\nQuarto sometimes finds a system Python instead of the one uv just created in .venv. If quarto check jupyter reports no Jupyter, point Quarto at the venv explicitly:\nexport QUARTO_PYTHON=$(pwd)/.venv/bin/python\nquarto check jupyter\n\n\n\n\n\n\n\n\nNoteEmpacou meu querido?\n\n\n\nPergunta lá no nosso canal do discord. Algum colega com toda a certeza conseguirá te ajudar. Noiz.",
     "crumbs": [
       "Course Information",
-      "Como Contribuir"
-    ]
-  },
-  {
-    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
-    "href": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
-    "title": "Como Contribuir",
-    "section": "Contribuindo com o Awesome Geospatial",
-    "text": "Contribuindo com o Awesome Geospatial\nA página Awesome Geospatial é uma lista de ferramentas organizadas por plataforma (QGIS, Google Earth Engine, Machine Learning, AI, Databases, Cloud Computing).\nPara adicionar uma ferramenta, edite awesome-geospatial/index.md e inclua um item na lista, sob a seção da plataforma correspondente:\n- [**Nome**](https://link.com) — descrição curta do que é / para que serve.\nSe você não tem certeza que o link ou a descrição estão corretos/atualizados, adicione ⚠️ *verificar* no fim da linha — assim outra pessoa sabe que precisa conferir antes de confiar no item. Sem essa marcação, o item é considerado confiável.\nSe a plataforma que você quer ainda não tem uma seção, crie um novo ## Nome da Plataforma no fim do arquivo.",
-    "crumbs": [
-      "Course Information",
-      "Como Contribuir"
-    ]
-  },
-  {
-    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
-    "href": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
-    "title": "Como Contribuir",
-    "section": "Contribuindo com o diagrama de provedores (bubble chart)",
-    "text": "Contribuindo com o diagrama de provedores (bubble chart)\nO diagrama de bolhas em Provedores de Dados Geoespaciais — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: course-info/data/provedores.json. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.\nPara adicionar um provedor a um tema já existente, inclua um novo objeto na lista provedores da categoria correspondente:\n{\n  \"nome\": \"Nome do provedor\",\n  \"escopo\": \"BR\",\n  \"url\": \"https://exemplo.gov.br/\",\n  \"dado\": \"Uma frase curta: qual dado, para qual uso\"\n}\nescopo é sempre \"BR\" ou \"GLOBAL\". Para criar um tema novo inteiro, adicione um objeto à lista categorias (nível raiz do JSON) com nome, votos (pode deixar 0 se não veio do questionário original) e sua própria lista de provedores.\nAntes de commitar, valide que o JSON continua válido:\npython3 -m json.tool course-info/data/provedores.json &gt; /dev/null\nSem erro impresso = JSON válido.\n\n\n\n\n\n\nNoteDúvida?\n\n\n\nPergunta no canal do bootcamp antes de gastar muito tempo tentando resolver sozinho.",
-    "crumbs": [
-      "Course Information",
-      "Como Contribuir"
+      "Standard Set Up"
     ]
   },
   {
@@ -779,80 +732,167 @@
     ]
   },
   {
-    "objectID": "course-info/setup.html",
-    "href": "course-info/setup.html",
-    "title": "Standard Set Up",
+    "objectID": "course-info/how-to-contribute.html",
+    "href": "course-info/how-to-contribute.html",
+    "title": "Como Contribuir",
     "section": "",
-    "text": "Verifique de seguir esse guia antes de começar a explorar o bootcamp. Aqui ajudamos a como fazer as configurações corretas do Python enviroment e reproduzir os resultados em seu próprio computador.",
+    "text": "Esse ebook cresce com contribuição dos alunos. Por enquanto, tem duas formas diretas de contribuir, contudo o repositório visa ser uma contribução coletiva de muitas formas, então diversas outras maneiras aparecerão ao longo do bootcamp.\nAntes de editar qualquer coisa, crie sua própria branch! Veja o passo 3 da página de Setup. Isso evita conflito com atualizações futuras do repositório.",
     "crumbs": [
       "Course Information",
-      "Standard Set Up"
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "course-info/setup.html#pré-requisitos",
-    "href": "course-info/setup.html#pré-requisitos",
-    "title": "Standard Set Up",
-    "section": "1. Pré-requisitos",
-    "text": "1. Pré-requisitos\n\nGit — https://git-scm.com/downloads\nuv (Python package/version manager) — https://docs.astral.sh/uv/getting-started/installation/\nVS Code (recommended editor, with the Python + Jupyter extensions) — https://code.visualstudio.com/download\nQuarto — (optional, only if you want to preview the site itself, not just run notebooks) https://quarto.org/docs/get-started/\nPostgreSQL + PostGIS — (optional, only needed once we start working with a spatial database)\n\n\n\n\n\n\n\nLembre-se de usar uv sync para baixar as bibliotecas que utilizamos no decorrer de nossos encontros.",
+    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
+    "href": "course-info/how-to-contribute.html#contribuindo-com-o-awesome-geospatial",
+    "title": "Como Contribuir",
+    "section": "Contribuindo com o Awesome Geospatial",
+    "text": "Contribuindo com o Awesome Geospatial\nA página Awesome Geospatial é uma lista de ferramentas organizadas por plataforma (QGIS, Google Earth Engine, Machine Learning, AI, Databases, Cloud Computing).\nPara adicionar uma ferramenta, edite awesome-geospatial/index.md e inclua um item na lista, sob a seção da plataforma correspondente:\n- [**Nome**](https://link.com) — descrição curta do que é / para que serve.\nSe você não tem certeza que o link ou a descrição estão corretos/atualizados, adicione ⚠️ *verificar* no fim da linha — assim outra pessoa sabe que precisa conferir antes de confiar no item. Sem essa marcação, o item é considerado confiável.\nSe a plataforma que você quer ainda não tem uma seção, crie um novo ## Nome da Plataforma no fim do arquivo.",
     "crumbs": [
       "Course Information",
-      "Standard Set Up"
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "course-info/setup.html#clone-the-repository",
-    "href": "course-info/setup.html#clone-the-repository",
-    "title": "Standard Set Up",
-    "section": "2. Clone the repository",
-    "text": "2. Clone the repository\ngit clone https://github.com/emanuel-gf/spacetech-gis-ebook.git\ncd spacetech-gis-ebook",
+    "objectID": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
+    "href": "course-info/how-to-contribute.html#contribuindo-com-o-diagrama-de-provedores-bubble-chart",
+    "title": "Como Contribuir",
+    "section": "Contribuindo com o diagrama de provedores (bubble chart)",
+    "text": "Contribuindo com o diagrama de provedores (bubble chart)\nO diagrama de bolhas em Provedores de Dados Geoespaciais — temas de interesse ligados a provedores de dados geoespaciais — é gerado a partir de um único arquivo: course-info/data/provedores.json. Não existe cópia duplicada dos dados em nenhum outro lugar — editar esse arquivo é suficiente para atualizar o gráfico.\nPara adicionar um provedor a um tema já existente, inclua um novo objeto na lista provedores da categoria correspondente:\n{\n  \"nome\": \"Nome do provedor\",\n  \"escopo\": \"BR\",\n  \"url\": \"https://exemplo.gov.br/\",\n  \"dado\": \"Uma frase curta: qual dado, para qual uso\"\n}\nescopo é sempre \"BR\" ou \"GLOBAL\". Para criar um tema novo inteiro, adicione um objeto à lista categorias (nível raiz do JSON) com nome, votos (pode deixar 0 se não veio do questionário original) e sua própria lista de provedores.\nAntes de commitar, valide que o JSON continua válido:\npython3 -m json.tool course-info/data/provedores.json &gt; /dev/null\nSem erro impresso = JSON válido.\n\n\n\n\n\n\nNoteDúvida?\n\n\n\nPergunta no canal do bootcamp antes de gastar muito tempo tentando resolver sozinho.",
     "crumbs": [
       "Course Information",
-      "Standard Set Up"
+      "Como Contribuir"
     ]
   },
   {
-    "objectID": "course-info/setup.html#create-your-own-branch",
-    "href": "course-info/setup.html#create-your-own-branch",
-    "title": "Standard Set Up",
-    "section": "3. Create your own branch",
-    "text": "3. Create your own branch\nEste repositório será atualizado semanalmente. Portanto, se você modificar os arquivos diretamente na branch main, você terá um pouco de problema/dificuldade para baixar os novos capítulos que serão disponibilizados (git pull). Dessa forma, sugerimos que você crie sua própria branch e altere seus arquivos nessa branch, deixando sempre a main limpa.\ngit checkout -b semana0\nOU\ngit checkout -b qualquer-nome-aqui\nDessa forma, sempre que o repositório for atualizado, você só precisa ir na branch main e dar um git pull.\ngit checkout main\ngit pull\ngit checkout my-work\ngit merge main\nIsto deixará a main limpa e isolada, evitando possiveis dores de cabeça num futuro não muito distante.",
+    "objectID": "state-of-art/index.html",
+    "href": "state-of-art/index.html",
+    "title": "Estado da Arte (State-of-Art)",
+    "section": "",
+    "text": "Content coming soon.",
     "crumbs": [
-      "Course Information",
-      "Standard Set Up"
+      "Estado da Arte (State-of-Art)",
+      "Estado da Arte (State-of-Art)"
     ]
   },
   {
-    "objectID": "course-info/setup.html#sync-as-bibliotecas-de-python",
-    "href": "course-info/setup.html#sync-as-bibliotecas-de-python",
-    "title": "Standard Set Up",
-    "section": "4. Sync as bibliotecas de python",
-    "text": "4. Sync as bibliotecas de python\nCertifique-se de antes ter um ambiente uv, através do uv venv e de que esse ambiente esteja Ativo.\nuv sync\nThis reads pyproject.toml / uv.lock and creates a local .venv with the exact package versions used in class (geopandas, cartopy, plotly, etc).",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "SpaceTech Bootcamp",
+    "section": "",
+    "text": "Bem-vindo(a)! Este site é o nosso ebook do Future Tech Leaders Brasil - Space Tech Bootcam.\nUse a barra lateral à esquerda para navegar:\n\nCourse Information : informações gerais, leituras recomendadas e como configurar o seu ambiente para dados geoespaciais.\nFundamentos em GIS e Sensoriamento Remoto — Nossas sessões semanais, organizadas referente ao calendário disponibilizado do curso, com python notebooks para as aulas práticas.\nFundamentos em Machine Learning e Deep Learning - Materiais e práticas referente a ML e DL aplicado a observação da terra, bem como atividade de visão computacional.\nEstado da Arte (State-of-Art) - Últimos avanços e paradigmas sobre Deep Learning, incorporando sessões práticas com arquitetura de Deep Learning, Embeddings, Foundation Models, Knowledge Distillation (Destilação) e muito mais!\nSessões de Convidados - Página específica onde disponibizaremos todos os materiais que nossos experts dentro da área de dados geoespaciais apresentarão no decorrer desse bootcamp.\n\n\n\n\n\n\n\nTipPrimeira vez por aqui?\n\n\n\nComece pela página de Setup para configurar o seu ambiente.\n\n\n\n\n\n\nlogoAEB",
     "crumbs": [
-      "Course Information",
-      "Standard Set Up"
+      "Home"
     ]
   },
   {
-    "objectID": "course-info/setup.html#pronto",
-    "href": "course-info/setup.html#pronto",
-    "title": "Standard Set Up",
-    "section": "5. Pronto!",
-    "text": "5. Pronto!\nAgora você já pode rodar o notebook, clique nesse e selecione o kernel, tudo rodará feito magia.",
+    "objectID": "course-info/reading.html",
+    "href": "course-info/reading.html",
+    "title": "Leituras",
+    "section": "",
+    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano\nVisão Geral sobre Clustering SkLearn-Clustering",
     "crumbs": [
       "Course Information",
-      "Standard Set Up"
+      "Leituras"
     ]
   },
   {
-    "objectID": "course-info/setup.html#re-construindo-o-website-com-quarto",
-    "href": "course-info/setup.html#re-construindo-o-website-com-quarto",
-    "title": "Standard Set Up",
-    "section": "6. Re-construindo o website com quarto",
-    "text": "6. Re-construindo o website com quarto\nEssa é para você que deseja explorar um pouco mais as funcionalidades do Quarto. Primeiro de uma lida na documentação. Depois, dentro do projeto, rode isso no terminal.\nuv run quarto preview\n\n\n\n\n\n\nWarning“Jupyter is not available” / Quarto can’t find your kernel\n\n\n\nQuarto sometimes finds a system Python instead of the one uv just created in .venv. If quarto check jupyter reports no Jupyter, point Quarto at the venv explicitly:\nexport QUARTO_PYTHON=$(pwd)/.venv/bin/python\nquarto check jupyter\n\n\n\n\n\n\n\n\nNoteEmpacou meu querido?\n\n\n\nPergunta lá no nosso canal do discord. Algum colega com toda a certeza conseguirá te ajudar. Noiz.",
+    "objectID": "course-info/reading.html#leituras-recomendadas",
+    "href": "course-info/reading.html#leituras-recomendadas",
+    "title": "Leituras",
+    "section": "",
+    "text": "Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e complexo sistema de dados geoespaciais.\n\nPebesma, E.; Bivand, R. (2023). Spatial Data Science: With Applications in R. Chapman and Hall/CRC.\nERA5 Family. ERA5 explicacao\nL. Gobatti et Al (2026). Thermal justice in urban climate change adaptation. Nature. Nature Article\nSaldanha Rafael. 2026. Sistemas de Informação em Saúde no Brasil\nProfessora Cristiane. Cartografia e Representação da Terra em um plano\nVisão Geral sobre Clustering SkLearn-Clustering",
     "crumbs": [
       "Course Information",
-      "Standard Set Up"
+      "Leituras"
+    ]
+  },
+  {
+    "objectID": "course-info/general-info.html",
+    "href": "course-info/general-info.html",
+    "title": "Informações Gerais",
+    "section": "",
+    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "crumbs": [
+      "Course Information",
+      "Informações Gerais"
+    ]
+  },
+  {
+    "objectID": "course-info/general-info.html#sobre-esse-módulo",
+    "href": "course-info/general-info.html#sobre-esse-módulo",
+    "title": "Informações Gerais",
+    "section": "",
+    "text": "Nosso currículo é organizado em três grandes módulos, aos quais utilizamos uma abordagem transversal para lidar com problemas complexos no âmbito dos dados geoespaciais. No primeiro mês focamos na construção de um alicerce robusto referente a manipulação, análise e download dos dados geoespaciais, explorando diversas APIs e plataformas a fim de construir nossa amálgama de ferramentas que visa ser Agnóstica referente as plataformas, sem dependermos de um único provedor de dados ou linguagem de programação.\nAo decorrer do segundo módulo, avançaremos conceitos de Machine Learning para aprendizado supervisionado e não supervisionado, bem como técnicas de redução de dimensionalidade. Logo, mergulharemos no universo temático de aprendizado profundo (Deep Learning) para novamente construir uma base sólida as noções de gradiente, backpropagation, e demais conceitos essenciais para o módulo.\nPor fim, em nosso terceiro módulo, ilustraremos como o Deep-Learning vem sendo utilizado para abordar desafios complexos em nossa esfera territorial e social. Aplicaremos na prática tarefas como detecção de objetos (object detection), segmentação (segmentation), uso de Foundation Models e embeddings.\nAdemais, iremos explorar conceitos de cloud-computing como zarr e COG que estão sendo fundamentais para lidar com o massivo volume de dados geoespaciais produzidos.",
+    "crumbs": [
+      "Course Information",
+      "Informações Gerais"
+    ]
+  },
+  {
+    "objectID": "course-info/general-info.html#estrutura-de-aulas-semanais",
+    "href": "course-info/general-info.html#estrutura-de-aulas-semanais",
+    "title": "Informações Gerais",
+    "section": "Estrutura de Aulas Semanais",
+    "text": "Estrutura de Aulas Semanais\n\nFundamentos em GIS e Sensoriamento Remoto\n\n\n\nWeek\nTopic\n\n\n\n\n0\nEcossistema de Dados Geoespaciais\n\n\n1\nFundamentos em Análises Espaciais para dados vetoriais.\n\n\n2\nFundamentos em Sensoriamento Remoto e dados raster.\n\n\n3\nExpandindo conhecimentos para análise dados geoespaciais.\n\n\n4\nCubo de Dados (Data Cubes)\n\n\n\n\n\nFundamentos em Machine Learning e Deep Learning\n\n\n\nWeek\nTopic\n\n\n\n\n5\nAnálise Não Supervisionada de Aprendizado de Máquina\n\n\n6\nAnálise Supervisionada de Aprendizado de Máquina\n\n\n7\nRedução de Dimensionalidade\n\n\n\n\n\nEstado da Arte (State-of-Art)\n\n\n\nWeek\nTopic\n\n\n\n\nTBD\nTBD\n\n\n\n\n\n\n\nlogoAEB",
+    "crumbs": [
+      "Course Information",
+      "Informações Gerais"
+    ]
+  },
+  {
+    "objectID": "course-info/provedores.html",
+    "href": "course-info/provedores.html",
+    "title": "Provedores de Dados Geoespaciais",
+    "section": "",
+    "text": "Para cada um dos 19 temas que mais interessaram na turma, mapeamos alguns provedores de dados e uma bubble chart. Clique num tema para abrir e ver os provedores, depois, clique num provedor para ir direto ao site.\n\n\n\n\n\n\n\n\nTipQuer adicionar um provedor?\n\n\n\nOs dados desse diagrama vivem em data/provedores.json, editável por qualquer aluno. Veja o passo a passo em Como Contribuir.",
+    "crumbs": [
+      "Course Information",
+      "Provedores de Dados Geoespaciais"
+    ]
+  },
+  {
+    "objectID": "ml-dl/unsupervised_ml_note.html",
+    "href": "ml-dl/unsupervised_ml_note.html",
+    "title": "Unsupervised Learning",
+    "section": "",
+    "text": "Code\nimport marimo as mo\nAprendizado Nao Supervisionado\nMotivação\nArtigo do INPE",
+    "crumbs": [
+      "Fundamentos em Machine Learning e Deep Learning",
+      "Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "ml-dl/unsupervised_ml_note.html#clustering-apenas-por-localização",
+    "href": "ml-dl/unsupervised_ml_note.html#clustering-apenas-por-localização",
+    "title": "Unsupervised Learning",
+    "section": "Clustering apenas por localização",
+    "text": "Clustering apenas por localização\nAqui usamos o HDBSCAN considerando somente lat e lon.\n\n\nCode\ngeo_min_cluster_slider = mo.ui.slider(start=2, stop=15, step=1, value=4, label=\"min_cluster_size (geo)\")\ngeo_min_cluster_slider\n\n\n\n\nCode\ngeo_model = HDBSCAN(min_cluster_size=geo_min_cluster_slider.value)\nstations[\"geo_cluster\"] = geo_model.fit_predict(stations[[\"lat\", \"lon\"]])\n\n\n\n\nCode\npx.scatter_map(\n    stations,\n    lat=\"lat\",\n    lon=\"lon\",\n    color=\"geo_cluster\",\n    hover_name=\"station_id\",\n    hover_data=[\"turbidity\", \"oxygen\", \"zone\"],\n    zoom=10,\n    map_style=\"open-street-map\",\n    title=\"Clusters por localização (lat/lon)\",\n)",
+    "crumbs": [
+      "Fundamentos em Machine Learning e Deep Learning",
+      "Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "ml-dl/unsupervised_ml_note.html#clustering-por-localização-qualidade-da-água",
+    "href": "ml-dl/unsupervised_ml_note.html#clustering-por-localização-qualidade-da-água",
+    "title": "Unsupervised Learning",
+    "section": "Clustering por localização + qualidade da água",
+    "text": "Clustering por localização + qualidade da água\nAgora adicionamos turbidez e oxigenio dissolvido à matriz de dados. Como essas variáveis estão em escalas bem diferentes de lat/lon (e entre si), precisamos padronizar (StandardScaler) antes de calcular distâncias.\nVamos começar a tratar bastante essa idéia de padronização daqui para frente, pois ela é extremamente necessária para que nossos algoritmos de ML convergir. Senão padronizarmos, a variável com maior magnitude domina o cálculo.\n\n\nCode\nfrom sklearn.preprocessing import StandardScaler\n\n\n\n\nCode\ncombined_min_cluster_slider = mo.ui.slider(start=2, stop=15, step=1, value=4, label=\"min_cluster_size (combinado)\")\ncombined_min_cluster_slider\n\n\n\n\nCode\ncombined_features = stations[[\"lat\", \"lon\", \"turbidity\", \"oxygen\"]]\ncombined_scaled = StandardScaler().fit_transform(combined_features)\n\ncombined_model = HDBSCAN(min_cluster_size=combined_min_cluster_slider.value)\nstations[\"combined_cluster\"] = combined_model.fit_predict(combined_scaled)\n\n\n\n\nCode\npx.scatter_map(\n    stations,\n    lat=\"lat\",\n    lon=\"lon\",\n    color=\"combined_cluster\",\n    hover_name=\"station_id\",\n    hover_data=[\"turbidity\", \"oxygen\", \"zone\"],\n    zoom=10,\n    map_style=\"open-street-map\",\n    title=\"Clusters por localização + qualidade da água\",\n)\n\n\n\nSomente as variáveis de qualidade da água\n\n\nCode\nwater_features = stations[[\"turbidity\", \"oxygen\"]]\nwater_scaled = StandardScaler().fit_transform(water_features)\n\nwater_model = HDBSCAN(min_cluster_size=5)\nstations[\"water_cluster\"] = water_model.fit_predict(water_scaled)\n\n\n\n\nCode\npx.scatter_map(\n    stations,\n    lat=\"lat\",\n    lon=\"lon\",\n    color=\"water_cluster\",\n    hover_name=\"station_id\",\n    hover_data=[\"turbidity\", \"oxygen\", \"zone\"],\n    zoom=10,\n    map_style=\"open-street-map\",\n    title=\"Clusters por localização + qualidade da água\",\n)",
+    "crumbs": [
+      "Fundamentos em Machine Learning e Deep Learning",
+      "Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "ml-dl/unsupervised_ml_note.html#o-que-muda-entre-as-duas-abordagens",
+    "href": "ml-dl/unsupervised_ml_note.html#o-que-muda-entre-as-duas-abordagens",
+    "title": "Unsupervised Learning",
+    "section": "O que muda entre as duas abordagens?",
+    "text": "O que muda entre as duas abordagens?\n\nNo clustering geográfico, estações próximas fisicamente ficam no mesmo grupo, independente da qualidade da água. Inclusive as estações “anômalas” espalhadas tendem a virar ruído (-1) por estarem isoladas espacialmente.\nNo clustering combinado, a zona urbana (alta turbidez, baixo oxigênio) tende a se separar da zona rural/alto curso mesmo quando geograficamente próximas, e estações com valores extremos de qualidade da água (mesmo perto de um cluster geográfico “normal”) podem virar ruído, sinalizando possíveis sensores com defeito ou pontos de poluição a investigar.\nEssa comparação é exatamente o tipo de análise exploratória que clustering possibilita: descobrir estrutura nos dados sem ter rótulos prontos, seja para planejar novas estações de monitoramento, identificar zonas de risco, ou sinalizar sensores para inspeção.",
+    "crumbs": [
+      "Fundamentos em Machine Learning e Deep Learning",
+      "Unsupervised Learning"
     ]
   },
   {
