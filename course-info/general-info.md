@@ -28,7 +28,9 @@ Ademais, iremos explorar conceitos de cloud-computing como zarr e COG que estão
 
 | Week | Topic |
 |------|-------|
-| TBD | TBD |
+| 5 | Análise Não Supervisionada de Aprendizado de Máquina |
+| 6 | Análise Supervisionada de Aprendizado de Máquina |
+| 7 | Redução de Dimensionalidade |
 
 ### Estado da Arte (State-of-Art)
 

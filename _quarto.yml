@@ -48,7 +48,7 @@ website:
               - fundamentals_gis_rs/week4/xarray.ipynb
       - section: "Fundamentos em Machine Learning e Deep Learning"
         contents:
-          - ml-dl/index.md
+          - ml-dl/unsupervised_ml_note.ipynb
       - section: "Estado da Arte (State-of-Art)"
         contents:
           - state-of-art/index.md

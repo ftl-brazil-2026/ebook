@@ -11,3 +11,4 @@ Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e compl
 - L. Gobatti et Al (2026). **Thermal justice in urban climate change adaptation**. Nature. [Nature Article](https://www.nature.com/articles/s41558-026-02727-5)
 - Saldanha Rafael. 2026. [Sistemas de Informação em Saúde no Brasil](https://rfsaldanha.github.io/sis/)
 - Professora Cristiane. [Cartografia e Representação da Terra em um plano](https://www.professores.uff.br/cristiane/cartografia/)
+- Visão Geral sobre Clustering [SkLearn-Clustering](https://scikit-learn.org/stable/modules/clustering.html#overview-of-clustering-methods)
