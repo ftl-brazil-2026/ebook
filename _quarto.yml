@@ -49,6 +49,7 @@ website:
       - section: "Fundamentos em Machine Learning e Deep Learning"
         contents:
           - ml-dl/unsupervised_ml_note.ipynb
+          - ml-dl/supervised.ipynb
       - section: "Estado da Arte (State-of-Art)"
         contents:
           - state-of-art/index.md
