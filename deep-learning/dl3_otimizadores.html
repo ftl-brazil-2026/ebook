@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Deep Learning 3 — Otimizadores no PyTorch – FTL-Brasil-SpaceTech-Bootcamp</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../deep-learning/dl4_pipeline_de_treino.html" rel="next">
+<link href="../deep-learning/dl2_como_a_rede_aprende.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-41da928e5ec3fef6b8fa1ca56eed0ec2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">FTL-Brasil-SpaceTech-Bootcamp</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ftl-brazil-2026/ebook"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl3_otimizadores.html">Deep Learning 3 — Otimizadores no PyTorch</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Course Information</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/general-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Informações Gerais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/reading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Leituras</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standard Set Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/cli-utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilitários de CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/how-to-contribute.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Como Contribuir</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em GIS e Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 0 — Ecossistema geoespacial</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ecossistema Geoespacial</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/space_tech_ecossystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessao 0 - 19/08/2026</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 1 — Fundamentos em GIS</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/crs_and_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de Coordenadas de Referência e Projeções</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análise Espacial de Dados Vetoriais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 - Fundamentos em Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">STAC Catalogue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-Image_Processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 - Analises Espaciais Complexas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/dem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 - Series Temporais</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dados Multidimensionais e Séries Temporais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/unsupervised_ml_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unsupervised Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Machine Learning I</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos em Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl0_introducao_pytorch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 0 — Introdução ao PyTorch</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 1 — O que uma rede neural calcula</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl2_como_a_rede_aprende.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 2 — Como a rede aprende</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl3_otimizadores.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Deep Learning 3 — Otimizadores no PyTorch</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl4_pipeline_de_treino.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 4</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../state-of-art/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessões de Convidados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guest-sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessões de Convidados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../awesome-geospatial/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Awesome Geospatial</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#torch.optim.sgd-é-a-regra-da-aula-2" id="toc-torch.optim.sgd-é-a-regra-da-aula-2" class="nav-link active" data-scroll-target="#torch.optim.sgd-é-a-regra-da-aula-2">1. <code>torch.optim.SGD</code> é a regra da aula 2</a></li>
+  <li><a href="#o-padrão-de-todo-treino-em-pytorch" id="toc-o-padrão-de-todo-treino-em-pytorch" class="nav-link" data-scroll-target="#o-padrão-de-todo-treino-em-pytorch">2. O padrão de todo treino em PyTorch</a>
+  <ul class="collapse">
+  <li><a href="#por-que-precisamos-do-zero_grad" id="toc-por-que-precisamos-do-zero_grad" class="nav-link" data-scroll-target="#por-que-precisamos-do-zero_grad">Por que precisamos do <code>zero_grad()</code>?</a></li>
+  </ul></li>
+  <li><a href="#momentum-e-adam" id="toc-momentum-e-adam" class="nav-link" data-scroll-target="#momentum-e-adam"><em>Momentum</em> e Adam</a>
+  <ul class="collapse">
+  <li><a href="#sgd-com-momentum-uma-bola-rolando-morro-abaixo" id="toc-sgd-com-momentum-uma-bola-rolando-morro-abaixo" class="nav-link" data-scroll-target="#sgd-com-momentum-uma-bola-rolando-morro-abaixo">SGD com <em>momentum</em>: uma bola rolando morro abaixo</a></li>
+  <li><a href="#adam-uma-taxa-de-aprendizado-para-cada-parâmetro" id="toc-adam-uma-taxa-de-aprendizado-para-cada-parâmetro" class="nav-link" data-scroll-target="#adam-uma-taxa-de-aprendizado-para-cada-parâmetro">Adam: uma taxa de aprendizado para cada parâmetro</a></li>
+  <li><a href="#comparando-na-paisagem-da-aula-2" id="toc-comparando-na-paisagem-da-aula-2" class="nav-link" data-scroll-target="#comparando-na-paisagem-da-aula-2">Comparando na paisagem da aula 2</a></li>
+  </ul></li>
+  <li><a href="#sgd-momentum-adam-treinando-o-mnist" id="toc-sgd-momentum-adam-treinando-o-mnist" class="nav-link" data-scroll-target="#sgd-momentum-adam-treinando-o-mnist">SGD × <em>momentum</em> × Adam treinando o MNIST</a></li>
+  <li><a href="#sensibilidade-à-taxa-de-aprendizado" id="toc-sensibilidade-à-taxa-de-aprendizado" class="nav-link" data-scroll-target="#sensibilidade-à-taxa-de-aprendizado">Sensibilidade à taxa de aprendizado</a></li>
+  <li><a href="#de-volta-ao-teorema-da-aproximação-universal" id="toc-de-volta-ao-teorema-da-aproximação-universal" class="nav-link" data-scroll-target="#de-volta-ao-teorema-da-aproximação-universal">De volta ao Teorema da Aproximação Universal</a>
+  <ul class="collapse">
+  <li><a href="#uma-galeria-de-funções" id="toc-uma-galeria-de-funções" class="nav-link" data-scroll-target="#uma-galeria-de-funções">Uma galeria de funções</a></li>
+  <li><a href="#limite-1-só-vale-dentro-do-intervalo" id="toc-limite-1-só-vale-dentro-do-intervalo" class="nav-link" data-scroll-target="#limite-1-só-vale-dentro-do-intervalo">Limite 1: só vale <strong>dentro do intervalo</strong></a></li>
+  <li><a href="#limite-2-existir-uma-solução-conseguir-encontrá-la" id="toc-limite-2-existir-uma-solução-conseguir-encontrá-la" class="nav-link" data-scroll-target="#limite-2-existir-uma-solução-conseguir-encontrá-la">Limite 2: existir uma solução ≠ conseguir encontrá-la</a></li>
+  <li><a href="#e-em-mais-dimensões" id="toc-e-em-mais-dimensões" class="nav-link" data-scroll-target="#e-em-mais-dimensões">E em mais dimensões?</a></li>
+  <li><a href="#sua-vez-aproxime-qualquer-função" id="toc-sua-vez-aproxime-qualquer-função" class="nav-link" data-scroll-target="#sua-vez-aproxime-qualquer-função">Sua vez: aproxime qualquer função</a></li>
+  </ul></li>
+  <li><a href="#discussão" id="toc-discussão" class="nav-link" data-scroll-target="#discussão">7. Discussão</a>
+  <ul class="collapse">
+  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios">Exercícios</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl3_otimizadores.html">Deep Learning 3 — Otimizadores no PyTorch</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Deep Learning 3 — Otimizadores no PyTorch</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Link Colab</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/ml-dl/dl3_otimizadores.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Open In Colab</figcaption>
+</figure>
+</div>
+<p>Na aula 2 treinamos o MLP do MNIST escrevendo a atualização à mão:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> modelo.parameters():</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        p <span class="op">-=</span> eta <span class="op">*</span> p.grad</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        p.grad.zero_()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Hoje vamos ver que um <strong>otimizador</strong> do PyTorch é exatamente isso: <strong>o objeto que aplica a atualização</strong>. A vantagem é que trocar a regra de atualização (SGD, <em>momentum</em>, Adam…) passa a ser trocar uma linha.</p>
+<p><strong>Roteiro</strong></p>
+<ol type="1">
+<li><code>torch.optim.SGD</code> é a regra da aula 2</li>
+<li>O padrão <code>zero_grad() → backward() → step()</code>, e por que o <code>zero_grad</code> existe</li>
+<li><em>Momentum</em> e Adam na paisagem 2D da aula 2</li>
+<li>SGD × <em>momentum</em> × Adam treinando o MNIST</li>
+<li>Sensibilidade à taxa de aprendizado</li>
+<li>De volta ao Teorema da Aproximação Universal: aproximando qualquer função</li>
+</ol>
+<div id="1883089d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:32.092001Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:32.091780Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.174306Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.173852Z&quot;}}">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> copy</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision <span class="im">import</span> datasets, transforms</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>AZUL, LARANJA, VERDE, CINZA, TINTA <span class="op">=</span> <span class="st">"#2a78d6"</span>, <span class="st">"#eb6834"</span>, <span class="st">"#1baf7a"</span>, <span class="st">"#898781"</span>, <span class="st">"#52514e"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.spines.top"</span>: <span class="va">False</span>, <span class="st">"axes.spines.right"</span>: <span class="va">False</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.edgecolor"</span>: CINZA, <span class="st">"axes.labelcolor"</span>: TINTA,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"xtick.color"</span>: TINTA, <span class="st">"ytick.color"</span>: TINTA,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.grid"</span>: <span class="va">True</span>, <span class="st">"grid.color"</span>: <span class="st">"#e6e5e1"</span>, <span class="st">"figure.dpi"</span>: <span class="dv">110</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>treino <span class="op">=</span> datasets.MNIST(root<span class="op">=</span><span class="st">"data"</span>, train<span class="op">=</span><span class="va">True</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>transforms.ToTensor())</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>teste <span class="op">=</span> datasets.MNIST(root<span class="op">=</span><span class="st">"data"</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>transforms.ToTensor())</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cria_mlp():</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nn.Sequential(nn.Flatten(), nn.Linear(<span class="dv">784</span>, <span class="dv">128</span>), nn.ReLU(), nn.Linear(<span class="dv">128</span>, <span class="dv">10</span>))</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> acuracia(modelo, dataset, n<span class="op">=</span><span class="dv">10000</span>):</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    x, y <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(DataLoader(dataset, batch_size<span class="op">=</span>n)))</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (modelo(x).argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> y).<span class="bu">float</span>().mean().item()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="torch.optim.sgd-é-a-regra-da-aula-2" class="level2">
+<h2 class="anchored" data-anchor-id="torch.optim.sgd-é-a-regra-da-aula-2">1. <code>torch.optim.SGD</code> é a regra da aula 2</h2>
+<p>Vamos provar: duas cópias <strong>idênticas</strong> da rede, o mesmo lote de imagens. Na cópia A aplicamos a atualização à mão; na cópia B usamos <code>torch.optim.SGD(..., lr=0.1)</code>. Os pesos resultantes têm que ser iguais.</p>
+<div id="c5b1f98b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:33.175570Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:33.175473Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.189596Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.189232Z&quot;}}">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>modelo_a <span class="op">=</span> cria_mlp()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>modelo_b <span class="op">=</span> copy.deepcopy(modelo_a)            <span class="co"># cópia com os mesmos pesos</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>x_lote, y_lote <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(DataLoader(treino, batch_size<span class="op">=</span><span class="dv">64</span>, shuffle<span class="op">=</span><span class="va">True</span>)))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># A: atualização à mão (aula 2)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>F.cross_entropy(modelo_a(x_lote), y_lote).backward()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> modelo_a.parameters():</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        p <span class="op">-=</span> eta <span class="op">*</span> p.grad</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># B: otimizador do PyTorch</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>otimizador <span class="op">=</span> torch.optim.SGD(modelo_b.parameters(), </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                             lr<span class="op">=</span>eta</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                             )</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>F.cross_entropy(modelo_b(x_lote), y_lote).backward()</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>otimizador.step()</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>iguais <span class="op">=</span> <span class="bu">all</span>(torch.allclose(pa, pb) <span class="cf">for</span> pa, pb <span class="kw">in</span> <span class="bu">zip</span>(modelo_a.parameters(), modelo_b.parameters()))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Os pesos das duas redes são iguais depois da atualização? </span><span class="sc">{</span>iguais<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Os pesos das duas redes são iguais depois da atualização? True</code></pre>
+</div>
+</div>
+<p>O otimizador recebe a lista de parâmetros (<code>modelo.parameters()</code>) quando é criado. Depois disso:</p>
+<ul>
+<li><code>otimizador.step()</code> aplica a regra de atualização a todos eles, usando o <code>.grad</code> de cada um;</li>
+<li><code>otimizador.zero_grad()</code> zera todos os <code>.grad</code>.</li>
+</ul>
+</section>
+<section id="o-padrão-de-todo-treino-em-pytorch" class="level2">
+<h2 class="anchored" data-anchor-id="o-padrão-de-todo-treino-em-pytorch">2. O padrão de todo treino em PyTorch</h2>
+<p>Todo laço de treino em PyTorch tem estas três linhas, nesta ordem:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>otimizador.zero_grad()   <span class="co"># 1. apaga os gradientes do passo anterior</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>perda.backward()         <span class="co"># 2. calcula os novos gradientes</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>otimizador.step()        <span class="co"># 3. atualiza os pesos</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="por-que-precisamos-do-zero_grad" class="level3">
+<h3 class="anchored" data-anchor-id="por-que-precisamos-do-zero_grad">Por que precisamos do <code>zero_grad()</code>?</h3>
+<p>Porque o PyTorch <strong>acumula</strong> (soma) os gradientes: cada <code>backward()</code> <strong>adiciona</strong> ao <code>.grad</code> que já existe, em vez de substituir. Veja o que acontece chamando <code>backward()</code> duas vezes sem zerar:</p>
+<div id="2a394a61" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:33.190681Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:33.190616Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.194411Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.194070Z&quot;}}" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> cria_mlp()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>peso <span class="op">=</span> modelo[<span class="dv">1</span>].weight                       <span class="co"># pesos da primeira camada</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>F.cross_entropy(modelo(x_lote), y_lote).backward()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>grad_1 <span class="op">=</span> peso.grad.clone()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>F.cross_entropy(modelo(x_lote), y_lote).backward()      <span class="co"># mesmo lote, sem zerar</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>grad_2 <span class="op">=</span> peso.grad.clone()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"depois do 1º backward: soma |grad| = </span><span class="sc">{</span>grad_1<span class="sc">.</span><span class="bu">abs</span>()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"depois do 2º backward: soma |grad| = </span><span class="sc">{</span>grad_2<span class="sc">.</span><span class="bu">abs</span>()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"razão: </span><span class="sc">{</span>grad_2<span class="sc">.</span><span class="bu">abs</span>()<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> grad_1<span class="sc">.</span><span class="bu">abs</span>()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.2f}</span><span class="ss">  (o gradiente dobrou!)"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>otimizador <span class="op">=</span> torch.optim.SGD(modelo.parameters(), lr<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>otimizador.zero_grad()</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">depois do zero_grad(): </span><span class="sc">{</span>peso<span class="sc">.</span>grad<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>depois do 1º backward: soma |grad| = 98.6423
+depois do 2º backward: soma |grad| = 197.2846
+razão: 2.00  (o gradiente dobrou!)
+
+depois do zero_grad(): None</code></pre>
+</div>
+</div>
+<p>Sem o <code>zero_grad()</code>, cada passo usaria a soma de <strong>todos</strong> os gradientes anteriores: os passos ficariam cada vez maiores e apontando para direções antigas. O treino degringola. (Esse acúmulo é útil em um caso avançado, <em>gradient accumulation</em>, para simular lotes grandes demais para a memória. Por isso o PyTorch não zera sozinho.)</p>
+</section>
+</section>
+<section id="momentum-e-adam" class="level2">
+<h2 class="anchored" data-anchor-id="momentum-e-adam"><em>Momentum</em> e Adam</h2>
+<p>Na aula 2, a descida do gradiente fazia <strong>zigue-zague</strong> no vale alongado. Os otimizadores modernos mudam a regra de atualização para lidar com isso.</p>
+<section id="sgd-com-momentum-uma-bola-rolando-morro-abaixo" class="level3">
+<h3 class="anchored" data-anchor-id="sgd-com-momentum-uma-bola-rolando-morro-abaixo">SGD com <em>momentum</em>: uma bola rolando morro abaixo</h3>
+<p>Em vez de usar só o gradiente do passo atual, acumulamos uma <strong>velocidade</strong> <span class="math inline">\(v\)</span>, uma média dos gradientes recentes:</p>
+<p><span class="math display">\[v \leftarrow \beta\, v + \nabla L(\theta) \qquad \theta \leftarrow \theta - \eta\, v\]</span></p>
+<p>Com <span class="math inline">\(\beta\)</span> (tipicamente 0,9), os componentes que <strong>trocam de sinal</strong> a cada passo (o zigue-zague) se cancelam, e os que <strong>apontam sempre para o mesmo lado</strong> se somam e aceleram.</p>
+</section>
+<section id="adam-uma-taxa-de-aprendizado-para-cada-parâmetro" class="level3">
+<h3 class="anchored" data-anchor-id="adam-uma-taxa-de-aprendizado-para-cada-parâmetro">Adam: uma taxa de aprendizado para cada parâmetro</h3>
+<p>O Adam guarda duas médias móveis por parâmetro: a do gradiente <span class="math inline">\(m\)</span> (como o <em>momentum</em>) e a do gradiente <strong>ao quadrado</strong> <span class="math inline">\(s\)</span>. A atualização divide uma pela outra:</p>
+<p><span class="math display">\[\theta \leftarrow \theta - \eta \, \frac{m}{\sqrt{s} + \epsilon}\]</span></p>
+<p>Parâmetros com gradientes grandes dão passos menores; parâmetros com gradientes pequenos dão passos maiores. Na prática, cada parâmetro tem sua própria taxa de aprendizado. O Adam é o <strong>padrão sensato</strong> para começar qualquer projeto (com <code>lr=1e-3</code>).</p>
+</section>
+<section id="comparando-na-paisagem-da-aula-2" class="level3">
+<h3 class="anchored" data-anchor-id="comparando-na-paisagem-da-aula-2">Comparando na paisagem da aula 2</h3>
+<p>Mesma perda <span class="math inline">\(L(\theta_1, \theta_2) = \theta_1^2 + 25\,\theta_2^2\)</span>, mesmo ponto de partida e 60 passos de cada otimizador. Aqui os otimizadores do PyTorch atualizam um tensor com 2 parâmetros, exatamente como fariam com os pesos de uma rede.</p>
+<div id="9f031fbe" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:33.195378Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:33.195317Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.370439Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.370113Z&quot;}}" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> perda_2d(t):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t[<span class="dv">0</span>] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">25</span> <span class="op">*</span> t[<span class="dv">1</span>] <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> trajetoria(cria_otimizador, passos<span class="op">=</span><span class="dv">60</span>):</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> torch.tensor([<span class="op">-</span><span class="fl">4.5</span>, <span class="fl">1.0</span>], requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    otimizador <span class="op">=</span> cria_otimizador([theta])</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    caminho, perdas <span class="op">=</span> [theta.detach().clone()], []</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(passos):</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        otimizador.zero_grad()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        perda <span class="op">=</span> perda_2d(theta)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        perda.backward()</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        otimizador.step()</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        caminho.append(theta.detach().clone())</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        perdas.append(perda.item())</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.stack(caminho).numpy(), np.array(perdas)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>configs_2d <span class="op">=</span> {</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD (η = 0,035)"</span>: (<span class="kw">lambda</span> p: torch.optim.SGD(p, lr<span class="op">=</span><span class="fl">0.035</span>), CINZA),</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD + momentum (η = 0,02, β = 0,7)"</span>: (<span class="kw">lambda</span> p: torch.optim.SGD(p, lr<span class="op">=</span><span class="fl">0.02</span>, momentum<span class="op">=</span><span class="fl">0.7</span>), AZUL),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Adam (η = 0,2)"</span>: (<span class="kw">lambda</span> p: torch.optim.Adam(p, lr<span class="op">=</span><span class="fl">0.2</span>), LARANJA),</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>resultados_2d <span class="op">=</span> {nome: trajetoria(f) <span class="cf">for</span> nome, (f, _) <span class="kw">in</span> configs_2d.items()}</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>T1, T2 <span class="op">=</span> np.meshgrid(np.linspace(<span class="op">-</span><span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">300</span>), np.linspace(<span class="op">-</span><span class="fl">1.3</span>, <span class="fl">1.3</span>, <span class="dv">300</span>))</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="fl">4.5</span>), width_ratios<span class="op">=</span>[<span class="fl">1.6</span>, <span class="dv">1</span>])</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].contour(T1, T2, T1 <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">25</span> <span class="op">*</span> T2 <span class="op">**</span> <span class="dv">2</span>, levels<span class="op">=</span>np.logspace(<span class="op">-</span><span class="dv">1</span>, <span class="fl">1.8</span>, <span class="dv">12</span>), colors<span class="op">=</span>CINZA, linewidths<span class="op">=</span><span class="fl">0.6</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nome, (caminho, perdas) <span class="kw">in</span> resultados_2d.items():</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    cor <span class="op">=</span> configs_2d[nome][<span class="dv">1</span>]</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].plot(caminho[:, <span class="dv">0</span>], caminho[:, <span class="dv">1</span>], color<span class="op">=</span>cor, marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">3</span>, lw<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span>nome)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].plot(perdas, color<span class="op">=</span>cor, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span>nome)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].scatter(<span class="dv">0</span>, <span class="dv">0</span>, marker<span class="op">=</span><span class="st">"*"</span>, s<span class="op">=</span><span class="dv">250</span>, color<span class="op">=</span>VERDE, zorder<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"θ₁"</span>, ylabel<span class="op">=</span><span class="st">"θ₂"</span>, title<span class="op">=</span><span class="st">"Caminho de cada otimizador (60 passos)"</span>)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].grid(<span class="va">False</span>)</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>, loc<span class="op">=</span><span class="st">"upper center"</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.18</span>), ncols<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].<span class="bu">set</span>(yscale<span class="op">=</span><span class="st">"log"</span>, xlabel<span class="op">=</span><span class="st">"passo"</span>, ylabel<span class="op">=</span><span class="st">"perda (escala log)"</span>, title<span class="op">=</span><span class="st">"Perda ao longo dos passos"</span>)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nome, (_, perdas) <span class="kw">in</span> resultados_2d.items():</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>nome<span class="sc">:&lt;36}</span><span class="ss"> perda após 20 passos = </span><span class="sc">{</span>perdas[<span class="dv">19</span>]<span class="sc">:.3f}</span><span class="ss">   após 60 = </span><span class="sc">{</span>perdas[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.5f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SGD (η = 0,035)                      perda após 20 passos = 1.285   após 60 = 0.00387
+SGD + momentum (η = 0,02, β = 0,7)   perda após 20 passos = 0.035   após 60 = 0.00000
+Adam (η = 0,2)                       perda após 20 passos = 1.088   após 60 = 0.03307</code></pre>
+</div>
+</div>
+<p><strong>Leitura:</strong></p>
+<ul>
+<li><strong>SGD</strong> faz zigue-zague na direção íngreme (<span class="math inline">\(\theta_2\)</span>). Não dá para aumentar η sem divergir nessa direção, e por isso ele anda devagar na direção plana (<span class="math inline">\(\theta_1\)</span>).</li>
+<li><strong>Momentum</strong> também oscila no começo, mas as oscilações se cancelam rapidamente enquanto a velocidade se acumula na direção plana: depois de 20 passos, a perda já é dezenas de vezes menor que a do SGD.</li>
+<li><strong>Adam</strong> começa andando na <strong>diagonal</strong>: como ele normaliza cada parâmetro pelo tamanho do próprio gradiente, os primeiros passos têm o mesmo tamanho nas duas direções. Nesta paisagem simples ele não é o mais rápido. A vantagem real do Adam aparece em redes de verdade, com milhares de parâmetros em escalas diferentes, e na <strong>robustez à escolha de η</strong>, como veremos no MNIST.</li>
+</ul>
+</section>
+</section>
+<section id="sgd-momentum-adam-treinando-o-mnist" class="level2">
+<h2 class="anchored" data-anchor-id="sgd-momentum-adam-treinando-o-mnist">SGD × <em>momentum</em> × Adam treinando o MNIST</h2>
+<p>Agora a comparação que importa: o mesmo MLP, <strong>os mesmos pesos iniciais</strong>, os mesmos lotes na mesma ordem, 2 épocas para cada otimizador. Uma <strong>época</strong> é uma passada completa pelas 60 mil imagens de treino (938 lotes de 64).</p>
+<p>Repare que o laço de treino é <strong>idêntico</strong> para os três: só muda a linha que cria o otimizador.</p>
+<div id="14ddf81b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:33.371526Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:33.371454Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:39.500307Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:39.500012Z&quot;}}" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pesos_iniciais <span class="op">=</span> cria_mlp().state_dict()     <span class="co"># todos os otimizadores partem dos mesmos pesos</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> treina(cria_otimizador, epocas<span class="op">=</span><span class="dv">2</span>, seed<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    modelo <span class="op">=</span> cria_mlp()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    modelo.load_state_dict(pesos_iniciais)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    otimizador <span class="op">=</span> cria_otimizador(modelo.parameters())</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    gerador <span class="op">=</span> torch.Generator().manual_seed(seed)          <span class="co"># mesma ordem de lotes para todos</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    carregador <span class="op">=</span> DataLoader(treino, batch_size<span class="op">=</span><span class="dv">64</span>, shuffle<span class="op">=</span><span class="va">True</span>, generator<span class="op">=</span>gerador)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    historico <span class="op">=</span> []</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(epocas):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x, y <span class="kw">in</span> carregador:</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>            otimizador.zero_grad()                         <span class="co"># 1</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            perda <span class="op">=</span> F.cross_entropy(modelo(x), y)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>            perda.backward()                               <span class="co"># 2</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            otimizador.step()                              <span class="co"># 3</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            historico.append(perda.item())</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> modelo, np.array(historico)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>configs_mnist <span class="op">=</span> {</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD (lr = 0,05)"</span>: (<span class="kw">lambda</span> p: torch.optim.SGD(p, lr<span class="op">=</span><span class="fl">0.05</span>), CINZA),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD + momentum (lr = 0,05, β = 0,9)"</span>: (<span class="kw">lambda</span> p: torch.optim.SGD(p, lr<span class="op">=</span><span class="fl">0.05</span>, momentum<span class="op">=</span><span class="fl">0.9</span>), AZUL),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Adam (lr = 0,001)"</span>: (<span class="kw">lambda</span> p: torch.optim.Adam(p, lr<span class="op">=</span><span class="fl">1e-3</span>), LARANJA),</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>resultados_mnist <span class="op">=</span> {}</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nome, (cria_otimizador, _) <span class="kw">in</span> configs_mnist.items():</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    modelo, historico <span class="op">=</span> treina(cria_otimizador)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    resultados_mnist[nome] <span class="op">=</span> (modelo, historico)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>nome<span class="sc">:&lt;36}</span><span class="ss"> acurácia no teste = </span><span class="sc">{</span>acuracia(modelo, teste)<span class="sc">:.2%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>SGD (lr = 0,05)                      acurácia no teste = 92.82%
+SGD + momentum (lr = 0,05, β = 0,9)  acurácia no teste = 97.04%
+Adam (lr = 0,001)                    acurácia no teste = 96.24%</code></pre>
+</div>
+</div>
+<div id="27a6ddde" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:39.501387Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:39.501327Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:39.590527Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:39.590185Z&quot;}}" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> suaviza(serie, janela<span class="op">=</span><span class="dv">50</span>):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.convolve(serie, np.ones(janela) <span class="op">/</span> janela, mode<span class="op">=</span><span class="st">"valid"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="fl">4.5</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nome, (_, historico) <span class="kw">in</span> resultados_mnist.items():</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    cor <span class="op">=</span> configs_mnist[nome][<span class="dv">1</span>]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        ax.plot(np.arange(<span class="bu">len</span>(suaviza(historico))) <span class="op">+</span> <span class="dv">49</span>, suaviza(historico), color<span class="op">=</span>cor, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span>nome)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>lotes_por_epoca <span class="op">=</span> <span class="bu">len</span>(historico) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    ax.axvline(lotes_por_epoca, color<span class="op">=</span>CINZA, ls<span class="op">=</span><span class="st">":"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"passo (lote de 64 imagens)"</span>, ylabel<span class="op">=</span><span class="st">"entropia cruzada (média móvel de 50 lotes)"</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Perda de treino: 2 épocas"</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].text(lotes_por_epoca, axes[<span class="dv">0</span>].get_ylim()[<span class="dv">1</span>] <span class="op">*</span> <span class="fl">0.95</span>, <span class="st">" fim da 1ª época"</span>, color<span class="op">=</span>TINTA, fontsize<span class="op">=</span><span class="dv">9</span>, va<span class="op">=</span><span class="st">"top"</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].<span class="bu">set</span>(title<span class="op">=</span><span class="st">"Zoom nos primeiros 300 passos"</span>, xlim<span class="op">=</span>(<span class="dv">40</span>, <span class="dv">300</span>))</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sensibilidade-à-taxa-de-aprendizado" class="level2">
+<h2 class="anchored" data-anchor-id="sensibilidade-à-taxa-de-aprendizado">Sensibilidade à taxa de aprendizado</h2>
+<p>A comparação acima depende do η escolhido para cada otimizador. Para uma comparação justa, treinamos 1 época com várias taxas de aprendizado e olhamos a acurácia no teste. (Esta célula leva cerca de 20 segundos.)</p>
+<div id="918c3f65" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:39.591597Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:39.591540Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:55.887536Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:55.887174Z&quot;}}" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>taxas <span class="op">=</span> [<span class="fl">1e-4</span>, <span class="fl">1e-3</span>, <span class="fl">1e-2</span>, <span class="fl">1e-1</span>, <span class="fl">1.0</span>]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>otimizadores <span class="op">=</span> {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD"</span>: <span class="kw">lambda</span> p, lr: torch.optim.SGD(p, lr<span class="op">=</span>lr),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD + momentum"</span>: <span class="kw">lambda</span> p, lr: torch.optim.SGD(p, lr<span class="op">=</span>lr, momentum<span class="op">=</span><span class="fl">0.9</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Adam"</span>: <span class="kw">lambda</span> p, lr: torch.optim.Adam(p, lr<span class="op">=</span>lr),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>grade <span class="op">=</span> pd.DataFrame(index<span class="op">=</span>otimizadores, columns<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>lr<span class="sc">:g}</span><span class="ss">"</span> <span class="cf">for</span> lr <span class="kw">in</span> taxas], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nome, f <span class="kw">in</span> otimizadores.items():</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> lr <span class="kw">in</span> taxas:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        modelo, _ <span class="op">=</span> treina(<span class="kw">lambda</span> p: f(p, lr), epocas<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        grade.loc[nome, <span class="ss">f"</span><span class="sc">{</span>lr<span class="sc">:g}</span><span class="ss">"</span>] <span class="op">=</span> acuracia(modelo, teste)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.2</span>))</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(grade.values, cmap<span class="op">=</span><span class="st">"Blues"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>, aspect<span class="op">=</span><span class="st">"auto"</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(grade.shape[<span class="dv">0</span>]):</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(grade.shape[<span class="dv">1</span>]):</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> grade.iloc[i, j]</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        ax.text(j, i, <span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:.0%}</span><span class="ss">"</span>, ha<span class="op">=</span><span class="st">"center"</span>, va<span class="op">=</span><span class="st">"center"</span>, color<span class="op">=</span><span class="st">"white"</span> <span class="cf">if</span> v <span class="op">&gt;</span> <span class="fl">0.6</span> <span class="cf">else</span> TINTA, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xticks<span class="op">=</span><span class="bu">range</span>(<span class="bu">len</span>(taxas)), xticklabels<span class="op">=</span>grade.columns, yticks<span class="op">=</span><span class="bu">range</span>(<span class="bu">len</span>(otimizadores)), yticklabels<span class="op">=</span>grade.index,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>       xlabel<span class="op">=</span><span class="st">"taxa de aprendizado (lr)"</span>, title<span class="op">=</span><span class="st">"Acurácia no teste após 1 época"</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">False</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>plt.colorbar(im, ax<span class="op">=</span>ax, <span class="bu">format</span><span class="op">=</span><span class="kw">lambda</span> v, _: <span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:.0%}</span><span class="ss">"</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Leitura:</strong></p>
+<ul>
+<li>Cada otimizador tem a sua <strong>faixa boa</strong> de taxa de aprendizado: o SGD puro precisa de η grande (0,1 a 1), o <em>momentum</em> funciona melhor com η uma ordem de grandeza menor, e o Adam vai bem entre 0,001 e 0,01.</li>
+<li>O Adam é o mais <strong>tolerante</strong>: ele já passa de 90% com η = 0,0001, enquanto o SGD puro fica perto do chute.</li>
+<li>Fora da faixa, todos falham: η pequeno demais não sai do lugar em 1 época; η grande demais diverge (o Adam com lr = 1 fica no chute aleatório).</li>
+<li>O padrão <code>Adam(lr=1e-3)</code> funciona bem “de primeira” na maioria dos problemas. Por isso ele é o ponto de partida recomendado.</li>
+</ul>
+</section>
+<section id="de-volta-ao-teorema-da-aproximação-universal" class="level2">
+<h2 class="anchored" data-anchor-id="de-volta-ao-teorema-da-aproximação-universal">De volta ao Teorema da Aproximação Universal</h2>
+<p>Na aula 1 vimos o teorema:</p>
+<blockquote class="blockquote">
+<p>Uma rede com <strong>uma camada escondida</strong> e uma ativação não linear aproxima <strong>qualquer função contínua</strong> em um intervalo limitado, desde que tenha neurônios suficientes.</p>
+</blockquote>
+<p>Lá, a função <code>treina</code> era uma caixa-preta. Agora sabemos exatamente o que ela faz: é o padrão <code>zero_grad() depois backward() por fim isso é step()</code> com um otimizador. Vamos escrever uma função aproxima que recebe <strong>qualquer função</strong> <span class="math inline">\(f(x)\)</span> e tenta aproximá-la com uma rede <span class="math inline">\(1 \to n \to 1\)</span> com ReLU:</p>
+<ol type="1">
+<li>sorteamos pontos <span class="math inline">\(x\)</span> no intervalo e calculamos <span class="math inline">\(y = f(x)\)</span>: esse é o nosso “dataset”;</li>
+<li>criamos a rede com <span class="math inline">\(n\)</span> neurônios escondidos;</li>
+<li>treinamos com a perda MSE (regressão, aula 2) e o otimizador que quisermos (esta aula).</li>
+</ol>
+<div id="91cf2b4b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:55.888599Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:55.888539Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:55.890594Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:55.890292Z&quot;}}">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> aproxima(f, n_neuronios<span class="op">=</span><span class="dv">64</span>, intervalo<span class="op">=</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>), passos<span class="op">=</span><span class="dv">3000</span>, n_pontos<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>             cria_otimizador<span class="op">=</span><span class="kw">lambda</span> p: torch.optim.Adam(p, lr<span class="op">=</span><span class="fl">0.01</span>), seed<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Aproxima uma função f qualquer com uma rede 1 → n_neuronios → 1 (ReLU)."""</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(seed)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> torch.linspace(<span class="op">*</span>intervalo, n_pontos).unsqueeze(<span class="dv">1</span>)       <span class="co"># (n_pontos, 1)</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> f(x)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    rede <span class="op">=</span> nn.Sequential(nn.Linear(<span class="dv">1</span>, n_neuronios), nn.ReLU(), nn.Linear(n_neuronios, <span class="dv">1</span>))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    otimizador <span class="op">=</span> cria_otimizador(rede.parameters())</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    historico <span class="op">=</span> []</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(passos):</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        otimizador.zero_grad()</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        perda <span class="op">=</span> F.mse_loss(rede(x), y)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        perda.backward()</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        otimizador.step()</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        historico.append(perda.item())</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rede, np.array(historico)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="uma-galeria-de-funções" class="level3">
+<h3 class="anchored" data-anchor-id="uma-galeria-de-funções">Uma galeria de funções</h3>
+<p>Seis funções bem diferentes: suaves, com “bico”, cheias de oscilações e até <strong>descontínuas</strong> (que o teorema <strong>não</strong> cobre). Cada uma é aproximada com 4, 32 e 256 neurônios. (Esta célula leva ~15 segundos.)</p>
+<div id="c7dff848" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:55.891529Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:55.891480Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:33:02.618858Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:33:02.618446Z&quot;}}" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>funcoes <span class="op">=</span> {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"|x|"</span>: torch.<span class="bu">abs</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x³ − 2x"</span>: <span class="kw">lambda</span> x: x <span class="op">**</span> <span class="dv">3</span> <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> x,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"e^(−x²)"</span>: <span class="kw">lambda</span> x: torch.exp(<span class="op">-</span>x <span class="op">**</span> <span class="dv">2</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sin(3x) + 0,5·cos(7x)"</span>: <span class="kw">lambda</span> x: torch.sin(<span class="dv">3</span> <span class="op">*</span> x) <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> torch.cos(<span class="dv">7</span> <span class="op">*</span> x),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"degrau (descontínua)"</span>: <span class="kw">lambda</span> x: (x <span class="op">&gt;</span> <span class="dv">0</span>).<span class="bu">float</span>(),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dente de serra (descontínua)"</span>: <span class="kw">lambda</span> x: x <span class="op">-</span> torch.floor(x),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>larguras <span class="op">=</span> [<span class="dv">4</span>, <span class="dv">32</span>, <span class="dv">256</span>]</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>cores_largura <span class="op">=</span> {<span class="dv">4</span>: CINZA, <span class="dv">32</span>: AZUL, <span class="dv">256</span>: LARANJA}</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>x_plot <span class="op">=</span> torch.linspace(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">500</span>).unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>erros_uat <span class="op">=</span> pd.DataFrame(index<span class="op">=</span><span class="bu">list</span>(funcoes), columns<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> neurônios"</span> <span class="cf">for</span> n <span class="kw">in</span> larguras], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">8</span>))</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (nome, f) <span class="kw">in</span> <span class="bu">zip</span>(axes.flat, funcoes.items()):</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_plot, f(x_plot), color<span class="op">=</span>CINZA, lw<span class="op">=</span><span class="dv">6</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="st">"função real"</span>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n_neuronios <span class="kw">in</span> larguras:</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>        rede, historico <span class="op">=</span> aproxima(f, n_neuronios)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        erros_uat.loc[nome, <span class="ss">f"</span><span class="sc">{</span>n_neuronios<span class="sc">}</span><span class="ss"> neurônios"</span>] <span class="op">=</span> historico[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>            ax.plot(x_plot, rede(x_plot), color<span class="op">=</span>cores_largura[n_neuronios], lw<span class="op">=</span><span class="fl">1.8</span>, label<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>n_neuronios<span class="sc">}</span><span class="ss"> neurônios"</span>)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(title<span class="op">=</span>nome, xlabel<span class="op">=</span><span class="st">"x"</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>, loc<span class="op">=</span><span class="st">"upper center"</span>)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"Uma camada escondida, ReLU, Adam: aproximando funções diferentes"</span>, y<span class="op">=</span><span class="fl">1.01</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>erros_uat.style.<span class="bu">format</span>(<span class="st">"</span><span class="sc">{:.5f}</span><span class="st">"</span>).background_gradient(cmap<span class="op">=</span><span class="st">"Blues"</span>, axis<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<style type="text/css">
+#T_5f9b1_row0_col0, #T_5f9b1_row0_col1, #T_5f9b1_row0_col2, #T_5f9b1_row1_col1, #T_5f9b1_row1_col2, #T_5f9b1_row2_col1, #T_5f9b1_row2_col2 {
+  background-color: #f7fbff;
+  color: #000000;
+}
+#T_5f9b1_row1_col0 {
+  background-color: #bcd7eb;
+  color: #000000;
+}
+#T_5f9b1_row2_col0, #T_5f9b1_row4_col1, #T_5f9b1_row4_col2 {
+  background-color: #f5f9fe;
+  color: #000000;
+}
+#T_5f9b1_row3_col0 {
+  background-color: #1764ab;
+  color: #f1f1f1;
+}
+#T_5f9b1_row3_col1 {
+  background-color: #08306b;
+  color: #f1f1f1;
+}
+#T_5f9b1_row3_col2 {
+  background-color: #f4f9fe;
+  color: #000000;
+}
+#T_5f9b1_row4_col0 {
+  background-color: #e3eef9;
+  color: #000000;
+}
+#T_5f9b1_row5_col0 {
+  background-color: #81badb;
+  color: #000000;
+}
+#T_5f9b1_row5_col1 {
+  background-color: #ecf4fb;
+  color: #000000;
+}
+#T_5f9b1_row5_col2 {
+  background-color: #ebf3fb;
+  color: #000000;
+}
+</style>
+
+<table id="T_5f9b1" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_5f9b1_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">4 neurônios</th>
+<th id="T_5f9b1_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">32 neurônios</th>
+<th id="T_5f9b1_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">256 neurônios</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_5f9b1_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">|x|</th>
+<td id="T_5f9b1_row0_col0" class="data row0 col0">0.00000</td>
+<td id="T_5f9b1_row0_col1" class="data row0 col1">0.00000</td>
+<td id="T_5f9b1_row0_col2" class="data row0 col2">0.00003</td>
+</tr>
+<tr class="even">
+<th id="T_5f9b1_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">x³ − 2x</th>
+<td id="T_5f9b1_row1_col0" class="data row1 col0">0.04452</td>
+<td id="T_5f9b1_row1_col1" class="data row1 col1">0.00031</td>
+<td id="T_5f9b1_row1_col2" class="data row1 col2">0.00000</td>
+</tr>
+<tr class="odd">
+<th id="T_5f9b1_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">e^(−x²)</th>
+<td id="T_5f9b1_row2_col0" class="data row2 col0">0.00221</td>
+<td id="T_5f9b1_row2_col1" class="data row2 col1">0.00005</td>
+<td id="T_5f9b1_row2_col2" class="data row2 col2">0.00000</td>
+</tr>
+<tr class="even">
+<th id="T_5f9b1_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">sin(3x) + 0,5·cos(7x)</th>
+<td id="T_5f9b1_row3_col0" class="data row3 col0">0.12614</td>
+<td id="T_5f9b1_row3_col1" class="data row3 col1">0.15778</td>
+<td id="T_5f9b1_row3_col2" class="data row3 col2">0.00265</td>
+</tr>
+<tr class="odd">
+<th id="T_5f9b1_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">degrau (descontínua)</th>
+<td id="T_5f9b1_row4_col0" class="data row4 col0">0.01582</td>
+<td id="T_5f9b1_row4_col1" class="data row4 col1">0.00196</td>
+<td id="T_5f9b1_row4_col2" class="data row4 col2">0.00209</td>
+</tr>
+<tr class="even">
+<th id="T_5f9b1_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">dente de serra (descontínua)</th>
+<td id="T_5f9b1_row5_col0" class="data row5 col0">0.07069</td>
+<td id="T_5f9b1_row5_col1" class="data row5 col1">0.00879</td>
+<td id="T_5f9b1_row5_col2" class="data row5 col2">0.00942</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Leitura:</strong></p>
+<ul>
+<li>Com <strong>4 neurônios</strong>, a rede só consegue fazer ~4 “dobras”: serve para <span class="math inline">\(|x|\)</span> (uma dobra basta!), mas não para funções com muitas oscilações.</li>
+<li>Com <strong>256 neurônios</strong>, praticamente todas as funções contínuas ficam indistinguíveis da original.</li>
+<li>A função com oscilações rápidas, <span class="math inline">\(\sin(3x) + 0{,}5\cos(7x)\)</span>, é a que mais precisa de neurônios: cada subida e descida consome dobras.</li>
+<li>As <strong>descontínuas</strong> (degrau, dente de serra) estão fora do teorema. A rede faz o que pode: troca cada salto por uma <strong>rampa muito íngreme</strong>, e o erro se concentra nos saltos.</li>
+</ul>
+</section>
+<section id="limite-1-só-vale-dentro-do-intervalo" class="level3">
+<h3 class="anchored" data-anchor-id="limite-1-só-vale-dentro-do-intervalo">Limite 1: só vale <strong>dentro do intervalo</strong></h3>
+<p>O teorema fala de um intervalo limitado. Fora dos pontos de treino, a rede não sabe nada sobre a função: com ReLU, ela simplesmente continua em <strong>linha reta</strong>.</p>
+<div id="7d570e5c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:33:02.619873Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:33:02.619811Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:33:03.374702Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:33:03.374299Z&quot;}}" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rede_sen, _ <span class="op">=</span> aproxima(torch.sin, n_neuronios<span class="op">=</span><span class="dv">256</span>, intervalo<span class="op">=</span>(<span class="op">-</span><span class="dv">2</span> <span class="op">*</span> np.pi, <span class="dv">2</span> <span class="op">*</span> np.pi), passos<span class="op">=</span><span class="dv">4000</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>x_largo <span class="op">=</span> torch.linspace(<span class="op">-</span><span class="dv">4</span> <span class="op">*</span> np.pi, <span class="dv">4</span> <span class="op">*</span> np.pi, <span class="dv">800</span>).unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>ax.axvspan(<span class="op">-</span><span class="dv">2</span> <span class="op">*</span> np.pi, <span class="dv">2</span> <span class="op">*</span> np.pi, color<span class="op">=</span>AZUL, alpha<span class="op">=</span><span class="fl">0.08</span>, label<span class="op">=</span><span class="st">"intervalo de treino"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>ax.plot(x_largo, torch.sin(x_largo), color<span class="op">=</span>CINZA, lw<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, label<span class="op">=</span><span class="st">"sin(x)"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_largo, rede_sen(x_largo), color<span class="op">=</span>LARANJA, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"rede (256 neurônios)"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"x"</span>, ylim<span class="op">=</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>), title<span class="op">=</span><span class="st">"Dentro do intervalo de treino a rede acerta; fora dele, extrapola em linha reta"</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>, loc<span class="op">=</span><span class="st">"lower left"</span>, ncols<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="limite-2-existir-uma-solução-conseguir-encontrá-la" class="level3">
+<h3 class="anchored" data-anchor-id="limite-2-existir-uma-solução-conseguir-encontrá-la">Limite 2: existir uma solução ≠ conseguir encontrá-la</h3>
+<p>O teorema garante que <strong>existem</strong> pesos que aproximam a função, mas não diz como encontrá-los. Quem procura é o <strong>otimizador</strong>. Mesma rede (256 neurônios), mesma função cheia de oscilações, mesmos pesos iniciais e mesmos 3.000 passos, mudando só o otimizador:</p>
+<div id="cde2437b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:33:03.375751Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:33:03.375691Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:33:04.940405Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:33:04.940044Z&quot;}}" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>f_dificil <span class="op">=</span> funcoes[<span class="st">"sin(3x) + 0,5·cos(7x)"</span>]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>configs_uat <span class="op">=</span> {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD (lr = 0,01)"</span>: (<span class="kw">lambda</span> p: torch.optim.SGD(p, lr<span class="op">=</span><span class="fl">0.01</span>), CINZA),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SGD + momentum (lr = 0,01, β = 0,9)"</span>: (<span class="kw">lambda</span> p: torch.optim.SGD(p, lr<span class="op">=</span><span class="fl">0.01</span>, momentum<span class="op">=</span><span class="fl">0.9</span>), AZUL),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Adam (lr = 0,01)"</span>: (<span class="kw">lambda</span> p: torch.optim.Adam(p, lr<span class="op">=</span><span class="fl">0.01</span>), LARANJA),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="fl">4.5</span>), width_ratios<span class="op">=</span>[<span class="fl">1.3</span>, <span class="dv">1</span>])</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(x_plot, f_dificil(x_plot), color<span class="op">=</span>CINZA, lw<span class="op">=</span><span class="dv">6</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="st">"função real"</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nome, (cria_otimizador, cor) <span class="kw">in</span> configs_uat.items():</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    rede, historico <span class="op">=</span> aproxima(f_dificil, n_neuronios<span class="op">=</span><span class="dv">256</span>, cria_otimizador<span class="op">=</span>cria_otimizador)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        axes[<span class="dv">0</span>].plot(x_plot, rede(x_plot), color<span class="op">=</span>cor, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span>nome)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].plot(historico, color<span class="op">=</span>cor, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span>nome)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>nome<span class="sc">:&lt;38}</span><span class="ss"> MSE final = </span><span class="sc">{</span>historico[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.5f}</span><span class="ss">"</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"x"</span>, title<span class="op">=</span><span class="st">"Mesma rede, otimizadores diferentes"</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>, loc<span class="op">=</span><span class="st">"upper center"</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.15</span>), ncols<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].<span class="bu">set</span>(yscale<span class="op">=</span><span class="st">"log"</span>, xlabel<span class="op">=</span><span class="st">"passo"</span>, ylabel<span class="op">=</span><span class="st">"MSE (escala log)"</span>, title<span class="op">=</span><span class="st">"Perda durante o treino"</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>SGD (lr = 0,01)                        MSE final = 0.06749
+SGD + momentum (lr = 0,01, β = 0,9)    MSE final = 0.01236
+Adam (lr = 0,01)                       MSE final = 0.00265</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-12-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A rede é <strong>a mesma</strong> nos três casos: a capacidade de representar a função está lá. O que muda é se o otimizador consegue chegar até os pesos certos em 3.000 passos. É por isso que o teorema, sozinho, não basta: na prática, a escolha do <strong>otimizador</strong> e da <strong>taxa de aprendizado</strong> decide se a solução que existe é encontrada.</p>
+<p>Os <strong>picos</strong> na curva do Adam são normais com uma taxa de aprendizado relativamente alta: de tempos em tempos ele dá um passo grande demais, a perda sobe, e ele se recupera logo em seguida.</p>
+</section>
+<section id="e-em-mais-dimensões" class="level3">
+<h3 class="anchored" data-anchor-id="e-em-mais-dimensões">E em mais dimensões?</h3>
+<p>O teorema vale para funções de várias variáveis. Basta trocar a entrada de 1 para 2 números: uma rede <span class="math inline">\(2 \to 256 \to 1\)</span> aproximando a superfície <span class="math inline">\(f(x, y) = \sin(x)\cos(y)\)</span>.</p>
+<div id="20ea0ac4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:33:04.941387Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:33:04.941318Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:33:06.247808Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:33:06.247551Z&quot;}}" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>eixo <span class="op">=</span> torch.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">60</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> torch.meshgrid(eixo, eixo, indexing<span class="op">=</span><span class="st">"xy"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>entradas <span class="op">=</span> torch.stack([X.flatten(), Y.flatten()], dim<span class="op">=</span><span class="dv">1</span>)       <span class="co"># (3600, 2): cada linha é um ponto (x, y)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>alvo <span class="op">=</span> (torch.sin(X) <span class="op">*</span> torch.cos(Y)).flatten().unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>rede_2d <span class="op">=</span> nn.Sequential(nn.Linear(<span class="dv">2</span>, <span class="dv">256</span>), nn.ReLU(), nn.Linear(<span class="dv">256</span>, <span class="dv">1</span>))</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>otimizador <span class="op">=</span> torch.optim.Adam(rede_2d.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3000</span>):</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    otimizador.zero_grad()</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    perda <span class="op">=</span> F.mse_loss(rede_2d(entradas), alvo)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    perda.backward()</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    otimizador.step()</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    previsto <span class="op">=</span> rede_2d(entradas).reshape(<span class="dv">60</span>, <span class="dv">60</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>real <span class="op">=</span> alvo.reshape(<span class="dv">60</span>, <span class="dv">60</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="fl">4.5</span>))</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>extensao <span class="op">=</span> [<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>]</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, dados, titulo, cmap, lim <span class="kw">in</span> [</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    (axes[<span class="dv">0</span>], real, <span class="st">"função real: sin(x)·cos(y)"</span>, <span class="st">"RdBu_r"</span>, <span class="dv">1</span>),</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    (axes[<span class="dv">1</span>], previsto, <span class="st">"rede 2 → 256 → 1"</span>, <span class="st">"RdBu_r"</span>, <span class="dv">1</span>),</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    (axes[<span class="dv">2</span>], previsto <span class="op">-</span> real, <span class="ss">f"erro (MSE = </span><span class="sc">{</span>perda<span class="sc">.</span>item()<span class="sc">:.5f}</span><span class="ss">)"</span>, <span class="st">"RdBu_r"</span>, <span class="fl">0.1</span>),</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>]:</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> ax.imshow(dados, extent<span class="op">=</span>extensao, origin<span class="op">=</span><span class="st">"lower"</span>, cmap<span class="op">=</span>cmap, vmin<span class="op">=-</span>lim, vmax<span class="op">=</span>lim)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(title<span class="op">=</span>titulo, xlabel<span class="op">=</span><span class="st">"x"</span>, ylabel<span class="op">=</span><span class="st">"y"</span>)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">False</span>)</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    plt.colorbar(im, ax<span class="op">=</span>ax, shrink<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sua-vez-aproxime-qualquer-função" class="level3">
+<h3 class="anchored" data-anchor-id="sua-vez-aproxime-qualquer-função">Sua vez: aproxime qualquer função</h3>
+<p>Troque <code>minha_funcao</code> por qualquer função de <code>x</code> escrita com operações do PyTorch (<code>torch.sin</code>, <code>torch.exp</code>, <code>torch.abs</code>, <code>**</code>, …), escolha o número de neurônios e o intervalo, e veja até onde a rede chega.</p>
+<div id="fd9aace2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:33:06.248990Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:33:06.248927Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:33:06.936289Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:33:06.936025Z&quot;}}" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>minha_funcao <span class="op">=</span> <span class="kw">lambda</span> x: torch.sin(x <span class="op">**</span> <span class="dv">2</span>) <span class="op">*</span> torch.exp(<span class="op">-</span><span class="fl">0.1</span> <span class="op">*</span> x <span class="op">**</span> <span class="dv">2</span>)   <span class="co"># ← troque aqui</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>N_NEURONIOS <span class="op">=</span> <span class="dv">128</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>INTERVALO <span class="op">=</span> (<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>rede, historico <span class="op">=</span> aproxima(minha_funcao, n_neuronios<span class="op">=</span>N_NEURONIOS, intervalo<span class="op">=</span>INTERVALO, passos<span class="op">=</span><span class="dv">4000</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>x_sua <span class="op">=</span> torch.linspace(<span class="op">*</span>INTERVALO, <span class="dv">800</span>).unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="dv">4</span>))</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>ax.plot(x_sua, minha_funcao(x_sua), color<span class="op">=</span>CINZA, lw<span class="op">=</span><span class="dv">6</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="st">"sua função"</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_sua, rede(x_sua), color<span class="op">=</span>LARANJA, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="ss">f"rede (</span><span class="sc">{</span>N_NEURONIOS<span class="sc">}</span><span class="ss"> neurônios)"</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"x"</span>, title<span class="op">=</span><span class="ss">f"MSE final = </span><span class="sc">{</span>historico[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.5f}</span><span class="ss">"</span>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl3_otimizadores_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Com 128 neurônios e o intervalo <span class="math inline">\([-4, 4]\)</span>, a rede acerta o centro mas <strong>não pega as oscilações rápidas das bordas</strong>: ali <span class="math inline">\(\sin(x^2)\)</span> oscila cada vez mais rápido e faltam “dobras”. Experimente aumentar <code>N_NEURONIOS</code> (ou <code>passos</code> dentro de <code>aproxima</code>) e veja quanto custa capturar as bordas.</p>
+</section>
+</section>
+<section id="discussão" class="level2">
+<h2 class="anchored" data-anchor-id="discussão">7. Discussão</h2>
+<ul>
+<li>O <strong>otimizador</strong> é o objeto que aplica a atualização dos pesos. <code>torch.optim.SGD</code> é exatamente a regra <span class="math inline">\(\theta \leftarrow \theta - \eta \nabla L\)</span> da aula 2.</li>
+<li>Todo treino em PyTorch segue o padrão <code>zero_grad() → backward() → step()</code>. O <code>zero_grad()</code> é necessário porque o PyTorch <strong>soma</strong> os gradientes a cada <code>backward()</code>.</li>
+<li>O <strong><em>momentum</em></strong> acumula uma velocidade que amortece o zigue-zague e acelera nas direções consistentes.</li>
+<li>O <strong>Adam</strong> adapta a taxa de aprendizado de cada parâmetro. É o padrão sensato para começar.</li>
+<li>A <strong>taxa de aprendizado</strong> continua sendo o hiperparâmetro mais importante, para qualquer otimizador.</li>
+<li>O <strong>Teorema da Aproximação Universal</strong> garante que uma rede larga o bastante <em>pode</em> representar qualquer função contínua em um intervalo; é o <strong>otimizador</strong> que decide se essa solução é encontrada. Fora do intervalo de treino, a rede não sabe nada.</li>
+</ul>
+<section id="exercícios" class="level3">
+<h3 class="anchored" data-anchor-id="exercícios">Exercícios</h3>
+<ol type="1">
+<li>Na paisagem 2D, aumente o η do SGD para 0,045. O que acontece? Calcule: qual o maior η estável na direção <span class="math inline">\(\theta_2\)</span>? (Dica: o gradiente nessa direção é <span class="math inline">\(50\,\theta_2\)</span>.)</li>
+<li>Teste o <em>momentum</em> com β = 0,99 na paisagem 2D. Por que o caminho fica tão “solto”?</li>
+<li>Troque o Adam por <code>torch.optim.AdamW</code> e por <code>torch.optim.RMSprop</code> no MNIST. Algum é melhor com 2 épocas?</li>
+<li>Na seção 2, em vez de zerar os gradientes, divida-os por 2 depois do segundo <code>backward()</code>. Que gradiente você obtém? Essa é a ideia do <em>gradient accumulation</em>.</li>
+<li>Na célula “Sua vez”, qual o <strong>menor</strong> número de neurônios que deixa o MSE abaixo de 0,001 para a função <span class="math inline">\(\sin(3x) + 0{,}5\cos(7x)\)</span>? E se você trocar <code>nn.ReLU()</code> por <code>nn.Tanh()</code> dentro de <code>aproxima</code>?</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ftl-brazil-2026\.github\.io\/ebook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../deep-learning/dl2_como_a_rede_aprende.html" class="pagination-link" aria-label="Deep Learning 2 — Como a rede aprende">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Deep Learning 2 — Como a rede aprende</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../deep-learning/dl4_pipeline_de_treino.html" class="pagination-link" aria-label="Deep Learning 4">
+        <span class="nav-page-text">Deep Learning 4</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>SpaceTech Bootcamp · Emanuel Goulart</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

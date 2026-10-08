@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Deep Learning 4 – FTL-Brasil-SpaceTech-Bootcamp</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../state-of-art/index.html" rel="next">
+<link href="../deep-learning/dl3_otimizadores.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-41da928e5ec3fef6b8fa1ca56eed0ec2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">FTL-Brasil-SpaceTech-Bootcamp</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ftl-brazil-2026/ebook"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl4_pipeline_de_treino.html">Deep Learning 4</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Course Information</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/general-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Informações Gerais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/reading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Leituras</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standard Set Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/cli-utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilitários de CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/how-to-contribute.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Como Contribuir</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em GIS e Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 0 — Ecossistema geoespacial</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ecossistema Geoespacial</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/space_tech_ecossystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessao 0 - 19/08/2026</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 1 — Fundamentos em GIS</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/crs_and_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de Coordenadas de Referência e Projeções</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análise Espacial de Dados Vetoriais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 - Fundamentos em Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">STAC Catalogue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-Image_Processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 - Analises Espaciais Complexas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/dem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 - Series Temporais</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dados Multidimensionais e Séries Temporais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/unsupervised_ml_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unsupervised Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Machine Learning I</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos em Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl0_introducao_pytorch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 0 — Introdução ao PyTorch</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 1 — O que uma rede neural calcula</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl2_como_a_rede_aprende.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 2 — Como a rede aprende</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl3_otimizadores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 3 — Otimizadores no PyTorch</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl4_pipeline_de_treino.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Deep Learning 4</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../state-of-art/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessões de Convidados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guest-sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessões de Convidados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../awesome-geospatial/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Awesome Geospatial</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#requisitos-mínimos-para-um-pipeline-de-treino" id="toc-requisitos-mínimos-para-um-pipeline-de-treino" class="nav-link active" data-scroll-target="#requisitos-mínimos-para-um-pipeline-de-treino">Requisitos mínimos para um pipeline de treino</a></li>
+  <li><a href="#dataset-como-pegar-uma-amostra" id="toc-dataset-como-pegar-uma-amostra" class="nav-link" data-scroll-target="#dataset-como-pegar-uma-amostra">1. <code>Dataset</code>: como pegar <strong>uma</strong> amostra</a></li>
+  <li><a href="#dataloader-lotes-e-embaralhamento" id="toc-dataloader-lotes-e-embaralhamento" class="nav-link" data-scroll-target="#dataloader-lotes-e-embaralhamento">2. <code>DataLoader</code>: lotes e embaralhamento</a></li>
+  <li><a href="#treino-validação-e-teste" id="toc-treino-validação-e-teste" class="nav-link" data-scroll-target="#treino-validação-e-teste">3. Treino, validação e teste</a></li>
+  <li><a href="#o-laço-de-treino-em-pytorch-puro" id="toc-o-laço-de-treino-em-pytorch-puro" class="nav-link" data-scroll-target="#o-laço-de-treino-em-pytorch-puro">4. O laço de treino em PyTorch puro</a></li>
+  <li><a href="#primeiro-contato-com-o-overfitting" id="toc-primeiro-contato-com-o-overfitting" class="nav-link" data-scroll-target="#primeiro-contato-com-o-overfitting">5. Primeiro contato com o <em>overfitting</em></a></li>
+  <li><a href="#avaliação-final-no-teste" id="toc-avaliação-final-no-teste" class="nav-link" data-scroll-target="#avaliação-final-no-teste">6. Avaliação final no teste</a></li>
+  <li><a href="#o-mesmo-pipeline-com-pytorch-lightning" id="toc-o-mesmo-pipeline-com-pytorch-lightning" class="nav-link" data-scroll-target="#o-mesmo-pipeline-com-pytorch-lightning">7. O mesmo pipeline com PyTorch Lightning</a>
+  <ul class="collapse">
+  <li><a href="#nada-está-escondido-onde-foi-parar-cada-linha" id="toc-nada-está-escondido-onde-foi-parar-cada-linha" class="nav-link" data-scroll-target="#nada-está-escondido-onde-foi-parar-cada-linha">Nada está escondido: onde foi parar cada linha?</a></li>
+  </ul></li>
+  <li><a href="#discussão" id="toc-discussão" class="nav-link" data-scroll-target="#discussão">8. Discussão</a>
+  <ul class="collapse">
+  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios">Exercícios</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl4_pipeline_de_treino.html">Deep Learning 4</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Deep Learning 4</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="requisitos-mínimos-para-um-pipeline-de-treino" class="level2">
+<h2 class="anchored" data-anchor-id="requisitos-mínimos-para-um-pipeline-de-treino">Requisitos mínimos para um pipeline de treino</h2>
+<p>Link Colab</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/ml-dl/dl4_pipeline_de_treino.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Open In Colab</figcaption>
+</figure>
+</div>
+<p>Nas aulas 1 a 3 vimos cada peça separada: a rede (função), a perda, o <code>backward()</code> e o otimizador. Hoje montamos o <strong>pipeline completo</strong>, do dado bruto até o modelo treinado e avaliado, do jeito que se faz em projetos de verdade:</p>
+<ol type="1">
+<li><code>Dataset</code> e <code>DataLoader</code>: como o PyTorch entrega os dados para a rede</li>
+<li>Treino, validação e teste: para que serve cada um</li>
+<li>O laço de treino e o laço de avaliação em PyTorch puro</li>
+<li>Primeiro contato com o <strong><em>overfitting</em></strong></li>
+<li>Avaliação final no teste</li>
+<li>O mesmo pipeline com <strong>PyTorch Lightning</strong>, sem esconder nada</li>
+</ol>
+<div id="e8d50454" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:56.492793Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:56.492599Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:56.497460Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:56.496915Z&quot;}}" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># no Google Colab, o PyTorch já vem instalado; o Lightning não</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"google.colab"</span> <span class="kw">in</span> sys.modules:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>pip install <span class="op">-</span>q lightning</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="e6787e3c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:56.499633Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:56.499487Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.168015Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.167597Z&quot;}}" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> Dataset, DataLoader, Subset, random_split</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision <span class="im">import</span> datasets, transforms</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, ConfusionMatrixDisplay</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># cores e estilo dos gráficos (as mesmas das aulas de Machine Learning)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>AZUL, LARANJA, VERDE, CINZA, TINTA <span class="op">=</span> <span class="st">"#2a78d6"</span>, <span class="st">"#eb6834"</span>, <span class="st">"#1baf7a"</span>, <span class="st">"#898781"</span>, <span class="st">"#52514e"</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.spines.top"</span>: <span class="va">False</span>, <span class="st">"axes.spines.right"</span>: <span class="va">False</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.edgecolor"</span>: CINZA, <span class="st">"axes.labelcolor"</span>: TINTA,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"xtick.color"</span>: TINTA, <span class="st">"ytick.color"</span>: TINTA,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.grid"</span>: <span class="va">True</span>, <span class="st">"grid.color"</span>: <span class="st">"#e6e5e1"</span>, <span class="st">"figure.dpi"</span>: <span class="dv">110</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># CPU é mais rápida que a GPU do Mac (MPS) para uma rede tão pequena; no Colab com GPU, usamos CUDA</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>DEVICE <span class="op">=</span> <span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>DEVICE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>'cpu'</code></pre>
+</div>
+</div>
+</section>
+<section id="dataset-como-pegar-uma-amostra" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-como-pegar-uma-amostra">1. <code>Dataset</code>: como pegar <strong>uma</strong> amostra</h2>
+<p>Um <code>Dataset</code> do PyTorch é qualquer objeto que saiba responder duas perguntas:</p>
+<ul>
+<li><code>__len__</code>: quantas amostras existem?</li>
+<li><code>__getitem__(i)</code>: qual é a amostra número <code>i</code>? (devolve a entrada e o rótulo)</li>
+</ul>
+<p>Só isso. Para entender, vamos escrever o nosso próprio <code>Dataset</code> a partir dos arrays brutos do MNIST (imagens em <code>uint8</code>, de 0 a 255):</p>
+<div id="d874ef2c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.169024Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.168924Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.180222Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.179892Z&quot;}}" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mnist_bruto <span class="op">=</span> datasets.MNIST(root<span class="op">=</span><span class="st">"data"</span>, train<span class="op">=</span><span class="va">True</span>, download<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"imagens: </span><span class="sc">{</span><span class="bu">tuple</span>(mnist_bruto.data.shape)<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>mnist_bruto<span class="sc">.</span>data<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">   rótulos: </span><span class="sc">{</span><span class="bu">tuple</span>(mnist_bruto.targets.shape)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DigitosDataset(Dataset):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, imagens, rotulos):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.imagens <span class="op">=</span> imagens          <span class="co"># (N, 28, 28), uint8 de 0 a 255</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.rotulos <span class="op">=</span> rotulos          <span class="co"># (N,)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.rotulos)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, i):</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.imagens[i].<span class="bu">float</span>().div(<span class="dv">255</span>).unsqueeze(<span class="dv">0</span>)   <span class="co"># (1, 28, 28), float de 0 a 1</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> <span class="va">self</span>.rotulos[i]</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x, y</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>meu_dataset <span class="op">=</span> DigitosDataset(mnist_bruto.data, mnist_bruto.targets)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>x0, y0 <span class="op">=</span> meu_dataset[<span class="dv">0</span>]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"len = </span><span class="sc">{</span><span class="bu">len</span>(meu_dataset)<span class="sc">}</span><span class="ss">   amostra 0: x </span><span class="sc">{</span><span class="bu">tuple</span>(x0.shape)<span class="sc">}</span><span class="ss">, y = </span><span class="sc">{</span>y0<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>imagens: (60000, 28, 28) torch.uint8   rótulos: (60000,)
+len = 60000   amostra 0: x (1, 28, 28), y = 5</code></pre>
+</div>
+</div>
+<p>O <code>datasets.MNIST</code> do <code>torchvision</code> que usamos nas aulas anteriores é <strong>exatamente</strong> isso: uma classe com <code>__len__</code> e <code>__getitem__</code>, mais o download e o <code>transform</code> (<code>ToTensor()</code> faz a mesma conversão de 0–255 para 0–1). Daqui em diante usamos a versão pronta:</p>
+<div id="a5682ec5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.181195Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.181140Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.191412Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.191068Z&quot;}}" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>treino_completo <span class="op">=</span> datasets.MNIST(root<span class="op">=</span><span class="st">"data"</span>, train<span class="op">=</span><span class="va">True</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>transforms.ToTensor())</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>teste <span class="op">=</span> datasets.MNIST(root<span class="op">=</span><span class="st">"data"</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>transforms.ToTensor())</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>x_tv, y_tv <span class="op">=</span> treino_completo[<span class="dv">0</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"mesma amostra? </span><span class="sc">{</span>torch<span class="sc">.</span>equal(x_tv, x0) <span class="kw">and</span> y_tv <span class="op">==</span> y0<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>mesma amostra? True</code></pre>
+</div>
+</div>
+</section>
+<section id="dataloader-lotes-e-embaralhamento" class="level2">
+<h2 class="anchored" data-anchor-id="dataloader-lotes-e-embaralhamento">2. <code>DataLoader</code>: lotes e embaralhamento</h2>
+<p>O <code>Dataset</code> entrega uma amostra por vez; o <code>DataLoader</code> junta várias em um <strong>lote</strong> (<em>batch</em>) e, se pedirmos, <strong>embaralha</strong> a ordem a cada época. Embaralhar evita que a rede veja sempre a mesma sequência (por exemplo, todos os “0” juntos), o que atrapalharia a descida do gradiente estocástica.</p>
+<div id="05f4f36d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.192356Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.192300Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.199627Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.199332Z&quot;}}" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>carregador <span class="op">=</span> DataLoader(treino_completo, batch_size<span class="op">=</span><span class="dv">64</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x_lote, y_lote <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(carregador))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"um lote: x </span><span class="sc">{</span><span class="bu">tuple</span>(x_lote.shape)<span class="sc">}</span><span class="ss">   y </span><span class="sc">{</span><span class="bu">tuple</span>(y_lote.shape)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"lotes por época: </span><span class="sc">{</span><span class="bu">len</span>(carregador)<span class="sc">}</span><span class="ss">  (60000 / 64, arredondado para cima)"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">rótulos do 1º lote, 1ª vez:  </span><span class="sc">{</span><span class="bu">next</span>(<span class="bu">iter</span>(carregador))[<span class="dv">1</span>][:<span class="dv">12</span>]<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"rótulos do 1º lote, 2ª vez:  </span><span class="sc">{</span><span class="bu">next</span>(<span class="bu">iter</span>(carregador))[<span class="dv">1</span>][:<span class="dv">12</span>]<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">  ← nova ordem a cada época"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>um lote: x (64, 1, 28, 28)   y (64,)
+lotes por época: 938  (60000 / 64, arredondado para cima)
+
+rótulos do 1º lote, 1ª vez:  [9, 9, 4, 7, 7, 9, 4, 7, 9, 1, 7, 5]
+rótulos do 1º lote, 2ª vez:  [6, 4, 7, 6, 7, 8, 8, 1, 3, 6, 7, 9]  ← nova ordem a cada época</code></pre>
+</div>
+</div>
+</section>
+<section id="treino-validação-e-teste" class="level2">
+<h2 class="anchored" data-anchor-id="treino-validação-e-teste">3. Treino, validação e teste</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Conjunto</th>
+<th>Tamanho</th>
+<th>Para que serve</th>
+<th>Quantas vezes usamos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Treino</strong></td>
+<td>50.000</td>
+<td>ajustar os <strong>pesos</strong> (<code>backward()</code> + <code>step()</code>)</td>
+<td>a cada passo</td>
+</tr>
+<tr class="even">
+<td><strong>Validação</strong></td>
+<td>10.000</td>
+<td>acompanhar o treino e escolher <strong>hiperparâmetros</strong> (lr, nº de épocas, tamanho da rede)</td>
+<td>a cada época</td>
+</tr>
+<tr class="odd">
+<td><strong>Teste</strong></td>
+<td>10.000</td>
+<td>estimar o desempenho em dados <strong>novos</strong></td>
+<td><strong>uma única vez</strong>, no final</td>
+</tr>
+</tbody>
+</table>
+<p>Se escolhermos hiperparâmetros olhando o teste, ele deixa de ser “dado novo” e a nota fica otimista (a mesma ideia de <em>data leakage</em> da aula de ML supervisionado).</p>
+<p>O MNIST já vem com um teste separado (10 mil imagens). Separamos as 60 mil de treino em 50 mil + 10 mil com <code>random_split</code>. Aqui um sorteio aleatório é adequado porque as imagens são <strong>independentes</strong> entre si. Na aula da balneabilidade, com dados <strong>temporais</strong>, precisávamos separar pelo tempo.</p>
+<div id="04059aa3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.200519Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.200469Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.202854Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.202491Z&quot;}}" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gerador <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">42</span>)        <span class="co"># divisão reprodutível</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>treino, validacao <span class="op">=</span> random_split(treino_completo, [<span class="dv">50000</span>, <span class="dv">10000</span>], generator<span class="op">=</span>gerador)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>carregador_treino <span class="op">=</span> DataLoader(treino, batch_size<span class="op">=</span><span class="dv">64</span>, shuffle<span class="op">=</span><span class="va">True</span>, generator<span class="op">=</span>torch.Generator().manual_seed(<span class="dv">0</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>carregador_val <span class="op">=</span> DataLoader(validacao, batch_size<span class="op">=</span><span class="dv">1000</span>)     <span class="co"># sem embaralhar: a ordem não importa na avaliação</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>carregador_teste <span class="op">=</span> DataLoader(teste, batch_size<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"treino: </span><span class="sc">{</span><span class="bu">len</span>(treino)<span class="sc">}</span><span class="ss">   validação: </span><span class="sc">{</span><span class="bu">len</span>(validacao)<span class="sc">}</span><span class="ss">   teste: </span><span class="sc">{</span><span class="bu">len</span>(teste)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>treino: 50000   validação: 10000   teste: 10000</code></pre>
+</div>
+</div>
+</section>
+<section id="o-laço-de-treino-em-pytorch-puro" class="level2">
+<h2 class="anchored" data-anchor-id="o-laço-de-treino-em-pytorch-puro">4. O laço de treino em PyTorch puro</h2>
+<p>Duas funções, que vamos reaproveitar até o fim da aula:</p>
+<ul>
+<li><code>treina_uma_epoca</code>: para cada lote, <strong>forward → perda → backward → step</strong> (o padrão da aula 3).</li>
+<li><code>avalia</code>: calcula perda e acurácia <strong>sem treinar</strong>. Duas linhas novas:
+<ul>
+<li><code>modelo.eval()</code> coloca a rede em modo de avaliação (desliga camadas que se comportam diferente no treino, como <em>Dropout</em> e <em>BatchNorm</em>; o nosso MLP não tem, mas é um hábito obrigatório). <code>modelo.train()</code> volta ao modo de treino.</li>
+<li><code>torch.no_grad()</code> desliga o <em>autograd</em>: não vamos chamar <code>backward()</code>, então não precisamos registrar as operações. Fica mais rápido e gasta menos memória.</li>
+</ul></li>
+</ul>
+<div id="9ac9cc31" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.203688Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.203644Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.206020Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.205705Z&quot;}}" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cria_mlp(escondida<span class="op">=</span><span class="dv">128</span>):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nn.Sequential(nn.Flatten(), nn.Linear(<span class="dv">784</span>, escondida), nn.ReLU(), nn.Linear(escondida, <span class="dv">10</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> treina_uma_epoca(modelo, carregador, otimizador):</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    modelo.train()                                   <span class="co"># modo de treino</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    soma_perda, acertos, total <span class="op">=</span> <span class="fl">0.0</span>, <span class="dv">0</span>, <span class="dv">0</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x, y <span class="kw">in</span> carregador:                          <span class="co"># para cada lote...</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        x, y <span class="op">=</span> x.to(DEVICE), y.to(DEVICE)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> modelo(x)                           <span class="co"># 1. forward</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        perda <span class="op">=</span> F.cross_entropy(logits, y)           <span class="co"># 2. perda</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        otimizador.zero_grad()                       <span class="co"># 3. zera gradientes</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        perda.backward()                             <span class="co"># 4. backward</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        otimizador.step()                            <span class="co"># 5. atualiza os pesos</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        soma_perda <span class="op">+=</span> perda.item() <span class="op">*</span> <span class="bu">len</span>(y)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        acertos <span class="op">+=</span> (logits.argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> y).<span class="bu">sum</span>().item()</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        total <span class="op">+=</span> <span class="bu">len</span>(y)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> soma_perda <span class="op">/</span> total, acertos <span class="op">/</span> total</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()                                     <span class="co"># desliga o autograd na função inteira</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> avalia(modelo, carregador):</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    modelo.<span class="bu">eval</span>()                                    <span class="co"># modo de avaliação</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    soma_perda, acertos, total <span class="op">=</span> <span class="fl">0.0</span>, <span class="dv">0</span>, <span class="dv">0</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x, y <span class="kw">in</span> carregador:</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        x, y <span class="op">=</span> x.to(DEVICE), y.to(DEVICE)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> modelo(x)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>        soma_perda <span class="op">+=</span> F.cross_entropy(logits, y, reduction<span class="op">=</span><span class="st">"sum"</span>).item()</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        acertos <span class="op">+=</span> (logits.argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> y).<span class="bu">sum</span>().item()</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        total <span class="op">+=</span> <span class="bu">len</span>(y)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> soma_perda <span class="op">/</span> total, acertos <span class="op">/</span> total</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="862ace78" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.206841Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.206799Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:03.250576Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:03.250124Z&quot;}}" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> cria_mlp().to(DEVICE)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>otimizador <span class="op">=</span> torch.optim.Adam(modelo.parameters(), lr<span class="op">=</span><span class="fl">1e-3</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>EPOCAS <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>historico <span class="op">=</span> []</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>inicio <span class="op">=</span> time.time()</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoca <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, EPOCAS <span class="op">+</span> <span class="dv">1</span>):                   <span class="co"># para cada época...</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    perda_tr, acc_tr <span class="op">=</span> treina_uma_epoca(modelo, carregador_treino, otimizador)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    perda_val, acc_val <span class="op">=</span> avalia(modelo, carregador_val)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    historico.append({<span class="st">"época"</span>: epoca, <span class="st">"perda treino"</span>: perda_tr, <span class="st">"perda validação"</span>: perda_val,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"acurácia treino"</span>: acc_tr, <span class="st">"acurácia validação"</span>: acc_val})</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"época </span><span class="sc">{</span>epoca<span class="sc">}</span><span class="ss">: perda treino = </span><span class="sc">{</span>perda_tr<span class="sc">:.3f}</span><span class="ss">  perda val = </span><span class="sc">{</span>perda_val<span class="sc">:.3f}</span><span class="ss">  "</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"acc treino = </span><span class="sc">{</span>acc_tr<span class="sc">:.2%}</span><span class="ss">  acc val = </span><span class="sc">{</span>acc_val<span class="sc">:.2%}</span><span class="ss">"</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">tempo total: </span><span class="sc">{</span>time<span class="sc">.</span>time() <span class="op">-</span> inicio<span class="sc">:.0f}</span><span class="ss"> s"</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>historico <span class="op">=</span> pd.DataFrame(historico).set_index(<span class="st">"época"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>época 1: perda treino = 0.364  perda val = 0.220  acc treino = 90.32%  acc val = 93.57%
+época 2: perda treino = 0.172  perda val = 0.159  acc treino = 95.04%  acc val = 95.23%
+época 3: perda treino = 0.122  perda val = 0.137  acc treino = 96.42%  acc val = 96.13%
+época 4: perda treino = 0.093  perda val = 0.115  acc treino = 97.26%  acc val = 96.46%
+época 5: perda treino = 0.075  perda val = 0.112  acc treino = 97.78%  acc val = 96.52%
+
+tempo total: 5 s</code></pre>
+</div>
+</div>
+<div id="0e02f7b4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:03.251492Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:03.251436Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:03.331091Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:03.330772Z&quot;}}" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plota_curvas(hist, titulo, marca<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="dv">4</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax, metrica <span class="kw">in</span> <span class="bu">zip</span>(axes, [<span class="st">"perda"</span>, <span class="st">"acurácia"</span>]):</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        ax.plot(hist.index, hist[<span class="ss">f"</span><span class="sc">{</span>metrica<span class="sc">}</span><span class="ss"> treino"</span>], color<span class="op">=</span>AZUL, lw<span class="op">=</span><span class="dv">2</span>, marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"treino"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        ax.plot(hist.index, hist[<span class="ss">f"</span><span class="sc">{</span>metrica<span class="sc">}</span><span class="ss"> validação"</span>], color<span class="op">=</span>LARANJA, lw<span class="op">=</span><span class="dv">2</span>, marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"validação"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> marca <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>            ax.axvline(marca, color<span class="op">=</span>CINZA, ls<span class="op">=</span><span class="st">"--"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"época"</span>, title<span class="op">=</span>metrica.capitalize())</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        ax.xaxis.set_major_locator(plt.MaxNLocator(integer<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].yaxis.set_major_formatter(<span class="kw">lambda</span> v, _: <span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:.0%}</span><span class="ss">"</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    plt.suptitle(titulo, y<span class="op">=</span><span class="fl">1.02</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>plota_curvas(historico, <span class="st">"MLP 784 → 128 → 10, Adam, 50 mil imagens de treino"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl4_pipeline_de_treino_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As duas curvas andam juntas: a rede melhora no treino <strong>e</strong> em dados que não usou para ajustar os pesos. É o comportamento saudável.</p>
+<p>Por que na época 1 a validação é <em>melhor</em> que o treino? A perda de treino é a <strong>média ao longo da época</strong>, incluindo os primeiros lotes, quando a rede ainda chutava. A validação é medida <strong>no fim</strong> da época, com a rede já treinada naquela época inteira.</p>
+</section>
+<section id="primeiro-contato-com-o-overfitting" class="level2">
+<h2 class="anchored" data-anchor-id="primeiro-contato-com-o-overfitting">5. Primeiro contato com o <em>overfitting</em></h2>
+<p>O que acontece se a rede for <strong>grande</strong> e os dados de treino forem <strong>poucos</strong>? Vamos treinar uma rede bem maior (784 → 512 → 10, com ~407 mil parâmetros) com apenas <strong>1.000 imagens</strong> de treino, por 60 épocas. A validação continua com as mesmas 10 mil imagens.</p>
+<div id="017e8906" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:03.332189Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:03.332118Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:12.893737Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:12.893339Z&quot;}}" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>poucas <span class="op">=</span> Subset(treino, <span class="bu">range</span>(<span class="dv">1000</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>carregador_poucas <span class="op">=</span> DataLoader(poucas, batch_size<span class="op">=</span><span class="dv">64</span>, shuffle<span class="op">=</span><span class="va">True</span>, generator<span class="op">=</span>torch.Generator().manual_seed(<span class="dv">0</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>modelo_grande <span class="op">=</span> cria_mlp(escondida<span class="op">=</span><span class="dv">512</span>).to(DEVICE)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"parâmetros: </span><span class="sc">{</span><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> modelo_grande.parameters())<span class="sc">:,}</span><span class="ss"> para </span><span class="sc">{</span><span class="bu">len</span>(poucas)<span class="sc">}</span><span class="ss"> imagens de treino"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>otimizador_grande <span class="op">=</span> torch.optim.Adam(modelo_grande.parameters(), lr<span class="op">=</span><span class="fl">1e-3</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>hist_overfit <span class="op">=</span> []</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoca <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">61</span>):</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    perda_tr, acc_tr <span class="op">=</span> treina_uma_epoca(modelo_grande, carregador_poucas, otimizador_grande)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    perda_val, acc_val <span class="op">=</span> avalia(modelo_grande, carregador_val)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    hist_overfit.append({<span class="st">"época"</span>: epoca, <span class="st">"perda treino"</span>: perda_tr, <span class="st">"perda validação"</span>: perda_val,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"acurácia treino"</span>: acc_tr, <span class="st">"acurácia validação"</span>: acc_val})</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>hist_overfit <span class="op">=</span> pd.DataFrame(hist_overfit).set_index(<span class="st">"época"</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>melhor_epoca <span class="op">=</span> hist_overfit[<span class="st">"perda validação"</span>].idxmin()</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"menor perda de validação na época </span><span class="sc">{</span>melhor_epoca<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>hist_overfit<span class="sc">.</span>loc[melhor_epoca, <span class="st">'perda validação'</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"época 60: perda treino = </span><span class="sc">{</span>hist_overfit[<span class="st">'perda treino'</span>]<span class="sc">.</span>iloc[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">   perda validação = </span><span class="sc">{</span>hist_overfit[<span class="st">'perda validação'</span>]<span class="sc">.</span>iloc[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"época 60: acurácia treino = </span><span class="sc">{</span>hist_overfit[<span class="st">'acurácia treino'</span>]<span class="sc">.</span>iloc[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.1%}</span><span class="ss">   acurácia validação = </span><span class="sc">{</span>hist_overfit[<span class="st">'acurácia validação'</span>]<span class="sc">.</span>iloc[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.1%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>parâmetros: 407,050 para 1000 imagens de treino
+menor perda de validação na época 11: 0.386
+época 60: perda treino = 0.0014   perda validação = 0.486
+época 60: acurácia treino = 100.0%   acurácia validação = 89.6%</code></pre>
+</div>
+</div>
+<div id="21d2e224" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:12.894793Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:12.894726Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:12.963201Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:12.962898Z&quot;}}" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plota_curvas(hist_overfit, <span class="ss">f"Overfitting: rede grande, só 1.000 imagens de treino (linha tracejada = época </span><span class="sc">{</span>melhor_epoca<span class="sc">}</span><span class="ss">)"</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>             marca<span class="op">=</span>melhor_epoca)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl4_pipeline_de_treino_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Isso é <em>overfitting</em> (sobreajuste):</strong></p>
+<ul>
+<li>a perda de <strong>treino</strong> cai até quase zero e a acurácia de treino chega a 100%: a rede <strong>decorou</strong> as 1.000 imagens;</li>
+<li>a perda de <strong>validação</strong> para de cair (linha tracejada) e depois <strong>sobe</strong>: a rede fica cada vez mais confiante em respostas que não generalizam;</li>
+<li>a acurácia de validação <strong>estaciona</strong> em ~90%, bem abaixo dos ~97% da seção 4: com 1.000 imagens a rede não tem exemplos suficientes para generalizar, por maior que seja.</li>
+</ul>
+<p>Sem um conjunto de validação, só veríamos a curva azul e acharíamos que o modelo está ótimo. A validação mostra <strong>quando parar</strong> (a ideia do <em>early stopping</em>). Outras armas contra o overfitting: mais dados, redes menores e regularização (<em>dropout</em>, <em>weight decay</em>), que veremos mais adiante.</p>
+</section>
+<section id="avaliação-final-no-teste" class="level2">
+<h2 class="anchored" data-anchor-id="avaliação-final-no-teste">6. Avaliação final no teste</h2>
+<p>Voltamos ao modelo da seção 4 (50 mil imagens, 5 épocas) e usamos o teste <strong>uma única vez</strong>.</p>
+<div id="a7f0a283" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:12.964207Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:12.964141Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:13.224581Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:13.224197Z&quot;}}" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>perda_teste, acc_teste <span class="op">=</span> avalia(modelo, carregador_teste)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"TESTE: perda = </span><span class="sc">{</span>perda_teste<span class="sc">:.3f}</span><span class="ss">   acurácia = </span><span class="sc">{</span>acc_teste<span class="sc">:.2%}</span><span class="ss">"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predicoes(modelo, carregador):</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    modelo.<span class="bu">eval</span>()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    ys, preds <span class="op">=</span> [], []</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x, y <span class="kw">in</span> carregador:</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        preds.append(modelo(x.to(DEVICE)).argmax(dim<span class="op">=</span><span class="dv">1</span>).cpu())</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        ys.append(y)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.cat(ys), torch.cat(preds)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>y_teste, pred_teste <span class="op">=</span> predicoes(modelo, carregador_teste)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>TESTE: perda = 0.097   acurácia = 97.22%</code></pre>
+</div>
+</div>
+<div id="8b1ea94b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:13.225590Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:13.225530Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:13.294454Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:13.294149Z&quot;}}" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">7.5</span>, <span class="fl">6.5</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay(confusion_matrix(y_teste, pred_teste)).plot(ax<span class="op">=</span>ax, cmap<span class="op">=</span><span class="st">"Blues"</span>, colorbar<span class="op">=</span><span class="va">False</span>, values_format<span class="op">=</span><span class="st">"d"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"dígito previsto"</span>, ylabel<span class="op">=</span><span class="st">"dígito real"</span>, title<span class="op">=</span><span class="st">"Matriz de confusão no teste (10 mil imagens)"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">False</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl4_pipeline_de_treino_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="7720c8e1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:13.295554Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:13.295486Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:13.465724Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:13.465410Z&quot;}}" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>erros <span class="op">=</span> torch.nonzero(pred_teste <span class="op">!=</span> y_teste).flatten()[:<span class="dv">18</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">6</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="fl">6.5</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, i <span class="kw">in</span> <span class="bu">zip</span>(axes.flat, erros):</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    ax.imshow(teste[i][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">"gray_r"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"real </span><span class="sc">{</span>y_teste[i]<span class="sc">.</span>item()<span class="sc">}</span><span class="ss"> → previsto </span><span class="sc">{</span>pred_teste[i]<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>, color<span class="op">=</span>LARANJA, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="ss">f"Alguns dos </span><span class="sc">{</span>(pred_teste <span class="op">!=</span> y_teste)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span>item()<span class="sc">}</span><span class="ss"> erros no teste"</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl4_pipeline_de_treino_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Muitos erros são dígitos que até um humano hesitaria em classificar. Para ir além de ~97–98% em imagens, precisamos de redes que <strong>entendam a estrutura espacial</strong> da imagem (vizinhança entre pixels), em vez de achatá-la em um vetor: as <strong>redes convolucionais</strong>, assunto das próximas aulas.</p>
+</section>
+<section id="o-mesmo-pipeline-com-pytorch-lightning" class="level2">
+<h2 class="anchored" data-anchor-id="o-mesmo-pipeline-com-pytorch-lightning">7. O mesmo pipeline com PyTorch Lightning</h2>
+<p>Todo projeto em PyTorch acaba reescrevendo as mesmas coisas: o laço de épocas, <code>model.train()</code>/<code>model.eval()</code>, <code>torch.no_grad()</code>, mover dados para a GPU, registrar métricas, salvar <em>checkpoints</em>… O <strong>PyTorch Lightning</strong> organiza esse código padrão para você. <strong>Você continua escrevendo PyTorch</strong>: só coloca cada pedaço em um método com nome fixo, e o <code>Trainer</code> executa o laço.</p>
+<p>Um <code>LightningModule</code> tem quatro métodos principais:</p>
+<ul>
+<li><code>forward</code>: a rede (aula 1);</li>
+<li><code>training_step</code>: o que fazer com <strong>um lote</strong> de treino; devolve a perda;</li>
+<li><code>validation_step</code> / <code>test_step</code>: o que fazer com um lote de validação/teste;</li>
+<li><code>configure_optimizers</code>: qual otimizador usar (aula 3).</li>
+</ul>
+<div id="b629036d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:13.466832Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:13.466768Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:13.774340Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:13.773942Z&quot;}}" data-execution_count="15">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> lightning <span class="im">as</span> L</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lightning.pytorch.loggers <span class="im">import</span> CSVLogger</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lightning.pytorch.utilities.model_summary <span class="im">import</span> ModelSummary</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># deixa a saída do Lightning mais limpa na aula</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"lightning.pytorch"</span>).setLevel(logging.ERROR)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>, <span class="st">".*does not have many workers.*"</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>, <span class="st">".*GPU available but not used.*"</span>)     <span class="co"># a GPU do Mac (MPS), que não usamos aqui</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>, <span class="st">".*LeafSpec.*"</span>)                       <span class="co"># aviso interno do Lightning</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MLPMnist(L.LightningModule):</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, escondida<span class="op">=</span><span class="dv">128</span>, lr<span class="op">=</span><span class="fl">1e-3</span>):</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.save_hyperparameters()                         <span class="co"># guarda escondida e lr junto com o modelo</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.rede <span class="op">=</span> cria_mlp(escondida)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.rede(x)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _passo(<span class="va">self</span>, lote, etapa):</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        x, y <span class="op">=</span> lote</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> <span class="va">self</span>(x)                                    <span class="co"># forward</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        perda <span class="op">=</span> F.cross_entropy(logits, y)                  <span class="co"># perda</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>        acc <span class="op">=</span> (logits.argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> y).<span class="bu">float</span>().mean()</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.log(<span class="ss">f"</span><span class="sc">{</span>etapa<span class="sc">}</span><span class="ss">_perda"</span>, perda, on_step<span class="op">=</span><span class="va">False</span>, on_epoch<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.log(<span class="ss">f"</span><span class="sc">{</span>etapa<span class="sc">}</span><span class="ss">_acc"</span>, acc, on_step<span class="op">=</span><span class="va">False</span>, on_epoch<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> perda</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> training_step(<span class="va">self</span>, lote, indice):</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._passo(lote, <span class="st">"treino"</span>)                  <span class="co"># o Lightning faz backward() e step() com a perda devolvida</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> validation_step(<span class="va">self</span>, lote, indice):</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._passo(lote, <span class="st">"val"</span>)</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_step(<span class="va">self</span>, lote, indice):</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._passo(lote, <span class="st">"teste"</span>)</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> configure_optimizers(<span class="va">self</span>):</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> torch.optim.Adam(<span class="va">self</span>.parameters(), lr<span class="op">=</span><span class="va">self</span>.hparams.lr)</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>modelo_l <span class="op">=</span> MLPMnist()</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ModelSummary(modelo_l))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  | Name | Type       | Params | Mode  | FLOPs
+----------------------------------------------------
+0 | rede | Sequential | 101 K  | train | 0    
+----------------------------------------------------
+101 K     Trainable params
+0         Non-trainable params
+101 K     Total params
+0.407     Total estimated model params size (MB)
+5         Modules in train mode
+0         Modules in eval mode
+0         Total Flops</code></pre>
+</div>
+</div>
+<div id="b1033c73" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:13.775297Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:13.775237Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:20.382173Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:20.381876Z&quot;}}" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>trainer <span class="op">=</span> L.Trainer(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    max_epochs<span class="op">=</span><span class="dv">5</span>,                                           <span class="co"># o laço de épocas</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    accelerator<span class="op">=</span><span class="st">"gpu"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    logger<span class="op">=</span>CSVLogger(<span class="st">"logs"</span>, name<span class="op">=</span><span class="st">"mlp_mnist"</span>),             <span class="co"># salva as métricas em um CSV</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    enable_progress_bar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    enable_checkpointing<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>inicio <span class="op">=</span> time.time()</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>trainer.fit(modelo_l, carregador_treino, carregador_val)    <span class="co"># treino + validação a cada época</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"tempo total: </span><span class="sc">{</span>time<span class="sc">.</span>time() <span class="op">-</span> inicio<span class="sc">:.0f}</span><span class="ss"> s"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>tempo total: 7 s</code></pre>
+</div>
+</div>
+<div id="35ddc185" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:20.383250Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:20.383179Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:20.447145Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:20.446772Z&quot;}}" data-execution_count="17">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>metricas_l <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>trainer<span class="sc">.</span>logger<span class="sc">.</span>log_dir<span class="sc">}</span><span class="ss">/metrics.csv"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>hist_l <span class="op">=</span> metricas_l.groupby(<span class="st">"epoch"</span>).first().rename(columns<span class="op">=</span>{</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"treino_perda"</span>: <span class="st">"perda treino"</span>, <span class="st">"val_perda"</span>: <span class="st">"perda validação"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"treino_acc"</span>: <span class="st">"acurácia treino"</span>, <span class="st">"val_acc"</span>: <span class="st">"acurácia validação"</span>})</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>hist_l.index <span class="op">=</span> hist_l.index <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>hist_l.index.name <span class="op">=</span> <span class="st">"época"</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>plota_curvas(hist_l, <span class="st">"O mesmo MLP treinado com o Lightning"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl4_pipeline_de_treino_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="21bed61a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:20.448063Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:20.448000Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:20.582440Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:20.582115Z&quot;}}" data-execution_count="18">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>resultado <span class="op">=</span> trainer.test(modelo_l, carregador_teste, verbose<span class="op">=</span><span class="va">False</span>)[<span class="dv">0</span>]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"TESTE (Lightning):    perda = </span><span class="sc">{</span>resultado[<span class="st">'teste_perda'</span>]<span class="sc">:.3f}</span><span class="ss">   acurácia = </span><span class="sc">{</span>resultado[<span class="st">'teste_acc'</span>]<span class="sc">:.2%}</span><span class="ss">"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"TESTE (PyTorch puro): perda = </span><span class="sc">{</span>perda_teste<span class="sc">:.3f}</span><span class="ss">   acurácia = </span><span class="sc">{</span>acc_teste<span class="sc">:.2%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>TESTE (Lightning):    perda = 0.087   acurácia = 97.40%
+TESTE (PyTorch puro): perda = 0.097   acurácia = 97.22%</code></pre>
+</div>
+</div>
+<p>Os resultados ficam muito próximos dos do PyTorch puro, como esperado: é a <strong>mesma rede, a mesma perda e o mesmo otimizador</strong>. (Não são idênticos porque a inicialização e a ordem dos lotes não são exatamente as mesmas.)</p>
+<section id="nada-está-escondido-onde-foi-parar-cada-linha" class="level3">
+<h3 class="anchored" data-anchor-id="nada-está-escondido-onde-foi-parar-cada-linha">Nada está escondido: onde foi parar cada linha?</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>PyTorch puro (seção 4)</th>
+<th>Lightning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>for epoca in range(EPOCAS):</code></td>
+<td><code>Trainer(max_epochs=5)</code></td>
+</tr>
+<tr class="even">
+<td><code>for x, y in carregador_treino:</code></td>
+<td><code>trainer.fit(modelo, carregador_treino, ...)</code> chama <code>training_step</code> para cada lote</td>
+</tr>
+<tr class="odd">
+<td><code>modelo.train()</code> / <code>modelo.eval()</code></td>
+<td>automático, antes do treino e da validação</td>
+</tr>
+<tr class="even">
+<td><code>x, y = x.to(DEVICE), y.to(DEVICE)</code></td>
+<td>automático (<code>accelerator=...</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>logits = modelo(x)</code></td>
+<td><code>forward</code></td>
+</tr>
+<tr class="even">
+<td><code>perda = F.cross_entropy(logits, y)</code></td>
+<td>dentro de <code>training_step</code>, que <strong>devolve</strong> a perda</td>
+</tr>
+<tr class="odd">
+<td><code>otimizador.zero_grad()</code> → <code>perda.backward()</code> → <code>otimizador.step()</code></td>
+<td>automático, com a perda devolvida por <code>training_step</code></td>
+</tr>
+<tr class="even">
+<td><code>torch.optim.Adam(modelo.parameters(), lr=1e-3)</code></td>
+<td><code>configure_optimizers</code></td>
+</tr>
+<tr class="odd">
+<td><code>@torch.no_grad()</code> + laço da função <code>avalia</code></td>
+<td><code>validation_step</code> / <code>test_step</code> (já sem gradiente)</td>
+</tr>
+<tr class="even">
+<td><code>avalia(modelo, carregador_val)</code> a cada época</td>
+<td><code>trainer.fit(..., carregador_val)</code></td>
+</tr>
+<tr class="odd">
+<td><code>historico.append(...)</code> e <code>print(...)</code></td>
+<td><code>self.log(...)</code> + <code>CSVLogger</code></td>
+</tr>
+<tr class="even">
+<td><code>avalia(modelo, carregador_teste)</code></td>
+<td><code>trainer.test(modelo, carregador_teste)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Escrever o laço à mão primeiro é o melhor jeito de aprender. Em projetos maiores, o Lightning poupa código repetido e traz de graça treino em várias GPUs, <em>checkpoints</em>, <em>early stopping</em> e registro de métricas.</p>
+</section>
+</section>
+<section id="discussão" class="level2">
+<h2 class="anchored" data-anchor-id="discussão">8. Discussão</h2>
+<ul>
+<li><code>Dataset</code> define <strong>como pegar uma amostra</strong>; <code>DataLoader</code> cuida dos <strong>lotes</strong> e do <strong>embaralhamento</strong>.</li>
+<li><strong>Treino</strong> ajusta os pesos, <strong>validação</strong> acompanha o treino e escolhe hiperparâmetros, <strong>teste</strong> é usado uma única vez no final.</li>
+<li>O laço de treino é sempre: épocas → lotes → <em>forward</em> → perda → <code>zero_grad</code> → <code>backward</code> → <code>step</code>. A avaliação usa <code>model.eval()</code> e <code>torch.no_grad()</code>.</li>
+<li><strong>Overfitting</strong> aparece quando a perda de treino continua caindo e a de validação sobe: a rede decorou o treino. As curvas de validação dizem quando parar.</li>
+<li>O <strong>Lightning</strong> organiza o mesmo código em métodos com nome fixo; o <code>Trainer</code> executa o laço.</li>
+</ul>
+<section id="exercícios" class="level3">
+<h3 class="anchored" data-anchor-id="exercícios">Exercícios</h3>
+<ol type="1">
+<li>Na seção 5, troque 1.000 por 10.000 imagens de treino. O overfitting diminui? Em que época a perda de validação é mínima?</li>
+<li>Adicione <code>nn.Dropout(0.5)</code> depois da <code>nn.ReLU()</code> da rede grande e repita a seção 5. O que muda nas curvas? (Por que agora <code>model.train()</code>/<code>model.eval()</code> fazem diferença?)</li>
+<li>No Lightning, adicione o <em>callback</em> <code>L.pytorch.callbacks.EarlyStopping(monitor="val_perda", patience=3)</code> ao <code>Trainer</code> e treine a rede grande com 1.000 imagens por até 60 épocas. Em que época ele para?</li>
+<li>Troque <code>cria_mlp</code> por uma rede com duas camadas escondidas (784 → 256 → 128 → 10). A acurácia no teste melhora?</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ftl-brazil-2026\.github\.io\/ebook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../deep-learning/dl3_otimizadores.html" class="pagination-link" aria-label="Deep Learning 3 — Otimizadores no PyTorch">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Deep Learning 3 — Otimizadores no PyTorch</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../state-of-art/index.html" class="pagination-link" aria-label="Estado da Arte (State-of-Art)">
+        <span class="nav-page-text">Estado da Arte (State-of-Art)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>SpaceTech Bootcamp · Emanuel Goulart</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

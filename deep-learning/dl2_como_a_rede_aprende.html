@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Deep Learning 2 — Como a rede aprende – FTL-Brasil-SpaceTech-Bootcamp</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../deep-learning/dl3_otimizadores.html" rel="next">
+<link href="../deep-learning/dl1_o_que_a_rede_calcula.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-41da928e5ec3fef6b8fa1ca56eed0ec2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">FTL-Brasil-SpaceTech-Bootcamp</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ftl-brazil-2026/ebook"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl2_como_a_rede_aprende.html">Deep Learning 2 — Como a rede aprende</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Course Information</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/general-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Informações Gerais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/reading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Leituras</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standard Set Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/cli-utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilitários de CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/how-to-contribute.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Como Contribuir</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em GIS e Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 0 — Ecossistema geoespacial</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ecossistema Geoespacial</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/space_tech_ecossystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessao 0 - 19/08/2026</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 1 — Fundamentos em GIS</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/crs_and_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de Coordenadas de Referência e Projeções</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análise Espacial de Dados Vetoriais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 - Fundamentos em Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">STAC Catalogue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-Image_Processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 - Analises Espaciais Complexas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/dem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 - Series Temporais</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dados Multidimensionais e Séries Temporais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/unsupervised_ml_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unsupervised Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Machine Learning I</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos em Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl0_introducao_pytorch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 0 — Introdução ao PyTorch</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 1 — O que uma rede neural calcula</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl2_como_a_rede_aprende.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Deep Learning 2 — Como a rede aprende</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl3_otimizadores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 3 — Otimizadores no PyTorch</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl4_pipeline_de_treino.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 4</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../state-of-art/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessões de Convidados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guest-sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessões de Convidados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../awesome-geospatial/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Awesome Geospatial</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#funções-de-perda-loss" id="toc-funções-de-perda-loss" class="nav-link active" data-scroll-target="#funções-de-perda-loss">1. Funções de perda (Loss)</a>
+  <ul class="collapse">
+  <li><a href="#regressão-erro-quadrático-médio-mse" id="toc-regressão-erro-quadrático-médio-mse" class="nav-link" data-scroll-target="#regressão-erro-quadrático-médio-mse">Regressão: erro quadrático médio (MSE)</a></li>
+  <li><a href="#classificação-entropia-cruzada-cross-entropy" id="toc-classificação-entropia-cruzada-cross-entropy" class="nav-link" data-scroll-target="#classificação-entropia-cruzada-cross-entropy">Classificação: entropia cruzada (<em>cross-entropy</em>)</a></li>
+  </ul></li>
+  <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link" data-scroll-target="#gradient-descent">Gradient Descent</a>
+  <ul class="collapse">
+  <li><a href="#em-duas-dimensões" id="toc-em-duas-dimensões" class="nav-link" data-scroll-target="#em-duas-dimensões">Em duas dimensões</a></li>
+  </ul></li>
+  <li><a href="#retropropagação-backpropagation-a-regra-da-cadeia-camada-por-camada" id="toc-retropropagação-backpropagation-a-regra-da-cadeia-camada-por-camada" class="nav-link" data-scroll-target="#retropropagação-backpropagation-a-regra-da-cadeia-camada-por-camada">Retropropagação (<em>backpropagation</em>): a regra da cadeia, camada por camada</a>
+  <ul class="collapse">
+  <li><a href="#o-pytorch-faz-isso-sozinho-autograd" id="toc-o-pytorch-faz-isso-sozinho-autograd" class="nav-link" data-scroll-target="#o-pytorch-faz-isso-sozinho-autograd">O PyTorch faz isso sozinho: <em>autograd</em></a></li>
+  </ul></li>
+  <li><a href="#treinando-o-mlp-do-mnist-na-raça" id="toc-treinando-o-mlp-do-mnist-na-raça" class="nav-link" data-scroll-target="#treinando-o-mlp-do-mnist-na-raça">Treinando o MLP do MNIST na raça</a></li>
+  <li><a href="#discussão" id="toc-discussão" class="nav-link" data-scroll-target="#discussão">5. Discussão</a>
+  <ul class="collapse">
+  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios">Exercícios</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl2_como_a_rede_aprende.html">Deep Learning 2 — Como a rede aprende</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Deep Learning 2 — Como a rede aprende</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Link Colab</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/ml-dl/dl2_como_a_rede_aprende.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Open In Colab</figcaption>
+</figure>
+</div>
+<p>Na aula 1 vimos que uma rede neural é uma função com muitos parâmetros (101.770 no nosso MLP do MNIST) e que, com pesos aleatórios, ela chuta ~10% para cada dígito. Hoje vamos ver <strong>como os pesos são ajustados</strong>.</p>
+<p>O ciclo do aprendizado tem três peças:</p>
+<ol type="1">
+<li><strong>Função de perda</strong> (<em>loss</em>): um número que mede o quanto a rede está errando</li>
+<li><strong>Gradiente</strong>: em que direção mexer cada peso para a perda diminuir (calculado pela <strong>retropropagação</strong>)</li>
+<li><strong>Atualização</strong>: dar um pequeno passo nessa direção (<strong>descida do gradiente</strong>)</li>
+</ol>
+<p>Repetindo esse ciclo milhares de vezes, a rede aprende.</p>
+<div id="3745d96b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:26.658206Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:26.658036Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.557560Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.557080Z&quot;}}" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision <span class="im">import</span> datasets, transforms</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>AZUL, LARANJA, VERDE, CINZA, TINTA <span class="op">=</span> <span class="st">"#2a78d6"</span>, <span class="st">"#eb6834"</span>, <span class="st">"#1baf7a"</span>, <span class="st">"#898781"</span>, <span class="st">"#52514e"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.spines.top"</span>: <span class="va">False</span>, <span class="st">"axes.spines.right"</span>: <span class="va">False</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.edgecolor"</span>: CINZA, <span class="st">"axes.labelcolor"</span>: TINTA,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"xtick.color"</span>: TINTA, <span class="st">"ytick.color"</span>: TINTA,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.grid"</span>: <span class="va">True</span>, <span class="st">"grid.color"</span>: <span class="st">"#e6e5e1"</span>, <span class="st">"figure.dpi"</span>: <span class="dv">110</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(precision<span class="op">=</span><span class="dv">3</span>, suppress<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># o mesmo MNIST e o mesmo MLP da aula 1</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>treino <span class="op">=</span> datasets.MNIST(root<span class="op">=</span><span class="st">"data"</span>, train<span class="op">=</span><span class="va">True</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>transforms.ToTensor())</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>teste <span class="op">=</span> datasets.MNIST(root<span class="op">=</span><span class="st">"data"</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>transforms.ToTensor())</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cria_mlp():</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nn.Sequential(nn.Flatten(), nn.Linear(<span class="dv">784</span>, <span class="dv">128</span>), nn.ReLU(), nn.Linear(<span class="dv">128</span>, <span class="dv">10</span>))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> cria_mlp()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="funções-de-perda-loss" class="level2">
+<h2 class="anchored" data-anchor-id="funções-de-perda-loss">1. Funções de perda (Loss)</h2>
+<p>A <strong>perda</strong> compara a previsão <span class="math inline">\(\hat{y}\)</span> com o valor verdadeiro <span class="math inline">\(y\)</span> e devolve <strong>um único número</strong>: quanto menor, melhor. Treinar a rede é procurar os pesos que deixam a perda mínima.</p>
+<section id="regressão-erro-quadrático-médio-mse" class="level3">
+<h3 class="anchored" data-anchor-id="regressão-erro-quadrático-médio-mse">Regressão: erro quadrático médio (MSE)</h3>
+<p>Quando a saída é um número contínuo (temperatura, chuva, preço):</p>
+<p><span class="math display">\[\text{MSE} = \frac{1}{N}\sum_{i=1}^{N}(\hat{y}_i - y_i)^2\]</span></p>
+<p>Elevar ao quadrado deixa todo erro positivo e pune muito mais os erros grandes.</p>
+<div id="835c7084" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.558752Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.558653Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.561048Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.560690Z&quot;}}" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>y_real <span class="op">=</span> torch.tensor([<span class="fl">2.0</span>, <span class="fl">3.5</span>, <span class="fl">1.0</span>])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y_prev <span class="op">=</span> torch.tensor([<span class="fl">2.5</span>, <span class="fl">3.0</span>, <span class="fl">2.0</span>])</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>erros <span class="op">=</span> y_prev <span class="op">-</span> y_real</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"erros:            </span><span class="sc">{</span>erros<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"erros ao quadrado: </span><span class="sc">{</span>(erros <span class="op">**</span> <span class="dv">2</span>)<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MSE à mão:   </span><span class="sc">{</span>(erros <span class="op">**</span> <span class="dv">2</span>)<span class="sc">.</span>mean()<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"nn.MSELoss:  </span><span class="sc">{</span>nn<span class="sc">.</span>MSELoss()(y_prev, y_real)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>erros:            [0.5, -0.5, 1.0]
+erros ao quadrado: [0.25, 0.25, 1.0]
+MSE à mão:   0.5000
+nn.MSELoss:  0.5000</code></pre>
+</div>
+</div>
+</section>
+<section id="classificação-entropia-cruzada-cross-entropy" class="level3">
+<h3 class="anchored" data-anchor-id="classificação-entropia-cruzada-cross-entropy">Classificação: entropia cruzada (<em>cross-entropy</em>)</h3>
+<p>Vimos na aula anterior, que com o MNIST dataset, e a nossa MLP, a rede devolve 10 <em>logits</em>, que logo na saída a softmax transforma em probabilidades.</p>
+<p>Assim, a entropia cruzada olha só para a probabilidade que a rede deu à <strong>classe correta</strong>, <span class="math inline">\(p_{\text{correta}}\)</span>:</p>
+<p><span class="math display">\[\text{CE} = -\log(p_{\text{correta}})\]</span></p>
+<ul>
+<li>Se a rede dá 100% para a classe certa: <span class="math inline">\(-\log(1) = 0\)</span>, perda zero.</li>
+<li>Se dá quase 0% para a classe certa: <span class="math inline">\(-\log(0{,}001) \approx 6{,}9\)</span>, perda enorme.</li>
+</ul>
+<p>Vamos calcular à mão para uma imagem e comparar com o PyTorch. No PyTorch, <code>F.cross_entropy</code> recebe os <strong>logits</strong> diretamente (ele aplica a softmax internamente).</p>
+<div id="559c65ed" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.561944Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.561899Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.564176Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.563891Z&quot;}}" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>imagem, rotulo <span class="op">=</span> treino[<span class="dv">0</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> modelo(imagem.unsqueeze(<span class="dv">0</span>))            <span class="co"># (1, 10)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>probs <span class="op">=</span> torch.softmax(logits, dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>p_correta <span class="op">=</span> probs[<span class="dv">0</span>, rotulo]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"rótulo verdadeiro: </span><span class="sc">{</span>rotulo<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"probabilidade dada ao dígito </span><span class="sc">{</span>rotulo<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>p_correta<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"CE à mão:         -log(</span><span class="sc">{</span>p_correta<span class="sc">:.4f}</span><span class="ss">) = </span><span class="sc">{</span><span class="op">-</span>torch<span class="sc">.</span>log(p_correta)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F.cross_entropy:  </span><span class="sc">{</span>F<span class="sc">.</span>cross_entropy(logits, torch.tensor([rotulo]))<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>rótulo verdadeiro: 5
+probabilidade dada ao dígito 5: 0.1020
+CE à mão:         -log(0.1020) = 2.2828
+F.cross_entropy:  2.2828</code></pre>
+</div>
+</div>
+<div id="b3187948" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.565161Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.565114Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.620013Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.619735Z&quot;}}" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.linspace(<span class="fl">0.005</span>, <span class="dv">1</span>, <span class="dv">400</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ax.plot(p, <span class="op">-</span>np.log(p), color<span class="op">=</span>AZUL, lw<span class="op">=</span><span class="fl">2.5</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> valor, texto, cor <span class="kw">in</span> [(<span class="fl">0.9</span>, <span class="st">"confiante e certa"</span>, VERDE), (<span class="fl">0.1</span>, <span class="st">"chute (10%)"</span>, CINZA), (<span class="fl">0.01</span>, <span class="st">"confiante e errada"</span>, LARANJA)]:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    ax.scatter(valor, <span class="op">-</span>np.log(valor), s<span class="op">=</span><span class="dv">80</span>, color<span class="op">=</span>cor, zorder<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    ax.annotate(<span class="ss">f"</span><span class="sc">{</span>texto<span class="sc">}</span><span class="ch">\n</span><span class="ss">p = </span><span class="sc">{</span>valor<span class="sc">}</span><span class="ss">  perda = </span><span class="sc">{</span><span class="op">-</span>np<span class="sc">.</span>log(valor)<span class="sc">:.2f}</span><span class="ss">"</span>, (valor, <span class="op">-</span>np.log(valor)),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                xytext<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">10</span>), textcoords<span class="op">=</span><span class="st">"offset points"</span>, color<span class="op">=</span>TINTA, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"probabilidade dada à classe correta"</span>, ylabel<span class="op">=</span><span class="st">"entropia cruzada = -log(p)"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>       title<span class="op">=</span><span class="st">"Probabilidade vs Loss com Cross-Entropy"</span>, xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="fl">1.05</span>))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl2_como_a_rede_aprende_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Teste de sanidade:</strong> uma rede que ainda não aprendeu nada dá ~10% para cada um dos 10 dígitos, então a perda média deveria ser perto de <span class="math inline">\(-\log(0{,}1) = \ln(10) \approx 2{,}30\)</span>. Se a perda inicial de um modelo for muito diferente disso, alguma coisa está errada no código.</p>
+<div id="1c934a62" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.621090Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.621024Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.637099Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.636821Z&quot;}}" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lote_grande <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(DataLoader(treino, batch_size<span class="op">=</span><span class="dv">1000</span>)))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>x_lote, y_lote <span class="op">=</span> lote_grande</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    perda_inicial <span class="op">=</span> F.cross_entropy(modelo(x_lote), y_lote)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"perda média da rede não treinada (1000 imagens): </span><span class="sc">{</span>perda_inicial<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ln(10) = </span><span class="sc">{</span>np<span class="sc">.</span>log(<span class="dv">10</span>)<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>perda média da rede não treinada (1000 imagens): 2.298
+ln(10) = 2.303</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="gradient-descent" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-descent">Gradient Descent</h2>
+<p>Imagine a perda como uma paisagem, em que cada combinação de pesos é um ponto, e a altura é a perda. Queremos chegar ao vale o mais rápido possível. Assim, o <strong>gradiente</strong> <span class="math inline">\(\nabla L\)</span> aponta para onde a perda <strong>sobe</strong> mais rápido. O truque disso, é que vamos apontar no sentido <strong>contrário</strong>:</p>
+<p><span class="math display">\[\theta_i \leftarrow \theta - \eta \, \nabla L(\theta)\]</span></p>
+<ul>
+<li><span class="math inline">\(\theta\)</span>: os parâmetros (pesos e vieses)</li>
+<li><span class="math inline">\(\eta\)</span> (eta): a <strong>taxa de aprendizado</strong> (<em>learning rate</em>), o tamanho do passo</li>
+</ul>
+<p>Começamos com um único parâmetro e uma perda simples, <span class="math inline">\(L(\theta) = (\theta - 3)^2\)</span>, cujo mínimo está em <span class="math inline">\(\theta = 3\)</span> e cujo gradiente é <span class="math inline">\(\nabla L = 2(\theta - 3)\)</span>.</p>
+<div id="2b77c0a4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.638164Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.638111Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.724533Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.724178Z&quot;}}" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> perda_1d(theta):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (theta <span class="op">-</span> <span class="dv">3</span>) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gradiente_1d(theta):</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> (theta <span class="op">-</span> <span class="dv">3</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> descida_1d(theta0, eta, passos<span class="op">=</span><span class="dv">15</span>):</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    caminho <span class="op">=</span> [theta0]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(passos):</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        caminho.append(caminho[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> eta <span class="op">*</span> gradiente_1d(caminho[<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(caminho)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>thetas <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">300</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">4</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (eta, titulo) <span class="kw">in</span> <span class="bu">zip</span>(axes, [(<span class="fl">0.03</span>, <span class="st">"η = 0,03: pequeno demais"</span>), (<span class="fl">0.3</span>, <span class="st">"η = 0,3: bom"</span>), (<span class="fl">1.05</span>, <span class="st">"η = 1,05: grande demais"</span>)]):</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    caminho <span class="op">=</span> descida_1d(theta0<span class="op">=-</span><span class="fl">1.0</span>, eta<span class="op">=</span>eta)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    ax.plot(thetas, perda_1d(thetas), color<span class="op">=</span>CINZA, lw<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    ax.plot(caminho, perda_1d(caminho), color<span class="op">=</span>LARANJA, lw<span class="op">=</span><span class="dv">1</span>, marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    ax.scatter(caminho[<span class="dv">0</span>], perda_1d(caminho[<span class="dv">0</span>]), s<span class="op">=</span><span class="dv">90</span>, color<span class="op">=</span>AZUL, zorder<span class="op">=</span><span class="dv">3</span>, label<span class="op">=</span><span class="st">"início"</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(title<span class="op">=</span>titulo, xlabel<span class="op">=</span><span class="st">"θ"</span>, ylim<span class="op">=</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">40</span>), xlim<span class="op">=</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">9</span>))</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    ax.text(<span class="fl">0.03</span>, <span class="fl">0.95</span>, <span class="ss">f"após 15 passos: θ = </span><span class="sc">{</span>caminho[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.2f}</span><span class="ss">"</span>, transform<span class="op">=</span>ax.transAxes, va<span class="op">=</span><span class="st">"top"</span>, color<span class="op">=</span>TINTA)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"perda L(θ)"</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>, loc<span class="op">=</span><span class="st">"upper right"</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl2_como_a_rede_aprende_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>η pequeno demais:</strong> chega lá, mas devagar (muitos passos = muito tempo de treino).</li>
+<li><strong>η bom:</strong> chega rápido ao mínimo <span class="math inline">\(\theta = 3\)</span>.</li>
+<li><strong>η grande demais:</strong> cada passo <strong>passa do ponto</strong> e cai mais longe do outro lado: a perda explode (<em>divergência</em>).</li>
+</ul>
+<section id="em-duas-dimensões" class="level3">
+<h3 class="anchored" data-anchor-id="em-duas-dimensões">Em duas dimensões</h3>
+<p>Uma rede de verdade tem milhares de parâmetros, mas a ideia é a mesma. Com 2 parâmetros dá para desenhar a paisagem como um mapa de curvas de nível. Usamos <span class="math inline">\(L(\theta_1, \theta_2) = \theta_1^2 + 25\,\theta_2^2\)</span>, um vale <strong>alongado</strong>: muito íngreme na direção <span class="math inline">\(\theta_2\)</span> e quase plano na direção <span class="math inline">\(\theta_1\)</span>. Paisagens assim são comuns em redes neurais.</p>
+<div id="c324a500" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.725559Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.725490Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.810897Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.810522Z&quot;}}" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> perda_2d(t1, t2):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t1 <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">25</span> <span class="op">*</span> t2 <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gradiente_2d(t1, t2):</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([<span class="dv">2</span> <span class="op">*</span> t1, <span class="dv">50</span> <span class="op">*</span> t2])</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> descida_2d(inicio, eta, passos<span class="op">=</span><span class="dv">30</span>):</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    caminho <span class="op">=</span> [np.array(inicio, dtype<span class="op">=</span><span class="bu">float</span>)]</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(passos):</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        caminho.append(caminho[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> eta <span class="op">*</span> gradiente_2d(<span class="op">*</span>caminho[<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(caminho)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>T1, T2 <span class="op">=</span> np.meshgrid(np.linspace(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">300</span>), np.linspace(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">300</span>))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="fl">4.5</span>))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, eta <span class="kw">in</span> <span class="bu">zip</span>(axes, [<span class="fl">0.01</span>, <span class="fl">0.035</span>]):</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    caminho <span class="op">=</span> descida_2d([<span class="op">-</span><span class="fl">4.5</span>, <span class="fl">1.0</span>], eta)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    ax.contour(T1, T2, perda_2d(T1, T2), levels<span class="op">=</span>np.logspace(<span class="op">-</span><span class="dv">1</span>, <span class="fl">1.8</span>, <span class="dv">12</span>), colors<span class="op">=</span>CINZA, linewidths<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    ax.plot(caminho[:, <span class="dv">0</span>], caminho[:, <span class="dv">1</span>], color<span class="op">=</span>LARANJA, marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">4</span>, lw<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    ax.scatter(<span class="dv">0</span>, <span class="dv">0</span>, marker<span class="op">=</span><span class="st">"*"</span>, s<span class="op">=</span><span class="dv">250</span>, color<span class="op">=</span>VERDE, zorder<span class="op">=</span><span class="dv">3</span>, label<span class="op">=</span><span class="st">"mínimo"</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    ax.scatter(<span class="op">*</span>caminho[<span class="dv">0</span>], s<span class="op">=</span><span class="dv">80</span>, color<span class="op">=</span>AZUL, zorder<span class="op">=</span><span class="dv">3</span>, label<span class="op">=</span><span class="st">"início"</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(title<span class="op">=</span><span class="ss">f"η = </span><span class="sc">{</span>eta<span class="sc">}</span><span class="ss">: 30 passos, perda final = </span><span class="sc">{</span>perda_2d(<span class="op">*</span>caminho[<span class="op">-</span><span class="dv">1</span>])<span class="sc">:.3f}</span><span class="ss">"</span>.replace(<span class="st">"."</span>, <span class="st">","</span>), xlabel<span class="op">=</span><span class="st">"θ₁"</span>, ylabel<span class="op">=</span><span class="st">"θ₂"</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">False</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>, loc<span class="op">=</span><span class="st">"lower right"</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl2_como_a_rede_aprende_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Com η pequeno, o caminho é suave mas não chega ao mínimo em 30 passos. Com η maior, ele anda mais rápido em <span class="math inline">\(\theta_1\)</span> mas faz <strong>zigue-zague</strong> em <span class="math inline">\(\theta_2\)</span>, a direção íngreme. Não existe um η perfeito para as duas direções ao mesmo tempo. Na aula 3 veremos otimizadores (<em>momentum</em>, Adam) que resolvem isso.</p>
+</section>
+</section>
+<section id="retropropagação-backpropagation-a-regra-da-cadeia-camada-por-camada" class="level2">
+<h2 class="anchored" data-anchor-id="retropropagação-backpropagation-a-regra-da-cadeia-camada-por-camada">Retropropagação (<em>backpropagation</em>): a regra da cadeia, camada por camada</h2>
+<p>Para usar a descida do gradiente precisamos de <span class="math inline">\(\frac{\partial L}{\partial w}\)</span> para <strong>cada</strong> peso. A retropropagação calcula isso de forma eficiente usando a <strong>regra da cadeia</strong>: se <span class="math inline">\(L\)</span> depende de <span class="math inline">\(\hat{y}\)</span>, que depende de <span class="math inline">\(h\)</span>, que depende de <span class="math inline">\(w\)</span>, então</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w} = \frac{\partial L}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial h} \cdot \frac{\partial h}{\partial w}\]</span></p>
+<p>Vamos fazer à mão uma rede minúscula, com <strong>só dois pesos</strong>:</p>
+<p><span class="math display">\[z = w_1 x \qquad h = \text{ReLU}(z) \qquad \hat{y} = w_2 h \qquad L = (\hat{y} - y)^2\]</span></p>
+<p>com <span class="math inline">\(x = 2\)</span>, <span class="math inline">\(y = 1\)</span>, <span class="math inline">\(w_1 = 0{,}5\)</span> e <span class="math inline">\(w_2 = 0{,}8\)</span>.</p>
+<div id="01bddc81" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.811883Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.811826Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.814089Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.813780Z&quot;}}" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> <span class="fl">2.0</span>, <span class="fl">1.0</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>w1, w2 <span class="op">=</span> <span class="fl">0.5</span>, <span class="fl">0.8</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># forward pass: da entrada para a perda</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> w1 <span class="op">*</span> x</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="bu">max</span>(<span class="fl">0.0</span>, z)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> w2 <span class="op">*</span> h</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> (y_hat <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"FORWARD"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  z = w1·x = </span><span class="sc">{</span>z<span class="sc">:.3f}</span><span class="ss">   h = ReLU(z) = </span><span class="sc">{</span>h<span class="sc">:.3f}</span><span class="ss">   ŷ = w2·h = </span><span class="sc">{</span>y_hat<span class="sc">:.3f}</span><span class="ss">   L = (ŷ - y)² = </span><span class="sc">{</span>L<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># backward pass: da perda para os pesos, multiplicando derivadas locais</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>dL_dyhat <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (y_hat <span class="op">-</span> y)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>dyhat_dw2 <span class="op">=</span> h</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>dyhat_dh <span class="op">=</span> w2</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>dh_dz <span class="op">=</span> <span class="fl">1.0</span> <span class="cf">if</span> z <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.0</span>          <span class="co"># derivada da ReLU</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>dz_dw1 <span class="op">=</span> x</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>dL_dw2 <span class="op">=</span> dL_dyhat <span class="op">*</span> dyhat_dw2</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>dL_dw1 <span class="op">=</span> dL_dyhat <span class="op">*</span> dyhat_dh <span class="op">*</span> dh_dz <span class="op">*</span> dz_dw1</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">BACKWARD (regra da cadeia)"</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  ∂L/∂ŷ = 2(ŷ - y) = </span><span class="sc">{</span>dL_dyhat<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  ∂L/∂w2 = ∂L/∂ŷ · h = </span><span class="sc">{</span>dL_dyhat<span class="sc">:.3f}</span><span class="ss"> × </span><span class="sc">{</span>dyhat_dw2<span class="sc">:.3f}</span><span class="ss"> = </span><span class="sc">{</span>dL_dw2<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  ∂L/∂w1 = ∂L/∂ŷ · w2 · ReLU'(z) · x = </span><span class="sc">{</span>dL_dyhat<span class="sc">:.3f}</span><span class="ss"> × </span><span class="sc">{</span>dyhat_dh<span class="sc">:.3f}</span><span class="ss"> × </span><span class="sc">{</span>dh_dz<span class="sc">:.0f}</span><span class="ss"> × </span><span class="sc">{</span>dz_dw1<span class="sc">:.0f}</span><span class="ss"> = </span><span class="sc">{</span>dL_dw1<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>FORWARD
+  z = w1·x = 1.000   h = ReLU(z) = 1.000   ŷ = w2·h = 0.800   L = (ŷ - y)² = 0.0400
+
+BACKWARD (regra da cadeia)
+  ∂L/∂ŷ = 2(ŷ - y) = -0.400
+  ∂L/∂w2 = ∂L/∂ŷ · h = -0.400 × 1.000 = -0.4000
+  ∂L/∂w1 = ∂L/∂ŷ · w2 · ReLU'(z) · x = -0.400 × 0.800 × 1 × 2 = -0.6400</code></pre>
+</div>
+</div>
+<section id="o-pytorch-faz-isso-sozinho-autograd" class="level3">
+<h3 class="anchored" data-anchor-id="o-pytorch-faz-isso-sozinho-autograd">O PyTorch faz isso sozinho: <em>autograd</em></h3>
+<p>Marcando os pesos com <code>requires_grad=True</code>, o PyTorch <strong>registra</strong> cada operação do forward pass. Ao chamar <code>L.backward()</code>, ele percorre esse registro de trás para frente aplicando a regra da cadeia, e guarda cada derivada no atributo <code>.grad</code> do peso correspondente. Os números têm que bater com os nossos:</p>
+<div id="ff780d77" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.814952Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.814902Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.824954Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.824679Z&quot;}}">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>w1_t <span class="op">=</span> torch.tensor(<span class="fl">0.5</span>, requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>w2_t <span class="op">=</span> torch.tensor(<span class="fl">0.8</span>, requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>L_t <span class="op">=</span> (w2_t <span class="op">*</span> torch.relu(w1_t <span class="op">*</span> x) <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">## aqui ele computa os gradientes de forma automatica</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>L_t.backward()</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"∂L/∂w1: à mão = </span><span class="sc">{</span>dL_dw1<span class="sc">:.4f}</span><span class="ss">   autograd = </span><span class="sc">{</span>w1_t<span class="sc">.</span>grad<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"∂L/∂w2: à mão = </span><span class="sc">{</span>dL_dw2<span class="sc">:.4f}</span><span class="ss">   autograd = </span><span class="sc">{</span>w2_t<span class="sc">.</span>grad<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>∂L/∂w1: à mão = -0.6400   autograd = -0.6400
+∂L/∂w2: à mão = -0.4000   autograd = -0.4000</code></pre>
+</div>
+</div>
+<p>Os dois gradientes são <strong>negativos</strong>: aumentar <span class="math inline">\(w_1\)</span> e <span class="math inline">\(w_2\)</span> diminui a perda (a previsão 0,8 está abaixo do alvo 1,0). Um passo de descida do gradiente com <span class="math inline">\(\eta = 0{,}1\)</span>:</p>
+<div id="c9ad66ce" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.825975Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.825920Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.827860Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.827579Z&quot;}}" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():                        <span class="co"># a atualização em si não deve ser registrada pelo autograd</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    w1_t <span class="op">-=</span> eta <span class="op">*</span> w1_t.grad</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    w2_t <span class="op">-=</span> eta <span class="op">*</span> w2_t.grad</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    L_novo <span class="op">=</span> (w2_t <span class="op">*</span> torch.relu(w1_t <span class="op">*</span> x) <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"novos pesos: w1 = </span><span class="sc">{</span>w1_t<span class="sc">:.3f}</span><span class="ss">, w2 = </span><span class="sc">{</span>w2_t<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"perda: </span><span class="sc">{</span>L<span class="sc">:.4f}</span><span class="ss"> → </span><span class="sc">{</span>L_novo<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>novos pesos: w1 = 0.564, w2 = 0.840
+perda: 0.0400 → 0.0028</code></pre>
+</div>
+</div>
+<p><strong>Um passo, e a perda caiu de 0,04 para ~0,003.</strong> Isso é o aprendizado inteiro: forward, perda, backward, atualização. Agora vamos fazer o mesmo com os 101.770 parâmetros do MLP do MNIST.</p>
+</section>
+</section>
+<section id="treinando-o-mlp-do-mnist-na-raça" class="level2">
+<h2 class="anchored" data-anchor-id="treinando-o-mlp-do-mnist-na-raça">Treinando o MLP do MNIST na raça</h2>
+<p>Primeiro, com apenas um único step, forward, perda e <code>backward()</code>. Cada parâmetro da rede ganha um <code>.grad</code> com <strong>exatamente o mesmo formato</strong> do parâmetro.</p>
+<div id="42eabd91" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.828705Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.828657Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.833643Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.833395Z&quot;}}">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> cria_mlp()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>loader <span class="op">=</span> DataLoader(treino, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                    batch_size<span class="op">=</span><span class="dv">64</span>, </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                    shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>x_lote, y_lote <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(loader))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>perda <span class="op">=</span> F.cross_entropy(modelo(x_lote), y_lote)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>perda.backward()</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"perda do lote: </span><span class="sc">{</span>perda<span class="sc">.</span>item()<span class="sc">:.3f}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nome, p <span class="kw">in</span> modelo.named_parameters():</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>nome<span class="sc">:&lt;10}</span><span class="ss"> parâmetro </span><span class="sc">{</span><span class="bu">str</span>(<span class="bu">tuple</span>(p.shape))<span class="sc">:&lt;12}</span><span class="ss"> gradiente </span><span class="sc">{</span><span class="bu">str</span>(<span class="bu">tuple</span>(p.grad.shape))<span class="sc">:&lt;12}</span><span class="ss"> |grad| médio = </span><span class="sc">{</span>p<span class="sc">.</span>grad<span class="sc">.</span><span class="bu">abs</span>()<span class="sc">.</span>mean()<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>perda do lote: 2.302
+
+1.weight   parâmetro (128, 784)   gradiente (128, 784)   |grad| médio = 9.83e-04
+1.bias     parâmetro (128,)       gradiente (128,)       |grad| médio = 3.34e-03
+3.weight   parâmetro (10, 128)    gradiente (10, 128)    |grad| médio = 4.07e-03
+3.bias     parâmetro (10,)        gradiente (10,)        |grad| médio = 2.02e-02</code></pre>
+</div>
+</div>
+<p>Vimos aqui que os passos fundamentais são: - Calcular o forward pass - Computar o loss - Computar a retropropagação - Atualizar os parâmetros dos pesos</p>
+<hr>
+<p>Pronto, isso é exatamente <strong>1 step</strong>.</p>
+<p>Agora vamos de treino completo, <strong>sem nenhum otimizador pronto</strong>: só a regra <span class="math inline">\(\theta \leftarrow \theta - \eta\nabla L\)</span> aplicada a cada parâmetro. Usamos <strong>mini-lotes</strong> (<em>mini-batches</em>) de 64 imagens: em vez de calcular o gradiente com as 60 mil imagens a cada passo (lento), estimamos com 64 imagens sorteadas. Isso é a <strong>descida do gradiente estocástica</strong> (SGD).</p>
+<p>Dois detalhes importantes:</p>
+<ul>
+<li>a atualização fica dentro de <code>torch.no_grad()</code>, para o autograd não registrar a própria atualização;</li>
+<li>depois de atualizar, <strong>zeramos</strong> os gradientes (<code>p.grad.zero_()</code>). Na aula 3 veremos o que acontece se esquecermos.</li>
+</ul>
+<div id="11c43173" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.834593Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.834547Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:28.707626Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:28.707287Z&quot;}}" data-execution_count="15">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> acuracia(modelo, dataset, n<span class="op">=</span><span class="dv">10000</span>):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    x, y <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(DataLoader(dataset, batch_size<span class="op">=</span>n)))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (modelo(x).argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> y).<span class="bu">float</span>().mean().item()</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> cria_mlp()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> <span class="dv">600</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"acurácia no teste ANTES de treinar: </span><span class="sc">{</span>acuracia(modelo, teste)<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>historico <span class="op">=</span> []</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> passo, (x_lote, y_lote) <span class="kw">in</span> <span class="bu">enumerate</span>(loader):</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> passo <span class="op">==</span> steps:</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    perda <span class="op">=</span> F.cross_entropy(modelo(x_lote), y_lote)   <span class="co"># 1. forward + perda</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    perda.backward()                                   <span class="co"># 2. backward: calcula todos os .grad</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> p <span class="kw">in</span> modelo.parameters():                  <span class="co"># 3. atualização: θ ← θ - η·∇L</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>            p <span class="op">-=</span> lr <span class="op">*</span> p.grad</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>            p.grad.zero_()                             <span class="co"># 4. zera os gradientes para o próximo passo</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    historico.append(perda.item())</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"acurácia no teste DEPOIS de </span><span class="sc">{</span>steps<span class="sc">}</span><span class="ss"> passos: </span><span class="sc">{</span>acuracia(modelo, teste)<span class="sc">:.1%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>acurácia no teste ANTES de treinar: 10.4%
+acurácia no teste DEPOIS de 600 passos: 91.6%</code></pre>
+</div>
+</div>
+<div id="7e66c21f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:28.708666Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:28.708611Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:28.748870Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:28.748608Z&quot;}}" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>historico <span class="op">=</span> np.array(historico)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>media_movel <span class="op">=</span> np.convolve(historico, np.ones(<span class="dv">20</span>) <span class="op">/</span> <span class="dv">20</span>, mode<span class="op">=</span><span class="st">"valid"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>ax.plot(historico, color<span class="op">=</span>AZUL, alpha<span class="op">=</span><span class="fl">0.3</span>, lw<span class="op">=</span><span class="dv">1</span>, label<span class="op">=</span><span class="st">"perda de cada lote"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>ax.plot(np.arange(<span class="dv">19</span>, <span class="bu">len</span>(historico)), media_movel, color<span class="op">=</span>AZUL, lw<span class="op">=</span><span class="fl">2.5</span>, label<span class="op">=</span><span class="st">"média móvel (20 lotes)"</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>ax.axhline(np.log(<span class="dv">10</span>), color<span class="op">=</span>CINZA, ls<span class="op">=</span><span class="st">"--"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="bu">len</span>(historico), np.log(<span class="dv">10</span>) <span class="op">+</span> <span class="fl">0.05</span>, <span class="st">"ln(10): chute aleatório"</span>, ha<span class="op">=</span><span class="st">"right"</span>, va<span class="op">=</span><span class="st">"bottom"</span>, color<span class="op">=</span>TINTA, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"passo (lote de 64 imagens)"</span>, ylabel<span class="op">=</span><span class="st">"entropia cruzada"</span>, title<span class="op">=</span><span class="st">"Treinando o MLP do MNIST sem otimizador"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl2_como_a_rede_aprende_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="16a3fae5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:28.749867Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:28.749811Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:28.867284Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:28.866876Z&quot;}}" data-execution_count="17">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x_ex, y_ex <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(DataLoader(teste, batch_size<span class="op">=</span><span class="dv">12</span>)))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    probs_ex <span class="op">=</span> torch.softmax(modelo(x_ex), dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">6</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="fl">4.5</span>))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, img, y_true, p <span class="kw">in</span> <span class="bu">zip</span>(axes.flat, x_ex, y_ex, probs_ex):</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> p.argmax().item()</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    ax.imshow(img[<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">"gray_r"</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"previsto </span><span class="sc">{</span>pred<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>p[pred]<span class="sc">:.0%}</span><span class="ss">)"</span>, color<span class="op">=</span>VERDE <span class="cf">if</span> pred <span class="op">==</span> y_true <span class="cf">else</span> LARANJA, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"Previsões no conjunto de teste depois do treino (verde = acerto, laranja = erro)"</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl2_como_a_rede_aprende_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Em poucos segundos, a rede saiu de ~10% para ~90% de acerto em imagens que <strong>nunca viu</strong>. Não usamos nada além de: uma perda, <code>backward()</code> para os gradientes e a regra de atualização escrita à mão.</p>
+</section>
+<section id="discussão" class="level2">
+<h2 class="anchored" data-anchor-id="discussão">5. Discussão</h2>
+<ul>
+<li>A <strong>perda</strong> transforma “o quanto a rede erra” em um número: MSE para regressão, entropia cruzada para classificação. A perda inicial de um classificador de 10 classes deve ser ≈ ln(10) ≈ 2,30.</li>
+<li>A <strong>descida do gradiente</strong> dá passos contra o gradiente: <span class="math inline">\(\theta \leftarrow \theta - \eta\nabla L\)</span>. A <strong>taxa de aprendizado</strong> η é o hiperparâmetro mais importante: pequena demais é lenta; grande demais diverge.</li>
+<li>A <strong>retropropagação</strong> é a regra da cadeia aplicada da saída para a entrada. O <em>autograd</em> do PyTorch faz isso com <code>loss.backward()</code> e guarda o resultado em <code>.grad</code>.</li>
+<li>Usar <strong>mini-lotes</strong> (SGD) torna cada passo barato; a perda de cada lote é ruidosa, mas a tendência cai.</li>
+</ul>
+<section id="exercícios" class="level3">
+<h3 class="anchored" data-anchor-id="exercícios">Exercícios</h3>
+<ol type="1">
+<li>Na seção 3, mude <span class="math inline">\(w_1\)</span> para <span class="math inline">\(-0{,}5\)</span>. O que acontece com <span class="math inline">\(\frac{\partial L}{\partial w_1}\)</span>? Por quê? (Dica: ReLU.)</li>
+<li>No treino do MNIST, teste <code>eta = 0.01</code> e <code>eta = 2.0</code>. Desenhe as três curvas de perda juntas.</li>
+<li>Comente a linha <code>p.grad.zero_()</code> e treine de novo. O que acontece com a perda? Tente explicar antes da aula 3.</li>
+<li>Calcule à mão a entropia cruzada de uma rede que dá 50% para a classe correta. E 99%?</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ftl-brazil-2026\.github\.io\/ebook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="pagination-link" aria-label="Deep Learning 1 — O que uma rede neural calcula">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Deep Learning 1 — O que uma rede neural calcula</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../deep-learning/dl3_otimizadores.html" class="pagination-link" aria-label="Deep Learning 3 — Otimizadores no PyTorch">
+        <span class="nav-page-text">Deep Learning 3 — Otimizadores no PyTorch</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>SpaceTech Bootcamp · Emanuel Goulart</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
