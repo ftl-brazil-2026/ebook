@@ -12,3 +12,8 @@ Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e compl
 - Saldanha Rafael. 2026. [Sistemas de Informação em Saúde no Brasil](https://rfsaldanha.github.io/sis/)
 - Professora Cristiane. [Cartografia e Representação da Terra em um plano](https://www.professores.uff.br/cristiane/cartografia/)
 - Visão Geral sobre Clustering [SkLearn-Clustering](https://scikit-learn.org/stable/modules/clustering.html#overview-of-clustering-methods)
+- Canal sobre matemática e Deep Learning [3blue1brown](https://www.3blue1brown.com/?topic=neural-networks)
+- Ebook de Deep Learning [DL-EBOOK](https://bnaskrecki.faculty.wmi.amu.edu.pl/)
+- Biblia do Deep Learning [Goodfellow Book](https://www.deeplearningbook.org/)
+- Deep Learning Notes [Notes and EBOOK](https://deeplearningnotes.com/)
+- Machine Learning Visualized [ML-Visualized](https://ml-visualized.com/chapter1/linear_regression)
