@@ -46,10 +46,17 @@ website:
           - section: "Week 4 - Series Temporais"
             contents:
               - fundamentals_gis_rs/week4/xarray.ipynb
-      - section: "Fundamentos em Machine Learning e Deep Learning"
+      - section: "Fundamentos em Machine Learning"
         contents:
           - ml-dl/unsupervised_ml_note.ipynb
           - ml-dl/supervised.ipynb
+      - section: "Fundamentos em Deep Learning"
+        contents: 
+        - deep-learning/dl0_introducao_pytorch.ipynb
+        - deep-learning/dl1_o_que_a_rede_calcula.ipynb
+        - deep-learning/dl2_como_a_rede_aprende.ipynb
+        - deep-learning/dl3_otimizadores.ipynb
+        - deep-learning/dl4_pipeline_de_treino.ipynb
       - section: "Estado da Arte (State-of-Art)"
         contents:
           - state-of-art/index.md
