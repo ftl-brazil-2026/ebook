@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Deep Learning 0 — Introdução ao PyTorch – FTL-Brasil-SpaceTech-Bootcamp</title>
+<title>Deep Learning 0 – FTL-Brasil-SpaceTech-Bootcamp</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -177,7 +177,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Deep Learning 0 — Introdução ao PyTorch</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Deep Learning 0</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -397,25 +397,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deep-learning/dl0_introducao_pytorch.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Deep Learning 0 — Introdução ao PyTorch</span></a>
+ <span class="menu-text">Deep Learning 0</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Deep Learning 1 — O que uma rede neural calcula</span></a>
+ <span class="menu-text">Deep Learning 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deep-learning/dl2_como_a_rede_aprende.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Deep Learning 2 — Como a rede aprende</span></a>
+ <span class="menu-text">Deep Learning 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deep-learning/dl3_otimizadores.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Deep Learning 3 — Otimizadores no PyTorch</span></a>
+ <span class="menu-text">Deep Learning 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -476,7 +476,8 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#o-que-é-um-tensor" id="toc-o-que-é-um-tensor" class="nav-link active" data-scroll-target="#o-que-é-um-tensor">1. O que é um tensor?</a></li>
+  <li><a href="#introdução-ao-pytorch" id="toc-introdução-ao-pytorch" class="nav-link active" data-scroll-target="#introdução-ao-pytorch">Introdução ao PyTorch</a></li>
+  <li><a href="#o-que-é-um-tensor" id="toc-o-que-é-um-tensor" class="nav-link" data-scroll-target="#o-que-é-um-tensor">1. O que é um tensor?</a></li>
   <li><a href="#dimensões-escalar-vetor-matriz-e-além" id="toc-dimensões-escalar-vetor-matriz-e-além" class="nav-link" data-scroll-target="#dimensões-escalar-vetor-matriz-e-além">2. Dimensões: escalar, vetor, matriz e além</a></li>
   <li><a href="#tensores-2d-e-3d-na-prática" id="toc-tensores-2d-e-3d-na-prática" class="nav-link" data-scroll-target="#tensores-2d-e-3d-na-prática">3. Tensores 2D e 3D na prática</a>
   <ul class="collapse">
@@ -504,9 +505,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Deep Learning 0 — Introdução ao PyTorch</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Deep Learning 0</a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Deep Learning 0 — Introdução ao PyTorch</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Deep Learning 0</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
 </div>
 
 
@@ -523,10 +524,12 @@ window.Quarto = {
 </header>
 
 
+<section id="introdução-ao-pytorch" class="level2">
+<h2 class="anchored" data-anchor-id="introdução-ao-pytorch">Introdução ao PyTorch</h2>
 <p>Link Colab</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/ml-dl/dl0_introducao_pytorch.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<p><a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/deep-learning/dl0_introducao_pytorch.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
 <figcaption>Open In Colab</figcaption>
 </figure>
 </div>
@@ -573,6 +576,7 @@ window.Quarto = {
 GPU (CUDA) disponível? False</code></pre>
 </div>
 </div>
+</section>
 <section id="o-que-é-um-tensor" class="level2">
 <h2 class="anchored" data-anchor-id="o-que-é-um-tensor">1. O que é um tensor?</h2>
 <p>Um <strong>tensor</strong> é uma coleção de números organizada em uma grade com qualquer número de <strong>dimensões</strong> (também chamadas de <strong>eixos</strong>). Todo dado que entra em uma rede neural (uma tabela, uma imagem, um vídeo, uma série temporal) vira um tensor, e todos os pesos da rede também são tensores.</p>
@@ -1757,8 +1761,8 @@ parâmetros: 1,153</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="pagination-link" aria-label="Deep Learning 1 — O que uma rede neural calcula">
-        <span class="nav-page-text">Deep Learning 1 — O que uma rede neural calcula</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="pagination-link" aria-label="Deep Learning 1">
+        <span class="nav-page-text">Deep Learning 1</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
