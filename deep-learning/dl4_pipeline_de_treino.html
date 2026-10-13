@@ -457,7 +457,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#dataset-como-pegar-uma-amostra" id="toc-dataset-como-pegar-uma-amostra" class="nav-link" data-scroll-target="#dataset-como-pegar-uma-amostra">1. <code>Dataset</code>: como pegar <strong>uma</strong> amostra</a></li>
   <li><a href="#dataloader-batch-e-shuffle" id="toc-dataloader-batch-e-shuffle" class="nav-link" data-scroll-target="#dataloader-batch-e-shuffle">2. <code>DataLoader</code>: batch e shuffle</a></li>
   <li><a href="#treino-validação-e-teste" id="toc-treino-validação-e-teste" class="nav-link" data-scroll-target="#treino-validação-e-teste">3. Treino, validação e teste</a></li>
-  <li><a href="#o-laço-de-treino-em-pytorch-puro" id="toc-o-laço-de-treino-em-pytorch-puro" class="nav-link" data-scroll-target="#o-laço-de-treino-em-pytorch-puro">4. O laço de treino em PyTorch puro</a></li>
+  <li><a href="#o-loop-de-treino-em-pytorch-puro" id="toc-o-loop-de-treino-em-pytorch-puro" class="nav-link" data-scroll-target="#o-loop-de-treino-em-pytorch-puro">4. O loop de treino em PyTorch puro</a></li>
   <li><a href="#primeiro-contato-com-o-overfitting" id="toc-primeiro-contato-com-o-overfitting" class="nav-link" data-scroll-target="#primeiro-contato-com-o-overfitting">5. Primeiro contato com o <em>overfitting</em></a></li>
   <li><a href="#avaliação-final-no-teste" id="toc-avaliação-final-no-teste" class="nav-link" data-scroll-target="#avaliação-final-no-teste">6. Avaliação final no teste</a></li>
   <li><a href="#o-mesmo-pipeline-com-pytorch-lightning" id="toc-o-mesmo-pipeline-com-pytorch-lightning" class="nav-link" data-scroll-target="#o-mesmo-pipeline-com-pytorch-lightning">7. O mesmo pipeline com PyTorch Lightning</a>
@@ -609,7 +609,7 @@ len = 60000   amostra 0: x (1, 28, 28), y = 5</code></pre>
 <section id="dataloader-batch-e-shuffle" class="level2">
 <h2 class="anchored" data-anchor-id="dataloader-batch-e-shuffle">2. <code>DataLoader</code>: batch e shuffle</h2>
 <p>O <code>Dataset</code> entrega uma amostra por vez; o <code>DataLoader</code> junta várias em um <strong>lote</strong> (<em>batch</em>) e, se pedirmos, <strong>embaralha</strong> a ordem a cada época. Embaralhar evita que a rede veja sempre a mesma sequência (por exemplo, todos os “0” juntos), o que atrapalharia a descida do gradiente estocástica.</p>
-<div id="05f4f36d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.192356Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.192300Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.199627Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.199332Z&quot;}}" data-execution_count="5">
+<div id="05f4f36d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.192356Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.192300Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.199627Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.199332Z&quot;}}" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>carregador <span class="op">=</span> DataLoader(treino_completo, batch_size<span class="op">=</span><span class="dv">64</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
@@ -618,14 +618,14 @@ len = 60000   amostra 0: x (1, 28, 28), y = 5</code></pre>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"lotes por época: </span><span class="sc">{</span><span class="bu">len</span>(carregador)<span class="sc">}</span><span class="ss">  (60000 / 64, arredondado para cima)"</span>)</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">rótulos do 1º lote, 1ª vez:  </span><span class="sc">{</span><span class="bu">next</span>(<span class="bu">iter</span>(carregador))[<span class="dv">1</span>][:<span class="dv">12</span>]<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"rótulos do 1º lote, 2ª vez:  </span><span class="sc">{</span><span class="bu">next</span>(<span class="bu">iter</span>(carregador))[<span class="dv">1</span>][:<span class="dv">12</span>]<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">  ← nova ordem a cada época"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"rótulos do 1º lote, 2ª vez:  </span><span class="sc">{</span><span class="bu">next</span>(<span class="bu">iter</span>(carregador))[<span class="dv">1</span>][:<span class="dv">12</span>]<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">   nova ordem a cada epoch"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>um lote: x (64, 1, 28, 28)   y (64,)
 lotes por época: 938  (60000 / 64, arredondado para cima)
 
-rótulos do 1º lote, 1ª vez:  [9, 9, 4, 7, 7, 9, 4, 7, 9, 1, 7, 5]
-rótulos do 1º lote, 2ª vez:  [6, 4, 7, 6, 7, 8, 8, 1, 3, 6, 7, 9]  ← nova ordem a cada época</code></pre>
+rótulos do 1º lote, 1ª vez:  [9, 3, 7, 7, 2, 6, 0, 8, 9, 7, 5, 0]
+rótulos do 1º lote, 2ª vez:  [2, 7, 1, 0, 5, 0, 3, 5, 9, 3, 0, 2]   nova ordem a cada epoch</code></pre>
 </div>
 </div>
 </section>
@@ -669,7 +669,7 @@ rótulos do 1º lote, 2ª vez:  [6, 4, 7, 6, 7, 8, 8, 1, 3, 6, 7, 9]  ← nova o
 </table>
 <p>Se escolhermos hiperparâmetros olhando o teste, ele deixa de ser “dado novo” e a nota fica otimista (a mesma ideia de <em>data leakage</em> da aula de ML supervisionado).</p>
 <p>O MNIST já vem com um teste separado (10 mil imagens). Separamos as 60 mil de treino em 50 mil + 10 mil com <code>random_split</code>. Aqui um sorteio aleatório é adequado porque as imagens são <strong>independentes</strong> entre si. Na aula da balneabilidade, com dados <strong>temporais</strong>, precisávamos separar pelo tempo.</p>
-<div id="04059aa3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.200519Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.200469Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.202854Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.202491Z&quot;}}" data-execution_count="6">
+<div id="04059aa3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.200519Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.200469Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.202854Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.202491Z&quot;}}" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gerador <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">42</span>)        <span class="co"># divisão reprodutível</span></span>
@@ -686,11 +686,11 @@ rótulos do 1º lote, 2ª vez:  [6, 4, 7, 6, 7, 8, 8, 1, 3, 6, 7, 9]  ← nova o
 </div>
 </div>
 </section>
-<section id="o-laço-de-treino-em-pytorch-puro" class="level2">
-<h2 class="anchored" data-anchor-id="o-laço-de-treino-em-pytorch-puro">4. O laço de treino em PyTorch puro</h2>
+<section id="o-loop-de-treino-em-pytorch-puro" class="level2">
+<h2 class="anchored" data-anchor-id="o-loop-de-treino-em-pytorch-puro">4. O loop de treino em PyTorch puro</h2>
 <p>Duas funções, que vamos reaproveitar até o fim da aula:</p>
 <ul>
-<li><code>treina_uma_epoca</code>: para cada lote, <strong>forward → perda → backward → step</strong> (o padrão da aula 3).</li>
+<li><code>treina_uma_epoca</code>: para cada lote, <strong>forward -&gt; perda -&gt; backward -&gt; step</strong> (o padrão da aula 3).</li>
 <li><code>avalia</code>: calcula perda e acurácia <strong>sem treinar</strong>. Duas linhas novas:
 <ul>
 <li><code>modelo.eval()</code> coloca a rede em modo de avaliação (desliga camadas que se comportam diferente no treino, como <em>Dropout</em> e <em>BatchNorm</em>; o nosso MLP não tem, mas é um hábito obrigatório). <code>modelo.train()</code> volta ao modo de treino.</li>
@@ -796,7 +796,7 @@ tempo total: 5 s</code></pre>
 </section>
 <section id="primeiro-contato-com-o-overfitting" class="level2">
 <h2 class="anchored" data-anchor-id="primeiro-contato-com-o-overfitting">5. Primeiro contato com o <em>overfitting</em></h2>
-<p>O que acontece se a rede for <strong>grande</strong> e os dados de treino forem <strong>poucos</strong>? Vamos treinar uma rede bem maior (784 → 512 → 10, com ~407 mil parâmetros) com apenas <strong>1.000 imagens</strong> de treino, por 60 épocas. A validação continua com as mesmas 10 mil imagens.</p>
+<p>O que acontece se a rede for <strong>grande</strong> e os dados de treino forem <strong>poucos</strong>? Vamos treinar uma rede bem maior (784 -&gt; 512 -&gt; 10, com ~407 mil parâmetros) com apenas <strong>1.000 imagens</strong> de treino, por 60 épocas. A validação continua com as mesmas 10 mil imagens.</p>
 <div id="017e8906" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:03.332189Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:03.332118Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:12.893737Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:12.893339Z&quot;}}" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
@@ -891,14 +891,14 @@ menor perda de validação na época 11: 0.386
 </div>
 </div>
 </div>
-<div id="7720c8e1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:13.295554Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:13.295486Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:13.465724Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:13.465410Z&quot;}}" data-execution_count="14">
+<div id="7720c8e1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:55:13.295554Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:55:13.295486Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:55:13.465724Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:55:13.465410Z&quot;}}">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>erros <span class="op">=</span> torch.nonzero(pred_teste <span class="op">!=</span> y_teste).flatten()[:<span class="dv">18</span>]</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">6</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="fl">6.5</span>))</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, i <span class="kw">in</span> <span class="bu">zip</span>(axes.flat, erros):</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    ax.imshow(teste[i][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">"gray_r"</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"real </span><span class="sc">{</span>y_teste[i]<span class="sc">.</span>item()<span class="sc">}</span><span class="ss"> → previsto </span><span class="sc">{</span>pred_teste[i]<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>, color<span class="op">=</span>LARANJA, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"real </span><span class="sc">{</span>y_teste[i]<span class="sc">.</span>item()<span class="sc">}</span><span class="ss"> -&gt; previsto </span><span class="sc">{</span>pred_teste[i]<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>, color<span class="op">=</span>LARANJA, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="ss">f"Alguns dos </span><span class="sc">{</span>(pred_teste <span class="op">!=</span> y_teste)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span>item()<span class="sc">}</span><span class="ss"> erros no teste"</span>)</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
