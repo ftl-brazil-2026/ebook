@@ -424,6 +424,12 @@ window.Quarto = {
  <span class="menu-text">Deep Learning 4</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl5_lightning_qualquer_coisa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 5</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -812,7 +818,7 @@ BACKWARD (regra da cadeia)
 <section id="o-pytorch-faz-isso-sozinho-autograd" class="level3">
 <h3 class="anchored" data-anchor-id="o-pytorch-faz-isso-sozinho-autograd">O PyTorch faz isso sozinho: <em>autograd</em></h3>
 <p>Marcando os pesos com <code>requires_grad=True</code>, o PyTorch <strong>registra</strong> cada operação do forward pass. Ao chamar <code>L.backward()</code>, ele percorre esse registro de trás para frente aplicando a regra da cadeia, e guarda cada derivada no atributo <code>.grad</code> do peso correspondente. Os números têm que bater com os nossos:</p>
-<div id="ff780d77" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.814952Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.814902Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.824954Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.824679Z&quot;}}">
+<div id="ff780d77" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.814952Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.814902Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.824954Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.824679Z&quot;}}" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>w1_t <span class="op">=</span> torch.tensor(<span class="fl">0.5</span>, requires_grad<span class="op">=</span><span class="va">True</span>)</span>
@@ -855,7 +861,7 @@ perda: 0.0400 → 0.0028</code></pre>
 <section id="treinando-o-mlp-do-mnist-na-raça" class="level2">
 <h2 class="anchored" data-anchor-id="treinando-o-mlp-do-mnist-na-raça">Treinando o MLP do MNIST na raça</h2>
 <p>Primeiro, com apenas um único step, forward, perda e <code>backward()</code>. Cada parâmetro da rede ganha um <code>.grad</code> com <strong>exatamente o mesmo formato</strong> do parâmetro.</p>
-<div id="42eabd91" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.828705Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.828657Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.833643Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.833395Z&quot;}}">
+<div id="42eabd91" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:27.828705Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:27.828657Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:27.833643Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:27.833395Z&quot;}}" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>

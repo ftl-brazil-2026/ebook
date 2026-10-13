@@ -427,6 +427,12 @@ window.Quarto = {
  <span class="menu-text">Deep Learning 4</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl5_lightning_qualquer_coisa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 5</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -481,7 +487,7 @@ window.Quarto = {
   <ul>
   <li><a href="#otimizadores-no-pytorch" id="toc-otimizadores-no-pytorch" class="nav-link active" data-scroll-target="#otimizadores-no-pytorch">Otimizadores no PyTorch</a></li>
   <li><a href="#torch.optim.sgd-é-a-regra-da-aula-2" id="toc-torch.optim.sgd-é-a-regra-da-aula-2" class="nav-link" data-scroll-target="#torch.optim.sgd-é-a-regra-da-aula-2">1. <code>torch.optim.SGD</code> é a regra da aula 2</a></li>
-  <li><a href="#o-padrão-de-todo-treino-em-pytorch" id="toc-o-padrão-de-todo-treino-em-pytorch" class="nav-link" data-scroll-target="#o-padrão-de-todo-treino-em-pytorch">2. O padrão de todo treino em PyTorch</a>
+  <li><a href="#o-padrão-de-treino" id="toc-o-padrão-de-treino" class="nav-link" data-scroll-target="#o-padrão-de-treino">2. O padrão de treino</a>
   <ul class="collapse">
   <li><a href="#por-que-precisamos-do-zero_grad" id="toc-por-que-precisamos-do-zero_grad" class="nav-link" data-scroll-target="#por-que-precisamos-do-zero_grad">Por que precisamos do <code>zero_grad()</code>?</a></li>
   </ul></li>
@@ -554,7 +560,7 @@ window.Quarto = {
 <li>Sensibilidade à taxa de aprendizado</li>
 <li>De volta ao Teorema da Aproximação Universal: aproximando qualquer função</li>
 </ol>
-<div id="1883089d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:32.092001Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:32.091780Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.174306Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.173852Z&quot;}}">
+<div id="1883089d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:32.092001Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:32.091780Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.174306Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.173852Z&quot;}}" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> copy</span>
@@ -594,7 +600,7 @@ window.Quarto = {
 <section id="torch.optim.sgd-é-a-regra-da-aula-2" class="level2">
 <h2 class="anchored" data-anchor-id="torch.optim.sgd-é-a-regra-da-aula-2">1. <code>torch.optim.SGD</code> é a regra da aula 2</h2>
 <p>Vamos provar: duas cópias <strong>idênticas</strong> da rede, o mesmo lote de imagens. Na cópia A aplicamos a atualização à mão; na cópia B usamos <code>torch.optim.SGD(..., lr=0.1)</code>. Os pesos resultantes têm que ser iguais.</p>
-<div id="c5b1f98b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:33.175570Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:33.175473Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.189596Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.189232Z&quot;}}">
+<div id="c5b1f98b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T13:32:33.175570Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T13:32:33.175473Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T13:32:33.189596Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T13:32:33.189232Z&quot;}}" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
@@ -629,8 +635,8 @@ window.Quarto = {
 <li><code>otimizador.zero_grad()</code> zera todos os <code>.grad</code>.</li>
 </ul>
 </section>
-<section id="o-padrão-de-todo-treino-em-pytorch" class="level2">
-<h2 class="anchored" data-anchor-id="o-padrão-de-todo-treino-em-pytorch">2. O padrão de todo treino em PyTorch</h2>
+<section id="o-padrão-de-treino" class="level2">
+<h2 class="anchored" data-anchor-id="o-padrão-de-treino">2. O padrão de treino</h2>
 <p>Todo laço de treino em PyTorch tem estas três linhas, nesta ordem:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>otimizador.zero_grad()   <span class="co"># 1. apaga os gradientes do passo anterior</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>perda.backward()         <span class="co"># 2. calcula os novos gradientes</span></span>

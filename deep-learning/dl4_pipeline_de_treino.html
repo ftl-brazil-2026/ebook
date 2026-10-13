@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../state-of-art/index.html" rel="next">
+<link href="../deep-learning/dl5_lightning_qualquer_coisa.html" rel="next">
 <link href="../deep-learning/dl3_otimizadores.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -395,6 +395,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Deep Learning 4</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl5_lightning_qualquer_coisa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 5</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -449,7 +455,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#requisitos-mínimos-para-um-pipeline-de-treino" id="toc-requisitos-mínimos-para-um-pipeline-de-treino" class="nav-link active" data-scroll-target="#requisitos-mínimos-para-um-pipeline-de-treino">Requisitos mínimos para um pipeline de treino</a></li>
   <li><a href="#dataset-como-pegar-uma-amostra" id="toc-dataset-como-pegar-uma-amostra" class="nav-link" data-scroll-target="#dataset-como-pegar-uma-amostra">1. <code>Dataset</code>: como pegar <strong>uma</strong> amostra</a></li>
-  <li><a href="#dataloader-lotes-e-embaralhamento" id="toc-dataloader-lotes-e-embaralhamento" class="nav-link" data-scroll-target="#dataloader-lotes-e-embaralhamento">2. <code>DataLoader</code>: lotes e embaralhamento</a></li>
+  <li><a href="#dataloader-batch-e-shuffle" id="toc-dataloader-batch-e-shuffle" class="nav-link" data-scroll-target="#dataloader-batch-e-shuffle">2. <code>DataLoader</code>: batch e shuffle</a></li>
   <li><a href="#treino-validação-e-teste" id="toc-treino-validação-e-teste" class="nav-link" data-scroll-target="#treino-validação-e-teste">3. Treino, validação e teste</a></li>
   <li><a href="#o-laço-de-treino-em-pytorch-puro" id="toc-o-laço-de-treino-em-pytorch-puro" class="nav-link" data-scroll-target="#o-laço-de-treino-em-pytorch-puro">4. O laço de treino em PyTorch puro</a></li>
   <li><a href="#primeiro-contato-com-o-overfitting" id="toc-primeiro-contato-com-o-overfitting" class="nav-link" data-scroll-target="#primeiro-contato-com-o-overfitting">5. Primeiro contato com o <em>overfitting</em></a></li>
@@ -600,8 +606,8 @@ len = 60000   amostra 0: x (1, 28, 28), y = 5</code></pre>
 </div>
 </div>
 </section>
-<section id="dataloader-lotes-e-embaralhamento" class="level2">
-<h2 class="anchored" data-anchor-id="dataloader-lotes-e-embaralhamento">2. <code>DataLoader</code>: lotes e embaralhamento</h2>
+<section id="dataloader-batch-e-shuffle" class="level2">
+<h2 class="anchored" data-anchor-id="dataloader-batch-e-shuffle">2. <code>DataLoader</code>: batch e shuffle</h2>
 <p>O <code>Dataset</code> entrega uma amostra por vez; o <code>DataLoader</code> junta várias em um <strong>lote</strong> (<em>batch</em>) e, se pedirmos, <strong>embaralha</strong> a ordem a cada época. Embaralhar evita que a rede veja sempre a mesma sequência (por exemplo, todos os “0” juntos), o que atrapalharia a descida do gradiente estocástica.</p>
 <div id="05f4f36d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-07T09:54:58.192356Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-07T09:54:58.192300Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-07T09:54:58.199627Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-07T09:54:58.199332Z&quot;}}" data-execution_count="5">
 <details class="code-fold">
@@ -1581,8 +1587,8 @@ TESTE (PyTorch puro): perda = 0.097   acurácia = 97.22%</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../state-of-art/index.html" class="pagination-link" aria-label="Estado da Arte (State-of-Art)">
-        <span class="nav-page-text">Estado da Arte (State-of-Art)</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../deep-learning/dl5_lightning_qualquer_coisa.html" class="pagination-link" aria-label="Deep Learning 5">
+        <span class="nav-page-text">Deep Learning 5</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
