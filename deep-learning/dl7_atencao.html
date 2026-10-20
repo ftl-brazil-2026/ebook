@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Deep Learning 7 – FTL-Brasil-SpaceTech-Bootcamp</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../state-of-art/index.html" rel="next">
+<link href="../deep-learning/dl6_arquiteturas.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-41da928e5ec3fef6b8fa1ca56eed0ec2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">FTL-Brasil-SpaceTech-Bootcamp</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ftl-brazil-2026/ebook"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl7_atencao.html">Deep Learning 7</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Course Information</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/general-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Informações Gerais</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/reading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Leituras</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standard Set Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/cli-utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilitários de CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/how-to-contribute.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Como Contribuir</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info/provedores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Provedores de Dados Geoespaciais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em GIS e Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 0 — Ecossistema geoespacial</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ecossistema Geoespacial</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week0/space_tech_ecossystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessao 0 - 19/08/2026</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 1 — Fundamentos em GIS</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/crs_and_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de Coordenadas de Referência e Projeções</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análise Espacial de Dados Vetoriais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 - Fundamentos em Sensoriamento Remoto</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">STAC Catalogue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week2/RS-Image_Processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens de Satélite: Índices Espectrais e Detecção de Mudanças</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 - Analises Espaciais Complexas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/dem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos Digitais de Elevação - Digital Elevation Model (DEM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week3/image_processing2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Processamento de Imagens</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 - Series Temporais</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentals_gis_rs/week4/xarray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dados Multidimensionais e Séries Temporais</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos em Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/unsupervised_ml_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unsupervised Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml-dl/supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Machine Learning I</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos em Deep Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl0_introducao_pytorch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 0</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl1_o_que_a_rede_calcula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl2_como_a_rede_aprende.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl3_otimizadores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl4_pipeline_de_treino.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">deep-learning/dl5_lightning_qualquer_coisa.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl6_arquiteturas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Learning 6</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deep-learning/dl7_atencao.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Deep Learning 7</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../state-of-art/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estado da Arte (State-of-Art)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessões de Convidados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guest-sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sessões de Convidados</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../awesome-geospatial/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Awesome Geospatial</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#o-mecanismo-de-atenção-transformers-e-vision-transformers" id="toc-o-mecanismo-de-atenção-transformers-e-vision-transformers" class="nav-link active" data-scroll-target="#o-mecanismo-de-atenção-transformers-e-vision-transformers">O mecanismo de atenção: Transformers e Vision Transformers</a></li>
+  <li><a href="#parte-1-o-mecanismo-de-atenção" id="toc-parte-1-o-mecanismo-de-atenção" class="nav-link" data-scroll-target="#parte-1-o-mecanismo-de-atenção">Parte 1 — O mecanismo de atenção</a>
+  <ul class="collapse">
+  <li><a href="#a-intuição" id="toc-a-intuição" class="nav-link" data-scroll-target="#a-intuição">1.1 A intuição</a></li>
+  <li><a href="#atenção-do-zero" id="toc-atenção-do-zero" class="nav-link" data-scroll-target="#atenção-do-zero">1.2 Atenção do zero</a></li>
+  </ul></li>
+  <li><a href="#parte-2-o-bloco-transformer" id="toc-parte-2-o-bloco-transformer" class="nav-link" data-scroll-target="#parte-2-o-bloco-transformer">Parte 2 — O bloco Transformer</a>
+  <ul class="collapse">
+  <li><a href="#a-atenção-não-sabe-a-ordem-dos-tokens" id="toc-a-atenção-não-sabe-a-ordem-dos-tokens" class="nav-link" data-scroll-target="#a-atenção-não-sabe-a-ordem-dos-tokens">A atenção não sabe a ordem dos tokens</a></li>
+  </ul></li>
+  <li><a href="#parte-3-vision-transformer-vit" id="toc-parte-3-vision-transformer-vit" class="nav-link" data-scroll-target="#parte-3-vision-transformer-vit">Parte 3 — Vision Transformer (ViT)</a>
+  <ul class="collapse">
+  <li><a href="#uma-imagem-é-uma-sequência-de-pedaços" id="toc-uma-imagem-é-uma-sequência-de-pedaços" class="nav-link" data-scroll-target="#uma-imagem-é-uma-sequência-de-pedaços">3.1 Uma imagem é uma sequência de pedaços</a></li>
+  <li><a href="#vendo-a-atenção-de-um-vit-de-verdade" id="toc-vendo-a-atenção-de-um-vit-de-verdade" class="nav-link" data-scroll-target="#vendo-a-atenção-de-um-vit-de-verdade">3.2 Vendo a atenção de um ViT de verdade</a></li>
+  </ul></li>
+  <li><a href="#parte-4-um-primeiro-olhar-no-aprendizado-auto-supervisionado" id="toc-parte-4-um-primeiro-olhar-no-aprendizado-auto-supervisionado" class="nav-link" data-scroll-target="#parte-4-um-primeiro-olhar-no-aprendizado-auto-supervisionado">Parte 4 — Um primeiro olhar no aprendizado auto-supervisionado</a>
+  <ul class="collapse">
+  <li><a href="#o-gargalo-dos-rótulos" id="toc-o-gargalo-dos-rótulos" class="nav-link" data-scroll-target="#o-gargalo-dos-rótulos">4.1 O gargalo dos rótulos</a></li>
+  <li><a href="#o-que-um-modelo-auto-supervisionado-aprende-sem-rótulos" id="toc-o-que-um-modelo-auto-supervisionado-aprende-sem-rótulos" class="nav-link" data-scroll-target="#o-que-um-modelo-auto-supervisionado-aprende-sem-rótulos">4.2 O que um modelo auto-supervisionado aprende sem rótulos</a></li>
+  <li><a href="#modelos-de-fundação-para-observação-da-terra" id="toc-modelos-de-fundação-para-observação-da-terra" class="nav-link" data-scroll-target="#modelos-de-fundação-para-observação-da-terra">4.3 Modelos de fundação para observação da Terra</a></li>
+  </ul></li>
+  <li><a href="#resumo" id="toc-resumo" class="nav-link" data-scroll-target="#resumo">Resumo</a>
+  <ul class="collapse">
+  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios">Exercícios</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deep-learning/dl0_introducao_pytorch.html">Fundamentos em Deep Learning</a></li><li class="breadcrumb-item"><a href="../deep-learning/dl7_atencao.html">Deep Learning 7</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Deep Learning 7</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="o-mecanismo-de-atenção-transformers-e-vision-transformers" class="level2">
+<h2 class="anchored" data-anchor-id="o-mecanismo-de-atenção-transformers-e-vision-transformers">O mecanismo de atenção: Transformers e Vision Transformers</h2>
+<p>Link Colab</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/ftl-brazil-2026/ebook/blob/main/deep-learning/dl7_atencao.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Open In Colab</figcaption>
+</figure>
+</div>
+<p>Na aula 6 vimos como as <strong>convoluções</strong> dominaram a visão computacional: filtros locais, empilhados em redes cada vez mais profundas (ResNet) e em encoder-decoders (U-Net). Hoje vamos conhecer o mecanismo que está por trás de quase toda a IA atual: a <strong>atenção</strong>.</p>
+<p><strong>Roteiro</strong></p>
+<ol type="1">
+<li><strong>O mecanismo de atenção</strong>: a intuição de <em>query</em>, <em>key</em> e <em>value</em>, e a atenção escrita do zero</li>
+<li><strong>O bloco Transformer</strong>: atenção + MLP + conexões residuais + normalização</li>
+<li><strong>Vision Transformer (ViT)</strong>: imagens como sequências de pedaços, e a atenção de um modelo de verdade (DINOv2)</li>
+<li><strong>Um primeiro olhar no aprendizado auto-supervisionado</strong>: o que um modelo aprende sem nenhum rótulo</li>
+</ol>
+<p>Como na aula 6, cada arquitetura tem uma <strong>ficha</strong> 🗂️ com o ano, o tipo de treino, pontos fortes e limitações.</p>
+<div id="c24d76a8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:08.281139Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:08.280924Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:08.286553Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:08.285572Z&quot;}}" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># no Google Colab, o PyTorch já vem instalado; o timm pode não vir</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"google.colab"</span> <span class="kw">in</span> sys.modules:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>pip install <span class="op">-</span>q timm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="c1d57131" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:08.288908Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:08.288738Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:10.157239Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:10.156869Z&quot;}}" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>os.environ.setdefault(<span class="st">"HF_HUB_DISABLE_PROGRESS_BARS"</span>, <span class="st">"1"</span>)     <span class="co"># saída mais limpa ao baixar do Hugging Face</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>os.environ.setdefault(<span class="st">"HF_HUB_VERBOSITY"</span>, <span class="st">"error"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Rectangle</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> ListedColormap</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision <span class="im">import</span> transforms</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skimage <span class="im">import</span> data, io</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> huggingface_hub <span class="im">import</span> hf_hub_download</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># cores e estilo dos gráficos (as mesmas das aulas de Machine Learning)</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>AZUL, LARANJA, VERDE, CINZA, TINTA <span class="op">=</span> <span class="st">"#2a78d6"</span>, <span class="st">"#eb6834"</span>, <span class="st">"#1baf7a"</span>, <span class="st">"#898781"</span>, <span class="st">"#52514e"</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.spines.top"</span>: <span class="va">False</span>, <span class="st">"axes.spines.right"</span>: <span class="va">False</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.edgecolor"</span>: CINZA, <span class="st">"axes.labelcolor"</span>: TINTA,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"xtick.color"</span>: TINTA, <span class="st">"ytick.color"</span>: TINTA,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"axes.grid"</span>: <span class="va">True</span>, <span class="st">"grid.color"</span>: <span class="st">"#e6e5e1"</span>, <span class="st">"figure.dpi"</span>: <span class="dv">110</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># imagens no padrão do ImageNet (o mesmo usado no pré-treino do DINOv2)</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>MEDIA <span class="op">=</span> torch.tensor([<span class="fl">0.485</span>, <span class="fl">0.456</span>, <span class="fl">0.406</span>])[:, <span class="va">None</span>, <span class="va">None</span>]</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>DESVIO <span class="op">=</span> torch.tensor([<span class="fl">0.229</span>, <span class="fl">0.224</span>, <span class="fl">0.225</span>])[:, <span class="va">None</span>, <span class="va">None</span>]</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>normaliza <span class="op">=</span> <span class="kw">lambda</span> x: (x <span class="op">-</span> MEDIA) <span class="op">/</span> DESVIO</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># o dataset LandCover.ai da aula 6 (já fica no cache do Hugging Face se você rodou aquela aula)</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>PASTA_LC <span class="op">=</span> <span class="st">"data/landcoverai"</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(PASTA_LC):</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    caminho <span class="op">=</span> hf_hub_download(repo_id<span class="op">=</span><span class="st">"isaaccorley/landcoverai"</span>, filename<span class="op">=</span><span class="st">"landcoverai100.zip"</span>, repo_type<span class="op">=</span><span class="st">"dataset"</span>)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    zipfile.ZipFile(caminho).extractall(PASTA_LC)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>NOMES_LC <span class="op">=</span> [<span class="st">"fundo"</span>, <span class="st">"edificação"</span>, <span class="st">"floresta"</span>, <span class="st">"água"</span>, <span class="st">"estrada"</span>]</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>CORES_LC <span class="op">=</span> [<span class="st">"#d9d9d9"</span>, <span class="st">"#e34948"</span>, <span class="st">"#1baf7a"</span>, <span class="st">"#2a78d6"</span>, <span class="st">"#eda100"</span>]</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>cmap_lc <span class="op">=</span> ListedColormap(CORES_LC)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"PyTorch </span><span class="sc">{</span>torch<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">, timm </span><span class="sc">{</span>timm<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>PyTorch 2.14.1, timm 1.0.30</code></pre>
+</div>
+</div>
+</section>
+<section id="parte-1-o-mecanismo-de-atenção" class="level1">
+<h1>Parte 1 — O mecanismo de atenção</h1>
+<section id="a-intuição" class="level2">
+<h2 class="anchored" data-anchor-id="a-intuição">1.1 A intuição</h2>
+<p>Uma convolução (aula 6) olha só para a <strong>vizinhança</strong> de cada pixel. Para relacionar partes distantes da imagem (o olho esquerdo com o direito, um rio com a ponte que o cruza) uma CNN precisa empilhar muitas camadas.</p>
+<p>A <strong>atenção</strong> faz isso em <strong>uma</strong> camada: cada elemento (uma palavra, um pedaço da imagem) olha para <strong>todos</strong> os outros e decide quanto cada um importa para ele. Cada elemento gera três vetores:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Vetor</th>
+<th>Pergunta</th>
+<th>Analogia em uma biblioteca</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Query</strong> <span class="math inline">\(Q\)</span></td>
+<td>“o que eu estou procurando?”</td>
+<td>o que você digita na busca</td>
+</tr>
+<tr class="even">
+<td><strong>Key</strong> <span class="math inline">\(K\)</span></td>
+<td>“o que eu ofereço?”</td>
+<td>o título de cada livro</td>
+</tr>
+<tr class="odd">
+<td><strong>Value</strong> <span class="math inline">\(V\)</span></td>
+<td>“qual o meu conteúdo?”</td>
+<td>o conteúdo do livro</td>
+</tr>
+</tbody>
+</table>
+<p>A semelhança entre a <em>query</em> de um elemento e a <em>key</em> de cada outro vira um <strong>peso</strong>, e a saída é a média dos <em>values</em> ponderada por esses pesos:</p>
+<p><span class="math display">\[\text{Atenção}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d}}\right) V\]</span></p>
+</section>
+<section id="atenção-do-zero" class="level2">
+<h2 class="anchored" data-anchor-id="atenção-do-zero">1.2 Atenção do zero</h2>
+<div id="9198b616" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:10.158431Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:10.158322Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:10.243720Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:10.243344Z&quot;}}" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> atencao(Q, K, V):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> Q.shape[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    pontuacoes <span class="op">=</span> Q <span class="op">@</span> K.transpose(<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>) <span class="op">/</span> d <span class="op">**</span> <span class="fl">0.5</span>     <span class="co"># semelhança entre cada query e cada key</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    pesos <span class="op">=</span> pontuacoes.softmax(dim<span class="op">=-</span><span class="dv">1</span>)                   <span class="co"># cada linha soma 1</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pesos <span class="op">@</span> V, pesos</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> [<span class="st">"rio"</span>, <span class="st">"ponte"</span>, <span class="st">"chuva"</span>, <span class="st">"cheia"</span>, <span class="st">"estrada"</span>, <span class="st">"casa"</span>]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>X_tok <span class="op">=</span> torch.randn(<span class="bu">len</span>(tokens), <span class="dv">16</span>)                     <span class="co"># 6 "tokens", cada um um vetor de 16 números</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>W_q, W_k, W_v <span class="op">=</span> (nn.Linear(<span class="dv">16</span>, <span class="dv">8</span>, bias<span class="op">=</span><span class="va">False</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>))   <span class="co"># projeções aprendíveis</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    Q, K, V <span class="op">=</span> W_q(X_tok), W_k(X_tok), W_v(X_tok)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    saida, pesos <span class="op">=</span> atencao(Q, K, V)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    saida_torch <span class="op">=</span> F.scaled_dot_product_attention(Q[<span class="va">None</span>], K[<span class="va">None</span>], V[<span class="va">None</span>])[<span class="dv">0</span>]</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"entrada </span><span class="sc">{</span><span class="bu">tuple</span>(X_tok.shape)<span class="sc">}</span><span class="ss"> → Q, K, V </span><span class="sc">{</span><span class="bu">tuple</span>(Q.shape)<span class="sc">}</span><span class="ss"> → saída </span><span class="sc">{</span><span class="bu">tuple</span>(saida.shape)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"igual ao F.scaled_dot_product_attention do PyTorch? </span><span class="sc">{</span>torch<span class="sc">.</span>allclose(saida, saida_torch, atol<span class="op">=</span><span class="fl">1e-6</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"cada linha dos pesos soma 1: </span><span class="sc">{</span>pesos<span class="sc">.</span><span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>)<span class="sc">.</span><span class="bu">round</span>(decimals<span class="op">=</span><span class="dv">4</span>)<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">6.5</span>, <span class="dv">5</span>))</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(pesos, cmap<span class="op">=</span><span class="st">"Blues"</span>, vmin<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xticks<span class="op">=</span><span class="bu">range</span>(<span class="dv">6</span>), xticklabels<span class="op">=</span>tokens, yticks<span class="op">=</span><span class="bu">range</span>(<span class="dv">6</span>), yticklabels<span class="op">=</span>tokens,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>       xlabel<span class="op">=</span><span class="st">"key: para quem se olha"</span>, ylabel<span class="op">=</span><span class="st">"query: quem olha"</span>, title<span class="op">=</span><span class="st">"Matriz de atenção (pesos aleatórios)"</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>):</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>):</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        ax.text(j, i, <span class="ss">f"</span><span class="sc">{</span>pesos[i, j]<span class="sc">:.2f}</span><span class="ss">"</span>, ha<span class="op">=</span><span class="st">"center"</span>, va<span class="op">=</span><span class="st">"center"</span>, fontsize<span class="op">=</span><span class="dv">9</span>, color<span class="op">=</span><span class="st">"white"</span> <span class="cf">if</span> pesos[i, j] <span class="op">&gt;</span> <span class="fl">0.3</span> <span class="cf">else</span> TINTA)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">False</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>plt.colorbar(im, ax<span class="op">=</span>ax, shrink<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>entrada (6, 16) → Q, K, V (6, 8) → saída (6, 8)
+igual ao F.scaled_dot_product_attention do PyTorch? True
+cada linha dos pesos soma 1: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl7_atencao_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Com projeções aleatórias os pesos não significam nada; <strong>treinar</strong> é justamente ajustar <span class="math inline">\(W_q\)</span>, <span class="math inline">\(W_k\)</span> e <span class="math inline">\(W_v\)</span> para que cada elemento preste atenção nos outros elementos <strong>relevantes</strong>.</p>
+<p>Na prática usamos <strong>várias cabeças</strong> (<em>multi-head attention</em>): várias atenções em paralelo, cada uma com suas projeções, que aprendem a procurar coisas diferentes. O PyTorch já tem a camada pronta:</p>
+<div id="f8f235c4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:10.244815Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:10.244750Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:10.248434Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:10.248119Z&quot;}}" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mha <span class="op">=</span> nn.MultiheadAttention(embed_dim<span class="op">=</span><span class="dv">16</span>, num_heads<span class="op">=</span><span class="dv">4</span>, batch_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>saida, pesos_mha <span class="op">=</span> mha(X_tok[<span class="va">None</span>], X_tok[<span class="va">None</span>], X_tok[<span class="va">None</span>])      <span class="co"># autoatenção: Q, K e V vêm da mesma sequência</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"entrada (1, 6, 16) → saída </span><span class="sc">{</span><span class="bu">tuple</span>(saida.shape)<span class="sc">}</span><span class="ss">, pesos </span><span class="sc">{</span><span class="bu">tuple</span>(pesos_mha.shape)<span class="sc">}</span><span class="ss"> (média das 4 cabeças)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>entrada (1, 6, 16) → saída (1, 6, 16), pesos (1, 6, 6) (média das 4 cabeças)</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="parte-2-o-bloco-transformer" class="level1">
+<h1>Parte 2 — O bloco Transformer</h1>
+<p>A atenção sozinha não é um Transformer. Um <strong>bloco Transformer</strong> junta quatro peças, e três delas já conhecemos:</p>
+<pre><code>  x ──────────────┐                      x ─────────────┐
+  │               │                      │              │
+  LayerNorm       │                      LayerNorm      │
+  │               │  conexão             │              │  conexão
+  Multi-Head      │  residual            MLP            │  residual
+  Attention       │  (ResNet!)           (Linear →      │
+  │               │                       GELU →        │
+  + ◄─────────────┘                       Linear)       │
+  │                                      │              │
+  └──────────── ► ───────────────────►   + ◄────────────┘</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Peça</th>
+<th>Papel</th>
+<th>Onde já vimos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Multi-Head Attention</strong></td>
+<td>cada token <strong>troca informação</strong> com todos os outros</td>
+<td>Parte 1</td>
+</tr>
+<tr class="even">
+<td><strong>MLP</strong> (duas camadas lineares)</td>
+<td>cada token <strong>processa</strong> a informação que recebeu, sozinho</td>
+<td>aulas 1 a 4</td>
+</tr>
+<tr class="odd">
+<td><strong>Conexão residual</strong> (<code>x + ...</code>)</td>
+<td>o gradiente flui por dezenas de blocos</td>
+<td>ResNet, aula 6</td>
+</tr>
+<tr class="even">
+<td><strong>LayerNorm</strong></td>
+<td>normaliza cada token (média 0, desvio 1), estabiliza o treino</td>
+<td>parente do BatchNorm da ResNet</td>
+</tr>
+</tbody>
+</table>
+<p>Um modelo como o ViT ou um LLM é basicamente <strong>dezenas desses blocos empilhados</strong>.</p>
+<div id="9af0e1c9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:10.249360Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:10.249288Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:10.256582Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:10.256291Z&quot;}}" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BlocoTransformer(nn.Module):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, dim<span class="op">=</span><span class="dv">16</span>, cabecas<span class="op">=</span><span class="dv">4</span>, expansao<span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm1 <span class="op">=</span> nn.LayerNorm(dim)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.atencao <span class="op">=</span> nn.MultiheadAttention(dim, cabecas, batch_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm2 <span class="op">=</span> nn.LayerNorm(dim)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mlp <span class="op">=</span> nn.Sequential(nn.Linear(dim, expansao <span class="op">*</span> dim), nn.GELU(), nn.Linear(expansao <span class="op">*</span> dim, dim))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        h <span class="op">=</span> <span class="va">self</span>.norm1(x)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.atencao(h, h, h)[<span class="dv">0</span>]        <span class="co"># 1. os tokens conversam entre si (+ residual)</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.mlp(<span class="va">self</span>.norm2(x))          <span class="co"># 2. cada token processa o que recebeu (+ residual)</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>bloco <span class="op">=</span> BlocoTransformer()</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> X_tok[<span class="va">None</span>]                                   <span class="co"># (1 sequência, 6 tokens, 16 números)</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"entrada </span><span class="sc">{</span><span class="bu">tuple</span>(x.shape)<span class="sc">}</span><span class="ss"> → saída </span><span class="sc">{</span><span class="bu">tuple</span>(bloco(x).shape)<span class="sc">}</span><span class="ss">: o formato não muda, então dá para empilhar"</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>pronto <span class="op">=</span> nn.TransformerEncoderLayer(d_model<span class="op">=</span><span class="dv">16</span>, nhead<span class="op">=</span><span class="dv">4</span>, dim_feedforward<span class="op">=</span><span class="dv">64</span>, batch_first<span class="op">=</span><span class="va">True</span>, norm_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"parâmetros: nosso bloco = </span><span class="sc">{</span><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> bloco.parameters())<span class="sc">}</span><span class="ss">, "</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"nn.TransformerEncoderLayer do PyTorch = </span><span class="sc">{</span><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> pronto.parameters())<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>encoder <span class="op">=</span> nn.Sequential(<span class="op">*</span>[BlocoTransformer() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>)])  <span class="co"># 6 blocos empilhados = um encoder Transformer</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"6 blocos empilhados: </span><span class="sc">{</span><span class="bu">tuple</span>(encoder(x).shape)<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> encoder.parameters())<span class="sc">:,}</span><span class="ss"> parâmetros"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>entrada (1, 6, 16) → saída (1, 6, 16): o formato não muda, então dá para empilhar
+parâmetros: nosso bloco = 3280, nn.TransformerEncoderLayer do PyTorch = 3280
+6 blocos empilhados: (1, 6, 16), 19,680 parâmetros</code></pre>
+</div>
+</div>
+<section id="a-atenção-não-sabe-a-ordem-dos-tokens" class="level3">
+<h3 class="anchored" data-anchor-id="a-atenção-não-sabe-a-ordem-dos-tokens">A atenção não sabe a ordem dos tokens</h3>
+<p>Um detalhe importante: a atenção compara <strong>todos com todos</strong>, sem olhar a posição. Se embaralharmos os tokens da entrada, a saída sai <strong>embaralhada do mesmo jeito</strong>, com os mesmos valores. Para o bloco, “o rio transbordou após a chuva” e “a chuva transbordou após o rio” seriam a mesma coisa!</p>
+<div id="d1742003" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:10.257425Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:10.257363Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:10.260099Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:10.259791Z&quot;}}" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ordem <span class="op">=</span> torch.randperm(<span class="dv">6</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    saida_normal <span class="op">=</span> bloco(X_tok[<span class="va">None</span>])[<span class="dv">0</span>]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    saida_embaralhada <span class="op">=</span> bloco(X_tok[ordem][<span class="va">None</span>])[<span class="dv">0</span>]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"nova ordem dos tokens: </span><span class="sc">{</span>ordem<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"a saída embaralhada é a saída normal na nova ordem? </span><span class="sc">{</span>torch<span class="sc">.</span>allclose(saida_embaralhada, saida_normal[ordem], atol<span class="op">=</span><span class="fl">1e-5</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>nova ordem dos tokens: [2, 5, 3, 0, 1, 4]
+a saída embaralhada é a saída normal na nova ordem? True</code></pre>
+</div>
+</div>
+<p>Por isso todo Transformer <strong>soma uma informação de posição</strong> a cada token antes do primeiro bloco: um vetor diferente para a posição 1, 2, 3… (<em>positional embedding</em>), que pode ser fixo (senos e cossenos, no artigo original) ou aprendido (no ViT). Com isso, o mesmo token em posições diferentes passa a ter representações diferentes.</p>
+<blockquote class="blockquote">
+<h3 id="ficha-transformer" class="anchored">🗂️ Ficha: Transformer</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Ano</strong></td>
+<td>2017 (Vaswani et al., Google, artigo <em>Attention Is All You Need</em>)</td>
+</tr>
+<tr class="even">
+<td><strong>Antiga ou nova?</strong></td>
+<td><strong>Recente</strong> em termos históricos e a base da IA atual (GPT, Claude, Gemini, BERT, ViT)</td>
+</tr>
+<tr class="odd">
+<td><strong>Tipo de treino</strong></td>
+<td>originalmente <strong>supervisionado</strong> (tradução de textos com pares de frases); hoje quase sempre <strong>auto-supervisionado</strong> em grandes volumes de texto (prever a próxima palavra ou palavras mascaradas)</td>
+</tr>
+<tr class="even">
+<td><strong>Por que é importante</strong></td>
+<td>substituiu as redes recorrentes (LSTM) e a convolução pela <strong>atenção</strong>: cada elemento se relaciona com todos os outros em uma única camada, e o cálculo é <strong>paralelo</strong>, ideal para GPUs</td>
+</tr>
+<tr class="odd">
+<td><strong>Pontos fortes</strong></td>
+<td>contexto <strong>global</strong>; escala muito bem com dados e com tamanho do modelo; a mesma arquitetura serve para texto, imagens, áudio e séries temporais. Cada bloco usa <strong>conexões residuais</strong> (a ideia da ResNet!) e <em>LayerNorm</em></td>
+</tr>
+<tr class="even">
+<td><strong>Limitações</strong></td>
+<td>o custo da atenção cresce com o <strong>quadrado</strong> do número de elementos (imagens grandes ficam caras); precisa de <strong>muitos dados</strong> porque tem pouco conhecimento embutido sobre a estrutura do problema</td>
+</tr>
+<tr class="odd">
+<td><strong>Ainda é usada?</strong></td>
+<td>é <strong>a</strong> arquitetura dominante hoje</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</section>
+</section>
+<section id="parte-3-vision-transformer-vit" class="level1">
+<h1>Parte 3 — Vision Transformer (ViT)</h1>
+<section id="uma-imagem-é-uma-sequência-de-pedaços" class="level2">
+<h2 class="anchored" data-anchor-id="uma-imagem-é-uma-sequência-de-pedaços">3.1 Uma imagem é uma sequência de pedaços</h2>
+<p>Como aplicar atenção a uma imagem? Atenção entre <strong>todos os pixels</strong> seria cara demais (uma imagem 224 × 224 tem 50 mil pixels, então 2,5 bilhões de pares). O ViT corta a imagem em <strong>pedaços</strong> (<em>patches</em>), por exemplo de 16 × 16 pixels, e trata cada pedaço como uma “palavra”:</p>
+<ol type="1">
+<li>a imagem 224 × 224 vira uma grade de 14 × 14 = <strong>196 patches</strong>;</li>
+<li>cada patch é achatado e projetado em um vetor (um <em>token</em>);</li>
+<li>somamos uma <strong>posição</strong> a cada token (a atenção sozinha não sabe onde cada patch estava);</li>
+<li>adicionamos um token especial <strong>[CLS]</strong>, que no fim resume a imagem inteira;</li>
+<li>a sequência passa por vários blocos Transformer.</li>
+</ol>
+<div id="01899dcd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:10.260956Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:10.260898Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:10.389958Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:10.389335Z&quot;}}" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gato <span class="op">=</span> transforms.functional.to_tensor(Image.fromarray(data.chelsea()).resize((<span class="dv">224</span>, <span class="dv">224</span>)))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> <span class="dv">16</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>patches <span class="op">=</span> gato.unfold(<span class="dv">1</span>, P, P).unfold(<span class="dv">2</span>, P, P)                       <span class="co"># (3, 14, 14, 16, 16)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>patches <span class="op">=</span> patches.permute(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">3</span>, P, P)        <span class="co"># (196, 3, 16, 16): uma sequência de 196 patches</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"imagem </span><span class="sc">{</span><span class="bu">tuple</span>(gato.shape)<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>patches<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> patches de </span><span class="sc">{</span><span class="bu">tuple</span>(patches.shape[<span class="dv">1</span>:])<span class="sc">}</span><span class="ss"> → tokens de </span><span class="sc">{</span><span class="dv">3</span> <span class="op">*</span> P <span class="op">*</span> P<span class="sc">}</span><span class="ss"> números"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="fl">4.8</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_axes([<span class="fl">0.0</span>, <span class="fl">0.05</span>, <span class="fl">0.3</span>, <span class="fl">0.9</span>])</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>ax.imshow(gato.permute(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">14</span>):</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    ax.axhline(k <span class="op">*</span> P <span class="op">-</span> <span class="fl">0.5</span>, color<span class="op">=</span><span class="st">"white"</span>, lw<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    ax.axvline(k <span class="op">*</span> P <span class="op">-</span> <span class="fl">0.5</span>, color<span class="op">=</span><span class="st">"white"</span>, lw<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"imagem 224 × 224 cortada em 14 × 14 patches"</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">24</span>):</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_axes([<span class="fl">0.33</span> <span class="op">+</span> k <span class="op">*</span> <span class="fl">0.0275</span>, <span class="fl">0.42</span>, <span class="fl">0.025</span>, <span class="fl">0.16</span>])</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    ax.imshow(patches[k <span class="op">+</span> <span class="dv">84</span>].permute(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>))</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>fig.text(<span class="fl">0.33</span>, <span class="fl">0.66</span>, <span class="st">"… que viram uma SEQUÊNCIA de tokens (patches 85 a 108 mostrados), como palavras em uma frase"</span>,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>         color<span class="op">=</span>TINTA, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>imagem (3, 224, 224) → 196 patches de (3, 16, 16) → tokens de 768 números</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl7_atencao_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<h3 id="ficha-vision-transformer-vit" class="anchored">🗂️ Ficha: Vision Transformer (ViT)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Ano</strong></td>
+<td>2020 (Dosovitskiy et al., Google)</td>
+</tr>
+<tr class="even">
+<td><strong>Antiga ou nova?</strong></td>
+<td><strong>Recente</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Tipo de treino</strong></td>
+<td>no artigo original, <strong>supervisionado</strong> em datasets gigantes (JFT-300M, 300 milhões de imagens); hoje os melhores ViTs são treinados de forma <strong>auto-supervisionada</strong> (Parte 5)</td>
+</tr>
+<tr class="even">
+<td><strong>Por que é importante</strong></td>
+<td>mostrou que <strong>não é preciso convolução</strong> para visão: um Transformer puro sobre patches iguala ou supera as CNNs, e unificou visão e linguagem na mesma arquitetura (base dos modelos multimodais)</td>
+</tr>
+<tr class="odd">
+<td><strong>Pontos fortes</strong></td>
+<td>atenção <strong>global</strong> desde a primeira camada; escala muito bem com dados; é a base dos <strong>modelos de fundação</strong> de visão e de observação da Terra</td>
+</tr>
+<tr class="even">
+<td><strong>Limitações</strong></td>
+<td>com <strong>poucos dados</strong> costuma perder para CNNs (não tem o viés de vizinhança da convolução embutido); custo quadrático no número de patches; resolução limitada pelo tamanho do patch</td>
+</tr>
+<tr class="odd">
+<td><strong>Ainda é usada?</strong></td>
+<td><strong>sim</strong>, é a base de DINOv2, SAM, CLIP, Prithvi e muitos outros</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</section>
+<section id="vendo-a-atenção-de-um-vit-de-verdade" class="level2">
+<h2 class="anchored" data-anchor-id="vendo-a-atenção-de-um-vit-de-verdade">3.2 Vendo a atenção de um ViT de verdade</h2>
+<p>Vamos abrir um ViT treinado: o <strong>DINOv2</strong> (ViT-S/14, versão com <em>registers</em>), baixado do Hub. Interceptamos a entrada da última camada de atenção e calculamos os pesos <span class="math inline">\(\text{softmax}(QK^\top/\sqrt{d})\)</span>, como na seção 1.2.</p>
+<p>Duas perguntas:</p>
+<ol type="1">
+<li>Se escolhermos o patch de <strong>um olho</strong> do gato, para onde ele presta atenção?</li>
+<li>Para onde olha cada uma das 6 <strong>cabeças</strong> do token [CLS]?</li>
+</ol>
+<blockquote class="blockquote">
+<p>Sobre os <em>registers</em>: ViTs grandes tendem a “esconder” informação global em alguns patches do fundo, o que deixa os mapas de atenção ruidosos. A versão com <em>registers</em> (Darcet et al., 2023) adiciona 4 tokens extras para esse papel, e os mapas ficam limpos.</p>
+</blockquote>
+<div id="11f5e139" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:10.391745Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:10.391675Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:11.367255Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:11.366812Z&quot;}}" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>inicio <span class="op">=</span> time.time()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dino <span class="op">=</span> timm.create_model(<span class="st">"hf-hub:timm/vit_small_patch14_reg4_dinov2.lvd142m"</span>, pretrained<span class="op">=</span><span class="va">True</span>, img_size<span class="op">=</span><span class="dv">448</span>).<span class="bu">eval</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>N_PREFIXO <span class="op">=</span> dino.num_prefix_tokens                       <span class="co"># 1 [CLS] + 4 registers</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>LADO <span class="op">=</span> <span class="dv">448</span> <span class="op">//</span> <span class="dv">14</span>                                         <span class="co"># 32 × 32 patches</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"DINOv2 ViT-S/14 carregado em </span><span class="sc">{</span>time<span class="sc">.</span>time() <span class="op">-</span> inicio<span class="sc">:.0f}</span><span class="ss"> s: </span><span class="sc">{</span><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> dino.parameters()) <span class="op">/</span> <span class="fl">1e6</span><span class="sc">:.0f}</span><span class="ss"> M parâmetros, "</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(dino.blocks)<span class="sc">}</span><span class="ss"> blocos, </span><span class="sc">{</span>dino<span class="sc">.</span>blocks[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>attn<span class="sc">.</span>num_heads<span class="sc">}</span><span class="ss"> cabeças, </span><span class="sc">{</span>N_PREFIXO<span class="sc">}</span><span class="ss"> tokens especiais"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepara(img, lado<span class="op">=</span><span class="dv">448</span>):</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> transforms.functional.to_tensor(Image.fromarray(img).resize((lado, lado), Image.BICUBIC))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> normaliza(x)[<span class="va">None</span>]</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>capturado <span class="op">=</span> {}</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>dino.blocks[<span class="op">-</span><span class="dv">1</span>].attn.register_forward_hook(<span class="kw">lambda</span> modulo, entrada, saida: capturado.<span class="fu">__setitem__</span>(<span class="st">"x"</span>, entrada[<span class="dv">0</span>]))</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> atencao_ultima_camada(img):</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Devolve as features dos patches e os pesos de atenção da última camada: (cabeças, tokens, tokens)."""</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    feats <span class="op">=</span> dino.forward_features(prepara(img))</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    a, x <span class="op">=</span> dino.blocks[<span class="op">-</span><span class="dv">1</span>].attn, capturado[<span class="st">"x"</span>]</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    B, N, C <span class="op">=</span> x.shape</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    qkv <span class="op">=</span> a.qkv(x).reshape(B, N, <span class="dv">3</span>, a.num_heads, C <span class="op">//</span> a.num_heads).permute(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    q, k <span class="op">=</span> a.q_norm(qkv[<span class="dv">0</span>]), a.k_norm(qkv[<span class="dv">1</span>])</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    pesos <span class="op">=</span> (q <span class="op">@</span> k.transpose(<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>) <span class="op">*</span> a.scale).softmax(dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> feats[<span class="dv">0</span>, N_PREFIXO:], pesos[<span class="dv">0</span>]</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>img_gato <span class="op">=</span> data.chelsea()</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>feats_gato, att_gato <span class="op">=</span> atencao_ultima_camada(img_gato)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"features dos patches: </span><span class="sc">{</span><span class="bu">tuple</span>(feats_gato.shape)<span class="sc">}</span><span class="ss">   pesos de atenção: </span><span class="sc">{</span><span class="bu">tuple</span>(att_gato.shape)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>DINOv2 ViT-S/14 carregado em 1 s: 22 M parâmetros, 12 blocos, 6 cabeças, 5 tokens especiais
+features dos patches: (1024, 384)   pesos de atenção: (6, 1029, 1029)</code></pre>
+</div>
+</div>
+<div id="f1d7f130" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:11.368649Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:11.368551Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:11.599397Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:11.599010Z&quot;}}" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>gato_448 <span class="op">=</span> np.array(Image.fromarray(img_gato).resize((<span class="dv">448</span>, <span class="dv">448</span>)))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>linha_olho, coluna_olho <span class="op">=</span> <span class="dv">11</span>, <span class="dv">11</span>                                     <span class="co"># patch sobre o olho esquerdo</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>indice_olho <span class="op">=</span> N_PREFIXO <span class="op">+</span> linha_olho <span class="op">*</span> LADO <span class="op">+</span> coluna_olho</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>mapa_olho <span class="op">=</span> att_gato[:, indice_olho, N_PREFIXO:].mean(<span class="dv">0</span>).reshape(LADO, LADO)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>mapas_cls <span class="op">=</span> att_gato[:, <span class="dv">0</span>, N_PREFIXO:].reshape(<span class="op">-</span><span class="dv">1</span>, LADO, LADO)       <span class="co"># atenção do [CLS] em cada cabeça</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">9</span>))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].imshow(gato_448)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].add_patch(Rectangle((coluna_olho <span class="op">*</span> <span class="dv">14</span>, linha_olho <span class="op">*</span> <span class="dv">14</span>), <span class="dv">14</span>, <span class="dv">14</span>, fill<span class="op">=</span><span class="va">False</span>, edgecolor<span class="op">=</span>LARANJA, lw<span class="op">=</span><span class="dv">3</span>))</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">"patch escolhido (laranja)"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">1</span>].imshow(gato_448)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">1</span>].imshow(np.array(Image.fromarray(mapa_olho.numpy()).resize((<span class="dv">448</span>, <span class="dv">448</span>), Image.BILINEAR)), cmap<span class="op">=</span><span class="st">"inferno"</span>, alpha<span class="op">=</span><span class="fl">0.65</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">"para onde esse patch olha"</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>):</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes.flat[<span class="dv">2</span> <span class="op">+</span> h]</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    ax.imshow(mapas_cls[h], cmap<span class="op">=</span><span class="st">"viridis"</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"[CLS], cabeça </span><span class="sc">{</span>h <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes.flat:</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"Atenção na última camada do DINOv2"</span>, y<span class="op">=</span><span class="fl">0.99</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl7_atencao_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Leitura:</strong> o patch de um olho presta atenção principalmente <strong>no outro olho</strong>, que está do outro lado da imagem. Uma convolução 3 × 3 precisaria de muitas camadas para relacionar duas regiões tão distantes; a atenção faz isso em uma operação. Cada cabeça do [CLS] se especializou em algo diferente: contornos, olhos, orelhas, regiões do fundo.</p>
+<p>Ninguém disse ao modelo o que é um olho: <strong>o DINOv2 nunca viu um rótulo</strong>. Ele foi treinado de forma auto-supervisionada, o assunto da última parte.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>CNN (ResNet)</th>
+<th>Transformer (ViT)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Operação básica</td>
+<td>convolução (filtro local)</td>
+<td>atenção (todos com todos)</td>
+</tr>
+<tr class="even">
+<td>Contexto</td>
+<td><strong>local</strong>, cresce com a profundidade</td>
+<td><strong>global</strong> desde a 1ª camada</td>
+</tr>
+<tr class="odd">
+<td>Conhecimento embutido</td>
+<td>vizinhança e translação (bom com poucos dados)</td>
+<td>quase nenhum (precisa de muitos dados)</td>
+</tr>
+<tr class="even">
+<td>Custo</td>
+<td>linear no nº de pixels</td>
+<td>quadrático no nº de patches</td>
+</tr>
+<tr class="odd">
+<td>Melhor quando</td>
+<td>poucos dados, imagens grandes, tempo real</td>
+<td>muitos dados, pré-treino em larga escala</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="parte-4-um-primeiro-olhar-no-aprendizado-auto-supervisionado" class="level1">
+<h1>Parte 4 — Um primeiro olhar no aprendizado auto-supervisionado</h1>
+<section id="o-gargalo-dos-rótulos" class="level2">
+<h2 class="anchored" data-anchor-id="o-gargalo-dos-rótulos">4.1 O gargalo dos rótulos</h2>
+<p>Tudo o que treinamos até aqui foi <strong>supervisionado</strong>: alguém rotulou cada imagem (ou cada pixel). Rótulos são caros, lentos e, em observação da Terra, raros: existem <strong>petabytes</strong> de imagens de satélite, mas pouquíssimas máscaras de uso do solo.</p>
+<p>O <strong>aprendizado auto-supervisionado</strong> (<em>self-supervised learning</em>, SSL) cria a supervisão <strong>a partir dos próprios dados</strong>, com uma tarefa “de pretexto”:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Família</th>
+<th>Tarefa de pretexto</th>
+<th>Exemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Modelagem mascarada</strong></td>
+<td>esconder ~75% dos patches e reconstruí-los</td>
+<td>MAE (2021), SatMAE (2022), Prithvi (2023)</td>
+</tr>
+<tr class="even">
+<td><strong>Contrastiva</strong></td>
+<td>duas versões aumentadas da mesma imagem devem ter representações parecidas, e imagens diferentes, distantes</td>
+<td>SimCLR, MoCo (2020), SSL4EO-S12 (2022)</td>
+</tr>
+<tr class="odd">
+<td><strong>Autodestilação</strong></td>
+<td>um “aluno” aprende a imitar um “professor” que vê outra versão da imagem</td>
+<td>DINO (2021), DINOv2 (2023), DINOv3 (2025)</td>
+</tr>
+</tbody>
+</table>
+<p>Depois desse <strong>pré-treino</strong> em milhões de imagens sem rótulo, o modelo vira um <strong>modelo de fundação</strong>: com poucas imagens rotuladas, ele é adaptado (<em>fine-tuning</em>) para tarefas específicas, exatamente como fizemos com a ResNet-50 na U-Net da aula 6.</p>
+<blockquote class="blockquote">
+<h3 id="ficha-modelos-auto-supervisionados-mae-dino-dinov2" class="anchored">🗂️ Ficha: Modelos auto-supervisionados (MAE, DINO, DINOv2)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Ano</strong></td>
+<td>2020–2021 (SimCLR, MoCo, MAE, DINO) e 2023 (DINOv2); continuam evoluindo rápido (DINOv3 em 2025)</td>
+</tr>
+<tr class="even">
+<td><strong>Antiga ou nova?</strong></td>
+<td><strong>Nova geração</strong>: a fronteira atual da área</td>
+</tr>
+<tr class="odd">
+<td><strong>Tipo de treino</strong></td>
+<td><strong>auto-supervisionado</strong>: milhões ou bilhões de imagens <strong>sem rótulos</strong> (o DINOv2 usou 142 milhões de imagens selecionadas); depois, ajuste supervisionado com poucos rótulos</td>
+</tr>
+<tr class="even">
+<td><strong>Por que é importante</strong></td>
+<td>quebra a dependência de rótulos; as representações aprendidas são tão gerais que servem para classificação, segmentação, profundidade e busca <strong>sem retreinar o backbone</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Pontos fortes</strong></td>
+<td>aproveita dados não rotulados abundantes (perfeito para satélites); representações ricas e transferíveis; poucos rótulos para adaptar a novas tarefas</td>
+</tr>
+<tr class="even">
+<td><strong>Limitações</strong></td>
+<td>o pré-treino exige <strong>muita computação</strong> (centenas de GPUs); modelos grandes; é preciso escolher bem os dados e as tarefas de pretexto; o domínio importa (um modelo de fotos não é ideal para radar)</td>
+</tr>
+<tr class="odd">
+<td><strong>Ainda é usada?</strong></td>
+<td>é <strong>o</strong> caminho dos modelos de fundação atuais, inclusive em observação da Terra</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</section>
+<section id="o-que-um-modelo-auto-supervisionado-aprende-sem-rótulos" class="level2">
+<h2 class="anchored" data-anchor-id="o-que-um-modelo-auto-supervisionado-aprende-sem-rótulos">4.2 O que um modelo auto-supervisionado aprende sem rótulos</h2>
+<p>Pegamos as <strong>features</strong> que o DINOv2 produz para cada patch (vetores de 384 números) e as comprimimos em <strong>3 números</strong> com PCA, usados como cores RGB. Patches com features parecidas ficam com cores parecidas. Também agrupamos as features com <strong>K-means</strong> (a técnica da aula de aprendizado não supervisionado) em 5 grupos.</p>
+<p>Ninguém disse ao modelo o que é um olho, uma floresta ou um telhado.</p>
+<div id="dc8caca1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-20T12:20:11.601689Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-20T12:20:11.601596Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-20T12:20:12.762190Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-20T12:20:12.761563Z&quot;}}" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pca_rgb(feats):</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    rgb <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">3</span>).fit_transform(feats.numpy())</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    rgb <span class="op">=</span> (rgb <span class="op">-</span> rgb.<span class="bu">min</span>(<span class="dv">0</span>)) <span class="op">/</span> (rgb.<span class="bu">max</span>(<span class="dv">0</span>) <span class="op">-</span> rgb.<span class="bu">min</span>(<span class="dv">0</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rgb.reshape(LADO, LADO, <span class="dv">3</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>ID_AEREO <span class="op">=</span> <span class="st">"M-33-20-D-d-3-3_247"</span>                      <span class="co"># recorte com as 5 classes</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>img_aerea <span class="op">=</span> io.imread(<span class="ss">f"</span><span class="sc">{</span>PASTA_LC<span class="sc">}</span><span class="ss">/output/</span><span class="sc">{</span>ID_AEREO<span class="sc">}</span><span class="ss">.jpg"</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>mascara_aerea <span class="op">=</span> io.imread(<span class="ss">f"</span><span class="sc">{</span>PASTA_LC<span class="sc">}</span><span class="ss">/output/</span><span class="sc">{</span>ID_AEREO<span class="sc">}</span><span class="ss">_m.png"</span>)[..., <span class="dv">0</span>]</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>feats_aereo, _ <span class="op">=</span> atencao_ultima_camada(img_aerea)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="fl">8.3</span>))</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> linha, (img, feats, ref, titulo_ref) <span class="kw">in</span> <span class="bu">enumerate</span>([</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        (img_gato, feats_gato, <span class="va">None</span>, <span class="va">None</span>),</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        (img_aerea, feats_aereo, mascara_aerea, <span class="st">"rótulo real (só para comparar)"</span>)]):</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    grupos <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">5</span>, n_init<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit_predict(feats.numpy()).reshape(LADO, LADO)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    axes[linha, <span class="dv">0</span>].imshow(img)<span class="op">;</span> axes[linha, <span class="dv">0</span>].set_title(<span class="st">"imagem"</span>)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    axes[linha, <span class="dv">1</span>].imshow(pca_rgb(feats))<span class="op">;</span> axes[linha, <span class="dv">1</span>].set_title(<span class="st">"features do DINOv2 (PCA → RGB)"</span>)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    axes[linha, <span class="dv">2</span>].imshow(grupos, cmap<span class="op">=</span><span class="st">"tab10"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">9</span>, interpolation<span class="op">=</span><span class="st">"nearest"</span>)<span class="op">;</span> axes[linha, <span class="dv">2</span>].set_title(<span class="st">"K-means, 5 grupos (sem rótulos)"</span>)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ref <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>        axes[linha, <span class="dv">3</span>].imshow(ref, cmap<span class="op">=</span>cmap_lc, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">4</span>, interpolation<span class="op">=</span><span class="st">"nearest"</span>)<span class="op">;</span> axes[linha, <span class="dv">3</span>].set_title(titulo_ref)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        axes[linha, <span class="dv">3</span>].axis(<span class="st">"off"</span>)</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax <span class="kw">in</span> axes[linha, :<span class="dv">3</span>]:</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>        ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">3</span>].axis(<span class="st">"off"</span>)</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"O que o DINOv2 aprendeu sem nenhum rótulo"</span>, y<span class="op">=</span><span class="fl">0.99</span>)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dl7_atencao_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Leitura:</strong> no gato, as features separam olhos, nariz e boca, pelo e fundo. Na imagem aérea, <strong>floresta</strong>, <strong>água</strong> e a <strong>área com casas e quintais</strong> formam grupos diferentes, com fronteiras muito próximas das do rótulo real, e a estrada aparece como uma faixa entre elas. O DINOv2 nem foi treinado com imagens aéreas, e o K-means não sabe os nomes das classes (as cores dos grupos não correspondem às do rótulo). Mesmo assim, é quase uma segmentação sem um único rótulo.</p>
+</section>
+<section id="modelos-de-fundação-para-observação-da-terra" class="level2">
+<h2 class="anchored" data-anchor-id="modelos-de-fundação-para-observação-da-terra">4.3 Modelos de fundação para observação da Terra</h2>
+<p>A mesma ideia está sendo aplicada a imagens de satélite, com modelos disponíveis no Hugging Face:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>Quem</th>
+<th>Ano</th>
+<th>Pré-treino</th>
+<th>No Hub</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Prithvi-EO</strong></td>
+<td>NASA e IBM</td>
+<td>2023 / 2024</td>
+<td>autoencoder mascarado (MAE) em séries temporais do Harmonized Landsat Sentinel-2</td>
+<td><code>ibm-nasa-geospatial/Prithvi-EO-2.0-300M</code></td>
+</tr>
+<tr class="even">
+<td><strong>SSL4EO-S12</strong></td>
+<td>TU Munich / DLR</td>
+<td>2022</td>
+<td>contrastivo e MAE em Sentinel-1 e Sentinel-2</td>
+<td><code>wangyi111/SSL4EO-S12</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Clay</strong></td>
+<td>Clay (organização sem fins lucrativos)</td>
+<td>2024</td>
+<td>MAE em vários sensores e resoluções</td>
+<td><code>made-with-clay/Clay</code></td>
+</tr>
+<tr class="even">
+<td><strong>DOFA</strong></td>
+<td>TU Munich e parceiros</td>
+<td>2024</td>
+<td>um único modelo para sensores com número de bandas diferente</td>
+<td><code>earthflow/DOFA</code></td>
+</tr>
+<tr class="odd">
+<td><strong>DINOv3 (satélite)</strong></td>
+<td>Meta</td>
+<td>2025</td>
+<td>autodestilação em ~493 milhões de imagens de satélite</td>
+<td><code>facebook/dinov3-vitl16-pretrain-sat493m</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Na próxima aula</strong> vamos entender como esses modelos são treinados (tarefas de pretexto, <em>masking</em>, autodestilação) e como adaptá-los a um problema real com poucos rótulos.</p>
+</section>
+</section>
+<section id="resumo" class="level1">
+<h1>Resumo</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Conceito</th>
+<th>Ideia-chave</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Atenção</strong></td>
+<td>cada elemento olha para <strong>todos</strong> os outros, com pesos <span class="math inline">\(\text{softmax}(QK^\top/\sqrt{d})\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>Multi-head</strong></td>
+<td>várias atenções em paralelo, cada uma procurando relações diferentes</td>
+</tr>
+<tr class="odd">
+<td><strong>Bloco Transformer</strong></td>
+<td>atenção + MLP, cada um com conexão residual e LayerNorm; dezenas de blocos empilhados</td>
+</tr>
+<tr class="even">
+<td><strong>Posição</strong></td>
+<td>a atenção ignora a ordem; por isso somamos <em>positional embeddings</em> aos tokens</td>
+</tr>
+<tr class="odd">
+<td><strong>ViT</strong></td>
+<td>a imagem vira uma sequência de patches; atenção global desde a primeira camada</td>
+</tr>
+<tr class="even">
+<td><strong>Auto-supervisionado</strong></td>
+<td>aprender representações <strong>sem rótulos</strong> (MAE, DINO) e depois adaptar com poucos rótulos</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquitetura</th>
+<th>Ano</th>
+<th>Era</th>
+<th>Tipo de treino</th>
+<th>Ponto forte</th>
+<th>Ponto fraco</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Transformer</td>
+<td>2017</td>
+<td>atual</td>
+<td>supervisionado → auto-supervisionado</td>
+<td>contexto global, escala com dados</td>
+<td>custo quadrático, precisa de muitos dados</td>
+</tr>
+<tr class="even">
+<td>ViT</td>
+<td>2020</td>
+<td>atual</td>
+<td>supervisionado → auto-supervisionado</td>
+<td>atenção global em imagens</td>
+<td>fraco com poucos dados</td>
+</tr>
+<tr class="odd">
+<td>DINOv2, MAE, Prithvi</td>
+<td>2021–2025</td>
+<td>nova geração</td>
+<td><strong>auto-supervisionado</strong></td>
+<td>representações gerais sem rótulos</td>
+<td>pré-treino muito caro</td>
+</tr>
+</tbody>
+</table>
+<section id="exercícios" class="level3">
+<h3 class="anchored" data-anchor-id="exercícios">Exercícios</h3>
+<ol type="1">
+<li>Na seção 1.2, troque a divisão por <span class="math inline">\(\sqrt{d}\)</span> por uma divisão por 1. O que acontece com os pesos de atenção? (Dica: olhe o quanto cada linha fica “concentrada” em um único token.)</li>
+<li>No <code>BlocoTransformer</code>, remova as duas conexões residuais e empilhe 12 blocos. A saída continua com valores razoáveis?</li>
+<li>Some um vetor de posição aleatório (<code>torch.randn(6, 16)</code>) a <code>X_tok</code> e repita o teste de embaralhar os tokens. A saída embaralhada ainda é igual à normal reordenada? Por quê?</li>
+<li>Na seção 3.2, mude o patch escolhido (por exemplo, para o nariz). Para onde ele olha agora?</li>
+<li>Na seção 4.2, troque o número de grupos do K-means. Com quantos grupos a imagem aérea fica mais parecida com o rótulo real?</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ftl-brazil-2026\.github\.io\/ebook\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../deep-learning/dl6_arquiteturas.html" class="pagination-link" aria-label="Deep Learning 6">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Deep Learning 6</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../state-of-art/index.html" class="pagination-link" aria-label="Estado da Arte (State-of-Art)">
+        <span class="nav-page-text">Estado da Arte (State-of-Art)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>SpaceTech Bootcamp · Emanuel Goulart</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
