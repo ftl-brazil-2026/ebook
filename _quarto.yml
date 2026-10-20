@@ -58,6 +58,8 @@ website:
         - deep-learning/dl3_otimizadores.ipynb
         - deep-learning/dl4_pipeline_de_treino.ipynb
         - deep-learning/dl5_lightning_qualquer_coisa.ipynb
+        - deep-learning/dl6_arquiteturas.ipynb
+        - deep-learning/dl7_atencao.ipynb
       - section: "Estado da Arte (State-of-Art)"
         contents:
           - state-of-art/index.md

@@ -40,3 +40,4 @@ ml-dl/logs/
 # dados e logs dos notebooks de Deep Learning
 deep-learning/data/MNIST/
 deep-learning/logs/
+deep-learning/data/landcoverai/

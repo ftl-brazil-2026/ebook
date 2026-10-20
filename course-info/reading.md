@@ -17,3 +17,10 @@ Semanalmente, iremos recomendando leituras para ajudar a digerir o amplo e compl
 - Biblia do Deep Learning [Goodfellow Book](https://www.deeplearningbook.org/)
 - Deep Learning Notes [Notes and EBOOK](https://deeplearningnotes.com/)
 - Machine Learning Visualized [ML-Visualized](https://ml-visualized.com/chapter1/linear_regression)
+- Visualizing and Understanding Convolutional Neurowk [Visualizing Dense Layers in CNN](https://arxiv.org/pdf/1311.2901)
+- Stanford Article - Convolutional Neural Network [Stanford cnn](https://cs231n.github.io/convolutional-networks/)
+- Cheatsheet of CNN - [Cheatsheet](https://mriquestions.com/uploads/3/4/5/7/34572113/cheatsheet-convolutional-neural-networks.pdf)
+- Stanford Deep Learning - [DL - Stanford](https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks/)
+- CNN sendo treinada em seu browser. [Karpathy CNN](https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html)
+- 2D visualização de um CNN - [2D CNN](https://adamharley.com/nn_vis/cnn/2d.html
+- 2D CNN Explainer - [CNN Explainer](https://poloclub.github.io/cnn-explainer/)
