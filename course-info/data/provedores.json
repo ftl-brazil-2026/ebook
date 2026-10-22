@@ -169,7 +169,13 @@
         {"nome": "Sentinel-5P (Copernicus Data Space)", "escopo": "GLOBAL", "url": "https://dataspace.copernicus.eu/", "dado": "Colunas troposfericas de NO2, CO, SO2, aerossois"},
         {"nome": "CETESB e orgaos estaduais de meio ambiente", "escopo": "BR", "url": "https://cetesb.sp.gov.br/ar/qualar/", "dado": "Estacoes de superficie, indice horario por municipio"},
         {"nome": "MonitorAr / IEMA", "escopo": "BR", "url": "https://energiaeambiente.org.br/", "dado": "Consolidacao nacional de dados de monitoramento"},
-        {"nome": "OpenAQ", "escopo": "GLOBAL", "url": "https://openaq.org/", "dado": "Agregador global de estacoes, inclui Brasil"}
+        {"nome": "OpenAQ", "escopo": "GLOBAL", "url": "https://openaq.org/", "dado": "Agregador global de estacoes, inclui Brasil"},
+        {"nome": "IBGE - Malhas municipais 2025", "escopo": "BR", "url": "https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2025/Brasil/BR_Municipios_2025.zip", "dado": "Limites municipais oficiais (shapefile) para recortar a grade de emissoes"},
+        {"nome": "BRAIN - Brazilian Atmospheric Inventories", "escopo": "BR", "url": "https://essd.copernicus.org/articles/16/2385/2024/", "dado": "Inventarios de emissoes (industrial, veicular, queimadas, biogenica) em grade de 20 km x 20 km, CMAQ 2019 (Hoinaski et al., 2024)"},
+        {"nome": "LCQAr/UFSC - Banco de monitoramento (MonitorAr estendido)", "escopo": "BR", "url": "https://arquivos.lcqar.ufsc.br/data/databases/stations/Monitoramento_QAr_BR.csv", "dado": "Cadastro de estacoes e medias diarias de MP2,5 (Relatorios Anuais 2024 e 2025)"},
+        {"nome": "LCQAr/UFSC - Relatorio anual de qualidade do ar (interativo)", "escopo": "BR", "url": "https://arquivos.lcqar.ufsc.br/br-airquality-report/intro.html", "dado": "Estacoes, series historicas e medias por municipio e poluente, sem codigo"},
+        {"nome": "CONAMA - Resolucao 506/2024", "escopo": "BR", "url": "https://conama.mma.gov.br/index.php?option=com_sisconama&view=atonormativo&id=756", "dado": "Padroes de qualidade do ar e regras de monitoramento vigentes no Brasil"},
+        {"nome": "CMAS - Metadados de grade I/O API", "escopo": "GLOBAL", "url": "https://cmascenter.org/ioapi/documentation/all_versions/html/GRIDS.html", "dado": "Convencao de grades (WRF/MCIP, CMAQ) para interpretar os NetCDFs de emissao"}
       ]
     },
     {
