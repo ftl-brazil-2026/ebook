@@ -61,9 +61,6 @@ website:
         - deep-learning/dl6_arquiteturas.ipynb
         - deep-learning/dl7_atencao.ipynb
         - deep-learning/dl8_embeddings.ipynb
-      - section: "Estado da Arte (State-of-Art)"
-        contents:
-          - state-of-art/index.md
       - section: "Sessões de Convidados"
         contents:
           - guest-sessions/index.md
