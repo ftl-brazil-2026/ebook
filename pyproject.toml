@@ -47,6 +47,7 @@ dependencies = [
     "torch>=2.14.1",
     "torchvision>=0.29.1",
     "tqdm>=4.70.0",
+    "umap-learn>=0.5.12",
     "xarray>=2026.7.0",
     "xarray-spatial>=0.4.0",
     "zarr>3",
