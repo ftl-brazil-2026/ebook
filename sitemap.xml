@@ -1,139 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/awesome-geospatial/index.html</loc>
-    <lastmod>2026-10-22T16:13:26.742Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/unsupervised_ml_note.html</loc>
-    <lastmod>2026-10-22T16:13:27.219Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/supervised.html</loc>
-    <lastmod>2026-10-22T16:13:27.219Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/how-to-contribute.html</loc>
-    <lastmod>2026-10-22T16:13:26.744Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/cli-utils.html</loc>
-    <lastmod>2026-10-22T16:13:26.743Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/general-info.html</loc>
-    <lastmod>2026-10-22T16:13:26.744Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week4/index.html</loc>
-    <lastmod>2026-10-22T16:13:27.198Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/AUX_week1.html</loc>
-    <lastmod>2026-10-22T16:13:26.837Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html</loc>
-    <lastmod>2026-10-22T16:13:26.879Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week3/image_processing2.html</loc>
-    <lastmod>2026-10-22T16:13:27.173Z</lastmod>
-  </url>
-  <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week2/index.html</loc>
-    <lastmod>2026-10-22T16:13:26.919Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week0/space_tech_ecossystem.html</loc>
-    <lastmod>2026-10-22T16:13:26.827Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/guest-sessions/index.html</loc>
-    <lastmod>2026-10-22T16:13:27.201Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl0_introducao_pytorch.html</loc>
-    <lastmod>2026-10-22T16:13:26.745Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl6_arquiteturas.html</loc>
-    <lastmod>2026-10-22T16:13:26.788Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl7_atencao.html</loc>
-    <lastmod>2026-10-22T16:13:26.797Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl5_lightning_pytorch.html</loc>
-    <lastmod>2026-10-22T16:13:26.761Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl4_pipeline_de_treino.html</loc>
-    <lastmod>2026-10-22T16:13:26.757Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl1_o_que_a_rede_calcula.html</loc>
-    <lastmod>2026-10-22T16:13:26.748Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl3_otimizadores.html</loc>
-    <lastmod>2026-10-22T16:13:26.755Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl2_como_a_rede_aprende.html</loc>
-    <lastmod>2026-10-22T16:13:26.750Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/index.html</loc>
-    <lastmod>2026-10-22T16:13:27.201Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week0/index.html</loc>
-    <lastmod>2026-10-22T16:13:26.804Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week2/RS-Image_Processing.html</loc>
-    <lastmod>2026-10-22T16:13:26.908Z</lastmod>
+    <lastmod>2026-10-28T22:11:23.602Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week2/RS-STAC.html</loc>
-    <lastmod>2026-10-22T16:13:26.919Z</lastmod>
+    <lastmod>2026-10-28T22:11:23.602Z</lastmod>
   </url>
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week3/dem.html</loc>
-    <lastmod>2026-10-22T16:13:27.109Z</lastmod>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/AUX_week1.html</loc>
+    <lastmod>2026-10-28T22:11:23.543Z</lastmod>
   </url>
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/crs_and_projections.html</loc>
-    <lastmod>2026-10-22T16:13:26.846Z</lastmod>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week3/image_processing2.html</loc>
+    <lastmod>2026-10-28T22:11:23.799Z</lastmod>
   </url>
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week4/xarray.html</loc>
-    <lastmod>2026-10-22T16:13:27.201Z</lastmod>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week4/index.html</loc>
+    <lastmod>2026-10-28T22:11:23.819Z</lastmod>
   </url>
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/reading.html</loc>
-    <lastmod>2026-10-22T16:13:26.744Z</lastmod>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week0/index.html</loc>
+    <lastmod>2026-10-28T22:11:23.516Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/index.html</loc>
+    <lastmod>2026-10-28T22:11:23.821Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl6_arquiteturas.html</loc>
+    <lastmod>2026-10-28T22:11:23.489Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl4_pipeline_de_treino.html</loc>
+    <lastmod>2026-10-28T22:11:23.472Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl1_o_que_a_rede_calcula.html</loc>
+    <lastmod>2026-10-28T22:11:23.465Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl8_embeddings.html</loc>
+    <lastmod>2026-10-28T22:11:23.510Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl2_como_a_rede_aprende.html</loc>
+    <lastmod>2026-10-28T22:11:23.467Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/course-info/provedores.html</loc>
-    <lastmod>2026-10-22T16:13:26.744Z</lastmod>
+    <lastmod>2026-10-28T22:11:23.463Z</lastmod>
   </url>
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/setup.html</loc>
-    <lastmod>2026-10-22T16:13:26.744Z</lastmod>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/how-to-contribute.html</loc>
+    <lastmod>2026-10-28T22:11:23.463Z</lastmod>
   </url>
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/dataset_preparation.html</loc>
-    <lastmod>2026-10-22T16:13:27.214Z</lastmod>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/reading.html</loc>
+    <lastmod>2026-10-28T22:11:23.463Z</lastmod>
   </url>
   <url>
-    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/index.html</loc>
-    <lastmod>2026-10-22T16:13:27.215Z</lastmod>
+    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/unsupervised_ml_note.html</loc>
+    <lastmod>2026-10-28T22:11:23.835Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/supervised.html</loc>
+    <lastmod>2026-10-28T22:11:23.834Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/guest-sessions/index.html</loc>
+    <lastmod>2026-10-28T22:11:23.821Z</lastmod>
   </url>
   <url>
     <loc>https://ftl-brazil-2026.github.io/ebook/state-of-art/index.html</loc>
-    <lastmod>2026-10-22T16:13:27.220Z</lastmod>
+    <lastmod>2026-10-28T22:11:23.835Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/dataset_preparation.html</loc>
+    <lastmod>2026-10-28T22:11:23.831Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/ml-dl/index.html</loc>
+    <lastmod>2026-10-28T22:11:23.831Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/cli-utils.html</loc>
+    <lastmod>2026-10-28T22:11:23.462Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/setup.html</loc>
+    <lastmod>2026-10-28T22:11:23.463Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/course-info/general-info.html</loc>
+    <lastmod>2026-10-28T22:11:23.463Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl3_otimizadores.html</loc>
+    <lastmod>2026-10-28T22:11:23.471Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl5_lightning_pytorch.html</loc>
+    <lastmod>2026-10-28T22:11:23.475Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl0_introducao_pytorch.html</loc>
+    <lastmod>2026-10-28T22:11:23.464Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/deep-learning/dl7_atencao.html</loc>
+    <lastmod>2026-10-28T22:11:23.496Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/awesome-geospatial/index.html</loc>
+    <lastmod>2026-10-28T22:11:23.461Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week0/space_tech_ecossystem.html</loc>
+    <lastmod>2026-10-28T22:11:23.535Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week4/xarray.html</loc>
+    <lastmod>2026-10-28T22:11:23.821Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week3/dem.html</loc>
+    <lastmod>2026-10-28T22:11:23.750Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/crs_and_projections.html</loc>
+    <lastmod>2026-10-28T22:11:23.549Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week1/spatial_analysis_of_vectors.html</loc>
+    <lastmod>2026-10-28T22:11:23.573Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ftl-brazil-2026.github.io/ebook/fundamentals_gis_rs/week2/RS-Image_Processing.html</loc>
+    <lastmod>2026-10-28T22:11:23.594Z</lastmod>
   </url>
 </urlset>
