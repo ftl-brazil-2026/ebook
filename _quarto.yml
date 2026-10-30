@@ -57,7 +57,7 @@ website:
         - deep-learning/dl2_como_a_rede_aprende.ipynb
         - deep-learning/dl3_otimizadores.ipynb
         - deep-learning/dl4_pipeline_de_treino.ipynb
-        - deep-learning/dl5_lightning_qualquer_coisa.ipynb
+        - deep-learning/dl5_lightning_pytorch.ipynb
         - deep-learning/dl6_arquiteturas.ipynb
         - deep-learning/dl7_atencao.ipynb
         - deep-learning/dl8_embeddings.ipynb
