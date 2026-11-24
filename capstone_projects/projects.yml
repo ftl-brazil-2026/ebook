@@ -5,7 +5,7 @@
 # Se não houver site, o card mostra um bloco "Repositório" e aponta para o repo.
 
 - title: "Cheias do Taquari"
-  author: "Isadora Beckmann; Alfa Marine"
+  author: "Isadora Beckmann"
   description: "Previsão de curto prazo da cota do rio Taquari (Muçum e Encantado) com dados da ANA e chuva de satélite IMERG."
   categories: [Hidrologia, Séries Temporais, Sensoriamento Remoto]
   site: "https://ftl-capstone.beckmannisadora.workers.dev/"
