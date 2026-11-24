@@ -1,0 +1,58 @@
+# Um item por projeto. O card na página Capstone Projects é gerado a partir daqui.
+#   site:  URL pública do projeto (GitHub Pages, Cloudflare, Vercel...). O card mostra uma prévia ao vivo.
+#   repo:  URL do repositório (opcional).
+#   image: screenshot opcional em capstone_projects/images/ — substitui a prévia ao vivo.
+# Se não houver site, o card mostra um bloco "Repositório" e aponta para o repo.
+
+- title: "Cheias do Taquari"
+  author: "Isadora Beckmann; Alfa Marine"
+  description: "Previsão de curto prazo da cota do rio Taquari (Muçum e Encantado) com dados da ANA e chuva de satélite IMERG."
+  categories: [Hidrologia, Séries Temporais, Sensoriamento Remoto]
+  site: "https://ftl-capstone.beckmannisadora.workers.dev/"
+
+- title: "GeoDetective Brasil"
+  author: "Luiz Augusto de Almeida"
+  description: "Jogo interativo para estimar a mudança da vegetação nativa em pares reais de imagens Sentinel-2, com dados do MapBiomas."
+  categories: [Vegetação, Sensoriamento Remoto, Jogo Educativo]
+  site: "https://1luizaugusto.github.io/GeoDetective-Brasil/"
+  repo: "https://github.com/1luizaugusto/GeoDetective-Brasil"
+
+- title: "Área queimada no PN Chapada das Mesas (2024)"
+  author: "Fernanda Carine Soares Mendes"
+  description: "Mapeamento mensal da área queimada no Parque Nacional da Chapada das Mesas (MA) em 2024 com Sentinel-2, NBR/dNBR e Google Earth Engine, validado com o MapBiomas Fogo."
+  categories: [Queimadas, Sensoriamento Remoto, Google Earth Engine]
+  site: "https://passagens-alt.github.io/area-queimada-chapada-mesas/"
+  repo: "https://github.com/passagens-alt/area-queimada-chapada-mesas"
+
+- title: "Eventos Extremos no Brasil em 2026"
+  author: "Trabalho em Grupo. Ver integrantes no Github do projeto."
+  description: "Storytelling sobre o El Niño de 2026: anomalias de temperatura do Pacífico (NOAA OISST) e os eventos extremos mapeados pelo Brasil."
+  categories: [Clima, Storytelling, Mapas Interativos]
+  site: "https://luizhenrque.github.io/CAPSTONE-FTL-BRASIL/"
+  repo: "https://github.com/luizhenrque/CAPSTONE-FTL-BRASIL"
+
+- title: "GeoPass — Orbital Intelligence"
+  author: "Luiz Gustavo de Barros e Silva Santos"
+  description: "Cartografia de passagens de satélites: calcula quando satélites passam sobre um local a partir de dados do CelesTrak, com rastreador ao vivo e integração com ESP32."
+  categories: [Satélites, Mapas Interativos, Hardware]
+  site: "https://ftl-brasil-capstone-tcc-geo-pass.vercel.app/"
+
+- title: "Área queimada no PN Chapada das Mesas (2024)"
+  author: "Fernanda Carine Soares Mendes"
+  description: "Mapeamento mensal da área queimada no Parque Nacional da Chapada das Mesas (MA) em 2024 com Sentinel-2, NBR/dNBR e Google Earth Engine, validado com o MapBiomas Fogo."
+  categories: [Queimadas, Sensoriamento Remoto, Google Earth Engine]
+  site: "https://passagens-alt.github.io/area-queimada-chapada-mesas/"
+  repo: "https://github.com/passagens-alt/area-queimada-chapada-mesas"
+
+- title: "Atlas SP — RAG geoespacial com Gemini"
+  author: "Caio Henrique"
+  description: "Aplicação Streamlit para consultar dados de segurança pública de São Paulo (Infosiga, SSP e notícias) a partir de uma região desenhada no mapa, com conversa via Gemini."
+  categories: [IA Generativa, RAG, Mapas Interativos]
+  repo: "https://github.com/caiochf/FTL_map_chat"
+
+- title: "Telemetria de ônibus: baixa velocidade observada"
+  author: "Lilian Retori"
+  description: "Pipeline geoespacial que analisa registros de telemetria de ônibus para identificar áreas e horários com baixa velocidade recorrente, reportando cobertura e limitações dos dados."
+  categories: [Mobilidade Urbana, Análise Vetorial, Python]
+  repo: "https://github.com/lilian-retori/telemetria"
+

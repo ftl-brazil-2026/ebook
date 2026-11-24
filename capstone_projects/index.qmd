@@ -1,0 +1,19 @@
+---
+title: "Capstone Projects"
+description: "Acervo dos projetos finais do Space Tech Bootcamp 2026."
+listing:
+  id: capstone-listing
+  contents: projects.yml
+  template: _project-card.ejs
+  sort: "title"
+  categories: true
+  filter-ui: true
+  sort-ui: false
+toc: false
+---
+
+Durante o programa do Future Tech Leaders na formação "Space Tech Bootcamp", os estudantes desenvolveram seus projetos finais de impacto para o setor geoespacial. Esta página é um guia e acervo dos projetos finais desenvolvidos durante o ano de 2026. Clique em um card para abrir o projeto em uma nova aba.
+
+Todos os projetos são *open-source* e podem ser replicados localmente. O FTL Brasil busca engajar na qualidade e contribuir para o ecossistema geoespacial Brasileiro.  
+::: {#capstone-listing}
+:::

@@ -7,6 +7,9 @@ website:
   repo-url: "https://github.com/ftl-brazil-2026/ebook"
   page-navigation: true
   navbar:
+    left:
+      - text: "Capstone Projects"
+        href: capstone_projects/index.qmd
     right:
       - icon: github
         href: https://github.com/ftl-brazil-2026/ebook
@@ -64,9 +67,6 @@ website:
       - section: "Sessões de Convidados"
         contents:
           - guest-sessions/index.md
-      - section: "Capstone Projects"
-        contents: 
-          - 
       - text: "Awesome Geospatial"
         href: awesome-geospatial/index.md
   page-footer:
@@ -76,6 +76,12 @@ website:
 format:
   html:
     theme: [cosmo, custom.scss]
+    include-in-header:
+      # Apply the saved side-panel state before first paint, so the page doesn't jump.
+      # (Toggle buttons and logic: _includes/sidebar-toggle.html; styles: custom.scss.)
+      text: |
+        <script>try{var c=document.documentElement.classList;if(localStorage.getItem("ebook-sidebar-hidden")==="1")c.add("sidebar-hidden");if(localStorage.getItem("ebook-margin-hidden")==="1")c.add("margin-hidden")}catch(e){}</script>
+    include-after-body: _includes/sidebar-toggle.html
     toc: true
     toc-depth: 3
     toc-title: "On this page"

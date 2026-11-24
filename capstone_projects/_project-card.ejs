@@ -1,0 +1,59 @@
+```{=html}
+<div class="capstone-carousel">
+<button type="button" class="capstone-nav capstone-prev" aria-label="Projetos anteriores"><i class="bi bi-chevron-left"></i></button>
+<div class="list capstone-track" tabindex="0" aria-label="Catálogo de projetos">
+<% for (const item of items) { const link = item.site || item.repo; %>
+<div class="capstone-card" <%= metadataAttrs(item) %>>
+<a class="capstone-preview" href="<%- link %>" target="_blank" rel="noopener" aria-label="Abrir projeto em nova aba: <%= item.title %>">
+<% if (item.image) { %>
+<img src="<%- item.image %>" alt="" loading="lazy">
+<% } else if (item.site) { %>
+<iframe src="<%- item.site %>" loading="lazy" tabindex="-1" aria-hidden="true" scrolling="no" title="Prévia: <%= item.title %>"></iframe>
+<% } else { %>
+<span class="capstone-placeholder"><i class="bi bi-github"></i><span><%= item.repo.replace(/^https?:\/\/(www\.)?github\.com\//, '') %></span></span>
+<% } %>
+</a>
+<div class="capstone-body">
+<h3 class="listing-title"><a href="<%- link %>" target="_blank" rel="noopener"><%= item.title %></a></h3>
+<% if (item.author) { %><p class="capstone-author listing-author"><%= item.author %></p><% } %>
+<% if (item.description) { %><p class="capstone-desc listing-description"><%= item.description %></p><% } %>
+<% if (item.categories) { %>
+<div class="capstone-tags"><% for (const cat of item.categories) { %><span class="listing-category"><%= cat %></span><% } %></div>
+<% } %>
+<div class="capstone-links">
+<% if (item.site) { %><a href="<%- item.site %>" target="_blank" rel="noopener">Abrir site ↗</a><% } %>
+<% if (item.repo) { %><a href="<%- item.repo %>" target="_blank" rel="noopener">Repositório ↗</a><% } %>
+</div>
+</div>
+</div>
+<% } %>
+</div>
+<button type="button" class="capstone-nav capstone-next" aria-label="Próximos projetos"><i class="bi bi-chevron-right"></i></button>
+</div>
+<script>
+(function () {
+  const root = document.currentScript.previousElementSibling;
+  const track = root.querySelector(".capstone-track");
+  const prev = root.querySelector(".capstone-prev");
+  const next = root.querySelector(".capstone-next");
+
+  // Scroll by one "page" of visible cards.
+  const step = () => track.clientWidth * 0.9;
+  prev.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+  next.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+
+  // Disable buttons at the ends; hide both when everything fits (e.g. after filtering).
+  const update = () => {
+    const max = track.scrollWidth - track.clientWidth;
+    prev.disabled = track.scrollLeft <= 2;
+    next.disabled = track.scrollLeft >= max - 2;
+    root.classList.toggle("capstone-fits", max <= 2);
+  };
+  track.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  new MutationObserver(() => { track.scrollLeft = 0; update(); })
+    .observe(track, { subtree: true, attributes: true, attributeFilter: ["class", "style"], childList: true });
+  update();
+})();
+</script>
+```
