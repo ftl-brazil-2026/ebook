@@ -1,0 +1,54 @@
+<!--
+  Collapsible side panels (desktop only).
+  - Left:  the docked navigation sidebar (#quarto-sidebar).
+  - Right: the margin column (#quarto-margin-sidebar) — page TOC, or listing categories.
+  Each toggle flips a class on <html> (sidebar-hidden / margin-hidden); CSS in custom.scss
+  does the hiding and re-flows the grid. State is saved per side in localStorage and
+  re-applied before first paint by the snippet in _quarto.yml (include-in-header).
+-->
+<button type="button" class="panel-toggle panel-toggle-left" data-panel="#quarto-sidebar"
+        data-class="sidebar-hidden" data-key="ebook-sidebar-hidden"
+        data-icon-open="bi-chevron-double-left" data-icon-closed="bi-layout-sidebar"
+        data-label-open="Ocultar menu lateral" data-label-closed="Mostrar menu lateral">
+  <i class="bi" aria-hidden="true"></i>
+</button>
+<button type="button" class="panel-toggle panel-toggle-right" data-panel="#quarto-margin-sidebar"
+        data-class="margin-hidden" data-key="ebook-margin-hidden"
+        data-icon-open="bi-chevron-double-right" data-icon-closed="bi-layout-sidebar-reverse"
+        data-label-open="Ocultar painel direito" data-label-closed="Mostrar painel direito">
+  <i class="bi" aria-hidden="true"></i>
+</button>
+<script>
+(function () {
+  const root = document.documentElement;
+
+  document.querySelectorAll(".panel-toggle").forEach((btn) => {
+    const d = btn.dataset;
+    const panel = document.querySelector(d.panel);
+
+    // Only offer a toggle when the panel exists and has something in it.
+    const usable = panel && panel.textContent.trim() !== "" &&
+      (d.panel !== "#quarto-sidebar" || document.body.classList.contains("docked"));
+    if (!usable) { btn.remove(); root.classList.remove(d.class); return; }
+
+    const icon = btn.querySelector(".bi");
+    const render = () => {
+      const hidden = root.classList.contains(d.class);
+      icon.className = "bi " + (hidden ? d.iconClosed : d.iconOpen);
+      const label = hidden ? d.labelClosed : d.labelOpen;
+      btn.setAttribute("aria-label", label);
+      btn.title = label;
+      btn.setAttribute("aria-expanded", String(!hidden));
+    };
+
+    btn.setAttribute("aria-controls", d.panel.slice(1));
+    btn.addEventListener("click", () => {
+      const hidden = root.classList.toggle(d.class);
+      try { localStorage.setItem(d.key, hidden ? "1" : "0"); } catch (e) {}
+      render();
+      window.dispatchEvent(new Event("resize"));   // let Quarto and the carousel re-measure
+    });
+    render();
+  });
+})();
+</script>

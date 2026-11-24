@@ -45,6 +45,24 @@ python3 -m json.tool course-info/data/provedores.json > /dev/null
 
 Sem erro impresso = JSON válido.
 
+## Adicionando seu Capstone Project
+
+Todos os projetos finais ficam listados em um único arquivo: [`capstone_projects/projects.yml`](../capstone_projects/index.qmd). Cada item vira um card na página [Capstone Projects](../capstone_projects/index.qmd) — não precisa editar mais nada.
+
+Adicione um item no fim do arquivo:
+
+```yaml
+- title: "Nome do Projeto"
+  author: "Seu Nome"
+  description: "Uma ou duas frases: qual problema, quais dados, qual resultado."
+  categories: [Sensoriamento Remoto, Machine Learning]
+  site: "https://seu-usuario.github.io/seu-projeto/"   # opcional, se o projeto tiver uma página pública
+  repo: "https://github.com/seu-usuario/seu-projeto"   # opcional
+  # image: images/nome-do-projeto.png                  # opcional: screenshot para o card
+```
+
+Informe pelo menos `site` ou `repo`. Com `site`, o card mostra uma prévia ao vivo da sua página; sem `site`, mostra um bloco com o link do repositório. Se o seu site for pesado (mapas grandes, muitos dados carregando ao vivo), salve um screenshot da página inicial em `capstone_projects/images/` e use o campo `image` — o card passa a mostrar a imagem em vez da prévia.
+
 ::: {.callout-note appearance="simple"}
 
 ## Dúvida?

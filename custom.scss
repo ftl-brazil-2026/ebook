@@ -40,3 +40,245 @@ $sidebar-bg: #f7f9fb;
   }
 
 }
+
+/* ---------- Capstone projects ---------- */
+
+// Horizontal carousel: native scroll + snap, with prev/next buttons on the sides.
+.capstone-carousel {
+  position: relative;
+  margin: 1rem 0 2rem;
+}
+
+.capstone-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: .25rem;
+  padding: .5rem .25rem 1rem;      // room for the hover lift and shadow
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #c9d3de transparent;
+
+  &:focus-visible {
+    outline: 2px solid $link-color;
+    outline-offset: 2px;
+    border-radius: 10px;
+  }
+}
+
+.capstone-nav {
+  position: absolute;
+  top: 105px;                       // vertically centred on the preview area
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e3e8ee;
+  border-radius: 50%;
+  background: #fff;
+  color: $link-color;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+  cursor: pointer;
+  transition: opacity .15s ease;
+
+  &:disabled { opacity: 0; pointer-events: none; }
+  &:hover:not(:disabled) { background: $sidebar-bg; }
+}
+
+.capstone-prev { left: -1.1rem; }
+.capstone-next { right: -1.1rem; }
+.capstone-fits .capstone-nav { display: none; }
+
+// Touch devices swipe natively; the buttons would only cover the cards.
+@media (hover: none) {
+  .capstone-nav { display: none; }
+}
+
+.capstone-card {
+  flex: 0 0 min(320px, 85%);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e3e8ee;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow .15s ease, transform .15s ease;
+
+  &:hover {
+    box-shadow: 0 6px 18px rgba(29, 78, 137, .12);
+    transform: translateY(-2px);
+  }
+}
+
+// Live preview: render the student's page at desktop width, scaled down.
+.capstone-preview {
+  position: relative;
+  display: block;
+  height: 210px;
+  overflow: hidden;
+  background: $sidebar-bg;
+  border-bottom: 1px solid #e3e8ee;
+
+  iframe {
+    width: 1280px;
+    height: 840px;
+    border: 0;
+    transform: scale(.28);
+    transform-origin: 0 0;
+    pointer-events: none;   // clicks go to the card link, not the embedded page
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+}
+
+// Shown when a project has only a repository (no public site, no image).
+.capstone-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  height: 100%;
+  color: $link-color;
+  background: linear-gradient(135deg, #eef3f9 0%, #f7f9fb 100%);
+  font-family: SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .9rem;
+
+  .bi { font-size: 2.5rem; }
+}
+
+.capstone-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1rem 1.1rem 1.1rem;
+
+  .listing-title {
+    font-size: 1.15rem;
+    margin: 0 0 .2rem;
+    a { text-decoration: none; }
+  }
+}
+
+.capstone-author {
+  color: $link-color;
+  font-weight: 600;
+  font-size: .9rem;
+  margin-bottom: .5rem;
+}
+
+.capstone-desc {
+  font-size: .92rem;
+  color: #4a5562;
+  margin-bottom: .75rem;
+}
+
+.capstone-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-bottom: .75rem;
+
+  .listing-category {
+    font-size: .75rem;
+    padding: .1rem .5rem;
+    border-radius: 999px;
+    background: $sidebar-bg;
+    border: 1px solid #e3e8ee;
+  }
+}
+
+.capstone-links {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: .88rem;
+  font-weight: 500;
+}
+
+/* ---------- Collapsible side panels (desktop only) ----------
+   Buttons + logic: _includes/sidebar-toggle.html
+   html.sidebar-hidden -> hides the left docked nav (#quarto-sidebar)
+   html.margin-hidden  -> hides the right margin column (#quarto-margin-sidebar: TOC / categories)
+*/
+
+.panel-toggle {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .panel-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 1.25rem;
+    z-index: 1040;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;                     // browser default button padding pushed the icon off-centre
+    line-height: 1;
+    border: 1px solid #e3e8ee;
+    background: #fff;
+    color: $link-color;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+    cursor: pointer;
+
+    &:hover { background: $sidebar-bg; }
+    &:focus-visible { outline: 2px solid $link-color; outline-offset: 2px; }
+
+    // Bootstrap Icons sets vertical-align: -.125em on the glyph, which sinks it in a flex box.
+    .bi,
+    .bi::before {
+      display: block;
+      line-height: 1;
+      vertical-align: 0;
+      font-size: 1rem;
+    }
+  }
+
+  // Tabs hug the screen edge: square on the outer side, rounded on the inner side.
+  .panel-toggle-left  { left: 0;  border-left: 0;  border-radius: 0 8px 8px 0; }
+  .panel-toggle-right { right: 0; border-right: 0; border-radius: 8px 0 0 8px; }
+
+  html.sidebar-hidden {
+    #quarto-sidebar,
+    #quarto-sidebar-glass { display: none !important; }
+
+    // Same named grid lines as Quarto's docked layout, minus the sidebar column,
+    // so content (and the right-hand margin) re-centres and gets the freed width.
+    body.docked .page-columns {
+      grid-template-columns:
+        [screen-start] 1.5em
+        [screen-start-inset] 5fr
+        [page-start page-start-inset] 35px
+        [body-start-outset] 35px
+        [body-start] 1.5em
+        [body-content-start] minmax(500px, calc(1100px - 3em))
+        [body-content-end] 1.5em
+        [body-end] 50px
+        [body-end-outset] minmax(50px, 100px)
+        [page-end-inset] 50px
+        [page-end] 5fr
+        [screen-end-inset] 1.5em
+        [screen-end];
+    }
+  }
+
+  html.margin-hidden {
+    #quarto-margin-sidebar { display: none !important; }
+
+    // The margin column runs body-end -> page-end; let the main content take it over.
+    .page-columns .content { grid-column-end: page-end; }
+  }
+}
