@@ -14,6 +14,7 @@ toc: false
 
 Durante o programa do Future Tech Leaders na formação "Space Tech Bootcamp", os estudantes desenvolveram seus projetos finais de impacto para o setor geoespacial. Esta página é um guia e acervo dos projetos finais desenvolvidos durante o ano de 2026. Clique em um card para abrir o projeto em uma nova aba.
 
-Todos os projetos são *open-source* e podem ser replicados localmente. O FTL Brasil busca engajar na qualidade e contribuir para o ecossistema geoespacial Brasileiro.  
+Todos os projetos são *open-source* e podem ser replicados localmente. O FTL Brasil busca engajar na qualidade e contribuir para o ecossistema geoespacial Brasileiro.
+
 ::: {#capstone-listing}
 :::
