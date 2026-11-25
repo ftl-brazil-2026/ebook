@@ -49,3 +49,9 @@
   categories: [Mobilidade Urbana, Análise Vetorial, Python]
   repo: "https://github.com/lilian-retori/telemetria"
 
+- title: "MoonAI - Explorando crateras lunares"
+  author: "Julli "
+  description: "An interactive, scientifically grounded lunar exploration platform: a *Google Earth for the Moon*  built on real NASA/USGS data, with a deep-learning crater detector trained locally and running in your browser."
+  categories: [Mapeamento, Astronomia, Deep Learning]
+  repo: "https://github.com/jjullimayanne/moonIA"
+  site: "https://jjullimayanne.github.io/moonIA/"
